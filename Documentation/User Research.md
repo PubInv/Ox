@@ -98,7 +98,7 @@ Maintenance periods must be as long as possible, with tool-less servcing and fre
 
 #### 1.3 Questions Remaining
 
-1. What is the flow rate required? Have received 5,10, 15 and 20LPM as the target. 20LPM is the target for this device, although this could be as low as 5LPM for a portable 12V at-home device, or multiple 100LPM+ units for a small clinic. Currently keeping the design flexible to accomodate changing user needs.
+1. What is the flow rate required? Indications of flow rate of 5, 10, 15 and 20LPM as the target. 20LPM is the target for this device, although this could be as low as 5LPM for a portable 12V at-home device, or multiple 100LPM+ units for a small clinic. Currently keeping the design flexible to accomodate changing user needs.
 2. What is the FiO2 required? Current target is minimium 90% O2, ideally 95% O2. Costs raise disproportionally beyond 95% O2 as further steps to remove Argon are required.
 3. What is the distribution mechanism of the devices? Carried by hand, bicycles, cars, trucks?
 4. What are the local manufacturing capabilities? Currently assumed to be a car mechanics workshop, up to basic engineering facilities to service local industries.
