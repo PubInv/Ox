@@ -92,7 +92,7 @@ The shipped device must be lightweight and compact to minimize the burden on log
 
 The device must be robust to survive the supply chain, including bumpy roads and being dropped from trucks.
 
-A multi-lingual touch screen with a visual interface to using icons and language agnostic visual design to communicate visually to the end user.
+A multi-lingual touch screen with a visual interface that uses icons and language agnostic visual design to communicate visually to the end user. Touch screen must be robust. The only other UI component is a power on/off switch.
 
 Maintenance periods must be as long as possible, with tool-less servcing and frequently used spare parts included within the device, eg. washers, fuses etc.
 
