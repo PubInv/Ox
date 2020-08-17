@@ -26,3 +26,5 @@ Jupyter Notebooks are useful for organising Python code, math and notes. https:/
 Mechanical CAD designs are made using OnShape which is free for open source projects. OnShape is is a professional, browser-based, parametric CAD program similar to SolidWorks. https://www.onshape.com/
 
 PCB designs can be made using Eagle. https://learn.sparkfun.com/tutorials/how-to-install-and-setup-eagle/all
+
+Embedded software should be developed using PlatformIO https://platformio.org/
