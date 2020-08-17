@@ -96,7 +96,7 @@ A multi-lingual touch screen with a visual interface to using icons and language
 
 Maintenance periods must be as long as possible, with tool-less servcing and frequently used spare parts included within the device, eg. washers, fuses etc.
 
-##### 1.2 Questions Remaining
+#### 1.3 Questions Remaining
 
 1. What is the flow rate required? Have received 5,10, 15 and 20LPM as the target. 20LPM is the target for this device, although this could be as low as 5LPM for a portable 12V at-home device, or multiple 100LPM+ units for a small clinic. Currently keeping the design flexible to accomodate changing user needs.
 2. What is the FiO2 required? Current target is minimium 90% O2, ideally 95% O2. Costs raise disproportionally beyond 95% O2 as further steps to remove Argon are required.
