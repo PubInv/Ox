@@ -1,0 +1,60 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L 74xx:74HC595 U?
+U 1 1 5F55E21B
+P 8000 3400
+F 0 "U?" H 8000 4181 50  0000 C CNN
+F 1 "74HC595" H 8000 4090 50  0000 C CNN
+F 2 "" H 8000 3400 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/sn74hc595.pdf" H 8000 3400 50  0001 C CNN
+	1    8000 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Display_Graphic:EA_eDIPTFT32-ATP U?
+U 1 1 5F55E9EE
+P 10600 3850
+F 0 "U?" H 10550 5331 50  0000 C CNN
+F 1 "EA_eDIPTFT32-ATP" H 10550 5240 50  0000 C CNN
+F 2 "Display:EA_eDIPTFT32-XXX" H 10600 2350 50  0001 C CNN
+F 3 "http://www.lcd-module.com/fileadmin/eng/pdf/grafik/ediptft43-ae.pdf" H 10900 3650 50  0001 C CNN
+	1    10600 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L RF_Module:ESP32-WROOM-32 U?
+U 1 1 5F55FC7B
+P 4200 7550
+F 0 "U?" H 4200 9131 50  0000 C CNN
+F 1 "ESP32-WROOM-32" H 4200 9040 50  0000 C CNN
+F 2 "RF_Module:ESP32-WROOM-32" H 4200 6050 50  0001 C CNN
+F 3 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf" H 3900 7600 50  0001 C CNN
+	1    4200 7550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+24V #PWR?
+U 1 1 5F56C437
+P 3350 1550
+F 0 "#PWR?" H 3350 1400 50  0001 C CNN
+F 1 "+24V" H 3365 1723 50  0000 C CNN
+F 2 "" H 3350 1550 50  0001 C CNN
+F 3 "" H 3350 1550 50  0001 C CNN
+	1    3350 1550
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
