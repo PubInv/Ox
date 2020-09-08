@@ -1,4 +1,4 @@
-# Public Invention Oxygen Concentrator
+# Public Invention Medical Oxygen Concentrator
 
 ## Introduction
 
