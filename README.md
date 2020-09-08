@@ -1,4 +1,4 @@
-# Public Invention Medical Oxygen Concentrator
+# Public Invention Oxygen Concentrator (PIOC)
 
 ## Introduction
 
