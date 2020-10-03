@@ -45,7 +45,7 @@ User research has been collected from the community at www.helpfulengineering.or
 - Current: is industrial O2 with no oversight.
 - Cost proportionate to level of standard of filter (perhaps target somewhere midway)
 - Hospitals - 10-20 beds up to 2,3-400 beds
-- Hospitals in provences (~50)
+- Hospitals in provinces (~50)
 - Maybe target 20 people
 - Oxygen balloon
 - Don't speak English, understand content etc. eg. they don't understand error messages
@@ -108,7 +108,7 @@ Maintenance periods must be as long as possible, with tool-less servcing and fre
 8. Our current best research indicates the need for a bedside unit connected to a remote air supply providing 20LPM for high flow nasal canular oxygen therapy. This needs to be confirmed as medically impactful.
 9. Demand for oxygen concentrators for invasive ventilation has not been analysed.
 10. What documentation would need to be produced for local health authorities? Currently working to FDA requirements.
-11. What languages would the documenation need to be translated to?
+11. What languages would the documentation need to be translated to?
 12. What manufacturing guides would be required? Can paper or 3D printed jigs/templates be made and distributed to aid manufacturing?
 13. What bureaucratic and security concerns are there? Large containers may be held up at customs and are targets for theft.
 14. How would servicing work? What service facilities or training is required for maintenance of the devices?
