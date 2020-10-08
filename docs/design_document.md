@@ -1,9 +1,9 @@
 # Design Document
-## Public Invention Oxygen Concentrator
+## Public Invention OxyCon
 
 ### 1.0 Design Specification
 
-The Public Invention Oxygen Concentrator (PIOC) aims to meet or exceed the WHO specification for oxygen concentrators [ref?]. The PIOC is intended for use in remote communities with little access to medical resources and basic infrastructure.
+The Public Invention OxyCon aims to meet or exceed the WHO specification for oxygen concentrators [1]. OxyCon is intended for use in remote communities with little access to medical resources and basic infrastructure.
 
 #### 1.1 Functional
 1. Deliver medical grade oxygen at 90% O2 concentration or greater at a flow rate of 20LPM or greater.
@@ -50,13 +50,48 @@ The Public Invention Oxygen Concentrator (PIOC) aims to meet or exceed the WHO s
 #### 1.9 Standards
 1. Insert relevant standards.
 #### 2.0 Regulatory
+#### 2.1 Relevant Standards
 1. Regulatory requirements
-#### 3.0 Concept Design
+
+#### 2.2 Failure Mode and Effects Analysis
+
+#### 2.3 Risk Management
+### 3.0 Literature Review
+#### 3.1 Open Source Projects
+- Project Apollo
+- Enaccess Open O2
+- OxiKit
+- Zurich ETH
+
+#### 3.2 Commercial Units
+
+#### 3.3 Processing Methods
+##### 3.3.1 Pressure Swing Adsorption
+
+##### 3.3.2 Membrane Filtration
+
+
+### 4.0 User Needs Research
+
+### 5.0 Concept Design
 
 ![sketch](img/pneumatic_circuit_sketch.jpg)
 
 ![sketch](img/pneumatic_circuit_wall_mounted.jpg)
 
-#### 4.0 Prototyping
+### 6.0 Prototyping
+#### 6.1 Requirements
 
+#### 6.2 First Protoype
 ![OxyCon Pneumatic Circuit Prototype](img/pneumatic_circuit_prototype_v1.jpg)
+
+
+### References
+
+1. COVID-19 Technical specifications for procurement of oxygen therapy and monitoring devices. 2015. World Health Organization. https://www.who.int/medical_devices/publications/tech_specs_oxygen-concentrators/en/
+
+2. Technical Specifications for Oxygen Concentrators. World Health Organization.
+
+
+To organise:
+https://www.who.int/medical_devices/management_use/mde_tech_spec/en/
