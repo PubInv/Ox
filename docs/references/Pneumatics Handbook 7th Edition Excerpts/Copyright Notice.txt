@@ -1,0 +1,6 @@
+Excerpts of The Pneumatics Handbook 7th Edition by Anthony Barber have been
+included for educational purposes only for breathing apparatus in the
+context of COVID-19 open source device design.
+
+For the full text, the 8th edition can be purchased here:
+https://www.sciencedirect.com/book/9781856172493/pneumatic-handbook

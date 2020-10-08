@@ -1,0 +1,41 @@
+240 MHz dual core Tensilica LX6 microcontroller with 600 DMIPS
+Integrated 520 KB SRAM
+Integrated 802.11b/g/n HT40 Wi-Fi transceiver, baseband, stack and LWIP
+Integrated dual mode Bluetooth (classic and BLE)
+4 MByte flash
+On-board PCB antenna
+Ultra-low noise analog amplifier
+Hall sensor
+10x capacitive touch interface
+32 kHz crystal oscillator
+3 x UARTs (only two are configured by default in the Feather Arduino IDE support, one UART is used for bootloading/debug)
+3 x SPI (only one is configured by default in the Feather Arduino IDE support)
+2 x I2C (only one is configured by default in the Feather Arduino IDE support)
+12 x ADC input channels
+2 x I2S Audio
+2 x DAC
+PWM/timer input/output available on every GPIO pin
+OpenOCD debug interface with 32 kB TRAX buffer
+SDIO main/secondary 50 MHz
+SD-card interface support
+
+https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/overview
+https://www.espressif.com/en/products/socs/esp32
+
+// ADAFRUIT FEATHER ESP32
+// 1 RST
+// 2 3V
+// 3 NC
+// 4 GND
+// 5 A0     BATT
+// 6 A1     EN
+// 7 A2     USB
+// 8 A3     13 A12
+// 9 A4     12 A11
+// 10 A5    27 A10
+// 11 SCK   33 A9
+// 12 MO    15 A8
+// 13 MI    32 A7
+// 14 RX    14 A6
+// 15 TX    SCL 22
+// 16 21    SDA 23
