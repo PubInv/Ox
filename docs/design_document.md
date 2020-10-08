@@ -20,7 +20,7 @@ The Public Invention Oxygen Concentrator (PIOC) aims to meet or exceed the WHO s
 1. Easy to transport.
 1. Sound level less than 40dB at 1m (WHO suggests 60dB).
 1. Battery backup power supply for 20 minutes.
-1. 
+1.
 #### 1.2 Performance
 1. Flow rate shall be +- 5% of the target value.
 1. Pressure shall be +- 5% of the target value.
@@ -51,3 +51,12 @@ The Public Invention Oxygen Concentrator (PIOC) aims to meet or exceed the WHO s
 1. Insert relevant standards.
 #### 2.0 Regulatory
 1. Regulatory requirements
+#### 3.0 Concept Design
+
+![sketch](img/pneumatic_circuit_sketch.jpg)
+
+![sketch](img/pneumatic_circuit_wall_mounted.jpg)
+
+#### 4.0 Prototyping
+
+![OxyCon Pneumatic Circuit Prototype](img/pneumatic_circuit_prototype_v1.jpg)
