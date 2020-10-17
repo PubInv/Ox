@@ -1,4 +1,4 @@
-# Public Invention OxyCon
+# Public Invention Oxygen Concentrator
 
 ## Introduction
 
@@ -13,3 +13,7 @@ Infrastructure and logistics create additional challenges. This is raised the re
 ## Project Structure
 
 Please see subdirectories for relevant files and documentation.
+
+## Thanks
+
+Many thanks to [Project Apollo](https://github.com/oxycon/ProjectApollo) and [Helpful Engineering](https://helpfulengineering.org/) for their ongoing collaboration on this important work.
