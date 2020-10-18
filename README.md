@@ -10,6 +10,14 @@ Field hospital settings may be urban or rural. Environments such as high tempera
 
 Infrastructure and logistics create additional challenges. This is raised the requirement to design a device that can be manufactured locally, along with sufficient documentation to present to local regulatory authorities. Medical device standards must be met and this project aims to meet regulatory requirements.
 
+# Project Status
+
+**19/10/2020**
+
+First build is almost ready for testing! Parts of the system have been tested independently. Next is to complete assembly for a full pressure test. Then fill the sieves with zeolite and start tuning the control system.
+
+![mockup](docs/img/pioc-mockup.jpg)
+
 ## Project Structure
 
 Please see subdirectories for relevant files and documentation.
