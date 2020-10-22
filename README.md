@@ -14,7 +14,7 @@ Infrastructure and logistics create additional challenges. This is raised the re
 
 **22 October 2020**
 
-The system is now mounted to the board! Some changes have been made during the build to simplify it - the sieves now use barb fittings to avoid having to drill and tap 3/8" BSPT which is costly and requires a drill press. The pneumatics circuit slightly has been adjusted slightly to shorten the overall height. The valves have been tested manually and the overall operation appears to be correct. Next steps are to finish the driver circuits and fill the sieves.
+The system is now mounted to the board! Some changes have been made during the build to simplify it - the sieves now use barb fittings to avoid having to drill and tap 3/8" BSPT which is costly and requires a drill press. The pneumatic circuit has been modified to shorten the overall height. The valves have been tested manually and the overall operation appears to be correct. Next steps are to finish the driver circuits and fill the sieves.
 
 ![build-001](docs/img/pioc-build-001.jpg)
 
