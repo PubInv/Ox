@@ -24,7 +24,7 @@ User research has been collected from the community at www.helpfulengineering.or
 - Home care patients currently take oxygen cylinders to fill stations.
 - Cylinders cost of $200USD each, which is expensive for average citizen.
 - Currently ~1500 cylinders per day in the entire country, 1 patient needs 4 cylinder per day 5-6 days
-- People present to specialist hospitals at late stages (stigma), now 42 hospitals (none have central O2 supply), level of realibility of skillset poor - high fatalities
+- People present to specialist hospitals at late stages (stigma), now 42 hospitals (none have central O2 supply), level of reliability of skillset poor - high fatalities
 - Infection rates are very high
 - What equipment?
 - Cost?
@@ -35,9 +35,9 @@ User research has been collected from the community at www.helpfulengineering.or
 - Cryogenic facilities - fill tanks, fill cryo tanks, industrial, not practical for rural areas
 (estimates of 1 metric tonne for 20 beds per day)
 - Pressure swing/membrane technology - these consume a lot of power
-- Secure powersupply or allow intermittent power supply
+- Secure power supply or allow intermittent power supply
 - Containerised high pressure cylinders - backup
-- Specify powersupply, geography, size of institution
+- Specify power supply, geography, size of institution
 - Afghanistan hospital (Kabul - dedicated 75 beds for COVID) 100 beds in another, most vary between 20-50 beds or smaller in provincial
 - bring your own cylinder ($250 per cylinder, $7 per fill)
 - oxygen is industrial grade not medical grade (possibly affecting level of treatment)
@@ -54,7 +54,7 @@ User research has been collected from the community at www.helpfulengineering.or
 - How much can you produce in-country?
 - What are the costs? Long, short term viability
 - 15-20L/min for high flow oxygen therapy
-- 1-3 day period with supplimental oxygen. 10-15PLM high flow oxygen.
+- 1-3 day period with supplemental oxygen. 10-15PLM high flow oxygen.
 - Goal is keep people out of hospitals.
 
 ##### 1.1.4. Indonesia
@@ -94,7 +94,7 @@ The device must be robust to survive the supply chain, including bumpy roads and
 
 A multi-lingual touch screen with a visual interface that uses icons and language agnostic visual design to communicate visually to the end user. Touch screen must be robust. The only other UI component is a power on/off switch.
 
-Maintenance periods must be as long as possible, with tool-less servcing and frequently used spare parts included within the device, eg. washers, fuses etc.
+Maintenance periods must be as long as possible, with tool-less servicing and frequently used spare parts included within the device, eg. washers, fuses etc.
 
 #### 1.3 Questions Remaining
 
