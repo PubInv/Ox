@@ -14,14 +14,29 @@
 #define WHITE   0xFFFF
 
 //SPI Display
-#define TFT_CLK 5
+/*#define TFT_CLK 5
 #define TFT_MISO  19
 #define TFT_MOSI 18
 #define TFT_CS 14
 #define TFT_DC 32
-#define TFT_RST 15
+#define TFT_RST 15*/
 
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
+// DISPLAY
+/*
+#define TOUCH_Y1 5
+#define TOUCH_X1 6
+#define TOUCH_Y2 34
+#define TOUCH_X2 39
+
+#define LCD_RST 36
+#define LCD_RD 4
+#define LCD_WR 5
+#define LCD_CD 18
+#define LCD_CS 19
+
+Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
+*/
+
 
 void display_init();
 unsigned long testText();

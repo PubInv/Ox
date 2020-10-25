@@ -1,40 +1,10 @@
 #include <valve.h>
 #include <stdio.h>
 #include <iostream>
-
-valve VALVES[NUM_VALVES] = {
-  { .name = 'A',
-    .num = 0,
-    .status = 0,
-    .err = 0,
-    .pin = 12,
-    .start = 0,
-    .stop = 6000 },
-  { .name = 'B',
-      .num = 0,
-      .status = 0,
-      .err = 0,
-      .pin = 12,
-      .start = 6000,
-      .stop = 6400 },
-  { .name = 'C',
-      .num = 0,
-      .status = 0,
-      .err = 0,
-      .pin = 12,
-      .start = 6400,
-      .stop = 12400 },
-  { .name = 'D',
-      .num = 0,
-      .status = 0,
-      .err = 0,
-      .pin = 12,
-      .start = 12400,
-      .stop = 12900 }};
+#include <config.h>
 
 uint8_t valve_init()
 {
-
   return 1;
 }
 

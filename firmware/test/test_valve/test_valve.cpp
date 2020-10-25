@@ -3,8 +3,9 @@
 #include <iostream>
 #include <string.h>
 #include <inttypes.h>
-#include <valve.h>
 #include <chrono>
+#include <valve.h>
+#include <config.h>
 
 /*void test_valve_does_init() {
   int success = valve_init();
