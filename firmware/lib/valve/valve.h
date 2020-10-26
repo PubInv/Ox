@@ -8,7 +8,7 @@ struct valve {
   uint8_t num;
   uint8_t status;
   uint8_t err;
-  uint8_t pin;
+  char pin;
   uint32_t start;
   uint32_t stop;
 };

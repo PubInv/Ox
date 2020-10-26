@@ -17,7 +17,7 @@ void test_valve_does_tick(){
   using namespace std::chrono;
 
   // Record start time
-
+    
   steady_clock::time_point a = steady_clock::now();
   int success = valve_init();
   TEST_ASSERT_TRUE(success == 1);

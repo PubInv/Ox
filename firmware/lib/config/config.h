@@ -59,7 +59,7 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
 
 ///////// VALVES //////////
 
-#define TOTAL_CYCLE_TIME 12900
+#define TOTAL_CYCLE_TIME 12900 //ms
 #define TIME_STEP 100 //ms
 #define NUM_VALVES 4
 
