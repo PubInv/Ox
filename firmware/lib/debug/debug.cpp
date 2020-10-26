@@ -8,7 +8,7 @@ void serial_init(uint32_t baud){
 #ifdef ARDUINO
   Serial.begin(baud);
 #else
-  printf("%s", "Serial init");
+  printf("%s", "Serial init\n");
 #endif
 }
 

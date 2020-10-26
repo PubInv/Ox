@@ -1,15 +1,26 @@
-#include "shift.h"
+#ifdef ARDUINO
+#include <Arduino.h>
+#endif
 
-void shift()
+#include "shift.h"
+#include <config.h>
+
+shift_pins sp;
+
+void shift_init(){
+  sp.latch = ST_CP;
+  sp.clock = SH_CP;
+  sp.data = DS;
+
+  pinMode(sp.latch, OUTPUT);
+  pinMode(sp.clock, OUTPUT);
+  pinMode(sp.data, OUTPUT);
+}
+
+void shift_out(shift_pins sp, uint8_t data_out)
 {
-  // Convert from 8 bit and output to shift register
-  for (int j = 0; j < 256; j++) {
-    //ground latchPin and hold low for as long as you are transmitting
-    /*digitalWrite(ST_CP, LOW);
-    shiftOut(DS, SH_CP, LSBFIRST, j);
-    //return the latch pin high to signal chip that it
-    //no longer needs to listen for information
-    digitalWrite(ST_CP, HIGH);
-    delay(1000);*/
-  }
+    // data_out can be max of 256 per operation
+    digitalWrite(sp.latch, LOW);
+    shiftOut(sp.data, sp.clock, LSBFIRST, data_out);
+    digitalWrite(sp.latch, HIGH);
 }

@@ -24,30 +24,29 @@ void test_valve_does_tick(){
 
   for (int i = 0; i < 3; i++){
     std::cout << "Cycle: " << i << "\n";
-  for (uint32_t i = 0; i < TOTAL_CYCLE_TIME; i += TIME_STEP){
+    for (uint32_t i = 0; i < TOTAL_CYCLE_TIME; i += TIME_STEP){
 
-    bool success = valve_tick(i);
+      bool success = valve_tick(i);
 
-    // Wait 100ms during the valve sim
-    steady_clock::time_point start = steady_clock::now();
-    while (1){
-      steady_clock::time_point current = steady_clock::now();
-      duration<double> elapsed = current - start;
+      // Wait 100ms during the valve sim
+      steady_clock::time_point start = steady_clock::now();
+      while (1){
+        steady_clock::time_point current = steady_clock::now();
+        duration<double> elapsed = current - start;
 
-      double x = elapsed.count();
-      std::cout << " ";// this needs to be there to show the couts!
-      double y = 0.1; // same as TIME_STEP
-      if (x > y){
-        break;
+        double x = elapsed.count();
+        std::cout << " ";// this needs to be there to show the couts!
+        double y = 0.1; // same as TIME_STEP
+        if (x > y){
+          break;
+        }
       }
-    }
     // end of waiting
-  }
+    }
 
-
-  steady_clock::time_point b = steady_clock::now();
-  duration<double> e = b - a;
-  std::cout << "\nTotal time: " << e.count() << "\n";
+    steady_clock::time_point b = steady_clock::now();
+    duration<double> e = b - a;
+    std::cout << "\nTotal time: " << e.count() << "\n";
   }
   //TEST_ASSERT_TRUE(success);
 }

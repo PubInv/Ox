@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <valve.h>
+//#include <valve.h>
 
 // ADAFRUIT FEATHER ESP32
 // RST
@@ -57,39 +57,41 @@
 Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
 */
 
-#define TOTAL_CYCLE_TIME 13000
+///////// VALVES //////////
+
+#define TOTAL_CYCLE_TIME 12900
 #define TIME_STEP 100 //ms
 #define NUM_VALVES 4
 
-valve VALVES[NUM_VALVES] = {
+// start and stop times must be a multiple of TIME_STEP!
+static valve VALVES[NUM_VALVES] = {
   { .name = 'A',
     .num = 0,
     .status = 0,
     .err = 0,
-    .pin = 12,
-    .start = 0,
+    .pin = 1,//CONTROL_VALVE_A,
+    .start = 100,
     .stop = 6000 },
   { .name = 'B',
-      .num = 0,
+      .num = 1,
       .status = 0,
       .err = 0,
-      .pin = 12,
+      .pin = 2,//CONTROL_VALVE_B,
       .start = 6000,
       .stop = 6400 },
   { .name = 'C',
-      .num = 0,
+      .num = 2,
       .status = 0,
       .err = 0,
-      .pin = 12,
+      .pin = 4,//BALANCE_VALVE_A,
       .start = 6400,
       .stop = 12400 },
   { .name = 'D',
-      .num = 0,
+      .num = 3,
       .status = 0,
       .err = 0,
-      .pin = 12,
+      .pin = 8,//BALANCE_VALVE_B,
       .start = 12400,
       .stop = 12900 }};
-
 
 #endif

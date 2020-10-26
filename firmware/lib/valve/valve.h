@@ -2,9 +2,7 @@
 #define VALVE_H
 
 #include <inttypes.h>
-//#include <config.h>
 
-// start and stop times must be a multiple of TIME_STEP!
 struct valve {
   char name;
   uint8_t num;
@@ -14,10 +12,8 @@ struct valve {
   uint32_t start;
   uint32_t stop;
 };
-
-//uint16_t cycle_time;
   
-//extern valve valves[NUM_VALVES];
+///// FUNCTIONS /////
 
 uint8_t valve_init();
 bool valve_tick(uint32_t step);
