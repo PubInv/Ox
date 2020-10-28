@@ -15,81 +15,20 @@
 //#include <state.h>
 #include <controller.h>
 #include <config.h>
-#include <chrono>
+#include <timer.h>
 
 using namespace PIOC_Debug;
 using namespace PIOC_Controller;
+using namespace PIOC_Timer;
 
-////////// TIMER //////////
-
-using namespace std::chrono;
-
-struct timer { 
-  uint32_t tick_time;
-  uint32_t num_cycles;
-  uint32_t t_last;
-  double t_elapsed;
-  steady_clock::time_point t_start;
-};
-
-timer valve_timer;
-
-steady_clock::time_point start_timer(){
-  return steady_clock::now();
-}
-
-double check_timer(bool print, steady_clock::time_point t_start){
-  steady_clock::time_point now = steady_clock::now();
-  duration<double> t = now - t_start;
-  double t_elapsed = t.count();
-#ifdef ARDUINO
-  if (print){
-    Serial.print("\nTotal time: ");
-    Serial.print(t_elapsed);
-    Serial.print("\n");
-  }
-#else
-  if (print)
-    std::cout << "\nTotal time: " << t_elapsed << "\n";
-#endif
-  return t_elapsed;
-}
-
-void wait(int t){
-#ifdef ARDUINO
-  delay(t);
-#else
-  steady_clock::time_point start = steady_clock::now();
-  while (1){
-    steady_clock::time_point current = steady_clock::now();
-    duration<double> elapsed = current - start;
-    double x = elapsed.count();
-    double y = t*0.001; // same as TIME_STEP
-    if (x > y){
-      break;
-    }
-  }
-#endif
-}
-
-////////// END OF TIMER //////////
-
-
-ValveController vc;
+Timer valveTimer;
+ValveController vc(VALVES, NUM_VALVES);
 
 void setup() {
   serialBegin(115200);
   Debug<const char*>("Starting PIOC\n");
 
-  /*pioc_state ps = { .mode = STARTING,
-    .run_time = 0
-  };*/
-
-  valve_timer.tick_time = 0;
-  valve_timer.num_cycles = 0;
-  valve_timer.t_last = 0;
-  valve_timer.t_elapsed = 0;
-  valve_timer.t_start = start_timer();
+  valveTimer.tStart = startTimer();
   
   /*pinMode(ST_CP, OUTPUT);
   pinMode(SH_CP, OUTPUT);
@@ -109,27 +48,33 @@ void loop(void) {
   //testFillScreen();
   //delay(3000);
 
-  // VALVES
-  valve_timer.tick_time = valve_timer.t_elapsed * 1000; //convert double seconds to int milliseconds
+  ////// UPDATE VALVES //////
+  valveTimer.tickTime = valveTimer.tElapsed * 1000; //convert double seconds to int milliseconds
   
-  // Update valves every timestep
-  if (valve_timer.tick_time >= valve_timer.t_last + TIME_STEP){  // BUG: doesnt trigger on t=0!
-    vc.tick(valve_timer.tick_time);
-    valve_timer.t_last = valve_timer.tick_time;
+  // Update valve controller every timestep
+  // BUG: doesnt trigger on t=0!
+  // Will this compound timing errors? Probably better ways to do this.
+  if (valveTimer.tickTime >= valveTimer.tLast + TIME_STEP) {
+    vc.tick(valveTimer.tickTime);
+    valveTimer.tLast = valveTimer.tickTime;
   }
 
-  // End of one cycle has been reached
-  if (valve_timer.tick_time >= TOTAL_CYCLE_TIME){
-    valve_timer.t_start = start_timer();
-    valve_timer.t_last = 0;
-    valve_timer.num_cycles++;
-    std::cout << "end of cycle \n";
+  // One valve cycle has been completed
+  if (valveTimer.tickTime >= TOTAL_CYCLE_TIME){
+    Debug<const char*>("End of cycle!\n");
+    valveTimer.tStart = startTimer();
+    valveTimer.tLast = 0;
+    valveTimer.numCycles++;
   }
 
-  valve_timer.t_elapsed = check_timer(false, valve_timer.t_start);
+  valveTimer.tElapsed = checkTimer(false, valveTimer.tStart);
 
-  if (valve_timer.num_cycles > 5)
+#ifndef ARDUINO
+  if (valveTimer.numCycles > 5) // Exit condition for testing
     exit(0);
+#endif
+
+  ////// END OF UPDATE VALVES //////
 }
 
 

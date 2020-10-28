@@ -63,6 +63,39 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
 #define TIME_STEP 100 //ms
 #define NUM_VALVES 4
 
+// Valve start and stop times must be a multiple of TIME_STEP
+// or they will go undetected!
+// Minimum start time is TIME_STEP (not 0!)
+PIOC_Controller::valve VALVES[NUM_VALVES] = {
+  { .name = 'A',
+    .num = 0,
+    .status = 0,
+    .err = 0,
+    .pin = 1,//CONTROL_VALVE_A,
+    .start = 200,
+    .stop = 6000 },
+  { .name = 'B',
+      .num = 1,
+      .status = 0,
+      .err = 0,
+      .pin = 2,//CONTROL_VALVE_B,
+      .start = 6000,
+      .stop = 6400 },
+  { .name = 'C',
+      .num = 2,
+      .status = 0,
+      .err = 0,
+      .pin = 4,//BALANCE_VALVE_A,
+      .start = 6100,
+      .stop = 12400 },
+  { .name = 'D',
+      .num = 3,
+      .status = 0,
+      .err = 0,
+      .pin = 8,//BALANCE_VALVE_B,
+      .start = 12400,
+      .stop = 12900 }};
+
 // start and stop times must be a multiple of TIME_STEP!
 /*static PIOC_Valves::valve VALVES[NUM_VALVES] = {
   { .name = 'A',
