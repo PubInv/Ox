@@ -9,7 +9,23 @@
 
 namespace PIOC_Controller {
 
-  valve VALVES[4] = {
+// Helper MACRO to display bit pattern for debugging only
+//https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format
+// printf("Some text "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(byte));
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY(byte)  \
+  (byte & 0x80 ? '1' : '0'), \
+  (byte & 0x40 ? '1' : '0'), \
+  (byte & 0x20 ? '1' : '0'), \
+  (byte & 0x10 ? '1' : '0'), \
+  (byte & 0x08 ? '1' : '0'), \
+  (byte & 0x04 ? '1' : '0'), \
+  (byte & 0x02 ? '1' : '0'), \
+  (byte & 0x01 ? '1' : '0') 
+
+#define NUM_VALVES 4
+
+  valve VALVES[NUM_VALVES] = {
   { .name = 'A',
     .num = 0,
     .status = 0,
@@ -39,14 +55,35 @@ namespace PIOC_Controller {
       .start = 12400,
       .stop = 12900 }};
 
+  ///////// HELPER FUNCTIONS //////////
+
+  void printDebugValves(int tick, int i, int valve_bits, bool start){
+#ifdef ARDUINO
+      //digitalWrite(VALVES[i].pin, LOW);
+      Serial.print("Valves: ");
+      Serial.print(VALVES[i].name);
+      Serial.print(" ");
+      Serial.print(start);
+      Serial.print(" ");
+      Serial.println(tick);
+#else
+      printf("Valves: " BYTE_TO_BINARY_PATTERN , BYTE_TO_BINARY(valve_bits));
+      printf(" %c%d t_%d\n", VALVES[i].name, start, tick);
+#endif
+  }
+
+  ////////// METHODS ///////////
+
   bool ValveController::tick(uint32_t tick) {
-    for (uint8_t i = 0; i < 4; i++){
+    for (uint8_t i = 0; i < NUM_VALVES; i++){
       if (VALVES[i].start == tick){
-        valve_bits |= VALVES[i].pin;
+        valveBits |= VALVES[i].pin;
+        printDebugValves(tick, i, valveBits, true);
       }
 
       if (VALVES[i].stop == tick){
-        valve_bits ^= VALVES[i].pin;
+        valveBits ^= VALVES[i].pin;
+        printDebugValves(tick, i, valveBits, false);
       }
     }
 
@@ -54,39 +91,3 @@ namespace PIOC_Controller {
   }
 
 }
-
-//https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format
-// printf("Some text "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(byte));
-/*#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
-#define BYTE_TO_BINARY(byte)  \
-  (byte & 0x80 ? '1' : '0'), \
-  (byte & 0x40 ? '1' : '0'), \
-  (byte & 0x20 ? '1' : '0'), \
-  (byte & 0x10 ? '1' : '0'), \
-  (byte & 0x08 ? '1' : '0'), \
-  (byte & 0x04 ? '1' : '0'), \
-  (byte & 0x02 ? '1' : '0'), \
-  (byte & 0x01 ? '1' : '0') 
-
-*/
-
-/*
-#ifdef ARDUINO
-      //digitalWrite(VALVES[i].pin, HIGH);
-      Serial.print("Valve start: ");
-      Serial.print(VALVES[i].name);
-#else
-      printf("tick %d", tick);
-      printf(" Valve start %c", VALVES[i].name);
-      printf(" bits " BYTE_TO_BINARY_PATTERN "\n", BYTE_TO_BINARY(valve_bits));
-#endif*/
-
-/*#ifdef ARDUINO
-      //digitalWrite(VALVES[i].pin, LOW);
-      Serial.print("Valve stop: ");
-      Serial.print(VALVES[i].name);
-#else
-      printf("tick %d", tick);
-      printf(" Valve stop %c", VALVES[i].name);
-      printf(" bits " BYTE_TO_BINARY_PATTERN "\n", BYTE_TO_BINARY(valve_bits));
-#endif*/

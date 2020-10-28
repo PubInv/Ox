@@ -5,7 +5,7 @@
 
 namespace PIOC_Controller {
   
-  enum pioc_mode {
+  enum PIOCMode {
       STARTING,
       RUNNING,
       STOPPED,
@@ -13,8 +13,8 @@ namespace PIOC_Controller {
       ERROR
   };
 
-  struct pioc_state {
-      pioc_mode mode;
+  struct PIOCState {
+      PIOCMode mode;
       uint32_t run_time;
   };
 
@@ -30,11 +30,11 @@ namespace PIOC_Controller {
 
   class ValveController {
     private:
-      uint8_t valve_bits;
+      uint8_t valveBits;
 
     public:
       ValveController() {
-        valve_bits = 0;
+        valveBits = 0;
       }
       bool tick(uint32_t tick);
   };
