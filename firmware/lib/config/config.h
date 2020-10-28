@@ -64,7 +64,7 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
 #define NUM_VALVES 4
 
 // start and stop times must be a multiple of TIME_STEP!
-static valve VALVES[NUM_VALVES] = {
+/*static PIOC_Valves::valve VALVES[NUM_VALVES] = {
   { .name = 'A',
     .num = 0,
     .status = 0,
@@ -92,6 +92,6 @@ static valve VALVES[NUM_VALVES] = {
       .err = 0,
       .pin = 8,//BALANCE_VALVE_B,
       .start = 12400,
-      .stop = 12900 }};
+      .stop = 12900 }};*/
 
 #endif

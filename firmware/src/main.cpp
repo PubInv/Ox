@@ -12,10 +12,13 @@
 #include <debug.h>
 //#include <shift.h>
 #include <inttypes.h>
-#include <state.h>
-#include <valve.h>
+//#include <state.h>
+#include <controller.h>
 #include <config.h>
 #include <chrono>
+
+using namespace PIOC_Debug;
+using namespace PIOC_Controller;
 
 ////////// TIMER //////////
 
@@ -71,15 +74,17 @@ void wait(int t){
 
 ////////// END OF TIMER //////////
 
+
+ValveController vc;
+
 void setup() {
-  serial_init(115200);
-  serial_out_s("Starting PIOC\n");
+  serialBegin(115200);
+  Debug<const char*>("Starting PIOC\n");
 
-  pioc_state ps = { .mode = STARTING,
+  /*pioc_state ps = { .mode = STARTING,
     .run_time = 0
-  };
+  };*/
 
-  valve_init();
   valve_timer.tick_time = 0;
   valve_timer.num_cycles = 0;
   valve_timer.t_last = 0;
@@ -109,7 +114,7 @@ void loop(void) {
   
   // Update valves every timestep
   if (valve_timer.tick_time >= valve_timer.t_last + TIME_STEP){  // BUG: doesnt trigger on t=0!
-    valve_tick(valve_timer.tick_time);
+    vc.tick(valve_timer.tick_time);
     valve_timer.t_last = valve_timer.tick_time;
   }
 

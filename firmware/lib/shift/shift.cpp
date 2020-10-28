@@ -1,6 +1,6 @@
 #ifdef ARDUINO
 #include <Arduino.h>
-#endif
+
 
 #include "shift.h"
 #include <config.h>
@@ -24,3 +24,4 @@ void shift_out(shift_pins sp, uint8_t data_out)
     shiftOut(sp.data, sp.clock, LSBFIRST, data_out);
     digitalWrite(sp.latch, HIGH);
 }
+#endif

@@ -5,24 +5,16 @@
 #include <inttypes.h>
 #include <debug.h>
 
-/*void test_valve_does_init() {
-  int success = valve_init();
-  TEST_ASSERT_TRUE(success == 1);
-}*/
+using namespace PIOC_Debug;
 
 void test_serial(){
-  serial_out_s("Testing");
-  serial_out_b(false);
-  serial_out_b(true);
-  uint8_t x = 50;
-  serial_out_uint8(x);
+  Debug<const char*>("Test text debug\n");
 
-  //TEST_ASSERT_TRUE(success);
+  TEST_ASSERT_TRUE(true);
 }
 
 void process() {
   UNITY_BEGIN();
-  //RUN_TEST(test_valve_does_init);
   RUN_TEST(test_serial);
   UNITY_END();
 }
