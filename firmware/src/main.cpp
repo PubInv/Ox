@@ -59,7 +59,7 @@ void loop(void) {
 
   if (timer.elapsed() > tLast + 100 ){
     tLast = timer.elapsed();
-    vc.updateV(&tLast);
+    vc.update(&tLast);
   }
 
   //exit(0);

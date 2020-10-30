@@ -22,8 +22,8 @@ namespace PIOC_Controller {
   struct valve {
     uint8_t name;
     uint8_t num;
-    uint8_t pin;
     uint8_t state;
+    uint8_t pin;
     uint32_t start;
     uint32_t stop;
   };
