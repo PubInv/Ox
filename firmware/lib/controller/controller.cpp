@@ -59,6 +59,14 @@ namespace PIOC_Controller {
     return true;
   }
 
+  bool ValveController::update(uint32_t msNow){
+    // TODO: check bounds of msNow
+
+    
+
+    return true;
+  }
+
   /*bool ValveController::setupValve(valve valve, uint8_t i){
     this->valves[i] = valve;
     return true;

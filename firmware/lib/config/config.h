@@ -72,37 +72,6 @@ PIOC_Controller::valve VALVES[NUM_VALVES] = {
     .status = 0,
     .err = 0,
     .pin = 1,//CONTROL_VALVE_A,
-    .start = 200,
-    .stop = 6000 },
-  { .name = 'B',
-      .num = 1,
-      .status = 0,
-      .err = 0,
-      .pin = 2,//CONTROL_VALVE_B,
-      .start = 6000,
-      .stop = 6400 },
-  { .name = 'C',
-      .num = 2,
-      .status = 0,
-      .err = 0,
-      .pin = 4,//BALANCE_VALVE_A,
-      .start = 6100,
-      .stop = 12400 },
-  { .name = 'D',
-      .num = 3,
-      .status = 0,
-      .err = 0,
-      .pin = 8,//BALANCE_VALVE_B,
-      .start = 12400,
-      .stop = 12900 }};
-
-// start and stop times must be a multiple of TIME_STEP!
-/*static PIOC_Valves::valve VALVES[NUM_VALVES] = {
-  { .name = 'A',
-    .num = 0,
-    .status = 0,
-    .err = 0,
-    .pin = 1,//CONTROL_VALVE_A,
     .start = 100,
     .stop = 6000 },
   { .name = 'B',
@@ -125,6 +94,6 @@ PIOC_Controller::valve VALVES[NUM_VALVES] = {
       .err = 0,
       .pin = 8,//BALANCE_VALVE_B,
       .start = 12400,
-      .stop = 12900 }};*/
+      .stop = 12900 }};
 
 #endif

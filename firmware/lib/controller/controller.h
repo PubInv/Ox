@@ -1,5 +1,5 @@
-#ifndef VALVE_H
-#define VALVE_H
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 #include <inttypes.h>
 
@@ -34,7 +34,7 @@ namespace PIOC_Controller {
       //uint8_t timeStep;
       PIOCState state;
       valve *valves;
-      int numValves;
+      int numValves; // TODO: clarify how many bits the int is
     public:
       ValveController(valve *v, int numValves) {
         valveBits = 0;
@@ -44,6 +44,7 @@ namespace PIOC_Controller {
         this->numValves = numValves;
       }
       bool tick(uint32_t tick);
+      bool update(uint32_t msNow);
       //bool setupValve(valve valve, uint8_t i);
       //bool setupValves(valve valves[], uint8_t numValves);
   };

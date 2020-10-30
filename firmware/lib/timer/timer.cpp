@@ -6,6 +6,12 @@
 using namespace std::chrono;
 using namespace PIOC_Debug;
 
+// Timer References:
+//https://www.robotshop.com/community/forum/t/arduino-101-timers-and-interrupts/13072
+//https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/system_time.html
+//https://randomnerdtutorials.com/getting-started-with-esp32/
+//https://github.com/espressif/arduino-esp32
+
 namespace PIOC_Timer {
 
     /*bool TimerC::updateTimer(){
