@@ -2,37 +2,30 @@
 #define TIMER_H
 
 #include <chrono>
-using namespace std::chrono;
 
 namespace PIOC_Timer {
 
-    struct Timer { 
-        uint32_t tickTime = 0;
-        uint32_t numCycles = 0;
-        uint32_t tLast = 0;
-        double tElapsed = 0;
-        steady_clock::time_point tStart;
+using namespace std::chrono;
+
+    uint64_t timeSinceEpochMs();
+
+    class Timer {
+        private:
+            uint32_t msElapsed;
+            uint32_t msStart;
+        public:
+            Timer(){
+                msElapsed = 0;
+                msStart = 0;
+            }
+            Timer(uint32_t start){
+                msElapsed = 0;
+                msStart = start;
+            }
+            void update();
+            uint32_t elapsed();
     };
-    
-    steady_clock::time_point startTimer();
-    double checkTimer(bool print, steady_clock::time_point tStart);
-    void wait(int t);
 
 }
 
 #endif
-
-
-
- /*class TimerC {
-        private:
-            uint32_t tickTime;
-            uint32_t numCycles;
-            uint32_t tLast;
-            double tElapsed;
-            steady_clock::time_point tStart;
-            uint8_t timeStep;
-            uint32_t totalCycleTime;
-        public:
-            bool updateTimer();
-    }*/

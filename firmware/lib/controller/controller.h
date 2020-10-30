@@ -4,7 +4,7 @@
 #include <inttypes.h>
 
 namespace PIOC_Controller {
-  
+
   enum PIOCMode {
       STARTING,
       RUNNING,
@@ -18,33 +18,34 @@ namespace PIOC_Controller {
       uint32_t totalRunTime;
   };
 
+
   struct valve {
-    char name;
+    uint8_t name;
     uint8_t num;
-    uint8_t status;
-    uint8_t err;
-    char pin;
+    uint8_t pin;
+    uint8_t state;
     uint32_t start;
     uint32_t stop;
   };
 
   class ValveController {
     private:
+      PIOCState pioc_state;
       uint8_t valveBits;
-      //uint8_t timeStep;
-      PIOCState state;
+      uint8_t numValves;
       valve *valves;
-      int numValves; // TODO: clarify how many bits the int is
     public:
       ValveController(valve *v, int numValves) {
         valveBits = 0;
-        state.mode = STARTING;
-        state.totalRunTime = 0;
+        pioc_state.mode = STARTING;
+        pioc_state.totalRunTime = 0;
         valves = v;
         this->numValves = numValves;
       }
-      bool tick(uint32_t tick);
-      bool update(uint32_t msNow);
+      bool update(uint32_t *msNow);
+      //bool tick(uint32_t tick);
+      //uint8_t updateValves(uint32_t msNow);
+      
       //bool setupValve(valve valve, uint8_t i);
       //bool setupValves(valve valves[], uint8_t numValves);
   };

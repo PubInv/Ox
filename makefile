@@ -23,4 +23,4 @@ docker-test-uno:
 docker-pio-run:
 	cd firmware \
 	&& sudo pio run -e native -v \
-	&& sudo .pio/build/native/program
+	&& sudo .pio/build/native/program -v

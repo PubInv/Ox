@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <inttypes.h>
+
 //#include <valve.h>
 
 // ADAFRUIT FEATHER ESP32
@@ -59,7 +61,7 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
 
 ///////// VALVES //////////
 
-#define TOTAL_CYCLE_TIME 12900 //ms
+#define TOTAL_CYCLE_TIME 5000 //ms
 #define TIME_STEP 100 //ms
 #define NUM_VALVES 4
 
@@ -69,31 +71,27 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
 PIOC_Controller::valve VALVES[NUM_VALVES] = {
   { .name = 'A',
     .num = 0,
-    .status = 0,
-    .err = 0,
-    .pin = 1,//CONTROL_VALVE_A,
-    .start = 100,
-    .stop = 6000 },
+    .state = 0,
+    .pin = 1,
+    .start = 500,
+    .stop = 2000, },
   { .name = 'B',
       .num = 1,
-      .status = 0,
-      .err = 0,
-      .pin = 2,//CONTROL_VALVE_B,
-      .start = 6000,
-      .stop = 6400 },
+      .state = 0,
+      .pin = 2,
+      .start = 2000,
+      .stop = 2400, },
   { .name = 'C',
       .num = 2,
-      .status = 0,
-      .err = 0,
-      .pin = 4,//BALANCE_VALVE_A,
-      .start = 6400,
-      .stop = 12400 },
+      .state = 0,
+      .pin = 4,
+      .start = 2400,
+      .stop = 4400, },
   { .name = 'D',
       .num = 3,
-      .status = 0,
-      .err = 0,
-      .pin = 8,//BALANCE_VALVE_B,
-      .start = 12400,
-      .stop = 12900 }};
+      .state = 0,
+      .pin = 8,
+      .start = 4400,
+      .stop = 4900, }};
 
 #endif

@@ -21,15 +21,24 @@ using namespace PIOC_Debug;
 using namespace PIOC_Controller;
 using namespace PIOC_Timer;
 
-Timer valveTimer;
+
 ValveController vc(VALVES, NUM_VALVES);
+Timer timer;
+
+uint32_t tLast;
+
 
 void setup() {
   serialBegin(115200);
   Debug<const char*>("Starting PIOC\n");
 
-  valveTimer.tStart = startTimer();
-  
+  #ifdef ARDUIO
+  timer = Timer();
+  #else
+  timer = Timer(timeSinceEpochMs());
+  #endif
+
+  tLast = 0;
   /*pinMode(ST_CP, OUTPUT);
   pinMode(SH_CP, OUTPUT);
   pinMode(DS, OUTPUT);
@@ -40,41 +49,20 @@ void setup() {
 
 }
 
-
-
 void loop(void) {
   //testText();
   //Serial.println(F("Loop"));
   //testFillScreen();
   //delay(3000);
 
-  ////// UPDATE VALVES //////
-  valveTimer.tickTime = valveTimer.tElapsed * 1000; //convert double seconds to int milliseconds
-  
-  // Update valve controller every timestep
-  // BUG: doesnt trigger on t=0!
-  // Will this compound timing errors? Probably better ways to do this.
-  if (valveTimer.tickTime >= valveTimer.tLast + TIME_STEP) {
-    vc.tick(valveTimer.tickTime);
-    valveTimer.tLast = valveTimer.tickTime;
+  timer.update();
+
+  if (timer.elapsed() > tLast + 100 ){
+    tLast = timer.elapsed();
+    vc.updateV(&tLast);
   }
 
-  // One valve cycle has been completed
-  if (valveTimer.tickTime >= TOTAL_CYCLE_TIME){
-    Debug<const char*>("End of cycle!\n");
-    valveTimer.tStart = startTimer();
-    valveTimer.tLast = 0;
-    valveTimer.numCycles++;
-  }
-
-  valveTimer.tElapsed = checkTimer(false, valveTimer.tStart);
-
-#ifndef ARDUINO
-  if (valveTimer.numCycles > 5) // Exit condition for testing
-    exit(0);
-#endif
-
-  ////// END OF UPDATE VALVES //////
+  //exit(0);
 }
 
 
