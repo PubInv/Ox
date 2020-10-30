@@ -17,28 +17,29 @@
 #include <config.h>
 #include <timer.h>
 
+
+
 using namespace PIOC_Debug;
 using namespace PIOC_Controller;
 using namespace PIOC_Timer;
 
+ValveController vc(&valveArray[0], NUM_VALVES);
+Timer valveCycle;
 
-ValveController vc(VALVES, NUM_VALVES);
-Timer timer;
-
-uint32_t tLast;
-
+unsigned int tLast;
 
 void setup() {
   serialBegin(115200);
   Debug<const char*>("Starting PIOC\n");
 
-  #ifdef ARDUIO
+  #ifdef ARDUINO
   timer = Timer();
   #else
-  timer = Timer(timeSinceEpochMs());
+  valveCycle = Timer(timeSinceEpochMs());
   #endif
 
   tLast = 0;
+
   /*pinMode(ST_CP, OUTPUT);
   pinMode(SH_CP, OUTPUT);
   pinMode(DS, OUTPUT);
@@ -55,11 +56,15 @@ void loop(void) {
   //testFillScreen();
   //delay(3000);
 
-  timer.update();
+  valveCycle.update();
 
-  if (timer.elapsed() > tLast + 100 ){
-    tLast = timer.elapsed();
-    vc.update(&tLast);
+  if (valveCycle.elapsed() >= tLast + TIME_STEP){
+    tLast = valveCycle.elapsed();
+    vc.updateController(&tLast);
+  } else if (valveCycle.elapsed() >= TOTAL_CYCLE_TIME){
+    vc.resetValves();
+    valveCycle = Timer(timeSinceEpochMs());
+    tLast = 0;
   }
 
   //exit(0);

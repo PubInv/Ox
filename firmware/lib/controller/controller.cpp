@@ -5,14 +5,7 @@
 #include <controller.h>
 #include <stdio.h>
 #include <iostream>
-
-//#include <valve.h>
-//#include <debug.h>
-//#include <config.h>
 #include <inttypes.h>
-
-//using namespace PIOC_Valve;
-//using namespace PIOC_Debug;
 
 namespace PIOC_Controller {
 
@@ -48,162 +41,36 @@ namespace PIOC_Controller {
 #endif
   }
 
-  
+  void ValveController::updateValves(uint32_t *msNow){
+    for (uint8_t i = 0; i < numValves; i++){
+      if (((*(valves+i)).state == 0) && (*msNow >= (*(valves+i)).start)) {
+          (*(valves+i)).state = 1;
+          valveBits |= (*(valves+i)).pin;
+      } else if (((*(valves+i)).state == 1) && (*msNow >= (*(valves+i)).stop)){
+        (*(valves+i)).state = 2;
+        valveBits ^= (*(valves+i)).pin;
+      }
+    }
+  }
 
-  uint8_t updateValve(valve *valve, uint32_t *msNow){
-    std::cout << *msNow << std::endl;
-    std::cout << valve->name<< std::endl;
-    std::cout << valve->num << std::endl;
-    std::cout << valve->pin << std::endl;
-    std::cout << valve->state << std::endl;
-    std::cout << valve->start<< std::endl;
-    std::cout << valve->stop<< std::endl;
-    
-      if ((valve->state = 0) && (*msNow >= valve->start)){
-        // Turn on valve
-        std::cout << "valve on";
-        valve->state = 1;
-        return valve->pin;
-      }
-      else if ((valve->state = 1) && (*msNow >= valve->stop)){
-        std::cout << "valve off";
-        valve->state = 2;
-        return valve->pin;
-      }
-      else {
-        //std::cout << "returning nothing";
-        return 0;
-      }
-
+  bool ValveController::resetValves(){
+    for (int i = 0; i < numValves; i++){
+      (*(valves+i)).state = 0;
+    }
+    valveBits = 0;
+    return true;
   }
 
   ////////// METHODS ///////////
 
-  bool ValveController::update(uint32_t *msNow){
+  bool ValveController::updateController(uint32_t *msNow){
     // TODO: error checking: msNow > msLast, msNow < msLast + tolerance
-    
-    //std::cout << *msNow << std::endl;
-    for (int i = 0; i < numValves; i++){
-      uint8_t x = updateValve((this->valves+i), msNow);
-      std::cout << "x:" << x << std::endl;
-    }
 
-    //updateValves(msNow);
+    updateValves(msNow);
 
-    printDebugValves(*msNow, valveBits, false, 'A');
+    printDebugValves(*msNow, valveBits, false, 'V');
 
     return true;
   }
-
-
 
 }
-
-
-
-  /*uint8_t ValveController::updateValves(uint32_t msNow){
-    for (uint8_t i = 0; i < numValves; i++){
-      if ((*(valves+i)).state = 0){
-          if (msNow >= (*(valves+i)).start){
-            (*(valves+i)).state == 1;
-            valveBits |= (*(valves+i)).pin;
-            //Debug<const char*>("Valve off!");
-            //printDebugValves(msNow, v, true, valve.name);
-          }
-      } else if ((*(valves+i)).state = 1){
-        if (msNow >= (*(valves+i)).stop){
-          (*(valves+i)).state == 2;
-          valveBits ^= (*(valves+i)).pin;
-          //Debug<const char*>("Valve off!");
-          //printDebugValves(msNow, v, false, valve.name);
-        }
-      }
-    }
-  }
-*/
-
-
-/*for (uint8_t i = 0; i < numValves; i++){
-      switch ((*(valves+i)).state){
-        case READY:
-          if (msNow >= (*(valves+i)).start){
-            (*(valves+i)).state == ON;
-            valveBits |= (*(valves+i)).pin;
-            //printDebugValves(msNow, v, true, valve.name);
-          }
-        break;
-        case ON:
-
-            Debug<const char*>("Valve on!");
-          if (msNow >= (*(valves+i)).stop){
-            (*(valves+i)).state == OFF;
-            valveBits ^= (*(valves+i)).pin;
-            Debug<const char*>("Valve off!");
-            //printDebugValves(msNow, v, false, valve.name);
-          }
-        break;
-        case OFF:
-          // needs to be reset at the start of the cycle
-        break;
-        case FAULT:
-          // TODO
-        break;
-        default:
-          Debug<const char*>("Valve state fault!");
-        break;
-      }
-    }*/
-
-/*bool ValveController::tick(uint32_t tick) {
-    for (uint8_t i = 0; i < numValves; i++){
-      if ((*(valves+i)).start == tick){
-        valveBits |= (*(valves+i)).pin;
-        printDebugValves(tick, i, valveBits, true, (*(valves+i)).name);
-      }
-
-      if ((*(valves+i)).stop == tick){
-        valveBits ^= (*(valves+i)).pin;
-        printDebugValves(tick, i, valveBits, false, (*(valves+i)).name);
-      }
-    }
-
-    return true;
-  }*/
-  
-
-    /*bool ValveController::setupValve(valve valve, uint8_t i){
-    this->valves[i] = valve;
-    return true;
-  }
-
-  bool ValveController::setupValves(valve valves[], uint8_t numValves){
-    for (int i = 0; i < numValves; i++){
-      this->valves[i] = valves[i];
-    }
-    return true;
-  }*/
-
-/*switch ((*(valves+i)).state){
-        case READY:
-          if (msNow >= (*(valves+i)).start){
-            (*(valves+i)).state == ON;
-            v |= (*(valves+i)).pin;
-            printDebugValves(msNow, i, v, true, (*(valves+i)).name);
-          }
-        break;
-        case ON:
-          if (msNow >= (*(valves+i)).stop){
-            (*(valves+i)).state == OFF;
-            v ^= (*(valves+i)).pin;
-            printDebugValves(msNow, i, v, false, (*(valves+i)).name);
-          }
-        break;
-        case OFF:
-        break;
-        case WAS_ON:
-        break;
-        case ERROR:
-        break;
-        default:
-        break;
-      }*/

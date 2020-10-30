@@ -62,13 +62,21 @@ Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RST);
 ///////// VALVES //////////
 
 #define TOTAL_CYCLE_TIME 5000 //ms
-#define TIME_STEP 100 //ms
-#define NUM_VALVES 4
+#define TIME_STEP 10 //ms
+#define NUM_VALVES 4 //1-8
 
-// Valve start and stop times must be a multiple of TIME_STEP
-// or they will go undetected!
-// Minimum start time is TIME_STEP (not 0!)
-PIOC_Controller::valve VALVES[NUM_VALVES] = {
+// { name, num, state, pin, start, stop }
+PIOC_Controller::Valve valveArray[NUM_VALVES] = {
+  { 'A', 0, 0, 1, 500, 2000, },
+  { 'B', 1, 0, 2, 2000, 2400, },
+  { 'C', 2, 0, 4, 2400, 4400, },
+  { 'D', 3, 0, 8, 4400, 4900, }};
+
+#endif
+
+
+
+/*PIOC_Controller::Valve valveArray[NUM_VALVES] = {
   { .name = 'A',
     .num = 0,
     .state = 0,
@@ -92,6 +100,4 @@ PIOC_Controller::valve VALVES[NUM_VALVES] = {
       .state = 0,
       .pin = 8,
       .start = 4400,
-      .stop = 4900, }};
-
-#endif
+      .stop = 4900, }};*/

@@ -23,5 +23,5 @@ docker-test-uno:
 
 # Build and run src/main.cpp in a Docker container
 docker-pio-run:
-	sudo docker build --tag pioc .
+	docker build --tag pioc .
 	docker run --rm -it --name pi pioc bash -c 'cd firmware && platformio lib install && platformio lib list && pio run -e native && .pio/build/native/program'

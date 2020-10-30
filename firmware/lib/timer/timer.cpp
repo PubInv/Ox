@@ -1,5 +1,8 @@
+#ifdef ARDUINO
+#include <Arduino.h>
+#endif
 #include <chrono>
-#include <iostream>
+//#include <iostream>
 #include <timer.h>
 
 namespace PIOC_Timer {
@@ -19,5 +22,4 @@ namespace PIOC_Timer {
     uint32_t Timer::elapsed(){
         return msElapsed;
     }
-
 }
