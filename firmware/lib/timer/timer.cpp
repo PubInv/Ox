@@ -13,7 +13,7 @@ namespace PIOC_Timer {
 
     void Timer::update(){
         #ifdef ARDUINO
-        this->msElapsed = millis();
+        this->msElapsed = (uint32_t)millis() - this->msStart;
         #else
         this->msElapsed = (uint32_t)(timeSinceEpochMs()) - this->msStart;
         #endif

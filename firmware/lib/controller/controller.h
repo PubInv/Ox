@@ -36,7 +36,7 @@ namespace PIOC_Controller {
       int numValves;
       Valve *valves;
     public:
-      ValveController(Valve* v, int numValves) {
+        ValveController(Valve* v, int numValves) {
         valveBits = 0;
         pioc_state.mode = STARTING;
         pioc_state.totalRunTime = 0;
@@ -46,7 +46,7 @@ namespace PIOC_Controller {
       void updateValves(uint32_t *msNow);
       bool updateController(unsigned int *msNow);
       bool resetValves();
-      
+      uint8_t getValveBits();
   };
 
 }

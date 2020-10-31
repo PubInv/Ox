@@ -28,13 +28,7 @@ namespace PIOC_Controller {
 
   void printDebugValves(uint32_t tick, int valve_bits, bool start, char name){
 #ifdef ARDUINO
-      //digitalWrite(VALVES[i].pin, LOW);
-      Serial.print("Valves: ");
-      Serial.print(name);
-      Serial.print(" ");
-      Serial.print(start);
-      Serial.print(" ");
-      Serial.println(tick);
+      //Serial.print(tick);
 #else
       printf("Valves: " BYTE_TO_BINARY_PATTERN , BYTE_TO_BINARY(valve_bits));
       printf(" %c%d t_%d\n", name, start, tick);
@@ -73,4 +67,8 @@ namespace PIOC_Controller {
     return true;
   }
 
-}
+  uint8_t ValveController::getValveBits(){
+    return valveBits;
+  }
+
+}   
