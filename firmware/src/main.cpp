@@ -29,7 +29,7 @@ void setup() {
   //Debug<const char*>("Starting PIOC\n");
 
 
-  //shiftInit();
+  shiftInit();
 
 
   #ifdef ARDUINO
@@ -64,7 +64,8 @@ void loop(void) {
     tLast = valveCycle.elapsed();
     vc.updateController(&tLast);
 #ifdef ARDUINO
-    shiftOut(vc.getValveBits());
+    uint8_t out = vc.getValveBits();
+    shiftOutValves(out);
 #endif
     printValveState(vc.getValveBits());
   } else if (valveCycle.elapsed() >= TOTAL_CYCLE_TIME){

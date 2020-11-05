@@ -13,6 +13,6 @@ struct shift_pins {
 };
 
 void shiftInit();
-void shiftOut(uint8_t data_out);
+void shiftOutValves(uint8_t data_out);
 
 #endif

@@ -32,16 +32,23 @@
 
 ///////// VALVES //////////
 
-#define TOTAL_CYCLE_TIME 5000 //ms
+#define TOTAL_CYCLE_TIME 8000 //ms
 #define TIME_STEP 10 //ms
 #define NUM_VALVES 4 //1-8
 
 // { name, num, state, pin, start, stop }
+/*PIOC_Controller::Valve valveArray[NUM_VALVES] = {
+  { 'A', 0, 0, 1, 0, 6000, },
+  { 'B', 1, 0, 2, 6000, 12000, },
+  { 'C', 2, 0, 4, 5600, 6000, },
+  { 'D', 3, 0, 8, 11600, 12000, }};
+*/
 PIOC_Controller::Valve valveArray[NUM_VALVES] = {
-  { 'A', 0, 0, 1, 500, 2000, },
-  { 'B', 1, 0, 2, 2000, 2400, },
-  { 'C', 2, 0, 4, 2400, 4400, },
-  { 'D', 3, 0, 8, 4400, 4900, }};
+  { 'A', 0, 0, 1, 100, 4000, },
+  { 'B', 1, 0, 2, 4000, 8000, },
+  { 'C', 2, 0, 4, 3700, 4000, },
+  { 'D', 3, 0, 8, 7700, 8000, }};
+
 
 #endif
 
