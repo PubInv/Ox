@@ -12,6 +12,13 @@ Infrastructure and logistics create additional challenges. This is raised the re
 
 # Project Status
 
+**1 November 2020**
+It's alive! Running for the first time PIOC reached 95% O2! VentMon is being used to monitor the O2 output, pressure and flowrate. Unfortunately the single stage water filter let enough water vapour past that after a few hours the concentration dropped to 35%. Next steps are to dry out the zeolite and build a simple chiller and dessicant drier to remove any excess water vapour - some digital pressure sensors will then be installed to tune the system and test various configurations.
+
+![build-002](docs/img/pioc_firstrun.jpg)
+![build-002](docs/img/ventmon95o2.jpg)
+![build-003](docs/img/pioc_circuit.jpg)
+
 **22 October 2020**
 
 The system is now mounted to the board! Some changes have been made during the build to simplify it - the sieves now use barb fittings to avoid having to drill and tap 3/8" BSPT which is costly and requires a drill press. The pneumatic circuit has been modified to shorten the overall height. The valves have been tested manually and the overall operation appears to be correct. Next steps are to finish the driver circuits and fill the sieves.
