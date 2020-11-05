@@ -38,4 +38,4 @@ Please see subdirectories for relevant files and documentation.
 
 ## Thanks
 
-Many thanks to [Project Apollo](https://github.com/oxycon/ProjectApollo) and [Helpful Engineering](https://helpfulengineering.org/) for their ongoing collaboration on this important work.
+Many thanks to [Project Apollo](https://github.com/oxycon/ProjectApollo), [Helpful Engineering](https://helpfulengineering.org/), [Shield Mission OxiKit](https://oxikit.com/) and [EnAccess OpenO2](https://enaccess.org/projects/openo2/) for their ongoing collaboration.
