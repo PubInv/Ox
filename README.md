@@ -10,6 +10,8 @@ Field hospital settings may be urban or rural. Environments such as high tempera
 
 Infrastructure and logistics create additional challenges. This is raised the requirement to design a device that can be manufactured locally, along with sufficient documentation to present to local regulatory authorities. Medical device standards must be met and this project aims to meet regulatory requirements.
 
+[Download](docs/PIOC.pdf) the PIOC 1 page presentation!
+
 # Project Status
 
 **1 November 2020**
