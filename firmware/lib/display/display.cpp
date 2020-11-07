@@ -131,33 +131,30 @@ void PIOC_Display::updateGraph() {
   bool up = true;
   srand (time(NULL));
 
-  double temp;
+  //double temp;
+
+  int yLast = y1;
 
   for (;;) {
-    tft.drawRect(x, graphYMax, barWidth, graphYMin-graphYMax+1, BLACK);
-    tft.drawPixel(x, y1, GREEN);
     
-    /*if (up){
-      y1++;
-      y1 += rand() % 2;
-      if (y1 >= graphYMin){
-        up = false;
-      }
+    // Moving bar
+    tft.drawRect(x, graphYMax, barWidth, graphYMin-graphYMax+1, BLACK);
+    
+    if (abs(y1-yLast) <= 1) {
+      tft.drawPixel(x, y1, YELLOW);
     } else {
-      y1--;
-      y1 -= rand() % 2;
-      if (y1 <= graphYMax){
-        up = true;
-      }
-    }*/
 
+      tft.drawFastVLine(x, y1, (yLast-y1), YELLOW);
+    }
+
+    yLast = y1;
+    
+
+    // Update the graph (this is a test function)
     // minus is up!!
     y1 = graphYZero - 20*sin(0.1*x) - 5*sin(0.5*x) - 2*sin(0.75*x); // rand() % 10;
-
     
-
-    //y1 = y1*-1;
-
+    // X step is constant
     x++;
     if (x > graphXMax-barWidth){
       barWidth--;
