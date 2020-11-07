@@ -35,14 +35,18 @@ void setup() {
   #ifdef ARDUINO
   display = PIOC_Display(); 
   display.displayInit();
-  display.startScreen();
-  delay(2000);
-  display.debugScreen();
+  //display.startScreen();
+  //delay(2000);
+  //display.debugScreen();
   
+  display.drawButton();
+
   valveCycle = Timer(millis());
   #else
   valveCycle = Timer(timeSinceEpochMs());
   #endif
+  
+  display.updateGraph();
 
   tLast = 0;
   displayTick = 0;

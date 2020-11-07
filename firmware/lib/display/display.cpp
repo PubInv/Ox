@@ -63,6 +63,114 @@ namespace PIOC {
     }
   }
 
+ String Key[4][4] = {
+  { "7", "8", "9", "/" },
+  { "4", "5", "6", "*" },
+  { "1", "2", "3", "-" },
+  { "C", "0", "=", "+" }
+};
+
+String N1, N2, ShowSC, opt;
+bool updata=false;
+float answers=-1;
+
+
+int screenWidth = 320;
+int screenHeight = 240;
+
+
+void PIOC_Display::drawButton(){
+
+    int x = 260;
+    tft.fillScreen(ILI9341_BLACK);
+    //tft.fillRect(0, 80, 240, 240, WHITE);
+    tft.drawFastHLine(x, 0, 60, WHITE);
+    tft.drawFastHLine(x, 60, 60, WHITE);
+    tft.drawFastHLine(x, 120, 60, WHITE);
+    tft.drawFastHLine(x, 180, 60, WHITE);
+    tft.drawFastHLine(x, 239, 60, WHITE);
+
+    tft.drawFastVLine(x, 0, 240, WHITE);
+    tft.drawFastVLine(319, 0, 240, WHITE);
+
+    tft.drawFastVLine(0, 120, 119, WHITE);
+    tft.drawFastHLine(0, 120, 260, WHITE);
+    tft.drawFastHLine(0, 239, 260, WHITE);
+
+    //tft.drawFastHLine(0, 180, 260, WHITE);
+    //tft.drawFastVLine(x, 0, 240, WHITE);
+    
+
+    /*tft.drawFastVLine(60, 80, 240, BLACK);
+    tft.drawFastVLine(120, 80, 240, BLACK);
+    tft.drawFastVLine(180, 80, 240, BLACK);
+    tft.drawFastVLine(240-1, 80, 240, BLACK);
+
+    for (int y=0;y<4;y++) {
+      for (int x=0;x<4;x++) {
+        tft.setCursor(22 + (60*x), 100 + (60*y));
+        tft.setTextSize(3);
+        tft.setTextColor(BLACK);
+        tft.println(Key[y][x]);
+      }
+    }*/
+}
+
+int graphYBase = 190;
+int graphYMin = 235;
+int graphYZero = 180;
+int graphYMax = 125;
+int graphXMin = 2;
+int graphXMax = 258;
+int barWidth = 30;
+
+
+void PIOC_Display::updateGraph() {
+  int x = graphXMin;
+  int y1 = graphYZero;
+  bool up = true;
+  srand (time(NULL));
+
+  double temp;
+
+  for (;;) {
+    tft.drawRect(x, graphYMax, barWidth, graphYMin-graphYMax+1, BLACK);
+    tft.drawPixel(x, y1, GREEN);
+    
+    /*if (up){
+      y1++;
+      y1 += rand() % 2;
+      if (y1 >= graphYMin){
+        up = false;
+      }
+    } else {
+      y1--;
+      y1 -= rand() % 2;
+      if (y1 <= graphYMax){
+        up = true;
+      }
+    }*/
+
+    // minus is up!!
+    y1 = graphYZero - 20*sin(0.1*x) - 5*sin(0.5*x) - 2*sin(0.75*x); // rand() % 10;
+
+    
+
+    //y1 = y1*-1;
+
+    x++;
+    if (x > graphXMax-barWidth){
+      barWidth--;
+      if (barWidth == 0){
+        x = graphXMin;
+        barWidth = 30;
+      }
+    }
+
+    delay(20);
+  }
+}
+
   /*void PIOC_Display::printLine(){
 
   }
