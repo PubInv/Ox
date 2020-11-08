@@ -120,9 +120,11 @@ int graphYBase = 190;
 int graphYMin = 235;
 int graphYZero = 180;
 int graphYMax = 125;
-int graphXMin = 2;
+int graphXMin = 1;
 int graphXMax = 258;
-int barWidth = 30;
+
+int maxBarWidth = 20;
+int barWidth = maxBarWidth;
 
 
 void PIOC_Display::updateGraph() {
@@ -131,36 +133,68 @@ void PIOC_Display::updateGraph() {
   bool up = true;
   srand (time(NULL));
 
-  //double temp;
-
   int yLast = y1;
+  int graphHeight = graphYMin-graphYMax+1;
 
   for (;;) {
+    printf("x %d\n", x);
     
-    // Moving bar
-    tft.drawRect(x, graphYMax, barWidth, graphYMin-graphYMax+1, BLACK);
+    // Black bar that moves at a constant rate.
+    if (x == graphXMin){
+      tft.startWrite();
+      tft.writeFillRect(x, graphYMax, barWidth, graphHeight, BLACK);
+      tft.endWrite();
+      yLast = graphYZero;
+      y1 = graphYZero;
+      printf("x == graphXMin\n");
+    } else {
+      tft.drawRect(x, graphYMax, barWidth, graphYMin-graphYMax+1, BLACK); // may be faster as 2 vertical lines
+    }
     
-    if (abs(y1-yLast) <= 1) {
+    // Draw a pixel when the line is 1 pixel long, otherwise draw a line.
+    // This draws a continuous line no matter the delta.
+    /*if (abs(y1-yLast) <= 1) {
       tft.drawPixel(x, y1, YELLOW);
     } else {
+      tft.drawFastVLine(x, y1, (yLast-y1), YELLOW);
+    }*/
 
+    if ((abs(y1-yLast) <= 1)) { // || (x == graphXMin)
+      tft.drawPixel(x, y1, YELLOW);
+    } else {
       tft.drawFastVLine(x, y1, (yLast-y1), YELLOW);
     }
-
+  
+    
     yLast = y1;
     
-
     // Update the graph (this is a test function)
     // minus is up!!
-    y1 = graphYZero - 20*sin(0.1*x) - 5*sin(0.5*x) - 2*sin(0.75*x); // rand() % 10;
+    // https://en.wikipedia.org/wiki/Square_wave
+
+    float f = 0.01; //Hz
+    float a = 10;
+    int noise = 2;
+    float ytemp = 0;
+    float b = 0;
+    for (int i = 0; i < 5; i++){
+      b = 2*PI*(2*i-1)*f*x;
+      ytemp += ((a*sin(b)) / (2*i-1)) + (-noise+rand()%(noise*2));
+    }
+    y1 = graphYZero - (int)(4/PI*(ytemp));
     
-    // X step is constant
+    // X step is constant 1 pixel per update.
     x++;
+
+    // At the end of the frame, the black bar shrinks to allow
+    // the graph to draw to the end of the frame.
     if (x > graphXMax-barWidth){
       barWidth--;
-      if (barWidth == 0){
+      if (x >= graphXMax){
         x = graphXMin;
-        barWidth = 30;
+        barWidth = maxBarWidth;
+        //yLast = y1;
+        
       }
     }
 
