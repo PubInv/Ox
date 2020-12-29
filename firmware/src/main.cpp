@@ -26,7 +26,7 @@ unsigned int displayTick;
 
 void setup() {
   serialBegin(115200);
-  //Debug<const char*>("Starting PIOC\n");
+  Debug<const char*>("Starting PIOC\n");
 
 
   shiftInit();
@@ -35,24 +35,24 @@ void setup() {
   #ifdef ARDUINO
   display = PIOC_Display(); 
   display.displayInit();
-  //display.startScreen();
-  //delay(2000);
-  //display.debugScreen();
+  display.startScreen();
+  delay(2000);
+  display.debugScreen();
   
-  display.drawButton();
-
   valveCycle = Timer(millis());
   #else
   valveCycle = Timer(timeSinceEpochMs());
   #endif
   
-  display.updateGraph();
+  /*// Test display layout and graph experiment
+  display.drawButton();
+  display.updateGraph();*/
 
   tLast = 0;
   displayTick = 0;
 }
 
-void printValveState(byte vs){
+void printValveState(uint8_t vs){
   Serial.print("Valves: ");
   for (int b = 7; b >= 0; b--)
   {
