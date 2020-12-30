@@ -23,18 +23,12 @@ namespace PIOC_Sensor {
         ERROR
     };
 
-    enum PressureUnits {
-        PSI,
-        Pa,
-        kPa,
-        bar,
-        ATM
-    };
-
     struct SensorState {
         uint8_t name;
-        uint8_t pin;
-        uint32_t lastMs;
+        uint8_t addr;
+        uint8_t minPSI;
+        uint8_t maxPSI;
+        uint8_t timeout;
         uint32_t pressure;
         SensorStatus status;
     };
@@ -42,29 +36,21 @@ namespace PIOC_Sensor {
     class MPR_Pressure {
         private:
             SensorState state;
-            PressureUnits units;
-            uint8_t addr;
-            uint8_t minPSI;
-            uint8_t maxPSI;
-
         public:
-            //MPR_Pressure(uint8_t name, uint8_t pin, PressureUnits pu){
-            MPR_Pressure(){
-                //state.name = name;
-                //state.pin = pin;
-                state.lastMs = 0;
+            MPR_Pressure(uint8_t name = 0, uint8_t i2cAddress = 0x18, uint8_t minimumPSI = 0, uint8_t maximumPSI = 25, uint8_t readTimeout = 15){
+                state.name = name;
+                state.addr = i2cAddress; //0x18; // default I2C address
+                state.minPSI = minimumPSI;
+                state.maxPSI = maximumPSI;
+                state.timeout = readTimeout;
                 state.pressure = 0;
                 state.status = OK;
-                //units = pu;
-                addr = 0x18; // default I2C address
             }
             bool setup();
             float readPressure();
             uint8_t readStatus();
             uint32_t getPressure();
             SensorState getState();
-            bool setUnits(PressureUnits pu);
-            PressureUnits getUnits();
     };
 
 }
