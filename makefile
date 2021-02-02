@@ -25,3 +25,9 @@ docker-test-uno:
 docker-pio-run:
 	docker build --tag pioc .
 	docker run --rm -it --name pi pioc bash -c 'cd firmware && platformio lib install && platformio lib list && pio run -e native && .pio/build/native/program'
+
+# Build and run on FeatherESP32 and start serial monitor
+pio-run-esp32:
+	cd firmware \
+	&& pio run -e featheresp32 -t upload \
+	&& pio device monitor

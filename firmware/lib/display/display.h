@@ -53,6 +53,8 @@ class PIOC_Display {
         void valveState(uint32_t vs, uint8_t state);
         void fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
         uint16_t color_convert(uint8_t red, uint8_t green, uint8_t blue);
+        void drawButton();
+        void updateGraph();
 };
 
 }
