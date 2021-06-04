@@ -12,7 +12,7 @@ Python 3 is used for scripting and modelling. https://www.python.org/
 
 Jupyter Notebooks are useful for organising Python code, math and notes. https://jupyter.org/
 
-KiCad is used for electronic CAD. https://kicad-pcb.org/
+KiCad is used for electronic CAD. https://www.kicad.org/
 
 OnShape is used for mechanical CAD. https://www.onshape.com/
 
