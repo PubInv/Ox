@@ -28,11 +28,11 @@ During testing the spool valves started to stick. They were disassembled which r
 
 ![valve-contamination](docs/img/valve_contamination.jpg)
 
-A compact and low-cost intercooler was built from 1 meter (3 feet) of copper gas pipe and a 120mm 12V fan. The surface area of the copper that is exposed to the fan was maximized using a spiral shape. Droplets of water were observed after the intercooler which demonstrates that the water vapour is still present after the coalescing filter. The water is directed into a resoivor with a 2/2 valve on the end - this should be replaced with an automatic drain in the future to minimize maintenance.
+A compact and low-cost intercooler was built from 1 meter (3 feet) of copper gas pipe and a 120mm 12V fan. The surface area of the copper that is exposed to the fan was maximized using a spiral shape. Droplets of water were observed after the intercooler which demonstrates that the water vapour is still present after the coalescing filter. The water is directed into a reservoir with a 2/2 valve on the end - this should be replaced with an automatic drain in the future to minimize maintenance.
 
 ![intercooler](docs/img/intercooler.jpg)
 
-Various configurations of the equilizing valve have been tried and the low pressure of the circuit may allow for the 2 brass valves to be reduced to 1.
+Various configurations of the equalizing valve have been tried and the low pressure of the circuit may allow for the 2 brass valves to be reduced to 1.
 
 A power issue was encountered with the 12V power regulator which needs further investigation. Space for 2 additional valves has also been added to the circuit board.
 
@@ -44,7 +44,7 @@ The latest build is shown below:
 
 **1 November 2020**
 
-It's alive! Running for the first time PIOC reached 95% O2! VentMon is being used to monitor the O2 output, pressure and flowrate. Unfortunately the single stage water filter let enough water vapour past that after a few hours the concentration dropped to 35% - the water separator was half full with a small puddle underneath it. PIOC has been made by hand without much effort to be exacting as to test the idea of manufacturing in an automotive or small engineering workshop - tolerances are +-millimeters not fractions of a millimeter. Next steps are to dry out the zeolite and build a simple chiller and dessicant drier to remove any excess water vapour - some digital pressure sensors will then be installed to tune the system and test various configurations.
+It's alive! Running for the first time PIOC reached 95% O2! VentMon is being used to monitor the O2 output, pressure and flowrate. Unfortunately the single stage water filter let enough water vapour past that after a few hours the concentration dropped to 35% - the water separator was half full with a small puddle underneath it. PIOC has been made by hand without much effort to be exacting as to test the idea of manufacturing in an automotive or small engineering workshop - tolerances are +-millimeters not fractions of a millimeter. Next steps are to dry out the zeolite and build a simple chiller and desiccant drier to remove any excess water vapour - some digital pressure sensors will then be installed to tune the system and test various configurations.
 
 ![build-002](docs/img/pioc_firstrun.jpg)
 ![build-002](docs/img/ventmon95o2.jpg)
