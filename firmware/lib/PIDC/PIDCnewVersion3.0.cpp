@@ -167,17 +167,14 @@ namespace PIDController
                                 {
                                     multiplyGains(0.93, 0.7, 1.04); //Adjusts the gains if the error at the next time step is higher than the error at the prev time step. // kd is increased to avoid overshoot. kp remains the same more or less. // ki is slightly decreased to avoid overshoot and reduce cumulative error.
                                 }
-                                else if ((onT - k) <= 0.5)
-                                {
-                                    if (error[k] > 0.057)
-                                    {                                  //TODO: See what this error is after testing and alter the set value.
-                                        multiplyGains(1.0, 1.21, 1.0); //Reduce the steady state error as much as possible since we are reaching the end of OnTime.
-                                    }
-                                    else
-                                    {
-                                        multiplyGains(1.0, 1.21, 0.94); //If the error at the next time step is smaller than or equal to error at the previous time step, kd is decreased to avoid unnecessary error accumulations. // ki remains the same.
-                                    }
-                                }
+			   	else if (error[k] > 0.057)
+			    	{                                  //TODO: See what this error is after testing and alter the set value.
+				    multiplyGains(1.0, 1.21, 1.0); //Reduce the steady state error as much as possible since we are reaching the end of OnTime.
+			    	}
+			    	else
+			    	{
+				    multiplyGains(1.0, 1.21, 0.94); //If the error at the next time step is smaller than or equal to error at the previous time step, kd is decreased to avoid unnecessary error accumulations. // ki remains the same.
+				}
                                 //Computing Controller
                                 int sum = computeSum(k, error);
                             }
