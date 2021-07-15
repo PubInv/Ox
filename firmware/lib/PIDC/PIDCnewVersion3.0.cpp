@@ -83,7 +83,7 @@ namespace PIDController
         //If the desired pressure is too low and the current pressure limits is well above the desired pressure.
         else if (stat == 0 && (pres <= (1.27 * minpres)) && mod == RUNNING)
         {
-            initGains(0.59, 0.367, 0.623); //kp is slightly increased since we need to desired pressure quickly. ki and kd are slightly increased too to reduce oscillations when we are nearing the desired pressure.
+            initGains(0.59, 0.367, 0.623); //kp is slightly increased since we need to reach the desired pressure quickly. ki and kd are slightly increased too to reduce oscillations when we are nearing the desired pressure.
         }
         return;
     }
@@ -94,13 +94,11 @@ namespace PIDController
             if ((onT < 0.4 * offT))
             {
                 initGains(0.56, 0.45, 0.43);
-                // Derivative Gain is double the instance when the onTime is increased.
                 //Integral gain is slightly raised to compensate for the state error.
             }
             else
             {
                 initGains(0.55, 0.65, 0.63);
-                // Derivative Gain is double the instance when the onTime is increased.
                 //Integral gain is slightly raised to compensate for the state error.
             }
         }
@@ -175,12 +173,12 @@ namespace PIDController
                                     {                                  //TODO: See what this error is after testing and alter the set value.
                                         multiplyGains(1.0, 1.21, 1.0); //Reduce the steady state error as much as possible since we are reaching the end of OnTime.
                                     }
+                                    else
+                                    {
+                                        multiplyGains(1.0, 1.21, 0.94); //If the error at the next time step is smaller than or equal to error at the previous time step, kd is decreased to avoid unnecessary error accumulations. // ki remains the same.
+                                    }
                                 }
                                 //Computing Controller
-                                else
-                                {
-                                    multiplyGains(1.0, 0.53, 1.04); //If the error at the next time step is smaller than or equal to error at the previous time step, kd is decreased to avoid unnecessary error accumulations. // ki remains the same.
-                                }
                                 int sum = computeSum(k, error);
                             }
                             else
@@ -215,6 +213,11 @@ namespace PIDController
                         pressure[i] = pres;
                         error[i] = pressure[i] - pressure[i - 1];
                         if (((error[i] - error[i - 1]) > 0.06) && (offT - i) <= 1500)
+                            /*
+                            If there is a significant error during the last few time states, we have to check if the pressure 
+				            at the pressure sensor is above/below the desired pressure. 
+				            We have to close/open the subsequent valves accordingly.
+                            */
                         { //We are checking the last one second and we are checking if there is an error. We have to check if the pressure at the pressure sensor is above/below the desired pressure. We have to close/open the subsequent valves accordingly.
                             if (j == 0)
                             {
@@ -231,8 +234,12 @@ namespace PIDController
                                 multiplyGains(1.17, 1.19, 1.0);
                             }
                         }
-                        else if (((error[i] - error[i - 1]) < -0.06) && (offT - i) <= 1500)
-                        { //We are checking the last one second and we are checking if there is an error. We have to check if the pressure at the pressure sensor is above/below the desired pressure. We have to close/open the subsequent valves accordingly.
+                        else if (((error[i] - error[i - 1]) < -0.06) && (offT - i) <= 1500)  {
+                            /*If the error accumulation decreases, we are making sure that the pressure rate increases 
+				              by increasing the onTime duration of valves (1,3) and decreasing the 
+				              onTime duration of valves (2,4) or vice versa*/
+                            
+                            //We are checking the last one second and we are checking if there is an error. We have to check if the pressure at the pressure sensor is above/below the desired pressure. We have to close/open the subsequent valves accordingly.
                             //Change valve Timing
                             if (j == 0)
                             {
