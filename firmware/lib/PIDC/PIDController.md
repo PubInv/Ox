@@ -49,20 +49,28 @@ InitialControlGainsValve:
 				However, there might be certain cases where the current pressure is well above the desired pressure. 
 				In such cases, we are making sure that the error is not too large by keeping the proportional gain above 0.5;
 		
-multiplyGains: Takes in the values and alters the gains accordingly. 
+multiplyGains: 
+
+			Takes in the values and alters the gains accordingly. 
 		
-computeSum: Computes the controller value : Sum = kp * error + kd * derivative error + ki * integral error.		
+computeSum: 
+
+			Computes the controller value : Sum = kp * error + kd * derivative error + ki * integral error.		
 		
-changeTiming:	Takes in the controller sum and changes the start time and stop time of valves. 
+changeTiming:	
+
+			Takes in the controller sum and changes the start time and stop time of valves. 
 		
 immediateChange: 
+		
 			Making sure the stop time of the current valve is increased and the start time of the valve at the outlet is decreased to increase oxygen flow.
 			
 			If the error at the next time step is greater than the error at the previous time step, 
 			Closing the current valve and opening the next valve to make sure that the O2 goes through the sink and not through the outlet.
 
 ControllerComp:
-		*ON TIME*
+
+			*ON TIME*
 
 			For every valve, during the start of OnTime,
 				Adjusts the gains if the error at the next time step is higher
@@ -87,7 +95,7 @@ ControllerComp:
 					If the error at the next time step is lesser than the error at the previous time step, 
 						kd is reduced to make sure there is no overshoot and the error stays close to 0.
  						We are increasing ki again when compared to the previous case to reduce oscillations.
-		*OFF TIME*
+			*OFF TIME*
 			During the offTime of one particular valve, we are checking if the error is significantly larger during the last few time states.
 			 	If there is a significant error during the last few time states, we have to check if the pressure 
 				at the pressure sensor is above/below the desired pressure. 
@@ -101,7 +109,9 @@ ControllerComp:
 				by increasing the onTime duration of valves (1,3) and decreasing the 
 				onTime duration of valves (2,4) or vice versa.
 			
-ImplementController: 		Sums up the aggregate of gains from all the test cases mentioned before by 
+ImplementController: 		
+
+				Sums up the aggregate of gains from all the test cases mentioned before by 
 				taking into account all the functions. 
 
 				Changes the timing of alternate set of valves by a simple feedback loop. 
