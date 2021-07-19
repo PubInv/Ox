@@ -1,3 +1,25 @@
+/*
+Public Invention's Ox Project is an open source hardware design for an oxygen concentrator for use by field hospitals around the world. This design concept aims to develop an oxygen concentrator that can be manufactured locally while also overcoming challenges posed by human resources, hospital location (geographically), infrastructure and logistics; in addition, this project attempts minimum documentation of their design standards necessary for local approval whilst tackling regulatory requirements for medical devices. Copyright (C) 2021 Robert Read, Ben Coombs, and Darío Hereñú.
+
+This program is free Firmware/Hardware designs: you can redistribute, use, study it and/or modify it under the terms of the CERN Open Hardware License Version 2 as published here: https://ohwr.org/cern_ohl_s_v2.txt
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the CERN Open Hardware License Version 2 for more details.
+You should have received a copy of the CERN Open Hardware License Version 2 along with this program.  If not, see https://ohwr.org/cern_ohl_s_v2.txt.
+
+This program includes free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+See the GNU Affero General Public License for more details.
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 #include "display.h"
 #include <Wire.h>
 #include "SPI.h"
@@ -99,7 +121,7 @@ void PIOC_Display::drawButton(){
 
     //tft.drawFastHLine(0, 180, 260, WHITE);
     //tft.drawFastVLine(x, 0, 240, WHITE);
-    
+
 
     /*tft.drawFastVLine(60, 80, 240, BLACK);
     tft.drawFastVLine(120, 80, 240, BLACK);
@@ -138,7 +160,7 @@ void PIOC_Display::updateGraph() {
 
   for (;;) {
     printf("x %d\n", x);
-    
+
     // Black bar that moves at a constant rate.
     if (x == graphXMin){
       tft.startWrite();
@@ -150,7 +172,7 @@ void PIOC_Display::updateGraph() {
     } else {
       tft.drawRect(x, graphYMax, barWidth, graphYMin-graphYMax+1, BLACK); // may be faster as 2 vertical lines
     }
-    
+
     // Draw a pixel when the line is 1 pixel long, otherwise draw a line.
     // This draws a continuous line no matter the delta.
     /*if (abs(y1-yLast) <= 1) {
@@ -164,10 +186,10 @@ void PIOC_Display::updateGraph() {
     } else {
       tft.drawFastVLine(x, y1, (yLast-y1), YELLOW);
     }
-  
-    
+
+
     yLast = y1;
-    
+
     // Update the graph (this is a test function)
     // minus is up!!
     // https://en.wikipedia.org/wiki/Square_wave
@@ -182,7 +204,7 @@ void PIOC_Display::updateGraph() {
       ytemp += ((a*sin(b)) / (2*i-1)) + (-noise+rand()%(noise*2));
     }
     y1 = graphYZero - (int)(4/PI*(ytemp));
-    
+
     // X step is constant 1 pixel per update.
     x++;
 
@@ -194,7 +216,7 @@ void PIOC_Display::updateGraph() {
         x = graphXMin;
         barWidth = maxBarWidth;
         //yLast = y1;
-        
+
       }
     }
 
