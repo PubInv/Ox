@@ -1,3 +1,15 @@
+/*========================================================================================================================
+ *
+ *   Filename:  mocksimulation.cpp
+ *
+ *    Description:  
+ *
+ *        Version:  1.0
+ *        Created:  07/25/2021
+ *       
+ *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
+ * =====================================================================================*/
+
 #include <math.h>
 #include <stdio.h>
 #include <PIDCnewVersion3.h>
