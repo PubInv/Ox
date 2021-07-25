@@ -16,7 +16,7 @@
 #include <cmath>
 #include <config.h>
 #include <valve.h>
-#include <PIDCnewVersion3.h>
+#include <PIDCnewVersion4.h>
 #include <mocksimulation.h>
 
 #define NUM_VALVES 4 //Referenced from config.h
@@ -46,11 +46,15 @@ namespace PIDController
     float sum = 0;
     float integral = 0;
     float deriv = 0;
-    float error[] = {3, 4, 5};     //Initialized as dupe array
+    MockSim m;
+    float error[] = {1.1, 2.3};    //PIOC_MockSimulation::MockSim::mockpressuresim(SELECTFUNCTION f, PIDController::PIDControl p, float on[], float end[]); //Initialized as dupe array
     float pressure[] = {1.4, 5.6}; //Initialized as dupe array
     PIOC_Controller::Valve *valve = valveArray;
     ControlGains c;
-
+    PIDControl p;
+    PIOC_MockSimulation::SELECTFUNCTION f;
+    float on[] = {1, 2};
+    float end[] = {2.2, 3.4};
     void checkifSystemisOn(SensorState *st, PIOCState *pstate)
     {
         if (stat == 0 && mod == RUNNING)
@@ -134,15 +138,18 @@ namespace PIDController
         }
         return sum;
     }
-    void changeTiming(int i, float a){
-        valve[i].start = a*valve[i].start + valve[i].start;
-        valve[i+2].start = a*valve[i].stop + valve[i].stop; 
+    void changeTiming(int i, float a)
+    {
+        valve[i].start = a * valve[i].start + valve[i].start;
+        valve[i + 2].start = a * valve[i].stop + valve[i].stop;
         return;
     }
-    void immediateChange(int j, PIOC_Controller::Valve *valve){
+    void immediateChange(int j, PIOC_Controller::Valve *valve)
+    {
         valve[j].stop = valve[j].stop + 700; //Making sure the stop time of the current valve is increased and the start time of the valve at the outlet is decreased to increase oxygen flow.
         valve[j + 2].start = valve[j + 2].start - 700;
-        if (((error[j] - error[j - 1]) > 0.06)){
+        if (((error[j] - error[j - 1]) > 0.06))
+        {
             valve[j].state = false; // Closing the current valve and opening the next valve to make sure that the O2 goes through the sink and not through the outlet.
             valve[j].stop = valve[j].stop - 700;
         }
@@ -165,19 +172,21 @@ namespace PIDController
                             if (k > 0)
                             {
                                 pressure[k] = pres;
-                                error[k] = pressure[k] - pressure[k - 1]; //Checks for error at the start of OnTime in all the valves.
+                                //PIDControl *v ;
+                                float duppres = m.mockpressuresim(f, v, on, end);
+                                error[k] = pressure[k] - duppres; //Checks for error at the start of OnTime in all the valves.
                                 if (error[k] > 0.65 * error[k - 1])
                                 {
                                     multiplyGains(0.93, 0.7, 1.04); //Adjusts the gains if the error at the next time step is higher than the error at the prev time step. // kd is increased to avoid overshoot. kp remains the same more or less. // ki is slightly decreased to avoid overshoot and reduce cumulative error.
                                 }
-			   	else if (error[k] > 0.057)
-			    	{                                  //TODO: See what this error is after testing and alter the set value.
-				    multiplyGains(1.0, 1.21, 1.0); //Reduce the steady state error as much as possible since we are reaching the end of OnTime.
-			    	}
-			    	else
-			    	{
-				    multiplyGains(1.0, 1.21, 0.94); //If the error at the next time step is smaller than or equal to error at the previous time step, kd is decreased to avoid unnecessary error accumulations. // ki remains the same.
-				}
+                                else if (error[k] > 0.057)
+                                {                                  //TODO: See what this error is after testing and alter the set value.
+                                    multiplyGains(1.0, 1.21, 1.0); //Reduce the steady state error as much as possible since we are reaching the end of OnTime.
+                                }
+                                else
+                                {
+                                    multiplyGains(1.0, 1.21, 0.94); //If the error at the next time step is smaller than or equal to error at the previous time step, kd is decreased to avoid unnecessary error accumulations. // ki remains the same.
+                                }
                                 //Computing Controller
                                 int sum = computeSum(k, error);
                             }
@@ -213,7 +222,7 @@ namespace PIDController
                         pressure[i] = pres;
                         error[i] = pressure[i] - pressure[i - 1];
                         if (((error[i] - error[i - 1]) > 0.06) && (offT - i) <= 1500)
-                            /*
+                        /*
                             If there is a significant error during the last few time states, we have to check if the pressure 
 				            at the pressure sensor is above/below the desired pressure. 
 				            We have to close/open the subsequent valves accordingly.
@@ -234,18 +243,19 @@ namespace PIDController
                                 multiplyGains(1.17, 1.19, 1.0);
                             }
                         }
-                        else if (((error[i] - error[i - 1]) < -0.06) && (offT - i) <= 1500)  {
+                        else if (((error[i] - error[i - 1]) < -0.06) && (offT - i) <= 1500)
+                        {
                             /*If the error accumulation decreases, we are making sure that the pressure rate increases 
 				              by increasing the onTime duration of valves (1,3) and decreasing the 
 				              onTime duration of valves (2,4) or vice versa*/
-                            
+
                             //We are checking the last one second and we are checking if there is an error. We have to check if the pressure at the pressure sensor is above/below the desired pressure. We have to close/open the subsequent valves accordingly.
                             //Change valve Timing
                             if (j == 0)
                             {
                                 if (valve[j].state == 1)
                                 {
-                                    valve[j + 1].state = 0;              //Close the immediate valve to make sure O2 does not go to sink.
+                                    valve[j + 1].state = 0; //Close the immediate valve to make sure O2 does not go to sink.
                                     immediateChange(j, valve);
                                     multiplyGains(1.17, 0.85, 1.12);
                                 }
@@ -254,7 +264,7 @@ namespace PIDController
                             {
                                 if (valve[j].state == 1)
                                 {
-                                    valve[j - 1].state = 0;              //Close the immediate valve to make sure O2 does not go to sink.
+                                    valve[j - 1].state = 0; //Close the immediate valve to make sure O2 does not go to sink.
                                     immediateChange(j, valve);
                                     multiplyGains(1.17, 0.85, 1.12);
                                 }
