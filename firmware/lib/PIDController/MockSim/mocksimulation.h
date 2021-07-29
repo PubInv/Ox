@@ -9,6 +9,9 @@
  *       
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
+#ifndef MOCKSIMULATION_H
+#define MOCKSIMULATION_H
+
 #include <stdio.h>
 #include <controller.h>
 #include <config.h>
@@ -39,3 +42,5 @@ namespace PIOC_MockSimulation
         float pressurechangerandom(SELECTFUNCTION function, float x);
     };
 };
+
+#endif
