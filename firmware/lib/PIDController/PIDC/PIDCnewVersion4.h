@@ -3,9 +3,9 @@
  *
  *    Description:  
  *
- *        Version:  3.0
- *        Created:  07/09/2021
- *       Revision:  Revised after Version 2.0
+ *        Version:  4.0
+ *        Created:  07/26/2021
+ *       Revision:  Revised after Version 3.0
  *       
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
@@ -16,6 +16,7 @@
 #include <config.h>
 #include <valve.h>
 #include <stdio.h>
+#include <mocksimulation.h>
 #define NUM_VALVES 4 //Referenced from config.h
 using namespace std;
 using namespace PIOC_Valve;
@@ -24,7 +25,6 @@ using namespace PIOC_Controller;
 using namespace PIOC_Timer;
 namespace PIDController
 {
-
     //Referencing update valve timing from Valve
     struct ControlGains
     {
@@ -45,7 +45,7 @@ namespace PIDController
         void multiplyGains(float x, float y, float z);
         float computeSum(float i, float error[]);
         void changeTiming(int i, float a);
-        void immediateChange(int j,PIOC_Controller::Valve *valve);
+        void immediateChange(int j,PIOC_Controller::Valve *Valve);
         float ControllerComp(SensorState *st, ValveState *vt);
         void ImplementController(SensorState *st, ValveState *vt, ValveStatus *vs, PIOCState *pstate);
     };

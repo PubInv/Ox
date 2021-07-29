@@ -3,24 +3,18 @@
  *
  *    Description:  
  *
- *        Version:  3.0
- *        Created:  07/09/2021
- *       Revision:  Revised after Version 2.0
+ *        Version:  4.0
+ *        Created:  07/26/2021
+ *       Revision:  Revised after Version 3.0
  *       
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
 #include <stdio.h>
-#include <controller.h>
-#include <mpr_pressure.h>
-#include <timer.h>
+
 #include <cmath>
-#include <config.h>
-#include <valve.h>
 #include <PIDCnewVersion4.h>
-#include <mocksimulation.h>
 
 #define NUM_VALVES 4 //Referenced from config.h
-using namespace PIOC_MockSimulation;
 using namespace PIDController;
 using namespace PIOC_Valve;
 using namespace PIOC_Sensor;
@@ -46,22 +40,22 @@ namespace PIDController
     float sum = 0;
     float integral = 0;
     float deriv = 0;
-    MockSim m;
-    float error[] = {1.1, 2.3};    //PIOC_MockSimulation::MockSim::mockpressuresim(SELECTFUNCTION f, PIDController::PIDControl p, float on[], float end[]); //Initialized as dupe array
-    float pressure[] = {1.4, 5.6}; //Initialized as dupe array
-    PIOC_Controller::Valve *valve = valveArray;
+    PIOC_MockSimulation::MockSim m;
+    float error[] = {};    //PIOC_MockSimulation::MockSim::mockpressuresim(SELECTFUNCTION f, PIDController::PIDControl p, float on[], float end[]); //Initialized as dupe array
+    float pressure[] = {}; //Initialized as dupe array
+    //extern PIOC_Controller::Valve *valve = valveArray;
     ControlGains c;
     PIDControl p;
     PIOC_MockSimulation::SELECTFUNCTION f;
     float on[] = {1, 2};
     float end[] = {2.2, 3.4};
-    void checkifSystemisOn(SensorState *st, PIOCState *pstate)
+    void PIDController::checkifSystemisOn(SensorState *st, PIOCState *pstate)
     {
         if (stat == 0 && mod == RUNNING)
             printf("PID Controller can be initialized");
         return;
     }
-    void initGains(float a, float b, float y)
+    void PIDController::initGains(float a, float b, float y)
     {
         c.kp = a;
         c.ki = b;
@@ -69,7 +63,7 @@ namespace PIDController
         return;
     }
 
-    void startingGains(float kp, float ki, float kd, ValveState vt)
+    void PIDController::startingGains(float kp, float ki, float kd, ValveState vt)
     {
         if (vt.status == 0)
         {
@@ -77,7 +71,7 @@ namespace PIDController
         }
         return;
     }
-    void InitialControlGainsSensor(SensorState *st, PIOCState *pstate)
+    void PIDController::InitialControlGainsSensor(SensorState *st, PIOCState *pstate)
     {
         if (stat == 0 && (pres >= (1.17 * minpres)) && mod == RUNNING) //If the desired pressure is too high and the current pressure is well below the desired pressure.
         {
@@ -94,9 +88,9 @@ namespace PIDController
         }
         return;
     }
-    void InitialControlGainsValve(ValveStatus *vs, ValveState *vt, PIOCState *pstate, SensorState *st)
+    void PIDController::InitialControlGainsValve(ValveStatus *vs, ValveState *vt, PIOCState *pstate, SensorState *st)
     {
-        if (vs == 0 && mod == STARTING)
+        if (vs == 0 && mod == 0)
         { //Checks for error at the start.
             if ((onT < 0.4 * offT))
             {
@@ -113,14 +107,14 @@ namespace PIDController
     }
     //Need to check about tackling MISSED and ERROR
     //Need to shiftOutValves to alter the timing of the oxygen concentrator.
-    void multiplyGains(float x, float y, float z)
+    void PIDController::multiplyGains(float x, float y, float z)
     {
         c.kp = c.kp * x;
         c.ki = c.ki * y;
         c.kd = c.kd * z;
         return;
     }
-    float computeSum(int i, float error[])
+    float PIDController::computeSum(int i, float error[])
     {
         uint16_t t = 1; // Checks for every 1 millisecond.
         if (i > 0)
@@ -138,43 +132,44 @@ namespace PIDController
         }
         return sum;
     }
-    void changeTiming(int i, float a)
+    void PIDController::changeTiming(int i, float a)
     {
-        valve[i].start = a * valve[i].start + valve[i].start;
-        valve[i + 2].start = a * valve[i].stop + valve[i].stop;
+        valveArray[i].start = a * valveArray[i].start + valveArray[i].start;
+        valveArray[i + 2].start = a * valveArray[i].stop + valveArray[i].stop;
         return;
     }
-    void immediateChange(int j, PIOC_Controller::Valve *valve)
+    void PIDController::immediateChange(int j, PIOC_Controller::Valve *valve)
     {
-        valve[j].stop = valve[j].stop + 700; //Making sure the stop time of the current valve is increased and the start time of the valve at the outlet is decreased to increase oxygen flow.
-        valve[j + 2].start = valve[j + 2].start - 700;
+        valveArray[j].stop = valveArray[j].stop + 700; //Making sure the stop time of the current valve is increased and the start time of the valve at the outlet is decreased to increase oxygen flow.
+        valveArray[j + 2].start = valveArray[j + 2].start - 700;
         if (((error[j] - error[j - 1]) > 0.06))
         {
-            valve[j].state = false; // Closing the current valve and opening the next valve to make sure that the O2 goes through the sink and not through the outlet.
-            valve[j].stop = valve[j].stop - 700;
+            valveArray[j].state = false; // Closing the current valve and opening the next valve to make sure that the O2 goes through the sink and not through the outlet.
+            valveArray[j].stop = valveArray[j].stop - 700;
         }
         return;
     }
-    float ControllerComp(SensorState *st, ValveState *vt)
+    float PIDController::ControllerComp(SensorState *st, ValveState *vt)
     {
         uint64_t ms = PIOC_Timer::timeSinceEpochMs();
         for (int j = 0; j++; j <= 3)
         {
-            if (valve[j].state == 1)
+            if (valveArray[j].state == 1)
             { //checking state of valve
-                if (valve[j].start <= ms < valve[j].stop)
+                if (valveArray[j].start <= ms < valveArray[j].stop)
                 {
                     int modulation = pres;
                     for (int k = 0; k++; k <= onT)
                     {
-                        if ((pin == valve[j].pin) && ((ms - valve[j].start) <= (valve[j].stop - ms)))
+                        if ((pin == valveArray[j].pin) && ((ms - valveArray[j].start) <= (valveArray[j].stop - ms)))
                         {
                             if (k > 0)
                             {
-                                pressure[k] = pres;
-                                //PIDControl *v ;
-                                float duppres = m.mockpressuresim(f, v, on, end);
-                                error[k] = pressure[k] - duppres; //Checks for error at the start of OnTime in all the valves.
+                                pressure[k] = pres;     //pressure is a straight line fit for max and min pressure limits from 1 to 6000. 
+                                //PIDControl  ;         //duppres is the mock pressure we are posing as measured pressure at the end of the plant from 1 to 6000. 
+                                //float duppres = mockpressuresim(f, on, end);
+                                //error[k] = pressure[k] - duppres; //Checks for error at the start of OnTime in all the valves.
+                                error[k] = 0;
                                 if (error[k] > 0.65 * error[k - 1])
                                 {
                                     multiplyGains(0.93, 0.7, 1.04); //Adjusts the gains if the error at the next time step is higher than the error at the prev time step. // kd is increased to avoid overshoot. kp remains the same more or less. // ki is slightly decreased to avoid overshoot and reduce cumulative error.
@@ -197,7 +192,7 @@ namespace PIDController
                                 int sum = computeSum(k, error); //Computing Controller
                             }
                         }
-                        if ((pin == valve[j].pin) && ((ms - valve[j].start) > (valve[j].stop - ms)))
+                        if ((pin == valveArray[j].pin) && ((ms - valveArray[j].start) > (valveArray[j].stop - ms)))
                         {
 
                             if (error[k] > error[k - 1])
@@ -212,7 +207,7 @@ namespace PIDController
                     }
                 }
             }
-            if (valve[j].state == 0)
+            if (valveArray[j].state == 0)
             {
                 for (int i = 0; i++; i <= offT)
                 {
@@ -230,16 +225,16 @@ namespace PIDController
                         { //We are checking the last one second and we are checking if there is an error. We have to check if the pressure at the pressure sensor is above/below the desired pressure. We have to close/open the subsequent valves accordingly.
                             if (j == 0)
                             {
-                                immediateChange(j, valve);
-                                valve[j + 1].state = true;
-                                valve[j + 1].start = valve[j + 1].start - 700;
+                                immediateChange(j, valveArray);
+                                valveArray[j + 1].state = true;
+                                valveArray[j + 1].start = valveArray[j + 1].start - 700;
                                 multiplyGains(1.17, 1.19, 1.0);
                             }
                             else if (j == 1)
                             {
-                                immediateChange(j, valve);
-                                valve[j - 1].state = true;
-                                valve[j - 1].stop = valve[j - 1].stop + 700;
+                                immediateChange(j, valveArray);
+                                valveArray[j - 1].state = true;
+                                valveArray[j - 1].stop = valveArray[j - 1].stop + 700;
                                 multiplyGains(1.17, 1.19, 1.0);
                             }
                         }
@@ -253,19 +248,19 @@ namespace PIDController
                             //Change valve Timing
                             if (j == 0)
                             {
-                                if (valve[j].state == 1)
+                                if (valveArray[j].state == 1)
                                 {
-                                    valve[j + 1].state = 0; //Close the immediate valve to make sure O2 does not go to sink.
-                                    immediateChange(j, valve);
+                                    valveArray[j + 1].state = 0; //Close the immediate valve to make sure O2 does not go to sink.
+                                    immediateChange(j, valveArray);
                                     multiplyGains(1.17, 0.85, 1.12);
                                 }
                             }
                             if (j == 1)
                             {
-                                if (valve[j].state == 1)
+                                if (valveArray[j].state == 1)
                                 {
-                                    valve[j - 1].state = 0; //Close the immediate valve to make sure O2 does not go to sink.
-                                    immediateChange(j, valve);
+                                    valveArray[j - 1].state = 0; //Close the immediate valve to make sure O2 does not go to sink.
+                                    immediateChange(j, valveArray);
                                     multiplyGains(1.17, 0.85, 1.12);
                                 }
                             }
@@ -287,7 +282,7 @@ namespace PIDController
         }
         return sum;
     }
-    void ImplementController(SensorState *st, ValveState *vt, ValveStatus *vs, PIOCState *pstate)
+    void PIDController::ImplementController(SensorState *st, ValveState *vt, ValveStatus *vs, PIOCState *pstate)
     {
         uint16_t ms = PIOC_Timer::timeSinceEpochMs();
         InitialControlGainsSensor(st, pstate);
@@ -297,8 +292,8 @@ namespace PIDController
         {
             for (int j = 0; j++; j <= 3)
             {
-                if (valve[j].start <= ms <= valve[j].stop)
-                    if (valve[j].state == 1 && (i == 0 || i == 1))
+                if (valveArray[j].start <= ms <= valveArray[j].stop)
+                    if (valveArray[j].state == 1 && (i == 0 || i == 1))
                     {
                         changeTiming(i, con);
                     }
