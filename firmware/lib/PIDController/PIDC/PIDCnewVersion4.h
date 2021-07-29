@@ -9,6 +9,8 @@
  *       
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
+#ifndef PIDCNEWVERSION4_H
+#define PIDCNEWVERSION4_H
 
 #include <controller.h>
 #include <mpr_pressure.h>
@@ -50,3 +52,5 @@ namespace PIDController
         void ImplementController(SensorState *st, ValveState *vt, ValveStatus *vs, PIOCState *pstate);
     };
 }
+
+#endif
