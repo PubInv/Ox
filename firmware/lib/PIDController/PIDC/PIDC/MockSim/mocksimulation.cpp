@@ -10,14 +10,16 @@
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
 #include <math.h>
-#include <mocksimulation.h>
+#include "mocksimulation.h"
 #include <iostream>
 #include <windows.h>
-
+#include "controller.h"
+#include "config.h"
 
 using namespace PIOC_Controller;
 using namespace std;
 using namespace PIOC_MockSimulation;
+
 namespace PIOC_MockSimulation{
     float on[] = {1, 2};
     float end[] = {2.2, 3.4};

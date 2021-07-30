@@ -10,20 +10,19 @@
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
 #include <stdio.h>
-
 #include <cmath>
-#include <PIDCnewVersion4.h>
-
+#include "pidcontroller.h"
+#include "timer.h"
 #define NUM_VALVES 4 //Referenced from config.h
 using namespace PIDController;
 using namespace PIOC_Valve;
 using namespace PIOC_Sensor;
 using namespace PIOC_Controller;
+//using namespace PIOC_MockSimulation;
 
 namespace PIDController
 {
     SensorState *st;
-    PIOCState *pstate;
     ValveStatus *vs;
     ValveState *vt;
     PIOCState *pstate;
@@ -40,22 +39,22 @@ namespace PIDController
     float sum = 0;
     float integral = 0;
     float deriv = 0;
-    PIOC_MockSimulation::MockSim m;
+    //PIOC_MockSimulation::MockSim m;
     float error[] = {};    //PIOC_MockSimulation::MockSim::mockpressuresim(SELECTFUNCTION f, PIDController::PIDControl p, float on[], float end[]); //Initialized as dupe array
     float pressure[] = {}; //Initialized as dupe array
     //extern PIOC_Controller::Valve *valve = valveArray;
     ControlGains c;
     PIDControl p;
-    PIOC_MockSimulation::SELECTFUNCTION f;
+    //PIOC_MockSimulation::SELECTFUNCTION f;
     float on[] = {1, 2};
     float end[] = {2.2, 3.4};
-    void PIDController::checkifSystemisOn(SensorState *st, PIOCState *pstate)
+    void PIDControl::checkifSystemisOn(SensorState *st, PIOCState* pstate)
     {
         if (stat == 0 && mod == RUNNING)
             printf("PID Controller can be initialized");
         return;
     }
-    void PIDController::initGains(float a, float b, float y)
+    void PIDControl::initGains(float a, float b, float y)
     {
         c.kp = a;
         c.ki = b;
@@ -63,7 +62,7 @@ namespace PIDController
         return;
     }
 
-    void PIDController::startingGains(float kp, float ki, float kd, ValveState vt)
+    void PIDControl::startingGains(float kp, float ki, float kd, ValveState vt)
     {
         if (vt.status == 0)
         {
@@ -71,7 +70,7 @@ namespace PIDController
         }
         return;
     }
-    void PIDController::InitialControlGainsSensor(SensorState *st, PIOCState *pstate)
+    void PIDControl::InitialControlGainsSensor(SensorState *st, PIOCState *pstate)
     {
         if (stat == 0 && (pres >= (1.17 * minpres)) && mod == RUNNING) //If the desired pressure is too high and the current pressure is well below the desired pressure.
         {
@@ -88,7 +87,7 @@ namespace PIDController
         }
         return;
     }
-    void PIDController::InitialControlGainsValve(ValveStatus *vs, ValveState *vt, PIOCState *pstate, SensorState *st)
+    void PIDControl::InitialControlGainsValve(ValveStatus *vs, ValveState *vt, PIOCState *pstate, SensorState *st)
     {
         if (vs == 0 && mod == 0)
         { //Checks for error at the start.
@@ -107,14 +106,14 @@ namespace PIDController
     }
     //Need to check about tackling MISSED and ERROR
     //Need to shiftOutValves to alter the timing of the oxygen concentrator.
-    void PIDController::multiplyGains(float x, float y, float z)
+    void PIDControl::multiplyGains(float x, float y, float z)
     {
         c.kp = c.kp * x;
         c.ki = c.ki * y;
         c.kd = c.kd * z;
         return;
     }
-    float PIDController::computeSum(int i, float error[])
+    float PIDControl::computeSum(int i, float error[])
     {
         uint16_t t = 1; // Checks for every 1 millisecond.
         if (i > 0)
@@ -132,13 +131,13 @@ namespace PIDController
         }
         return sum;
     }
-    void PIDController::changeTiming(int i, float a)
+    void PIDControl::changeTiming(int i, float a)
     {
         valveArray[i].start = a * valveArray[i].start + valveArray[i].start;
         valveArray[i + 2].start = a * valveArray[i].stop + valveArray[i].stop;
         return;
     }
-    void PIDController::immediateChange(int j, PIOC_Controller::Valve *valve)
+    void PIDControl::immediateChange(int j, PIOC_Controller::Valve *valve)
     {
         valveArray[j].stop = valveArray[j].stop + 700; //Making sure the stop time of the current valve is increased and the start time of the valve at the outlet is decreased to increase oxygen flow.
         valveArray[j + 2].start = valveArray[j + 2].start - 700;
@@ -149,9 +148,9 @@ namespace PIDController
         }
         return;
     }
-    float PIDController::ControllerComp(SensorState *st, ValveState *vt)
+    float PIDControl::ControllerComp(SensorState *st, ValveState *vt)
     {
-        uint64_t ms = PIOC_Timer::timeSinceEpochMs();
+        uint64_t ms = 1;
         for (int j = 0; j++; j <= 3)
         {
             if (valveArray[j].state == 1)
@@ -282,9 +281,9 @@ namespace PIDController
         }
         return sum;
     }
-    void PIDController::ImplementController(SensorState *st, ValveState *vt, ValveStatus *vs, PIOCState *pstate)
+    void PIDControl::ImplementController(SensorState *st, ValveState *vt, ValveStatus *vs, PIOCState *pstate)
     {
-        uint16_t ms = PIOC_Timer::timeSinceEpochMs();
+        uint16_t ms = 1;
         InitialControlGainsSensor(st, pstate);
         InitialControlGainsValve(vs, vt, pstate, st);
         float con = ControllerComp(st, vt);
