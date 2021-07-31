@@ -12,7 +12,7 @@ int main(){
     cerr<<"Hello\n";
     MockSim m;
 
-    SELECTFUNCTION f = XPLUSLOGARITHMX; 
+    SELECTFUNCTION f = XPLUSLOGARITHMX;
     int j = 1;
     PIOC_Controller::Valve *valve;
     PIDControl p;
