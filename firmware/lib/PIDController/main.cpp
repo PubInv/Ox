@@ -53,6 +53,12 @@ int main(){
         myPID.Start(*(pdup+g),output, y );
         a = *(pdup+g);
         double error = abs( a-y);
+        if (a-y > 0){
+            myPID.SetControllerDirection(DIRECT);
+        }
+        if (a - y<0){
+            myPID.SetControllerDirection(REVERSE);
+        }
         if (error < 0.5) {
         // we're close to setpoint, use conservative tuning parameters
             myPID.SetTunings(Kp, Ki, Kd);
