@@ -9,15 +9,15 @@
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
 
-#ifndef _MOCKSIMULATION_H
-#define _MOCKSIMULATION_H
+#ifndef MOCKSIMULATION_H
+#define MOCKSIMULATION_H
 
 #include <stdio.h>
 #include <math.h>
 using namespace std;
-
 namespace PIOC_MockSimulation
 {
+
     enum SELECTFUNCTION
     {
         XPLUSLOGARITHMX,
@@ -28,12 +28,10 @@ namespace PIOC_MockSimulation
     {
         SELECTFUNCTION f;
 
-
     public:
-        float* mockpressuresim(SELECTFUNCTION f,  float on[], float end[]);
+        double* mockpressuresim(SELECTFUNCTION f, int on[], int end[]);
         float computemockpressure(SELECTFUNCTION f, float x);
         float pressurechangerandom(SELECTFUNCTION f, float x);
     };
-};
-
+}
 #endif
