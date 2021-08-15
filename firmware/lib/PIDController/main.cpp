@@ -1,9 +1,10 @@
+
 #include <iostream>
-#include <mocksimulation.h>
-#include <pidcontroller.h>
+#include "mocksimulation.h"
+#include "pidcontroller.h"
 #include <math.h>
-#include <controller.h>
-#include <PID_v2.h>
+#include "controller.h"
+#include "PID_v2.h"
 
 using namespace PIDController;
 using namespace PIOC_MockSimulation;
@@ -13,16 +14,16 @@ int main(){
     MockSim m;
     SELECTFUNCTION f = XPLUSLOGARITHMX; 
     int j = 1;
-    SensorState *st;
-    ValveState *vt;
+    SensorStatus st;
+    ValveState vt;
     PIOC_Controller::Valve *valve = valveArray;
     double y;
     double output;
     double a;
-    double aggKp = 2.34, aggKi = 1.2, aggKd = 2.33;
-    double Kp = 0.0161;
-    double Ki = 0.0031228;
-    double Kd = 0.013052;
+    double aggKp = 8.34, aggKi = 8.2, aggKd = 8.33;
+    double Kp = 1.0161;
+    double Ki = 1.31228;
+    double Kd = 1.613052;
     //double Kp = 0.00261;
     //double Ki = 0.000128;
     //double Kd = 0.00252;
@@ -36,22 +37,31 @@ int main(){
    
     double q;
     int g =0;
+    a = *(pdup+ g);
+    y = 0.0035008*j + 1.996499;
     PID_v2 myPID( Kp, Ki, Kd, PID::Direct );
-    j = valveArray[0].start;
+    j = int(valveArray[0].start - 100);
     double out;
-    while (j<= valveArray[0].stop){
-        
+    
+    while (j <= int(valveArray[0].stop -100)){
+        a = *(pdup+ g);
+        //cout <<"Mock Pressure"<<g<<" "<<a<<endl;
+       
         //if ( f == PIOC_MockSimulation::SELECTFUNCTION::XPLUSLOGARITHMX)
         y = 0.0035008*j + 1.996499;
+    
+        //cout <<"Mock Pressure"<<y<<endl;
         //if (f ==PIOC_MockSimulation::SELECTFUNCTION::XPLUSEXPONENTX)
         //y = 0.0017504*j + 4.498249; 
         //if (j == 100)
-        output = 0.0017504*(j+ 120) + 4.498249;
+        
         //if (j < 2000)
             //output = q;
         //cout<<"output"<<output<<endl;
-        myPID.Start(*(pdup+g),output, y );
-        a = *(pdup+g);
+        a = *(pdup+ g);
+        y = 0.0035008*j + 1.996499;
+        output =   5.498249 ;
+        myPID.Start(a,output, y );
         double error = abs( a-y);
         if (a-y > 0){
             myPID.SetControllerDirection(DIRECT);
@@ -62,12 +72,12 @@ int main(){
         if (error < 0.5) {
         // we're close to setpoint, use conservative tuning parameters
             myPID.SetTunings(Kp, Ki, Kd);
-        } else {
+        } if (error >= 0.5) {
         // we're far from setpoint, use aggressive tuning parameters
             myPID.SetTunings(aggKp, aggKi, aggKd);
         }
-        q = myPID.Run(*(pdup+g));
-        cout<<"Error: "<<abs(q-y)<<endl;    
+        q = myPID.Run(a);
+        cout<<"Error: "<<q<<endl;    
         j = j + 1;
         g = g+1;
     }   

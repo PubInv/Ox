@@ -24,7 +24,7 @@ int on[] = {};
 int end[] = {};
 uint8_t maxpressure = 25;
 uint8_t minpressure = 0;
-
+double *presarrdup;
 SELECTFUNCTION f;
 float x;
 float press;
@@ -68,17 +68,13 @@ namespace PIOC_MockSimulation
         double presarr[valveArray[1].stop] = {};
         int i = 0;
         float value;
+        int arr = 0;
+        int a;
         while (i <= 1)
         {
             int end = int(valveArray[i].stop);
             int on = int(valveArray[i].start);
             int x = 0;
-            int arr;
-            if (i == 0){
-                arr = 0;
-            }
-            if (i == 1)
-                arr = int(valveArray[i].start);
             while (x <= (end - on))
             {
                 if (i == 0 && valveArray[i].stop > valveArray[i + 1].start)
@@ -95,16 +91,15 @@ namespace PIOC_MockSimulation
                 {
                     press = computemockpressure(f, x);
                 }
-                //cout << "\n"    << pres;
-                presarr[arr] = 0.0035008*x + 1.996499;
-                //cout << "\n"<< arr;
+                presarr[arr] = press;
+                //cout<<presarr[arr]<<endl;
                 arr = arr + 1;
 
                 x = x + 1;
             }
-            i += 1;
+            i = i +1;
         }
-        double *presarrdup = presarr;
+        presarrdup = presarr;
         return presarrdup;
     }
 }
