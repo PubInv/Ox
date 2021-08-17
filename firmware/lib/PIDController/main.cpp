@@ -19,7 +19,7 @@ int main(){
     PIOC_Controller::Valve *valve = valveArray;
     double y;
     double output;
-    double a;
+    double a = 0;
     double aggKp = 8.34, aggKi = 8.2, aggKd = 8.33;
     double Kp = 1.0161;
     double Ki = 1.31228;
@@ -35,20 +35,17 @@ int main(){
     //Intended pressure(setpoint) for Mock (XPLUSLOGARITHMX): y = 0.0035008*x + 1.996499
     //Intended pressure(setpoint) for Mock (XPLUSEXPONENTX): y = 0.0017504*x + 4.498249
    
-    double q;
+    double q = 0;
     int g =0;
     a = *(pdup+ g);
     y = 0.0035008*j + 1.996499;
     PID_v2 myPID( Kp, Ki, Kd, PID::Direct );
     j = int(valveArray[0].start - 100);
-    double out;
-    
+    double out;    
     while (j <= int(valveArray[0].stop -100)){
-        a = *(pdup+ g);
         //cout <<"Mock Pressure"<<g<<" "<<a<<endl;
        
         //if ( f == PIOC_MockSimulation::SELECTFUNCTION::XPLUSLOGARITHMX)
-        y = 0.0035008*j + 1.996499;
     
         //cout <<"Mock Pressure"<<y<<endl;
         //if (f ==PIOC_MockSimulation::SELECTFUNCTION::XPLUSEXPONENTX)
@@ -58,9 +55,9 @@ int main(){
         //if (j < 2000)
             //output = q;
         //cout<<"output"<<output<<endl;
-        a = *(pdup+ g);
+        a = *(pdup+ g) + (q-y);
         y = 0.0035008*j + 1.996499;
-        output =   5.498249 ;
+        output = 0.0017504*(j+ 120) + 4.498249 ;
         myPID.Start(a,output, y );
         double error = abs( a-y);
         if (a-y > 0){
@@ -77,7 +74,7 @@ int main(){
             myPID.SetTunings(aggKp, aggKi, aggKd);
         }
         q = myPID.Run(a);
-        cout<<"Error: "<<q<<endl;    
+        cout<<"Error: "<<(q - y)<<endl;    
         j = j + 1;
         g = g+1;
     }   
