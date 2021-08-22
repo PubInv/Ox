@@ -28,7 +28,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <iostream>
 #endif
 
+#ifdef ARDUINO
 #include <display.h>
+#endif
 #include <debug.h>
 #include <shift.h>
 #include <inttypes.h>
@@ -39,13 +41,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 using namespace PIOC_Debug;
 using namespace PIOC_Controller;
 using namespace PIOC_Timer;
-using namespace PIOC;
+//using namespace PIOC;
 
 ValveController vc(&valveArray[0], NUM_VALVES);
 Timer valveCycle;
 unsigned int tLast;
 
+#ifdef ARDUINO
 PIOC_Display display;
+#endif
 unsigned int displayTick;
 
 void setup() {
@@ -77,12 +81,14 @@ void setup() {
 }
 
 void printValveState(uint8_t vs){
+#ifdef ARDUINO
   Serial.print("Valves: ");
   for (int b = 7; b >= 0; b--)
   {
     Serial.print(bitRead(vs, b));
   }
   Serial.println("");
+#endif
 }
 
 void loop(void) {
