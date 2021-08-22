@@ -28,7 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 #endif
 
-namespace PIOC_Debug {
+namespace Ox_Debug {
 
   void serialBegin(int baud){
     #ifdef ARDUINO

@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <chrono>
 
-namespace PIOC_Timer {
+namespace Ox_Timer {
 
 using namespace std::chrono;
 

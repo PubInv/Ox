@@ -29,7 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <inttypes.h>
 #include <debug.h>
 
-using namespace PIOC_Debug;
+using namespace Ox_Debug;
 
 void test_serial(){
   Debug<const char*>("Test text debug\n");

@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <iostream>
 
-namespace PIOC_Debug {
+namespace Ox_Debug {
 
   // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
   // to get a debug output on Arduino or native environments
