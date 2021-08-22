@@ -54,3 +54,15 @@ pio-run-esp32:
 	cd firmware \
 	&& pio run -e featheresp32 -t upload \
 	&& pio device monitor
+
+# Build and run on Adafruit Grand Central Arm-M4F and start serial monitor
+pio-run-gcm4:
+	cd firmware \
+	&& pio run -e adafruit_grandcentral_m4 -t upload \
+	&& pio device monitor
+
+# Build and run on Arduino Mega 2560 and start serial monitor
+pio-run-mega:
+	cd firmware \
+	&& pio run -e megaatmega2560 -t upload \
+	&& pio device monitor
