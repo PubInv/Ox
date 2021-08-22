@@ -38,30 +38,29 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <config.h>
 #include <timer.h>
 
-using namespace PIOC_Debug;
-using namespace PIOC_Controller;
-using namespace PIOC_Timer;
-//using namespace PIOC;
+using namespace Ox_Debug;
+using namespace Ox_Controller;
+using namespace Ox_Timer;
 
 ValveController vc(&valveArray[0], NUM_VALVES);
 Timer valveCycle;
 unsigned int tLast;
 
 #ifdef ARDUINO
-PIOC_Display display;
+Ox_Display display;
 #endif
 unsigned int displayTick;
 
 void setup() {
   serialBegin(115200);
-  Debug<const char*>("Starting PIOC\n");
+  Debug<const char*>("Starting Ox\n");
 
 
   shiftInit();
 
 
   #ifdef ARDUINO
-  display = PIOC_Display();
+  display = Ox_Display();
   display.displayInit();
   display.startScreen();
   delay(2000);

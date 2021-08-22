@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <inttypes.h>
 
-namespace PIOC_Sensor {
+namespace Ox_Sensor {
 
     // Status byte flags from Table 14 MPR datasheet
     #define POWER_FLAG      0x40 //b01000000

@@ -30,7 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <chrono>
 #include <mpr_pressure.h>
 
-using namespace PIOC_Sensor;
+using namespace Ox_Sensor;
 
 void test_sensor_does_read(){
   MPR_Pressure mpr;

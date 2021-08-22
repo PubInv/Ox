@@ -29,7 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //#include <iostream>
 #include <timer.h>
 
-namespace PIOC_Timer {
+namespace Ox_Timer {
 
     uint64_t timeSinceEpochMs() {
         return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();

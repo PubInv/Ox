@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <inttypes.h>
 
-namespace PIOC_Valve {
+namespace Ox_Valve {
 
     enum ValveStatus {
         OK,

@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <inttypes.h>
 
-namespace PIOC {
+namespace Ox {
 
 /*
 https://learn.adafruit.com/adafruit-2-8-and-3-2-color-tft-touchscreen-breakout-v2/pinouts
@@ -68,6 +68,8 @@ RST - this is the TFT reset pin. There's auto-reset circuitry on the breakout so
 
 class Ox_Display {
     public:
+        Ox_Display(){};
+
         void displayInit();
         void startScreen();
         void debugScreen();
