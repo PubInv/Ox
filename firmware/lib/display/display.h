@@ -66,10 +66,8 @@ RST - this is the TFT reset pin. There's auto-reset circuitry on the breakout so
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-class PIOC_Display {
+class Ox_Display {
     public:
-        PIOC_Display(){};
-
         void displayInit();
         void startScreen();
         void debugScreen();
