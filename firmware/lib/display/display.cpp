@@ -29,11 +29,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "stdint.h"
 #include "Adafruit_ILI9341.h"
 
-namespace PIOC {
+namespace Ox {
 
   Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
-  void PIOC_Display::displayInit(){
+  void Ox_Display::displayInit(){
     tft.begin();
 
     // read diagnostics (optional but can help debug problems)
@@ -53,7 +53,7 @@ namespace PIOC {
   }
 
 
-  void PIOC_Display::startScreen(){
+  void Ox_Display::startScreen(){
     tft.fillScreen(ILI9341_BLACK);
     tft.setCursor(0,0);
     tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(2);
@@ -61,7 +61,7 @@ namespace PIOC {
     tft.println("Oxygen Concentrator");
   }
 
-  void PIOC_Display::debugScreen(){
+  void Ox_Display::debugScreen(){
     tft.fillScreen(ILI9341_BLACK);
     tft.setCursor(0,0);
     tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
@@ -70,12 +70,12 @@ namespace PIOC {
     tft.print("Valves:");
   }
 
-  void PIOC_Display::updateDebugScreen(char s){
+  void Ox_Display::updateDebugScreen(char s){
     tft.setCursor(50,0);
     tft.print(s);
   }
 
-  void PIOC_Display::valveState(uint32_t vs, uint8_t state){
+  void Ox_Display::valveState(uint32_t vs, uint8_t state){
     tft.fillRect(50,0,42,7,ILI9341_BLACK);
     tft.setCursor(50,0);
     tft.print(vs);
@@ -103,7 +103,7 @@ int screenWidth = 320;
 int screenHeight = 240;
 
 
-void PIOC_Display::drawButton(){
+void Ox_Display::drawButton(){
 
     int x = 260;
     tft.fillScreen(ILI9341_BLACK);
@@ -151,7 +151,7 @@ int maxBarWidth = 20;
 int barWidth = maxBarWidth;
 
 
-void PIOC_Display::updateGraph() {
+void Ox_Display::updateGraph() {
   int x = graphXMin;
   int y1 = graphYZero;
   bool up = true;
@@ -226,11 +226,11 @@ void PIOC_Display::updateGraph() {
   }
 }
 
-  /*void PIOC_Display::printLine(){
+  /*void Ox_Display::printLine(){
 
   }
 
-  void PIOC_Display::drawGraph(){
+  void Ox_Display::drawGraph(){
 
   }*/
 
@@ -239,7 +239,7 @@ void PIOC_Display::updateGraph() {
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
 
-  void PIOC_Display::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
+  void Ox_Display::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
   /*   for (int16_t i = 0; i < x + w; i++){
           for (int j = 0; j < y + h; j++){
               tft.writePixel(i, j, color);
@@ -255,7 +255,7 @@ void PIOC_Display::updateGraph() {
   }
 
   // source: http://www.barth-dev.de/online/rgb565-color-picker
-  uint16_t PIOC_Display::color_convert(uint8_t red, uint8_t green, uint8_t blue){
+  uint16_t Ox_Display::color_convert(uint8_t red, uint8_t green, uint8_t blue){
       return (((red & 0xf8)<<8) + ((green & 0xfc)<<3)+(blue>>3));
   }
 

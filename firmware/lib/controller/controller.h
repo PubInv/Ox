@@ -27,11 +27,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <inttypes.h>
 
-namespace PIOC_Controller {
+namespace Ox_Controller {
 
 #define NUM_VALVES 4
 
-  enum PIOCMode {
+  enum OxMode {
       STARTING,
       RUNNING,
       STOPPED,
@@ -39,8 +39,8 @@ namespace PIOC_Controller {
       ERROR
   };
 
-  struct PIOCState {
-      PIOCMode mode;
+  struct OxState {
+      OxMode mode;
       int totalRunTime;
   };
 
@@ -55,15 +55,15 @@ namespace PIOC_Controller {
 
   class ValveController {
     private:
-      PIOCState pioc_state;
+      OxState Ox_state;
       uint8_t valveBits;
       int numValves;
       Valve *valves;
     public:
         ValveController(Valve* v, int numValves) {
         valveBits = 0;
-        pioc_state.mode = STARTING;
-        pioc_state.totalRunTime = 0;
+        Ox_state.mode = STARTING;
+        Ox_state.totalRunTime = 0;
         valves = v;
         this->numValves = numValves;
       }

@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <valve.h>
 
-namespace PIOC_Valve {
+namespace Ox_Valve {
 
     bool Valve::update(uint32_t msNow){
         // Bistable timing

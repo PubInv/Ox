@@ -61,13 +61,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define NUM_VALVES 4 //1-8
 
 // { name, num, state, pin, start, stop }
-/*PIOC_Controller::Valve valveArray[NUM_VALVES] = {
+/*Ox_Controller::Valve valveArray[NUM_VALVES] = {
   { 'A', 0, 0, 1, 0, 6000, },
   { 'B', 1, 0, 2, 6000, 12000, },
   { 'C', 2, 0, 4, 5600, 6000, },
   { 'D', 3, 0, 8, 11600, 12000, }};
 */
-PIOC_Controller::Valve valveArray[NUM_VALVES] = {
+Ox_Controller::Valve valveArray[NUM_VALVES] = {
   { 'A', 0, 0, 1, 100, 4000, },
   { 'B', 1, 0, 2, 4000, 8000, },
   { 'C', 2, 0, 4, 3700, 4000, },
@@ -78,7 +78,7 @@ PIOC_Controller::Valve valveArray[NUM_VALVES] = {
 
 
 // Long format of defining valves
-/*PIOC_Controller::Valve valveArray[NUM_VALVES] = {
+/*Ox_Controller::Valve valveArray[NUM_VALVES] = {
   { .name = 'A',
     .num = 0,
     .state = 0,
