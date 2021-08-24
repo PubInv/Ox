@@ -17,7 +17,6 @@
 #include "config.h"
 #include "valve.h"
 
-#define NUM_VALVES 4 //Referenced from config.h
 using namespace std;
 using namespace PIOC_Valve;
 using namespace PIOC_Sensor;
@@ -27,19 +26,19 @@ using namespace PIOC_Timer;
 namespace PIDController
 {
 
-    //Referencing update valve timing from Valve
     struct ControlGains
     {
+        /*
+            Initializes the control gains structure
+        */
         float kp;
         float kd;
         float ki;
     };
 
-    //Referencing MPRPressure.cpp for getting pressure sensor readings
-
     class PIDControl
     {
-
+        //Sets control gains as a parameter to the PIDControl class.
         ControlGains c;
 
     public:
@@ -47,13 +46,13 @@ namespace PIDController
         void initGains(float a, float b, float y);
         void startingGains(float kp, float ki, float kd, ValveStatus vs);
         void InitialControlGainsSensor(SensorStatus st, PIOCMode mod);
-        void InitialControlGainsValve(ValveStatus vs,PIOCMode mod, SensorStatus st);
+        void InitialControlGainsValve(ValveStatus vs, PIOCMode mod, SensorStatus st);
         void multiplyGains(float x, float y, float z);
-        float computeSum(int i, double* err);
+        float computeSum(int i, double *err);
         void changeTiming(int i, float a);
         void immediateChange(int j, PIOC_Controller::Valve *valve);
-        float ControllerComp(SensorStatus st, ValveStatus vs,double* error);
-        void ImplementController(SensorStatus st, ValveStatus vs, PIOCMode mod, double* err);
+        float ControllerComp(double *error);
+        void ImplementController(SensorStatus st, ValveStatus vs, PIOCMode mod, double *err);
     };
 }
 #endif

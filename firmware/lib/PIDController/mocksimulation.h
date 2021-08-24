@@ -17,7 +17,10 @@
 using namespace std;
 namespace PIOC_MockSimulation
 {
-
+    /*
+    Initializes SELECTFUNCTION as a enum structure with the 
+    different mock pressure sim options as XPLUSLOGARITHMX and XPLUSEXPONENTX.
+    */
     enum SELECTFUNCTION
     {
         XPLUSLOGARITHMX,
@@ -26,8 +29,8 @@ namespace PIOC_MockSimulation
 
     class MockSim
     {
+        //Initializes SELECTFUNCTION f as a parameter to the MockSim class.
         SELECTFUNCTION f;
-
     public:
         double* mockpressuresim(SELECTFUNCTION f, int on[], int end[]);
         float computemockpressure(SELECTFUNCTION f, float x);
