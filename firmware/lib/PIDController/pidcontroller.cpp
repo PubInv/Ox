@@ -236,7 +236,7 @@ namespace PIDController
                 if ((k - valveArray[j].start) <= (valveArray[j].stop - k))
                 {
                     //Checks for error at the start of OnTime in all the valves.
-                    
+                    std::cout<<"Check";
                     if (error[arr] > 0.5 * error[arr - 1])
                     {
                         //Adjusts the gains if the error at the next time step is higher than the error at the prev time step.
@@ -366,8 +366,8 @@ namespace PIDController
         return sum;
     }
 
-    //Desired pressure for Mock (XPLUSLOGARITHMX): y = 0.0035008*x + 1.996499
-    //Desired pressure for Mock (XPLUSEXPONENTX): y = 0.0017504*x + 4.498249
+    //Desired pressure for Mock (XPLUSLOGARITHMX): y = 0.0040501*x + 1.9995949
+    //Desired pressure for Mock (XPLUSEXPONENTX): y = 0.00325008*x + 1.9996749
     void PIDControl::ImplementController(SensorStatus st, ValveStatus vs, PIOCMode mod, double *err)
     {
         /*
