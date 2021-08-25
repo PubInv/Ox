@@ -11,11 +11,11 @@
  * =====================================================================================*/
 #ifndef PIDCONTROLLER_H
 #define PIDCONTROLLER_H
-#include "controller.h"
-#include "mpr_pressure.h"
-#include "timer.h"
-#include "config.h"
-#include "valve.h"
+#include <controller.h>
+#include <mpr_pressure.h>
+#include <timer.h>
+#include <config.h>
+#include <valve.h>
 
 using namespace std;
 using namespace PIOC_Valve;

@@ -10,11 +10,11 @@
  *         Author:  Pranav Shankar Srinivasan (spranav1911@gmail.com)
  * =====================================================================================*/
 #include <math.h>
-#include "mocksimulation.h"
+#include <mocksimulation.h>
 #include <iostream>
-#include "controller.h"
-#include "config.h"
-#include "pidcontroller.h"
+#include <controller.h>
+#include <config.h>
+#include <pidcontroller.h>
 using namespace PIOC_MockSimulation;
 using namespace PIOC_Controller;
 using namespace PIDController;

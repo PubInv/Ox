@@ -11,8 +11,8 @@
  * =====================================================================================*/
 #include <iostream>
 #include <cmath>
-#include "pidcontroller.h"
-#include "mocksimulation.h"
+#include <pidcontroller.h>
+#include <mocksimulation.h>
 using namespace PIOC_Valve;
 using namespace PIOC_Sensor;
 using namespace PIOC_Controller;

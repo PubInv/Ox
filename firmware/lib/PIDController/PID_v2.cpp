@@ -9,8 +9,8 @@
   #include "Arduino.h"
 #else
 #endif
-#include "PID_v2.h"
-#include "timer.h"
+#include <PID_v2.h>
+#include <timer.h>
 /*Constructor (...)*********************************************************
  *    The parameters specified here are those for for which we can't set up
  *    reliable defaults, so we need to have the user set them.
