@@ -32,9 +32,9 @@ namespace PIDController
     int onT[] = {int(valveArray[0].stop - valveArray[0].start), int(valveArray[1].stop - valveArray[1].start)};
     int offT[] = {int(8000 - (valveArray[0].stop - valveArray[0].start)), int(8000 - (valveArray[1].stop - valveArray[1].start))};
     bool isOn = 1;
-    float integral = 0;
-    float deriv = 0;
-    float prop = 0;
+    float integral;
+    float deriv;
+    float prop;
     PIOC_MockSimulation::MockSim m;
     float error[] = {};
     float pressure[8000] = {};
@@ -73,7 +73,7 @@ namespace PIDController
         */
         if (vs == ValveStatus::OK)
         {
-            initGains(0.75, 0.87, 0);
+            initGains(0.75, 0.87, 0.56);
         }
         return;
     }
@@ -87,7 +87,7 @@ namespace PIDController
         //If the desired pressure is too high and the current pressure is well below the desired pressure.
         {
             // kp is increased to reach the desired pressure quickly. ki and kd are still low.
-            initGains(1.005, 0.76, 0);
+            initGains(1.005, 0.76, 0.65);
         }
         else if (st == SensorStatus::OK && (endpres <= 0.85 * maxpres) && mod == PIOCMode::STARTING)
         // If the desired pressure is high and the current pressure is close to the desired pressure.
@@ -95,7 +95,7 @@ namespace PIDController
             /* kp is reduced since we are close to reaching the desired pressure. 
               ki and kd are increased since the pressure is already near the desired pressure at the starting phase.
             */
-            initGains(0.54, 0.63, 0);
+            initGains(0.54, 1.23, 1.34);
         }
 
         else if (st == SensorStatus::OK && (endpres <= (1.27 * minpres)) && mod == PIOCMode::STARTING)
@@ -142,17 +142,17 @@ namespace PIDController
             each state.
         */
         if (x >= 1)
-            c.kp = c.kp + (0.00001 * x);
+            c.kp = c.kp + (0.0001 * x);
         if (x < 1)
-            c.kp = c.kp - (0.00001 * x);
+            c.kp = c.kp - (0.0001 * x);
         if (y >= 1)
-            c.ki = c.ki + (0.00001 * y);
+            c.ki = c.ki + (0.0001 * y);
         if (y < 1)
-            c.ki = c.ki - (0.00001 * y);
+            c.ki = c.ki - (0.0001 * y);
         if (z >= 1)
-            c.kd = c.kd;
+            c.kd = c.kd + (0.0001 *z);
         if (z < 1)
-            c.kd = c.kd; 
+            c.kd = c.kd - (0.0001 *z); 
         return;
     }
     float PIDControl::computeSum(int i, double *err)
@@ -162,7 +162,7 @@ namespace PIDController
             and proportional part of the error. Sums up the value at each 
             state.
         */
-        int t = 1; // Checks for every 1 millisecond.
+        int t = (1.5); // Checks for every 1 millisecond.
         if (i > 0)
         {
             if (*(err + i) > 0)
@@ -188,7 +188,6 @@ namespace PIDController
             integral = (*(err + i)) * t; //integral error
             sum = (c.kd * deriv + c.ki * integral + c.kp * (*(err + i)));
         }
-        cout<<"Sum "<<c.kd<<endl;
         return sum;
     }
     void PIDControl::changeTiming(int i, float a)
@@ -233,30 +232,28 @@ namespace PIDController
             int k = int(valveArray[j].start);
             while (k <= int(valveArray[j].stop))
             {
-                error[arr] = *(err + arr) + sum;
+                error[arr] = *(err + arr) + sum ;
                 if ((k - valveArray[j].start) <= (valveArray[j].stop - k))
                 {
                     //Checks for error at the start of OnTime in all the valves.
-
-                    if (error[arr] > 0.9 * error[arr - 1])
+                    std::cout<<"Check";
+                    if (error[arr] > 0.5 * error[arr - 1])
                     {
                         //Adjusts the gains if the error at the next time step is higher than the error at the prev time step.
                         // kd is increased to avoid overshoot. kp remains the same more or less.
-                        // ki is slightly decreased to avoid overshoot and reduce cumulative error.
-                        multiplyGains(0.99, 0.123, 1.02401);
+                        multiplyGains(2.82349, 2.0523, 1.6401);
                     }
-                    if (error[arr] > 0.0587)
+                    if (error[arr] > 0.587)
                     //TODO: See what this error is after testing and alter the set value.
                     {
-                        //Reduce the steady state error as much as possible by increasing Ki since we are reaching the end of OnTime.
-                        multiplyGains(0, 1.291, 0);
+                        multiplyGains(1.345, 0.991, 2.234);
                     }
                     if (error[arr] <= error[arr - 1])
                     {
                         //If the error at the next time step is smaller than or equal to error at the previous time step,
                         // kd is decreased to avoid unnecessary error accumulations.
                         // ki remains the same.
-                        multiplyGains(0.1, 0, 0.874);
+                        multiplyGains(0.234, 0.875, 0.9974);
                     }
                 }
                 if ((k - valveArray[j].start) > (valveArray[j].stop - k))
@@ -268,27 +265,27 @@ namespace PIDController
                         //kp is increased if the error at the next time step is higher than the error at the prev time step.
                         // kd is increased to avoid overshoot.
                         // ki is slightly increased to avoid overshoot and reduce cumulative error.
-                        multiplyGains(1.678, 1.01, 1.0251);
+                        multiplyGains(2.678, 1.56, 0.7251);
                     }
                     else if (error[arr] > 1)
                     {
                         // kd is reduced to make sure there is no overshoot and the error stays close to 0.
                         // if error is lesser than that of previous state.
                         //We are increasing ki again when compared to the previous case to reduce oscillations.
-                        multiplyGains(0.456, 1.1211, 0.474);
+                        multiplyGains(1.8456, 1.76211, 0.974);
                     }
                     else
                     {
                         // kd is reduced to make sure there is no overshoot and the error stays close to 0.
                         // if error is lesser than that of previous state. We are increasing ki again when compared
                         // to the previous case to reduce oscillations.
-                        multiplyGains(0, 1.1211, 0.879);
+                        multiplyGains(2.678, 2.06211, 0.879);
                     }
                 }
                 //Computing Controller
                 sum = computeSum(arr, err);
                 k = k + 1;
-                //cout << "Error: " << sum<< endl;
+                std::cout<< "Error: " << error[arr] << endl;
                 arr = arr + 1;
             }
 
