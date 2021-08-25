@@ -111,3 +111,19 @@ Checks if the onTime is greater than 40 percent of the OffTime.
     taking into account all the functions. 
 
     Changes the timing of alternate set of valves by a simple feedback loop. 
+
+
+# Mock Pressure Simulation
+
+   *Mock Pressure Simulation for a.b ^(x)*
+   
+   
+   ![MockPressure Sim](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image1.jpg)
+   
+   
+   *Mock Pressure Simulation for a.x + log(b.x)*
+   
+   
+   ![MockPressure Sim2](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image2.jpg)
+   
+   
