@@ -236,7 +236,7 @@ namespace PIDController
                 if ((k - valveArray[j].start) <= (valveArray[j].stop - k))
                 {
                     //Checks for error at the start of OnTime in all the valves.
-                    std::cout<<"Check";
+                    
                     if (error[arr] > 0.5 * error[arr - 1])
                     {
                         //Adjusts the gains if the error at the next time step is higher than the error at the prev time step.
