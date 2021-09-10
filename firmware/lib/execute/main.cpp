@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "mocksimulation.h"
 #include "pidcontroller.h"
@@ -11,72 +10,87 @@ using namespace PIOC_MockSimulation;
 using namespace std;
 using namespace PIOC_Controller;
 int main(){
-    MockSim m;
-    SELECTFUNCTION f = XPLUSLOGARITHMX; 
-    int j = 1;
+    /*
+        UNDER DEVELOPMENT
+        Takes into account the PID controller developed by myself and the PID controller library
+        referenced from Arduino to simulate the performance of the controller on the mock pressure.
+    */
+
     SensorStatus st;
-    ValveState vt;
-    PIOC_Controller::Valve *valve = valveArray;
+    ValveStatus vs ;
+    PIOCMode mod = PIOCMode::RUNNING;
     double y;
     double output;
-    double a = 0;
-    double aggKp = 8.34, aggKi = 8.2, aggKd = 8.33;
-    double Kp = 1.0161;
-    double Ki = 1.31228;
-    double Kd = 1.613052;
-    //double Kp = 0.00261;
-    //double Ki = 0.000128;
-    //double Kd = 0.00252;
+    double error[valveArray[1].stop - 100] = {};
+    double aggKp = 2.34, aggKi = 1.2, aggKd = 2.33;
+    double Kp = 0.000161;
+    double Ki = 0.00031228;
+    double Kd = 0.0013052;
+    PIDControl p;    
     int on[] = {3,4};
     int end[] = {1,3};
-    double *pdup;
-    double k[] = {};
-    pdup = m.PIOC_MockSimulation::MockSim::mockpressuresim(f, on, end);
-    //Intended pressure(setpoint) for Mock (XPLUSLOGARITHMX): y = 0.0035008*x + 1.996499
-    //Intended pressure(setpoint) for Mock (XPLUSEXPONENTX): y = 0.0017504*x + 4.498249
-   
-    double q = 0;
+    MockSim m;
+    SELECTFUNCTION f = SELECTFUNCTION::XPLUSEXPONENTX; 
+    double* pdup;
+    pdup = m.mockpressuresim(f, on, end);     //Input Pressure
+    int j = 0;
+    int arr = 0;
+    double d = 0;
+    while (j<= 1){
+        int x = int(valveArray[0].start);
+        if (j == 1)
+            x = valveArray[0].start - 100;
+        while (x<= (valveArray[0].stop))
+        {
+        /*Computes the error between the desired pressure and the mock pressure simulation.
+        */
+        if (f == PIOC_MockSimulation::SELECTFUNCTION::XPLUSLOGARITHMX)
+            y = 0.0040501*x + 1.9995949;
+        if (f == PIOC_MockSimulation::SELECTFUNCTION::XPLUSEXPONENTX)
+            y = 0.00325008*x + 1.9996749;                        // Set Point Pressure
+        if (f == PIOC_MockSimulation::SELECTFUNCTION::SIGMOID1)
+            y = 1/(1 -0.0909839*pow(x,(1.7*0.1609986)));       // Set Point Pressure
+        if (f == PIOC_MockSimulation::SELECTFUNCTION::SIGMOID)
+            y = 1/(1 -0.08599*pow(x,(1.7*0.169002)));
+        error[arr] = y - *(pdup +x);                              // Difference between Input and SetPoint
+        
+        if (x == valveArray[j].start )
+            d = y;
+        x = x+1;
+        arr = arr + 1;
+        }
+        j = j + 1;
+    }
+    double* err = error;  
+    p.ImplementController(d, st, vs, mod,  err);                      //Depending on the setpoint and input, we
+                                                               // initialize the gains and run the PID
+                                                                   //Controller
+    //cout<<""<<sum<<endl;
+    /*
+    double q;
     int g =0;
-    a = *(pdup+ g);
-    y = 0.0035008*j + 1.996499;
-    PID_v2 myPID( Kp, Ki, Kd, PID::Direct );
-    j = int(valveArray[0].start - 100);
-    double out;    
-    while (j <= int(valveArray[0].stop -100)){
-        //cout <<"Mock Pressure"<<g<<" "<<a<<endl;
-       
+    //PID_v2 myPID( Kp, Ki, Kd, PID::Direct );
+    j = 0;
+    double out;
+    while (j<= 8000){
+        //cout<<*(pdup+g)<<endl;
         //if ( f == PIOC_MockSimulation::SELECTFUNCTION::XPLUSLOGARITHMX)
-    
-        //cout <<"Mock Pressure"<<y<<endl;
+        y = 0.0035008*j + 1.996499;
         //if (f ==PIOC_MockSimulation::SELECTFUNCTION::XPLUSEXPONENTX)
         //y = 0.0017504*j + 4.498249; 
-        //if (j == 100)
+        output = 0.0017504*(j+ 150) + 4.498249;
+        //myPID.Start(*(pdup+g),output, y );
+        //double error = abs( a-y);
         
-        //if (j < 2000)
-            //output = q;
-        //cout<<"output"<<output<<endl;
-        a = *(pdup+ g) + (q-y);
-        y = 0.0035008*j + 1.996499;
-        output = 0.0017504*(j+ 120) + 4.498249 ;
-        myPID.Start(a,output, y );
-        double error = abs( a-y);
-        if (a-y > 0){
-            myPID.SetControllerDirection(DIRECT);
-        }
-        if (a - y<0){
-            myPID.SetControllerDirection(REVERSE);
-        }
-        if (error < 0.5) {
         // we're close to setpoint, use conservative tuning parameters
-            myPID.SetTunings(Kp, Ki, Kd);
-        } if (error >= 0.5) {
+         //else {
         // we're far from setpoint, use aggressive tuning parameters
-            myPID.SetTunings(aggKp, aggKi, aggKd);
-        }
-        q = myPID.Run(a);
-        cout<<"Error: "<<(q - y)<<endl;    
+            //myPID.SetTunings(aggKp, aggKi, aggKd);
+        //}
+        //q = myPID.Run(*(pdup+g));
+        //cout<<"Pressure"<<*(pdup +j)<<endl;
         j = j + 1;
         g = g+1;
-    }   
+    }   */
     return 0;
 }
