@@ -113,7 +113,7 @@ Checks if the onTime is greater than 40 percent of the OffTime.
     Changes the timing of alternate set of valves by a simple feedback loop. 
 
 
-# Mock Pressure Simulation
+# Mock Pressure Simulation:
 
    *Mock Pressure Simulation for a.b ^(x)*
    
@@ -126,4 +126,26 @@ Checks if the onTime is greater than 40 percent of the OffTime.
    
    ![MockPressure Sim2](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image2.jpg)
    
+   
+   *Mock Pressure Simulation for Sigmoid Function: 1/(1 -a*x.power(1.7x)) 
+   
+   A mix of XPLUSLOGARITHMX and XPLUSEXPONENTX have been utilized to simulate the mock pressure.
+   
+   ![MockPressure Sim3](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image4.jpg)
+   
+   *Mock Pressure Simulation (2) for Sigmoid Function: 1/(1 - a*x.power(1.7x))
+   
+   A mix of XPLUSLOGARITHMX and y = -ax.^2 + bx have been utilized to simulate the mock pressure. 
+   
+   ![MockPressure Sim4](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image3.jpg)
+   
+ ### Details of Mock Pressure Simulation:
+
+| Simulation             | Mock Pressure Description                                                    |
+| ---------------------- |:----------------------------------------------------------------------------:| 
+| XPLUSLOGARITHMX        | Simulated a couple of functions in  ax + log(bx) with different limits       |
+| XPLUSEXPONENTX         | Simulated a couple of functions in ab.^(x) with different limits             |
+| SIGMOID Simulation (1) | Simulated functions ab.^(x) and ax + log(bx) with different limits           |  
+| SIGMOID Simulation (2) | Simulated functions -ax.^2 + bx and ax + log(bx) with different limits       |  
+
    
