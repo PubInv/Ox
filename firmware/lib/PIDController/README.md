@@ -115,30 +115,40 @@ Checks if the onTime is greater than 40 percent of the OffTime.
 
 # Mock Pressure Simulation:
 
-   *Mock Pressure Simulation for a.b ^(x)*
+   **Mock Pressure Simulation for a.b ^(x)**&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**PID Performance**
+   
+   ![MockPressure Sim](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image1.jpg) ![PIDPerformance](
+https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/XPLUSEXPONENTX.png)
    
    
-   ![MockPressure Sim](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image1.jpg)
+   <br/>
+   <br/>
    
-   
-   *Mock Pressure Simulation for a.x + log(b.x)*
-   
-   
-   ![MockPressure Sim2](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image2.jpg)
-   
-   
-   *Mock Pressure Simulation for Sigmoid Function: 1/(1 -a*x.power(1.7x)) 
-   
+   **Mock Pressure Simulation for a.x + log(b.x)**&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**PID Performance**
+   ![MockPressure Sim2](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image2.jpg) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/XPLUSLOGARITHMX.png)
+
+<br/>
+<br/>
+
+   **Mock Pressure Simulation for Sigmoid Function: 1/(1 +ax.power(1.7x))**
+   <br/>
+   <br/>
    A mix of XPLUSLOGARITHMX and XPLUSEXPONENTX have been utilized to simulate the mock pressure.
+   &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+   <br/> **PID Performance**
    
-   ![MockPressure Sim3](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image4.jpg)
+   ![MockPressure Sim3](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image4.jpg) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID.png)
    
-   *Mock Pressure Simulation (2) for Sigmoid Function: 1/(1 - a*x.power(1.7x))
+   </br>
+   </br>
+   
+   **Mock Pressure Simulation (2) for Sigmoid Function: 1/(1 - a*x.power(1.7x))** 
    
    A mix of XPLUSLOGARITHMX and y = -ax.^2 + bx have been utilized to simulate the mock pressure. 
    
-   ![MockPressure Sim4](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image3.jpg)
-   
+   ![MockPressure Sim4](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image3.jpg) 
  ### Details of Mock Pressure Simulation:
 
 | Simulation             | Mock Pressure Description                                                    |
@@ -146,6 +156,5 @@ Checks if the onTime is greater than 40 percent of the OffTime.
 | XPLUSLOGARITHMX        | Simulated a couple of functions in  ax + log(bx) with different limits       |
 | XPLUSEXPONENTX         | Simulated a couple of functions in ab.^(x) with different limits             |
 | SIGMOID Simulation (1) | Simulated functions ab.^(x) and ax + log(bx) with different limits           |  
-| SIGMOID Simulation (2) | Simulated functions -ax.^2 + bx and ax + log(bx) with different limits       |  
 
    
