@@ -144,7 +144,7 @@ https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/XPLUSLOGARIT
    **Mock Pressure Simulation**&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **PID Performance**
    
    ![MockPressure Sim3](
-https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID1MOCK.png) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID1.png)
+https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOIDMOCK.png) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID.png)
    
    </br>
    </br>
