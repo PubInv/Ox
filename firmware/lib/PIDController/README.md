@@ -146,14 +146,23 @@ https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/XPLUSLOGARIT
    ![MockPressure Sim3](
 https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOIDMOCK.png) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID.png)
    
-   </br>
-   </br>
+   <br/>
+   <br/>
    
    **Mock Pressure Simulation (2) for Sigmoid Function: 1/(1 - ax.power(1.7x))** 
-   
+   <br/>
+   <br/>
    A mix of XPLUSLOGARITHMX and y = -ax.^2 + bx have been utilized to simulate the mock pressure. 
-   (..To be updated)
-    
+   <br/>
+   <br/>
+   &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   **Mock Pressure Simulation**&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **PID Performance**
+   
+   ![MockPressure Sim3](
+https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID1MOCK.png) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID1.png)
+
+   
+   
  ### Details of Mock Pressure Simulation:
 
 | Simulation             | Mock Pressure Description                                                    |
