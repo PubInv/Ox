@@ -139,7 +139,7 @@ https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/XPLUSEXPONEN
    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
    <br/> **PID Performance**
    
-   ![MockPressure Sim3](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image4.jpg) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID.png)
+   ![MockPressure Sim3](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/image4.jpg) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID1.png)
    
    </br>
    </br>
