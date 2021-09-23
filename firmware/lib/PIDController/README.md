@@ -158,8 +158,26 @@ https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOIDMOCK.
    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    **Mock Pressure Simulation**&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **PID Performance**
    
+ 
+   
    ![MockPressure Sim3](
 https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID1MOCK.png) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/SIGMOID1.png)
+
+  ## PID Controller (Fixed Setpoint) :
+  <br/>
+  Simulated a few mock trajectories with pressure as a monotonic function (Sigmoid, Logarithm, Exponent), to check the performance of the PID controller for a fixed setpoint. Performance graphs for log(x) and exp(x) will be updated soon. The value of the P, I and D constants are given.
+  
+  #### Simulation (Sigmoid Function) :
+  P: 0.22219 I: 0.19990, D: 0.23792
+  <br/>
+  
+  &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   **Mock Pressure Simulation**&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **PID Performance**
+   
+   
+   
+  ![MockPressure Sim3](
+https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/PIDSIGMOIDMOCK.png) ![PIDPerformance](https://github.com/PubInv/Ox/blob/Pranav/firmware/lib/PIDController/PIDSIGMOID.png)
 
    
    
