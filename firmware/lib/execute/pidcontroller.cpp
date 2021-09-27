@@ -11,6 +11,7 @@
  * =====================================================================================*/
 #include <iostream>
 #include <cmath>
+#include <fstream>
 #include "pidcontroller.h"
 #include "mocksimulation.h"
 using namespace PIOC_Valve;
@@ -31,16 +32,18 @@ namespace PIDController
     int maxpres = 25;
     int onT[2] = {int(valveArray[0].stop - valveArray[0].start), int(valveArray[1].stop - valveArray[1].start)};
     int offT[2] = {int(8000 - (valveArray[0].stop - valveArray[0].start)), int(8000 - (valveArray[1].stop - valveArray[1].start))};
-    float integral;
+    float integral = 0;
     float deriv;
     float prop;
     PIOC_MockSimulation::MockSim m;
-    float error[] = {};
+    double error[8000] = {};
     float pressure[8000] = {};
     double *err;
     float sum = 0;
     ControlGains c;
-    double g[2] = {0,0}; 
+    double g[2] = {0, 0};
+    double Kpchange, Kichange, Kdchange;
+    double initKp, initKi, initKd;
 
     void PIDControl::startingGains(ValveStatus vs)
     {
@@ -51,11 +54,14 @@ namespace PIDController
         */
         if (vs == ValveStatus::OK)
         {
-            initGains(0.5, 0.5, 0.5);
+            initKp = 1.1;
+            initKi = 0.5;
+            initKd = 0.5;
+            initGains(initKp, initKi, initKd);
         }
         return;
     }
-    
+
     void PIDControl::checkifSystemisOn(SensorStatus st, PIOCMode mod)
     {
         /*
@@ -65,8 +71,7 @@ namespace PIDController
         if (st == SensorStatus::OK && mod == PIOCMode::RUNNING)
         {
             printf("PID Controller can be initialized");
-            startingGains( vs );
-
+            startingGains(vs);
         }
         return;
     }
@@ -90,24 +95,33 @@ namespace PIDController
         if ((st == SensorStatus::OK) && (d >= (1.17 * minpres)) && (mod == PIOCMode::STARTING))
         //If the desired pressure is too high and the current pressure is well below the desired pressure.
         {
-            // kp is increased to reach the desired pressure quickly. ki and kd are still low.
-            initGains(1.5, 0.76, 0.65);
+            initKp = 1.5;
+            initKi = 1.5;
+            initKd = 1.5;
+            initGains(initKp, initKi, initKd);
         }
         else if (st == SensorStatus::OK && (d <= 0.85 * maxpres) && mod == PIOCMode::STARTING)
         // If the desired pressure is high and the current pressure is close to the desired pressure.
         {
-            /* kp is reduced since we are close to reaching the desired pressure. 
-              ki and kd are increased since the pressure is already near the desired pressure at the starting phase.
+            /* kp is changed since we are close to reaching the desired pressure. 
+              ki and kd are changed since the pressure is already near the desired pressure at the starting phase.
             */
-            initGains(0.54, 1.23, 1.34);
+            initKp = 0.54;
+            initKi = 0.53;
+            initKd = 0.54;
+            initGains(initKp, initKi, initKd);
         }
-        else 
+        else
         {
             /*
-            kp is slightly increased since we need to reach the desired pressure quickly. 
-            ki and kd are slightly increased too to reduce oscillations when we are nearing the desired pressure.
+            kp is changed since we need to reach the desired pressure quickly. 
+            ki and kd are slightly changed too to reduce oscillations when we are nearing the desired pressure.
             */
-            initGains(1.05, 1.04, 1.06);
+            initKp = 0.50;
+            initKi = 0.54;
+            initKd = 0.56;
+
+            initGains(initKp, initKi, initKd);
         }
         return;
     }
@@ -117,18 +131,31 @@ namespace PIDController
             Initializes the P, I and D gains of the controller with respect to 
             the state of the valve and the condition (OK, RUNNING) of the system. 
         */
+        initKp = 0.119012;
+        initKi = 0.1;
+        initKd = 0.1279;
+        initGains(initKp, initKi, initKd);
         if (vs == ValveStatus::OK && mod == PIOCMode::STARTING)
         {
             //Checks for error at the start.
             // I need to check the different test cases.
+
             if ((onT[0] < 0.4 * offT[0]))
             {
-                initGains(1.56, 1.45, 1.04);
+                /*Checks if the onTime of the first valve is 
+                  less than 40 percent of the offTime of the first valve. 
+                  */
+                initKp = 0.5;
+                initKi = 0.5;
+                initKd = 0.5;
+                initGains(initKp, initKi, initKd);
             }
-
             else
             {
-                initGains(1.55, 1.65, 1.06);
+                initKp = 0.10;
+                initKi = 0.15;
+                initKd = 0.16;
+                initGains(initKp, initKi, initKd);
             }
         }
         return;
@@ -149,11 +176,10 @@ namespace PIDController
         if (y < 1.0)
             c.ki = c.ki - (0.0001 * y);
         if (z >= 1.0)
-            c.kd = c.kd;
-        //c.kd = c.kd + (0.0001 *z);
+            c.kd = c.kd + (0.0001 * z);
         if (z < 1.0)
-            c.kd = c.kd;
-        //c.kd = c.kd - (0.0001 *z);
+            c.kd = c.kd - (0.0001 * z);
+
         return;
     }
     double PIDControl::computeSum(int i, double *err)
@@ -171,7 +197,7 @@ namespace PIDController
                 prop = -(*(err + i));                         //proportional error
                 deriv = -(*(err + i) - *(err + (i - 1))) / t; //derivative error
                 integral = -(*(err + i) * t);                 //integral error
-                sum = (c.kp * prop + c.kd * deriv + c.ki * integral);
+                sum = (c.kd * deriv + c.kp * prop + c.ki * integral);
             }
 
             else
@@ -179,7 +205,7 @@ namespace PIDController
                 prop = (*(err + i));                         //proportional error
                 deriv = (*(err + i) - *(err + (i - 1))) / t; //derivative error
                 integral = (*(err + i) * t);                 //integral error
-                sum = (c.kp * prop + c.kd * deriv + c.ki * integral);
+                sum = (c.kd * deriv + c.kp * prop + c.ki * integral);
             }
         }
         else
@@ -216,113 +242,110 @@ namespace PIDController
         }
         return;
     }
-    double* PIDControl::ControllerComp(double *err)
+    double *PIDControl::ControllerComp(double *err)
     {
         /*
          Computes the controller by taking into account, the error in pressure during different time states. 
          Adjusts the gains of the controller accordingly during each time state. 
         */
-        int on[] = {3, 4};
-        int end[] = {1, 3};
+        int on[] = {3, 4}; //Variables initialized by Default
+        int end[] = {1, 3};//Variables initialized by Default
         float mockpressure[] = {};
         int j = 0;
         int arr = 0;
-        while (j <= 1)
+        while (j < 1)
         {
             int k = int(valveArray[j].start);
             while (k <= int(valveArray[j].stop))
             {
                 error[arr] = *(err + arr) + sum; // Controller takes into account the error
-                                                 // at the immediate previous time step 
+                                                 // at the immediate previous time step
                 //Checks for error at the start of OnTime in all the valves.
-                if (error[arr] > 2.5 * error[arr - 1])
+
+                if (error[arr] >= error[arr - 1])
                 {
                     //Adjusts the gains if the error at the next time step is higher than the error at the prev time step.
-                    // kd is increased to avoid overshoot. kp remains the same more or less.
-                    multiplyGains(0.16, 1.073, 1.184);       // Changes the P, I and D at different time steps
-                                                            // depending on how big the error is
+                    //Kp, Ki and Kd gains are changed to compensate for the error.
+                    Kpchange = 0.91907;
+                    Kichange = -0.001994;
+                    Kdchange = 0.3;
+                    multiplyGains(Kpchange, Kichange, Kdchange); // Changes the P, I and D at different time steps
+                                                                 // depending on how big the error is
                 }
-                else if (error[arr] <= error[arr - 1])
+                if (error[arr] < error[arr - 1])
                 {
                     //If the error at the next time step is smaller than or equal to error at the previous time step,
-                    // kd is increased to prevent unnecessary overshoot.
-                    // ki remains the same.
-                    //cout<<"Check";
-                    multiplyGains(1.175, 0.1253, 1.2014);
+                    //Kp, Ki and Kd gains are changed to compensate for the error.
+                    Kpchange = 0.9752;
+                    Kichange = -0.01;
+                    Kdchange = 0.05;
+                    multiplyGains(Kpchange, Kichange, Kdchange);
                 }
-                else
-                {
-                    // kd is increased to make sure there is no overshoot and the error stays close to 0.
-                    // if error is lesser than that of previous state. We are increasing ki again when compared
-                    // to the previous case to reduce oscillations.
-                    multiplyGains(0.335, 1.0635, 4.03);
-                }
+                //if (error[arr]>= 3.0 || error[arr]<= -3.0)
+                    //error[arr] = 0.5 * error[arr];
                 //Computing Controller
-                if (((error[arr] - error[arr - 1]) > 0.06) && (valveArray[j].stop - arr) <= 500)
+
+                /*if (((error[arr] - error[arr - 1]) > 0.06) && (valveArray[j].stop - arr) <= 500)
 
                 //If there is a significant error during the last few time states, we have to check if the pressure
                 //at the pressure sensor is above/below the desired pressure.
                 //We have to close/open the subsequent valves accordingly.
 
-                { //We are checking the last 500 ms and we are checking if there is an error. 
-                    
-                  /*If the error in pressure is higher, this implies there is a problem with the valve
+                { //We are checking the last 500 ms and we are checking if there is an error.
+
+                    /*If the error in pressure is higher, this implies there is a problem with the valve
                     We are switching to the next valve to make the pressure reading close to the 
-                    desired pressure. */
+                    desired pressure. 
+
                     if (j == 0)
                     {
                         immediateChange(j, valveArray);
                         valveArray[j + 1].state = true;
                         valveArray[j + 1].start = valveArray[j + 1].start - 500;
                         valveArray[j].state = false;
-                        //multiplyGains(1.17, 1.19, 1.0);
                     }
                     if (j == 1)
                     {
                         immediateChange(j, valveArray);
                         valveArray[j - 1].state = true;
                         valveArray[j - 1].stop = valveArray[j - 1].stop + 500;
-                        //multiplyGains(1.17, 1.19, 1.0);
                     }
-                }
-                
+                }*/
+                cout<<"Erroref: "<<sum<<endl;
                 sum = computeSum(arr, err);
-                k = k + 1;
                 arr = arr + 1;
-                if (k == valveArray[0].stop)
-                    g[0] = sum;
-                if (k == (valveArray[1].stop - 100))
-                    g[1] = sum;
+                k = k + 1;
+                
             }
             j = j + 1;
         }
-        double* a = g;
+        double *a = error;
         return a;
     }
 
-    void PIDControl::ImplementController(double d, SensorStatus st, ValveStatus vs, PIOCMode mod, double *err)
+    double *PIDControl::ImplementController(double d, SensorStatus st, ValveStatus vs, PIOCMode mod, double *err)
     {
         /*
             Implements the controller based on the Sensor state, Valve State, the max/min pressure
             the desired pressure reading and the current pressure reading.
         */
-        InitialControlGainsSensor(d, st, mod);    // Sets Initial Gains
+        InitialControlGainsSensor(d, st, mod); // Sets Initial Gains
         InitialControlGainsValve(vs, mod, st); // Sets Initial Gains
-        double* con = ControllerComp(err);       // Runs the PID Controller
-        for (int i = 100; i++; i <= 7900)
+        double *con = ControllerComp(err);     // Runs the PID Controller
+        /*for (int i = 100; i++; i <= 4000)
         {
-            for (int j = 0; j++; j <= 1)
+            for (int j = 0; j++; j < 1)
             {
                 if (valveArray[j].start <= i <= valveArray[j].stop)
                     if (valveArray[j].state == 1 && (i == 0 || i == 1))
                     {
                         //Need to check about implementing a function
-                        // which will optimize the timing of the valves 
+                        // which will optimize the timing of the valves
                         //after considering the error in the pressure reading.
-                        changeTiming(i, *(con+i));
+                        changeTiming(i, *(con + i - 100));
                     }
             }
-        }
-        return;
+        }*/
+        return con;
     };
 }

@@ -41,8 +41,8 @@ namespace PIOC_MockSimulation
         else if (f == XPLUSEXPONENTX)
             press = 3.7243 * (pow(1.00029, x)); 
         else if (f == SIGMOID1)
-            press = 1.43487*pow(1.000435,x);
-        else
+            press = 2.43487*pow(1.000335,x);
+        else 
             press = 0.004289 * x - log(x * 0.00749642);
         return press;
     };
@@ -64,10 +64,12 @@ namespace PIOC_MockSimulation
         {
             press = 3.0239 * (pow(0.6498, (-0.001005 * x)));
         }
-        else if (f == SIGMOID1)
+        else if (f == SIGMOID)
             press = 0.00200404*x - log(0.0005254*x);
+        else if (f == SIGMOID1)
+            press = 0.00000015*pow(x,2) + 0.00105*x;
         else
-            press = -0.000000449*pow(x,2) + 0.00099*x;
+            press = 2.43487*pow(1.000335,x);
 
         return press;
     }
@@ -82,8 +84,8 @@ namespace PIOC_MockSimulation
         double presarr[valveArray[1].stop] = {};
         int i = 0;
         float value;
-        f = SELECTFUNCTION::XPLUSEXPONENTX;        
-        while (i <= 1)
+        f = SELECTFUNCTION::REGULARPID;        
+        while (i < 1)
         {
             int end = int(valveArray[i].stop);
             int on = int(valveArray[i].start);
@@ -102,15 +104,7 @@ namespace PIOC_MockSimulation
                     end = valveArray[i + 1].start;
                 int val = x / 100;
                 value = val;
-
-                if (((val % 2) != 0) && x > 1000)
-                {
-                    press = pressurechangerandom(f, x);
-                }
-                else
-               {
-                    press = computemockpressure(f, x);
-                }
+                press = pressurechangerandom(f, x);    
                 presarr[arr] = press;       
                 arr = arr + 1;
                 x = x + 1;
