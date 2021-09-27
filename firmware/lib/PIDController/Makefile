@@ -1,11 +1,12 @@
-main.o: main.cpp
-	gcc -c main.cpp -I MockSim -l ~/PubInv/Ox/firmware/lib
+main.o: main.cpp pidcontroller.cpp mocksimulation.cpp
+	gcc -c main.cpp pidcontroller.cpp mocksimulation.cpp -I ~/Ox/firmware/lib/header -lm
 
-MockSim/mocksimulation.o: MockSim/mocksimulation.cpp
-	cd MockSim; gcc -c mocksimulation.cpp -l ~/PubInv/Ox/firmware/lib
+mocksimulation.o: mocksimulation.o
+	gcc -c mocksimulation.cpp -I ~/Ox/firmware/lib/header -lm
+	
 
 pidcontroller.o: pidcontroller.cpp
-	gcc -c pidcontroller.cpp  -l ~/PubInv/Ox/firmware/lib
+	gcc -c pidcontroller.cpp  -I ~/Ox/firmware/lib/header -lm
 
-main: main.o pidcontroller.o MockSim/mocksimulation.o
-	gcc -o main.exe make.o pidcontroller.o MockSim/mocksimulation.o
+main: main.o pidcontroller.o mocksimulation.o
+	gcc -o main.exe main.o pidcontroller.o mocksimulation.o -lm
