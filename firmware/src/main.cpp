@@ -39,10 +39,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 using namespace OxCore;
 
-#ifdef ARDUINO
-Ox_Display display;
-#endif
-unsigned int displayTick;
+
 
 
 class TaskB : public Task
@@ -61,34 +58,12 @@ void setup()
 
   shiftInit();
 
-#ifdef ARDUINO
-  display = Ox_Display();
-  display.displayInit();
-  display.startScreen();
-  delay(2000);
-  display.debugScreen();
-#endif
-
-  /*// Test display layout and graph experiment
-  display.drawButton();
-  display.updateGraph();*/
-
-  displayTick = 0;
 }
 
 
 void loop(void)
 {
-   /*#ifdef ARDUINO
-        displayTick++; // TODO: make this a timer
-        if (displayTick >= 10000)
-        {
-            display.valveState(valveCycle.elapsed(), vc.getValveBits());
-
-            displayTick = 0;
-        }
-#endif*/
-
+  
   // TODO: call task
 
   //exit(0);

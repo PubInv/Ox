@@ -22,27 +22,23 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef PSA_VALVE_TASK_H
-#define PSA_VALVE_TASK_H
+#ifndef DISPLAY_TASK_H
+#define DISPLAY_TASK_H
 
 #include <task.h>
 #include <cstdint>
-#include <controller.h>
-#include <config.h>
-#include <timer.h>
+#include <display.h>
 
-namespace OxPSA
+namespace OxDisplay
 {
-    ValveController vc(&valveArray[0], NUM_VALVES);
 
-    class PsaCycleTask : public OxCore::Task
+    class DisplayTask : public OxCore::Task
     {
     private:
-        unsigned int tLast;
-        OxCore::Timer valveCycle;
+        Ox_Display display;
         void setup();
         void action();
-        void printValveState(uint8_t vs);
+        unsigned int displayTick;
     };
 
 }

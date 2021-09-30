@@ -22,14 +22,14 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include "display.h"
+#include <display.h>
+#include <cstdint>
 #include <Wire.h>
 #include "SPI.h"
 #include "Adafruit_GFX.h"
-#include "stdint.h"
 #include "Adafruit_ILI9341.h"
 
-namespace Ox {
+namespace OxDisplay {
 
   Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
