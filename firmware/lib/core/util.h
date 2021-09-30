@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef UTIL_H
 #define UTIL_H
 
-namespace OxUtil {
+namespace OxCore {
 
 bool CheckArrayBounds(int index, int length);
 

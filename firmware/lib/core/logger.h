@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include "logger_enums.h"
 
-namespace OxLogger {
+namespace OxCore {
 
 struct LogRecord {
     int timestamp;

@@ -22,61 +22,48 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <valve_task.h>
+#ifndef VALVE_H
+#define VALVE_H
 
-using namespace OxTimer;
+#include <inttypes.h>
 
-namespace OxApp
-{
+namespace OxPSA {
 
-    void PsaCycleTask::setup()
-    {
-        tLast = 0;
+    enum ValveStatus {
+        OK,
+        MISSED,
+        ERROR
+    };
 
-#ifdef ARDUINO
-        valveCycle.Init(millis());
-#else
-        valveCycle.Init(TimeSinceEpochMs());
-#endif
-    }
+    struct ValveState {
+        uint8_t name;
+        uint8_t pin;
+        uint32_t onTime; //ms the valve will be on
+        uint32_t offTime; //ms the valve will be off
+        uint32_t msLast;
+        ValveStatus status;
+        bool isOn;
+    };
 
-    void PsaCycleTask::action()
-    {
-        //std::cout << "Task A" << std::endl;
-        valveCycle.Update();
-
-        if (valveCycle.GetElapsed() >= tLast + TIME_STEP)
-        {
-            tLast = valveCycle.GetElapsed();
-            vc.updateController(&tLast);
-#ifdef ARDUINO
-            uint8_t out = vc.getValveBits();
-            shiftOutValves(out);
-#endif
-            printValveState(vc.getValveBits());
-        }
-        else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME)
-        {
-            vc.resetValves();
-#ifdef ARDUINO
-            valveCycle.Init(millis());
-#else
-            valveCycle.Init(TimeSinceEpochMs());
-#endif
-            tLast = 0; // TODO: put this in the timer class
-        }
-    }
-
-    void PsaCycleTask::printValveState(uint8_t vs)
-    {
-#ifdef ARDUINO
-        Serial.print("Valves: ");
-        for (int b = 7; b >= 0; b--)
-        {
-            Serial.print(bitRead(vs, b));
-        }
-        Serial.println("");
-#endif
-    }
+    class Valve {
+        private:
+            ValveState state;
+        public:
+            Valve(uint8_t name, uint8_t pin, uint32_t onTime, uint32_t offTime){
+                state.name = name;
+                state.pin = pin;
+                state.onTime = onTime;
+                state.offTime = offTime;
+                state.msLast = 0;
+                state.status = OK;
+                state.isOn = false;
+            }
+            bool update(uint32_t msNow);
+            ValveStatus getValveStatus();
+            bool changeTiming(uint32_t onTime, uint32_t offTime);
+            bool forceValveTrigger();
+    };
 
 }
+
+#endif

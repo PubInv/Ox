@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef OX_LOGGER_ENUMS_H
 #define OX_LOGGER_ENUMS_H
 
-namespace OxLogger {
+namespace OxCore {
 
 enum LogLevel {
     Debug,

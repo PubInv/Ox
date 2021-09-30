@@ -26,7 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <string.h>
 #include <stdio.h>
 #
-namespace OxLogger {
+namespace OxCore {
 
 const int BUFFER_SIZE = 1024;
 char buffer[BUFFER_SIZE];

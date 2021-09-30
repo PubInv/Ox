@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxCore {
 
 bool AddNextTask(Task *task) {
-    if (OxUtil::CheckArrayBounds(numberOfTasks, MAX_TASKS)) {
+    if (CheckArrayBounds(numberOfTasks, MAX_TASKS)) {
         tasks[numberOfTasks++] = task;
         return true;
     }
@@ -35,7 +35,7 @@ bool AddNextTask(Task *task) {
 }
 
 bool AddTask(Task *task, int index) {
-    if (OxUtil::CheckArrayBounds(index, MAX_TASKS)) {
+    if (CheckArrayBounds(index, MAX_TASKS)) {
         tasks[index] = task;
         return true;
     }
