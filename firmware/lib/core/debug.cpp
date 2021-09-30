@@ -22,19 +22,18 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <stdio.h>
-#include <iostream>
+#include <cstdio>
 #ifdef ARDUINO
 #include <Arduino.h>
 #endif
 
-namespace OxDebug {
+namespace OxCore {
 
   void serialBegin(int baud){
     #ifdef ARDUINO
       Serial.begin(baud);
     #else
-      printf("Serial init\n");
+      puts("Serial init");
     #endif
   }
 

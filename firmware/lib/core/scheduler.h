@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <task.h>
 #include <util.h>
-#include <inttypes.h>
+#include <cstdint>
 
 namespace OxCore {
 

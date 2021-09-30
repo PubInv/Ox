@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <inttypes.h>
+#include <cstdint>
 
 //#include <valve.h>
 

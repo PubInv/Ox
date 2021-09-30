@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef VALVE_H
 #define VALVE_H
 
-#include <inttypes.h>
+#include <cstdint>
 
 namespace OxPSA {
 
