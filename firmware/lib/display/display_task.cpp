@@ -22,29 +22,39 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef PSA_VALVE_TASK_H
-#define PSA_VALVE_TASK_H
+#include <display_task.h>
 
-#include <task.h>
-#include <cstdint>
-#include <controller.h>
-#include <config.h>
-#include <timer.h>
-
-namespace OxPSA
+namespace OxDisplay
 {
-    ValveController vc(&valveArray[0], NUM_VALVES);
 
-    class PsaCycleTask : public OxCore::Task
+    void DisplayTask::setup()
     {
-    private:
-        unsigned int tLast;
-        OxCore::Timer valveCycle;
-        void setup();
-        void action();
-        void printValveState(uint8_t vs);
-    };
+
+#ifdef ARDUINO
+        this->display = Ox_Display();
+        this->display.displayInit();
+        this->display.startScreen();
+        delay(2000);
+        this->display.debugScreen();
+#endif
+        /*// Test display layout and graph experiment
+        this->display.drawButton();
+        this->display.updateGraph();*/
+
+        this->displayTick = 0;
+    }
+
+    void DisplayTask::action()
+    {
+#ifdef ARDUINO
+        this->displayTick++; // TODO: make this a timer
+        if (this->displayTick >= 10000)
+        {
+            // I dont there is a valid reference for this at the moment - BC
+            //this->display.valveState(valveCycle.elapsed(), vc.getValveBits());
+            this->displayTick = 0;
+        }
+#endif
+    }
 
 }
-
-#endif
