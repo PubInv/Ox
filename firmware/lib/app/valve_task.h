@@ -22,27 +22,31 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef OX_LOGGER_H
-#define OX_LOGGER_H
+#ifndef VALVE_TASK_H
+#define VALVE_TASK_H
 
-#include "logger_enums.h"
+#include <task.h>
+#include <controller.h>
+#include <config.h>
+#include <timer.h>
+#include <inttypes.h>
 
-namespace OxLogger {
+using namespace OxController;
+using namespace OxCore;
 
-struct LogRecord {
-    int timestamp;
-    LogLevel level;
-    LogMessage message;
-};
+namespace OxApp
+{
+    ValveController vc(&valveArray[0], NUM_VALVES);
 
-extern const int BUFFER_SIZE;
-extern char buffer[];
-extern int bufferIndex;
-
-void Log(const char* message);
-void ResetBuffer();
-void ResetBufferPtr();
-void LogPtr(const char* message);
+    class PsaCycleTask : public Task
+    {
+    private:
+        unsigned int tLast;
+        Timer valveCycle;
+        void setup();
+        void action();
+        void printValveState(uint8_t vs);
+    };
 
 }
 

@@ -34,99 +34,72 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <debug.h>
 #include <shift.h>
 #include <inttypes.h>
-#include <controller.h>
 #include <config.h>
-#include <timer.h>
+#include <task.h>
 
 using namespace OxDebug;
-using namespace OxController;
-using namespace OxTimer;
-
-ValveController vc(&valveArray[0], NUM_VALVES);
-Timer valveCycle;
-unsigned int tLast;
+using namespace OxCore;
 
 #ifdef ARDUINO
 Ox_Display display;
 #endif
 unsigned int displayTick;
 
-void setup() {
-  serialBegin(115200);
-  Debug<const char*>("Starting Ox\n");
 
+class TaskB : public Task
+{
+private:
+  void action()
+  {
+    std::cout << "Task B" << std::endl;
+  }
+};
+
+void setup()
+{
+  serialBegin(115200);
+  Debug<const char *>("Starting Ox\n");
 
   shiftInit();
 
-
-  #ifdef ARDUINO
+#ifdef ARDUINO
   display = Ox_Display();
   display.displayInit();
   display.startScreen();
   delay(2000);
   display.debugScreen();
-
-  valveCycle.Init(millis());
-  #else
-  valveCycle.Init(TimeSinceEpochMs());
-  #endif
+#endif
 
   /*// Test display layout and graph experiment
   display.drawButton();
   display.updateGraph();*/
 
-  tLast = 0;
   displayTick = 0;
 }
 
-void printValveState(uint8_t vs){
-#ifdef ARDUINO
-  Serial.print("Valves: ");
-  for (int b = 7; b >= 0; b--)
-  {
-    Serial.print(bitRead(vs, b));
-  }
-  Serial.println("");
-#endif
-}
 
-void loop(void) {
-  valveCycle.Update();
+void loop(void)
+{
+   /*#ifdef ARDUINO
+        displayTick++; // TODO: make this a timer
+        if (displayTick >= 10000)
+        {
+            display.valveState(valveCycle.elapsed(), vc.getValveBits());
 
-  if (valveCycle.GetElapsed() >= tLast + TIME_STEP){
-    tLast = valveCycle.GetElapsed();
-    vc.updateController(&tLast);
-#ifdef ARDUINO
-    uint8_t out = vc.getValveBits();
-    shiftOutValves(out);
-#endif
-    printValveState(vc.getValveBits());
-  } else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME){
-    vc.resetValves();
-#ifdef ARDUINO
-    valveCycle.Init(millis());
-#else
-    valveCycle.Init(TimeSinceEpochMs());
-#endif
-    tLast = 0; // TODO: put this in the timer class
-  }
+            displayTick = 0;
+        }
+#endif*/
 
-#ifdef ARDUINO
-  displayTick++; // TODO: make this a timer
-  if (displayTick >= 10000){
-    display.valveState(valveCycle.elapsed(), vc.getValveBits());
-
-    displayTick = 0;
-  }
-#endif
+  // TODO: call task
 
   //exit(0);
 }
 
-
 #ifndef ARDUINO
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   setup();
-  while(1) loop();
+  while (1)
+    loop();
 }
 #endif

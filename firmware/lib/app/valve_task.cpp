@@ -22,28 +22,61 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef OX_LOGGER_H
-#define OX_LOGGER_H
+#include <valve_task.h>
 
-#include "logger_enums.h"
+using namespace OxTimer;
 
-namespace OxLogger {
+namespace OxApp
+{
 
-struct LogRecord {
-    int timestamp;
-    LogLevel level;
-    LogMessage message;
-};
+    void PsaCycleTask::setup()
+    {
+        tLast = 0;
 
-extern const int BUFFER_SIZE;
-extern char buffer[];
-extern int bufferIndex;
+#ifdef ARDUINO
+        valveCycle.Init(millis());
+#else
+        valveCycle.Init(TimeSinceEpochMs());
+#endif
+    }
 
-void Log(const char* message);
-void ResetBuffer();
-void ResetBufferPtr();
-void LogPtr(const char* message);
+    void PsaCycleTask::action()
+    {
+        //std::cout << "Task A" << std::endl;
+        valveCycle.Update();
+
+        if (valveCycle.GetElapsed() >= tLast + TIME_STEP)
+        {
+            tLast = valveCycle.GetElapsed();
+            vc.updateController(&tLast);
+#ifdef ARDUINO
+            uint8_t out = vc.getValveBits();
+            shiftOutValves(out);
+#endif
+            printValveState(vc.getValveBits());
+        }
+        else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME)
+        {
+            vc.resetValves();
+#ifdef ARDUINO
+            valveCycle.Init(millis());
+#else
+            valveCycle.Init(TimeSinceEpochMs());
+#endif
+            tLast = 0; // TODO: put this in the timer class
+        }
+    }
+
+    void PsaCycleTask::printValveState(uint8_t vs)
+    {
+#ifdef ARDUINO
+        Serial.print("Valves: ");
+        for (int b = 7; b >= 0; b--)
+        {
+            Serial.print(bitRead(vs, b));
+        }
+        Serial.println("");
+#endif
+    }
 
 }
-
-#endif

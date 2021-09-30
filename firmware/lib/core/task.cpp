@@ -26,12 +26,16 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
-void Task::SetMsLast(uint32_t ms) {
-    this->msLast = ms;
+void Task::init(int id, char priority) {
+    this->id = id;
+    this->priority = priority;
+    //std::cout << "id: " << id << std::endl;
+    setup();
 }
-
-uint32_t Task::GetMsLast() {
-    return this->msLast;
+void Task::run(unsigned int t_now) {
+    //std::cout << "Running " << id << " at " << t_now << std::endl;
+    t_run = t_now;
+    action();
 }
 
 }

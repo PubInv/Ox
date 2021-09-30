@@ -22,27 +22,24 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef OX_LOGGER_H
-#define OX_LOGGER_H
-
-#include "logger_enums.h"
+#ifndef OX_LOGGER_ENUMS_H
+#define OX_LOGGER_ENUMS_H
 
 namespace OxLogger {
 
-struct LogRecord {
-    int timestamp;
-    LogLevel level;
-    LogMessage message;
+enum LogLevel {
+    Debug,
+    Info,
+    Warning, 
+    Error, // Recoverable error
+    Critical // Non-recoverable error
 };
 
-extern const int BUFFER_SIZE;
-extern char buffer[];
-extern int bufferIndex;
-
-void Log(const char* message);
-void ResetBuffer();
-void ResetBufferPtr();
-void LogPtr(const char* message);
+// Add log message ids here to enumerate all possible cases
+enum LogMessage {
+    Something,
+    SomethingElse
+};
 
 }
 

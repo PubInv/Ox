@@ -27,6 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <task.h>
 #include <util.h>
+#include <inttypes.h>
 
 namespace OxCore {
 
@@ -41,7 +42,7 @@ int numberOfTasks = 0;
 
 bool AddNextTask(Task *task);
 bool AddTask(Task *task, int index);
-bool RunNextTask(Task task, uint32_t msNow);
+void RunNextTask(Task task, uint32_t msNow);
 void IncrementRunningTask();
 
 }

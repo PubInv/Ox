@@ -42,9 +42,9 @@ bool AddTask(Task *task, int index) {
     return false;
 }
 
-bool RunNextTask(Task task, uint32_t msNow) {
+void RunNextTask(Task task, uint32_t msNow) {
     IncrementRunningTask();
-    return tasks[currentRunningTask]->Run(msNow);
+    return tasks[currentRunningTask]->run(msNow);
 }
 
 void IncrementRunningTask() {
@@ -56,7 +56,7 @@ void IncrementRunningTask() {
 
 bool InitAllTasks() {
     for (int i = 0; i < numberOfTasks; i++) {
-        tasks[i]->Init();
+        tasks[i]->init(0, 0); // TODO: need an appropriate place for the init
     }
 }
 
