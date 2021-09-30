@@ -30,7 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <shift.h>
 //#include <config.h>
-#include <inttypes.h>
+#include <cstdint>
 
 // Shift register
 #define DS 13    // 747HC pin 14 - serial data

@@ -30,7 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <controller.h>
 #include <stdio.h>
-#include <inttypes.h>
+#include <cstdint>
 
 namespace OxPSA {
 

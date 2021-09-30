@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <inttypes.h>
+#include <cstdint>
 
 namespace OxPSA {
 

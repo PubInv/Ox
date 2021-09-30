@@ -1,4 +1,3 @@
-/*
 Public Invention's Ox Project is an open source hardware design for an oxygen
 concentrator for use by field hospitals around the world. This team aims to
 design an oxygen concentrator that can be manufactured locally while overcoming
@@ -20,33 +19,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*/
 
-#ifndef PSA_VALVE_TASK_H
-#define PSA_VALVE_TASK_H
-
-#include <task.h>
-#include <controller.h>
-#include <config.h>
-#include <timer.h>
-#include <cstdint>
-
-using namespace OxCore;
-
-namespace OxPSA
-{
-    ValveController vc(&valveArray[0], NUM_VALVES);
-
-    class PsaCycleTask : public Task
-    {
-    private:
-        unsigned int tLast;
-        Timer valveCycle;
-        void setup();
-        void action();
-        void printValveState(uint8_t vs);
-    };
-
-}
-
-#endif
+This is the LCD display library.

@@ -33,11 +33,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 #include <debug.h>
 #include <shift.h>
-#include <inttypes.h>
+#include <cstdint>
 #include <config.h>
 #include <task.h>
 
-using namespace OxDebug;
 using namespace OxCore;
 
 #ifdef ARDUINO

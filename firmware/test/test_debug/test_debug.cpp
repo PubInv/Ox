@@ -26,7 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
-#include <inttypes.h>
+#include <cstdint>
 #include <debug.h>
 
 using namespace OxDebug;

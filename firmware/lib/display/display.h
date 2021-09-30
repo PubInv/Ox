@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <inttypes.h>
+#include <cstdint>
 
 namespace Ox {
 
