@@ -25,19 +25,20 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef TASK_H
 #define TASK_H
 
-#include <inttypes.h>
+//#include <inttypes.h>
 
 namespace OxCore {
 
 class Task {
     private:
-        uint32_t msLast;
+        int id;
+        char priority;
+        unsigned int t_run;
+        virtual void setup() {}
+        virtual void action() {}
     public:
-        virtual bool Init();
-        virtual bool Run(uint32_t ms);
-        void SetMsLast(uint32_t ms);
-        uint32_t GetMsLast();
-
+        void init(int id, char priority);
+        void run(unsigned int t_now);
 };
 
 }
