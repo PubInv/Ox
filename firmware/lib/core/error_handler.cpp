@@ -22,13 +22,29 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <task.h>
+#include <error_handler.h>
+#include <iostream>
 
-namespace VOS_Task {
+namespace OxError {
 
-    bool Task::run(uint32_t ms){
 
+void InitErrorHandler(ErrorMode mode) {
+    errorMode = mode;
+}
+
+void HandleError(Error error) {
+
+    switch (errorMode) {
+        case ErrorMode::Log:
+
+        break;
+        case ErrorMode::StdOut:
+            printf(ErrorString[static_cast<int>(error)]);
+        break;
+        default:
+
+        break;
     }
-
+}
 
 }

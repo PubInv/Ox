@@ -38,9 +38,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <config.h>
 #include <timer.h>
 
-using namespace Ox_Debug;
-using namespace Ox_Controller;
-using namespace Ox_Timer;
+using namespace OxDebug;
+using namespace OxController;
+using namespace OxTimer;
 
 ValveController vc(&valveArray[0], NUM_VALVES);
 Timer valveCycle;
@@ -66,9 +66,9 @@ void setup() {
   delay(2000);
   display.debugScreen();
 
-  valveCycle = Timer(millis());
+  valveCycle.Init(millis());
   #else
-  valveCycle = Timer(timeSinceEpochMs());
+  valveCycle.Init(TimeSinceEpochMs());
   #endif
 
   /*// Test display layout and graph experiment
@@ -91,22 +91,22 @@ void printValveState(uint8_t vs){
 }
 
 void loop(void) {
-  valveCycle.update();
+  valveCycle.Update();
 
-  if (valveCycle.elapsed() >= tLast + TIME_STEP){
-    tLast = valveCycle.elapsed();
+  if (valveCycle.GetElapsed() >= tLast + TIME_STEP){
+    tLast = valveCycle.GetElapsed();
     vc.updateController(&tLast);
 #ifdef ARDUINO
     uint8_t out = vc.getValveBits();
     shiftOutValves(out);
 #endif
     printValveState(vc.getValveBits());
-  } else if (valveCycle.elapsed() >= TOTAL_CYCLE_TIME){
+  } else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME){
     vc.resetValves();
 #ifdef ARDUINO
-    valveCycle = Timer(millis());
+    valveCycle.Init(millis());
 #else
-    valveCycle = Timer(timeSinceEpochMs());
+    valveCycle.Init(TimeSinceEpochMs());
 #endif
     tLast = 0; // TODO: put this in the timer class
   }

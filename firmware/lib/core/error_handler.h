@@ -22,25 +22,29 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef ERROR_HANDLER_H
+#define ERROR_HANDLER_H
 
-#include <iostream>
+namespace OxError {
 
-namespace OxDebug {
+enum class ErrorMode {
+    Log,
+    StdOut
+};
 
-  // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
-  // to get a debug output on Arduino or native environments
-  template <class myType>
-  void Debug (myType a) {
-  #ifdef ARDUINO
-    Serial.print(a);
-  #else
-    std::cout << a;
-  #endif
-  }
+enum class Error {
+    Null,
+    LessThanZero,
+    OutOfBounds
+};
 
-  void serialBegin(int baud);
+// This is the error string to output from the above Error enum
+static const char *ErrorString[] = { "Null", "LessThanZero", "OutOfBounds" };
+
+ErrorMode errorMode;
+void InitErrorHandler(ErrorMode mode);
+void HandleError(Error error);
+
 }
 
 #endif

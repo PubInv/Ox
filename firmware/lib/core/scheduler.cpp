@@ -22,25 +22,46 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#include <scheduler.h>
 
-#include <iostream>
+namespace OxCore {
 
-namespace OxDebug {
-
-  // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
-  // to get a debug output on Arduino or native environments
-  template <class myType>
-  void Debug (myType a) {
-  #ifdef ARDUINO
-    Serial.print(a);
-  #else
-    std::cout << a;
-  #endif
-  }
-
-  void serialBegin(int baud);
+bool AddNextTask(Task *task) {
+    if (OxUtil::CheckArrayBounds(numberOfTasks, MAX_TASKS)) {
+        tasks[numberOfTasks++] = task;
+        return true;
+    }
+    return false;
 }
 
-#endif
+bool AddTask(Task *task, int index) {
+    if (OxUtil::CheckArrayBounds(index, MAX_TASKS)) {
+        tasks[index] = task;
+        return true;
+    }
+    return false;
+}
+
+bool RunNextTask(Task task, uint32_t msNow) {
+    IncrementRunningTask();
+    return tasks[currentRunningTask]->Run(msNow);
+}
+
+void IncrementRunningTask() {
+    currentRunningTask++;
+    if (currentRunningTask > numberOfTasks) {
+        currentRunningTask = 0;
+    }
+}
+
+bool InitAllTasks() {
+    for (int i = 0; i < numberOfTasks; i++) {
+        tasks[i]->Init();
+    }
+}
+
+void StartSchedulerClock() {
+    
+}
+
+}

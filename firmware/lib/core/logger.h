@@ -22,25 +22,20 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef OX_LOGGER_H
+#define OX_LOGGER_H
 
-#include <iostream>
+namespace OxLogger {
 
-namespace OxDebug {
+extern const int BUFFER_SIZE;
+extern char buffer[];
+extern int bufferIndex;
 
-  // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
-  // to get a debug output on Arduino or native environments
-  template <class myType>
-  void Debug (myType a) {
-  #ifdef ARDUINO
-    Serial.print(a);
-  #else
-    std::cout << a;
-  #endif
-  }
+void Log(const char* message);
+void ResetBuffer();
+void ResetBufferPtr();
+void LogPtr(const char* message);
 
-  void serialBegin(int baud);
 }
 
 #endif

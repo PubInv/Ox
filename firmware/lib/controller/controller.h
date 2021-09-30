@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <inttypes.h>
 
-namespace Ox_Controller {
+namespace OxController {
 
 #define NUM_VALVES 4
 
