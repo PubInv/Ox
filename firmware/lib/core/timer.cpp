@@ -29,21 +29,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //#include <iostream>
 #include <timer.h>
 
-namespace Ox_Timer {
+namespace OxTimer {
 
-    uint64_t timeSinceEpochMs() {
-        return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-    }
+uint64_t TimeSinceEpochMs() {
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
 
-    void Timer::update(){
-        #ifdef ARDUINO
-        this->msElapsed = (uint32_t)millis() - this->msStart;
-        #else
-        this->msElapsed = (uint32_t)(timeSinceEpochMs()) - this->msStart;
-        #endif
-    }
 
-    uint32_t Timer::elapsed(){
-        return msElapsed;
-    }
+void Timer::Init(uint32_t msStart) {
+    this->msElapsed = 0;
+    this->msStart = msStart;
+}
+
+void Timer::Update(){
+    #ifdef ARDUINO
+    this->msElapsed = (uint32_t)millis() - this->msStart;
+    #else
+    this->msElapsed = (uint32_t)(TimeSinceEpochMs()) - this->msStart;
+    #endif
+}
+
+uint32_t Timer::GetElapsed(){
+    return msElapsed;
+}
+
 }

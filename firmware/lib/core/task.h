@@ -22,25 +22,24 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef TASK_H
+#define TASK_H
 
-#include <iostream>
+#include <inttypes.h>
 
-namespace OxDebug {
+namespace OxCore {
 
-  // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
-  // to get a debug output on Arduino or native environments
-  template <class myType>
-  void Debug (myType a) {
-  #ifdef ARDUINO
-    Serial.print(a);
-  #else
-    std::cout << a;
-  #endif
-  }
+class Task {
+    private:
+        uint32_t msLast;
+    public:
+        virtual bool Init();
+        virtual bool Run(uint32_t ms);
+        void SetMsLast(uint32_t ms);
+        uint32_t GetMsLast();
 
-  void serialBegin(int baud);
+};
+
 }
 
 #endif

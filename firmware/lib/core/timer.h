@@ -22,25 +22,27 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef TIMER_H
+#define TIMER_H
 
-#include <iostream>
+#include <chrono>
 
-namespace OxDebug {
+namespace OxTimer {
 
-  // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
-  // to get a debug output on Arduino or native environments
-  template <class myType>
-  void Debug (myType a) {
-  #ifdef ARDUINO
-    Serial.print(a);
-  #else
-    std::cout << a;
-  #endif
-  }
+using namespace std::chrono;
 
-  void serialBegin(int baud);
+uint64_t TimeSinceEpochMs();
+
+class Timer {
+    private:
+        uint32_t msElapsed;
+        uint32_t msStart;
+    public:
+        void Init(uint32_t msStart);
+        void Update();
+        uint32_t GetElapsed();
+};
+
 }
 
 #endif

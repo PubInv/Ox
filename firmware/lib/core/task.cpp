@@ -22,23 +22,16 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef TASK_H
-#define TASK_H
+#include <task.h>
 
-#include <inttypes.h>
+namespace OxCore {
 
-namespace VOS_Task {
-
-    class Task {
-        private:
-            uint32_t msLast;
-
-        public:
-            Task(){}
-            bool run(uint32_t ms);
-
-    };
-
+void Task::SetMsLast(uint32_t ms) {
+    this->msLast = ms;
 }
 
-#endif
+uint32_t Task::GetMsLast() {
+    return this->msLast;
+}
+
+}

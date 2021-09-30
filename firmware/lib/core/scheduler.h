@@ -22,25 +22,28 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
 
-#include <iostream>
+#include <task.h>
+#include <util.h>
 
-namespace OxDebug {
+namespace OxCore {
 
-  // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
-  // to get a debug output on Arduino or native environments
-  template <class myType>
-  void Debug (myType a) {
-  #ifdef ARDUINO
-    Serial.print(a);
-  #else
-    std::cout << a;
-  #endif
-  }
+// [ Task1, Task2, Task3, Task4, Empty ]
+//            ^             ^      ^
+//         current        number  max
 
-  void serialBegin(int baud);
+const int MAX_TASKS = 5;
+Task *tasks[MAX_TASKS];
+int currentRunningTask = 0;
+int numberOfTasks = 0;
+
+bool AddNextTask(Task *task);
+bool AddTask(Task *task, int index);
+bool RunNextTask(Task task, uint32_t msNow);
+void IncrementRunningTask();
+
 }
 
 #endif

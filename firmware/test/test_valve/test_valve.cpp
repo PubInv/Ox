@@ -36,7 +36,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   TEST_ASSERT_TRUE(success == 1);
 }*/
 
-using namespace Ox_Controller;
+using namespace OxController;
 
 void test_valve_does_tick(){
   bool x = true;

@@ -31,7 +31,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <iostream>
 #include <inttypes.h>
 
-namespace Ox_Controller {
+namespace OxController {
 
 // Helper MACRO to display bit pattern for debugging only
 //https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format
