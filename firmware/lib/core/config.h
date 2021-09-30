@@ -67,7 +67,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   { 'C', 2, 0, 4, 5600, 6000, },
   { 'D', 3, 0, 8, 11600, 12000, }};
 */
-OxController::Valve valveArray[NUM_VALVES] = {
+
+OxPSA::Valve valveArray[NUM_VALVES] = {
   { 'A', 0, 0, 1, 100, 4000, },
   { 'B', 1, 0, 2, 4000, 8000, },
   { 'C', 2, 0, 4, 3700, 4000, },

@@ -24,14 +24,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #ifdef ARDUINO
 #include <Arduino.h>
+#else
+#include <iostream>
 #endif
 
 #include <controller.h>
 #include <stdio.h>
-#include <iostream>
 #include <inttypes.h>
 
-namespace OxController {
+namespace OxPSA {
 
 // Helper MACRO to display bit pattern for debugging only
 //https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format

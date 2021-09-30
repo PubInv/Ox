@@ -22,56 +22,31 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef PSA_VALVE_TASK_H
+#define PSA_VALVE_TASK_H
 
+#include <task.h>
+#include <controller.h>
+#include <config.h>
+#include <timer.h>
 #include <inttypes.h>
 
-namespace OxController {
+using namespace OxCore;
 
-#define NUM_VALVES 4
+namespace OxPSA
+{
+    ValveController vc(&valveArray[0], NUM_VALVES);
 
-  enum OxMode {
-      STARTING,
-      RUNNING,
-      STOPPED,
-      PAUSED,
-      ERROR
-  };
-
-  struct OxState {
-      OxMode mode;
-      int totalRunTime;
-  };
-
-  struct Valve {
-      char name;
-      unsigned num;
-      unsigned int state;
-      unsigned int pin;
-      unsigned int start;
-      unsigned int stop;
-  };
-
-  class ValveController {
+    class PsaCycleTask : public Task
+    {
     private:
-      OxState Ox_state;
-      uint8_t valveBits;
-      int numValves;
-      Valve *valves;
-    public:
-        ValveController(Valve* v, int numValves) {
-        valveBits = 0;
-        Ox_state.mode = STARTING;
-        Ox_state.totalRunTime = 0;
-        valves = v;
-        this->numValves = numValves;
-      }
-      void updateValves(uint32_t *msNow);
-      bool updateController(unsigned int *msNow);
-      bool resetValves();
-      uint8_t getValveBits();
-  };
+        unsigned int tLast;
+        Timer valveCycle;
+        void setup();
+        void action();
+        void printValveState(uint8_t vs);
+    };
 
 }
+
 #endif

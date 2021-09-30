@@ -22,48 +22,59 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <valve.h>
+#include <psa_valve_task.h>
 
-namespace Ox_Valve {
+namespace OxPSA
+{
 
-    bool Valve::update(uint32_t msNow){
-        // Bistable timing
-        //
-        //          ___off___
-        //         |         |
-        // ___on___|         |
-        //
+    void PsaCycleTask::setup()
+    {
+        tLast = 0;
 
-        if (state.isOn && (msNow - state.msLast >= state.onTime)){
-            // Turn off
-            state.isOn = false;
-            state.msLast = msNow;
-            return true;
+#ifdef ARDUINO
+        valveCycle.Init(millis());
+#else
+        valveCycle.Init(TimeSinceEpochMs());
+#endif
+    }
+
+    void PsaCycleTask::action()
+    {
+        //std::cout << "Task A" << std::endl;
+        valveCycle.Update();
+
+        if (valveCycle.GetElapsed() >= tLast + TIME_STEP)
+        {
+            tLast = valveCycle.GetElapsed();
+            vc.updateController(&tLast);
+#ifdef ARDUINO
+            uint8_t out = vc.getValveBits();
+            shiftOutValves(out);
+#endif
+            printValveState(vc.getValveBits());
         }
-        else if (!state.isOn && (msNow - state.msLast >= state.offTime)){
-            // Turn on
-            state.isOn = true;
-            state.msLast = msNow;
-            return true;
+        else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME)
+        {
+            vc.resetValves();
+#ifdef ARDUINO
+            valveCycle.Init(millis());
+#else
+            valveCycle.Init(TimeSinceEpochMs());
+#endif
+            tLast = 0; // TODO: put this in the timer class
         }
-        else {
-            return false;
+    }
+
+    void PsaCycleTask::printValveState(uint8_t vs)
+    {
+#ifdef ARDUINO
+        Serial.print("Valves: ");
+        for (int b = 7; b >= 0; b--)
+        {
+            Serial.print(bitRead(vs, b));
         }
+        Serial.println("");
+#endif
     }
 
-    ValveStatus Valve::getValveStatus(){
-        return state.status;
-    }
-
-    bool Valve::changeTiming(uint32_t onTime, uint32_t offTime){
-        // TODO: error checking
-
-        state.onTime = onTime;
-        state.offTime = offTime;
-        return true;
-    }
-
-    bool Valve::forceValveTrigger(){
-        return false;
-    }
 }

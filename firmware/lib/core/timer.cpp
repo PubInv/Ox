@@ -29,7 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //#include <iostream>
 #include <timer.h>
 
-namespace OxTimer {
+namespace OxCore {
 
 uint64_t TimeSinceEpochMs() {
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();

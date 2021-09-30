@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <chrono>
 
-namespace OxTimer {
+namespace OxCore {
 
 using namespace std::chrono;
 

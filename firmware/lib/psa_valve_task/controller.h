@@ -22,32 +22,56 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef VALVE_TASK_H
-#define VALVE_TASK_H
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
-#include <task.h>
-#include <controller.h>
-#include <config.h>
-#include <timer.h>
 #include <inttypes.h>
 
-using namespace OxController;
-using namespace OxCore;
+namespace OxPSA {
 
-namespace OxApp
-{
-    ValveController vc(&valveArray[0], NUM_VALVES);
+#define NUM_VALVES 4
 
-    class PsaCycleTask : public Task
-    {
+  enum OxMode {
+      STARTING,
+      RUNNING,
+      STOPPED,
+      PAUSED,
+      ERROR
+  };
+
+  struct OxState {
+      OxMode mode;
+      int totalRunTime;
+  };
+
+  struct Valve {
+      char name;
+      unsigned num;
+      unsigned int state;
+      unsigned int pin;
+      unsigned int start;
+      unsigned int stop;
+  };
+
+  class ValveController {
     private:
-        unsigned int tLast;
-        Timer valveCycle;
-        void setup();
-        void action();
-        void printValveState(uint8_t vs);
-    };
+      OxState Ox_state;
+      uint8_t valveBits;
+      int numValves;
+      Valve *valves;
+    public:
+        ValveController(Valve* v, int numValves) {
+        valveBits = 0;
+        Ox_state.mode = STARTING;
+        Ox_state.totalRunTime = 0;
+        valves = v;
+        this->numValves = numValves;
+      }
+      void updateValves(uint32_t *msNow);
+      bool updateController(unsigned int *msNow);
+      bool resetValves();
+      uint8_t getValveBits();
+  };
 
 }
-
 #endif

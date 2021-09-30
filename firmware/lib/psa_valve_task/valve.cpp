@@ -22,48 +22,48 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef VALVE_H
-#define VALVE_H
+#include <valve.h>
 
-#include <inttypes.h>
+namespace OxPSA {
 
-namespace Ox_Valve {
+    bool Valve::update(uint32_t msNow){
+        // Bistable timing
+        //
+        //          ___off___
+        //         |         |
+        // ___on___|         |
+        //
 
-    enum ValveStatus {
-        OK,
-        MISSED,
-        ERROR
-    };
+        if (state.isOn && (msNow - state.msLast >= state.onTime)){
+            // Turn off
+            state.isOn = false;
+            state.msLast = msNow;
+            return true;
+        }
+        else if (!state.isOn && (msNow - state.msLast >= state.offTime)){
+            // Turn on
+            state.isOn = true;
+            state.msLast = msNow;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
-    struct ValveState {
-        uint8_t name;
-        uint8_t pin;
-        uint32_t onTime; //ms the valve will be on
-        uint32_t offTime; //ms the valve will be off
-        uint32_t msLast;
-        ValveStatus status;
-        bool isOn;
-    };
+    ValveStatus Valve::getValveStatus(){
+        return state.status;
+    }
 
-    class Valve {
-        private:
-            ValveState state;
-        public:
-            Valve(uint8_t name, uint8_t pin, uint32_t onTime, uint32_t offTime){
-                state.name = name;
-                state.pin = pin;
-                state.onTime = onTime;
-                state.offTime = offTime;
-                state.msLast = 0;
-                state.status = OK;
-                state.isOn = false;
-            }
-            bool update(uint32_t msNow);
-            ValveStatus getValveStatus();
-            bool changeTiming(uint32_t onTime, uint32_t offTime);
-            bool forceValveTrigger();
-    };
+    bool Valve::changeTiming(uint32_t onTime, uint32_t offTime){
+        // TODO: error checking
 
+        state.onTime = onTime;
+        state.offTime = offTime;
+        return true;
+    }
+
+    bool Valve::forceValveTrigger(){
+        return false;
+    }
 }
-
-#endif
