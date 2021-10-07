@@ -31,14 +31,15 @@ namespace OxCore {
 
 class Task {
     private:
-        int id;
-        char priority;
-        unsigned int t_run;
-        virtual void setup() {}
-        virtual void action() {}
+        bool _initSuccess;
+        int _id;
+        char _priority;
+        unsigned int _last_ms;
+        virtual bool _init() {}
+        virtual bool _run() {}
     public:
-        void init(int id, char priority);
-        void run(unsigned int t_now);
+        bool init(int id, char priority);
+        bool run(unsigned int ms_now);
 };
 
 }

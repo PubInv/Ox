@@ -26,16 +26,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
-void Task::init(int id, char priority) {
-    this->id = id;
-    this->priority = priority;
+bool Task::init(int id, char priority) {
+    _id = id;
+    _priority = priority;
     //std::cout << "id: " << id << std::endl;
-    setup();
+    _initSuccess = _init();
+    return _initSuccess;
 }
-void Task::run(unsigned int t_now) {
-    //std::cout << "Running " << id << " at " << t_now << std::endl;
-    t_run = t_now;
-    action();
+bool Task::run(unsigned int ms_now) {
+    //std::cout << "Running " << id << " at " << ms_now << std::endl;
+    _last_ms = ms_now;
+    return _run();
 }
 
 }

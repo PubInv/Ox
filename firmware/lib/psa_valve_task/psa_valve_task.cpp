@@ -27,18 +27,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxPSA
 {
 
-    void PsaCycleTask::setup()
+    bool PsaCycleTask::_init()
     {
         tLast = 0;
-
-#ifdef ARDUINO
-        valveCycle.Init(millis());
-#else
-        valveCycle.Init(TimeSinceEpochMs());
-#endif
+        valveCycle.Init(OxCore::TimeSinceEpochMs());
     }
 
-    void PsaCycleTask::action()
+    bool PsaCycleTask::_run() 
     {
         //std::cout << "Task A" << std::endl;
         valveCycle.Update();
@@ -51,21 +46,17 @@ namespace OxPSA
             uint8_t out = vc.getValveBits();
             shiftOutValves(out);
 #endif
-            printValveState(vc.getValveBits());
+            _printValveState(vc.getValveBits());
         }
         else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME)
         {
             vc.resetValves();
-#ifdef ARDUINO
-            valveCycle.Init(millis());
-#else
-            valveCycle.Init(TimeSinceEpochMs());
-#endif
+            valveCycle.Init(OxCore::TimeSinceEpochMs());
             tLast = 0; // TODO: put this in the timer class
         }
     }
 
-    void PsaCycleTask::printValveState(uint8_t vs)
+    void PsaCycleTask::_printValveState(uint8_t vs)
     {
 #ifdef ARDUINO
         Serial.print("Valves: ");
@@ -74,6 +65,8 @@ namespace OxPSA
             Serial.print(bitRead(vs, b));
         }
         Serial.println("");
+#else
+        // todo
 #endif
     }
 
