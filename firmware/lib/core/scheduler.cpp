@@ -42,7 +42,7 @@ bool AddTask(Task *task, int index) {
     return false;
 }
 
-void RunNextTask(Task task, uint32_t msNow) {
+bool RunNextTask(uint32_t msNow) {
     IncrementRunningTask();
     return tasks[currentRunningTask]->run(msNow);
 }

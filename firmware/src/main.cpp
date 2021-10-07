@@ -36,35 +36,40 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <cstdint>
 #include <config.h>
 #include <task.h>
+#include <scheduler.h>
+#include <psa_valve_task.h>
+#include <display_task.h>
 
-using namespace OxCore;
-
-
-
-
-class TaskB : public Task
-{
-private:
-  void action()
-  {
-    std::cout << "Task B" << std::endl;
-  }
-};
+namespace OxCore {
 
 void setup()
 {
+#ifdef ARDUINO
   serialBegin(115200);
+#endif
   Debug<const char *>("Starting Ox\n");
 
+  // Init the shift register
   shiftInit();
 
-}
+  // Init and add tasks to scheduler
+  OxPSA::PsaCycleTask psa;
+  psa.init(0, 10);
 
+  OxDisplay::DisplayTask display;
+  display.init(1, 20);
+
+  AddTask(&psa, 0);
+  AddTask(&display, 1);
+}
 
 void loop(void)
 {
-  
-  // TODO: call task
+  int t_now = 142124124;
+  bool success = RunNextTask(t_now);
+  if (false == success) {
+    // Task failed
+  }
 
   //exit(0);
 }
@@ -77,3 +82,5 @@ int main(int argc, char **argv)
     loop();
 }
 #endif
+
+}

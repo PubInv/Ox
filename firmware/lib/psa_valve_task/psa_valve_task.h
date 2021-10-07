@@ -40,9 +40,9 @@ namespace OxPSA
     private:
         unsigned int tLast;
         OxCore::Timer valveCycle;
-        void setup();
-        void action();
-        void printValveState(uint8_t vs);
+        bool _init() override;
+        bool _run() override;
+        void _printValveState(uint8_t vs);
     };
 
 }

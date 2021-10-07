@@ -42,7 +42,7 @@ int numberOfTasks = 0;
 
 bool AddNextTask(Task *task);
 bool AddTask(Task *task, int index);
-void RunNextTask(Task task, uint32_t msNow);
+bool RunNextTask(uint32_t msNow);
 void IncrementRunningTask();
 
 }
