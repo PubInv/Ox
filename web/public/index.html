@@ -7,22 +7,55 @@
     <link rel="stylesheet" href="index.css">
     <title>Public Invention Ox</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdn.socket.io/4.2.0/socket.io.min.js" integrity="sha384-PiBR5S00EtOj2Lto9Uu81cmoyZqR57XcOna1oAuVuIEjzj0wpqDVfD0JA9eXlRsj" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.2.0/socket.io.min.js"
+        integrity="sha384-PiBR5S00EtOj2Lto9Uu81cmoyZqR57XcOna1oAuVuIEjzj0wpqDVfD0JA9eXlRsj"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
     <h1>Ox Web</h1>
 
     <div id="myDiv" style="width:600px;height:600px;"></div>
-    
+
     <script>
+
+        myDiv = document.getElementById('myDiv');
+
+        var data = [{
+            x: [0],
+            y: [0],
+            mode: 'lines',
+            line: { color: '#80CAF6' }
+        }]
+
+        Plotly.newPlot('myDiv', data);
+
+
+
         // Socket IO
         var socket = io();
         socket.on("connect", () => {
             console.log("connected");
-            console.log(socket.id); 
+            console.log(socket.id);
             socket.on('plot', (msg) => {
                 console.log('plot: ' + JSON.stringify(msg));
+                /*var minuteView = {
+                    xaxis: {
+                        type: 'date',
+                        range: [olderTime, futureTime]
+                    },
+                    yaxis: {
+                        range: [-amp * 1.1, amp * 1.1]
+                    }
+                };*/
+
+                var update = {
+                    x: [[msg.t]],
+                    y: [[msg.y]]//[[rand()]]
+                }
+
+                //Plotly.relayout('myDiv', minuteView);
+                Plotly.extendTraces('myDiv', update, [0])
             });
         });
 
@@ -34,7 +67,7 @@
             console.log("disconnected");
             console.log(socket.id);
         });
-        
+
     </script>
 
     <!--<script>
