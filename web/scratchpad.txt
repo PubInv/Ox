@@ -1,0 +1,95 @@
+<!--<script>
+        myDiv = document.getElementById('myDiv');
+
+        function rand() {
+            return Math.random();
+        }
+
+        var time = new Date();
+
+        var data = [{
+            x: [time],
+            y: [rand],
+            mode: 'lines',
+            line: { color: '#80CAF6' }
+        }]
+
+        Plotly.newPlot('myDiv', data);
+
+        var cnt = 0;
+        let fps = 30;
+        let rate = 1 / fps;
+        let freq = 0.5; // Hz
+        let amp = 2; // amplitude
+
+        let d_0 = new Date();
+        let t_0 = d_0.getTime();
+
+        var interval = setInterval(function () {
+
+            var time = new Date();
+            let t = (time.getTime() - t_0) / 1000;
+            let w = 2 * Math.PI * freq;
+            var y_val = amp * Math.sin(w * (t));
+            //console.log(t);
+            var update = {
+                x: [[time]],
+                y: [[y_val]]//[[rand()]]
+            }
+
+            var olderTime = time.setMinutes(time.getMinutes() - 1);
+            var futureTime = time.setMinutes(time.getMinutes() + 1);
+
+            var minuteView = {
+                xaxis: {
+                    type: 'date',
+                    range: [olderTime, futureTime]
+                },
+                yaxis: {
+                    range: [-amp, amp]
+                }
+            };
+
+            Plotly.relayout('myDiv', minuteView);
+            Plotly.extendTraces('myDiv', update, [0])
+
+            if (++cnt === 10000) clearInterval(interval);
+        }, rate);
+        
+        /*        var trace1 = {
+                    x: [1, 2, 3, 4, 5],
+                    y: [1, 2, 4, 8, 16],
+                    type: 'scatter'
+                }
+                var data = [trace1];
+        
+                var layout = {
+                    margin: {
+                        l: 50,
+                        r: 50,
+                        b: 50,
+                        t: 50,
+                        pad: 0
+                    },
+                    showlegend: false,
+                    xaxis: {
+                        range: [0, 10],
+                        linecolor: 'black',
+                        linewidth: 2,
+                        mirror: true,
+                        fixedrange: true,
+                        dtick: 1,
+                    },
+                    yaxis: {
+                        range: [0, 20],
+                        linecolor: 'black',
+                        linewidth: 2,
+                        mirror: true,
+                        fixedrange: true,
+                        dtick: 1,
+                    }
+                };
+        
+                Plotly.newPlot( TESTER, data, layout, {displayModeBar: false} );
+                */
+    </script>-->
