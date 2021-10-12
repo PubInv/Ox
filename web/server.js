@@ -80,7 +80,7 @@ let Pimd = sequelize.define('pimd', {
 })*/
 
 
-app.post('/', async (req, res) => {
+app.post('/pimd', async (req, res) => {
     //res.send('Got a POST request ' + JSON.stringify(req.body));
     res.sendStatus(200);
     console.log(req.body);
@@ -98,7 +98,7 @@ app.post('/', async (req, res) => {
     }
 });
 
-app.get('/', async (req, res) => {
+app.get('/pimd', async (req, res) => {
     try {
         const data = await Pimd.findAll();
         res.send(data);
@@ -112,7 +112,12 @@ app.use(express.static('public'));
 
 io.on('connection', (socket) => {
     console.log(`a user connected ${socket.id}`);
+    /*socket.emit('plot', {
+        't': 1,
+        'y': 2,
+    });*/
 });
+
 
 
 /*var cnt = 0;
@@ -133,7 +138,7 @@ let interval = setInterval(function () {
     io.emit('plot', point);
     console.log(point);
     if (++cnt === 10000) clearInterval(interval);
-}, 10);
+}, 100);
 */
 
 // Start server

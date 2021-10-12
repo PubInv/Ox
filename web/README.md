@@ -25,3 +25,14 @@ Ox uses a web GUI inspired by Vent Display. Popular desktop GUI frameworks such 
 
 ## Design
 In the spirit of simplicity, the fronted uses vanilla JavaScript, HTML5 and CSS3. The backend is also JavaScript using NodeJS with the popular minimalist Express framework. NPM is used for package management. Code should conform to the latest standards and best practices such as ECMA script.
+
+## Development
+
+### Quickstart
+
+1. Install packages: `npm install`
+1. Create database: `docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12-oss`
+1. Perform database schema migration: `npx sequelize db:migrate`
+1. Start server: `npm run serve`
+1. Push dummy signal into database: `python3 scripts/signal.py`
+1. Go to `http://localhost:3020` and you should see a sine wave appear in the plot.

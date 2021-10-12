@@ -14,10 +14,71 @@
 
 <body>
     <h1>Ox Web</h1>
-
-    <div id="myDiv" style="width:600px;height:600px;"></div>
+    <button onclick="getData()">Get Data</button>
+    <div id="myDiv" style="width:800px;height:500px;"></div> 
 
     <script>
+
+        // Poll endpoint every second (currently a dev hack)
+        // TODO: replace with websocket push model
+        var interval = setInterval(function () {
+            getData();
+        }, 1000);
+
+        // This is getting ALL the data
+        // TODO: needs to be optimized to get only the difference
+        // in data and also strip out unnecessary data server-side
+        function getData() {
+            fetch('http://localhost:3020/pimd')
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                plotData(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function plotData(data) {
+            const update = {
+                x: [],
+                y: []
+            };
+            for (let i = 0; i < data.length; i++){
+                update.x.push(data[i].time);
+                update.y.push(data[i].value);
+            }
+            var data = [{
+                x: update.x,
+                y: update.y,
+                mode: 'lines',
+                line: { color: '#80CAF6' }
+            }]
+
+            // Get the last 500 datapoints (this should really be converted to time)
+            let minTIme;
+            if (update.x[update.x.length - 500] == null) {
+                minTime = update.x[0];
+            } else {
+                minTime = update.x[update.x.length - 500];
+            }
+            maxTime = update.x[update.x.length - 1];
+
+            var minuteView = {
+                xaxis: {
+                    type: 'date',
+                    range: [minTime, maxTime]
+                },
+                yaxis: {
+                    range: [-11, 11]
+                }
+            };
+
+            //console.log(data);
+            Plotly.react('myDiv', data);
+            Plotly.relayout('myDiv', minuteView);
+        }
 
         myDiv = document.getElementById('myDiv');
 
@@ -30,31 +91,21 @@
 
         Plotly.newPlot('myDiv', data);
 
-
-
         // Socket IO
         var socket = io();
         socket.on("connect", () => {
             console.log("connected");
             console.log(socket.id);
-            socket.on('plot', (msg) => {
-                console.log('plot: ' + JSON.stringify(msg));
-                /*var minuteView = {
-                    xaxis: {
-                        type: 'date',
-                        range: [olderTime, futureTime]
-                    },
-                    yaxis: {
-                        range: [-amp * 1.1, amp * 1.1]
-                    }
-                };*/
 
+            // Subscribe to 'plot' websocket
+            socket.on('plot', (msg) => {
+                console.log('plot: ', msg);
+                
                 var update = {
                     x: [[msg.t]],
-                    y: [[msg.y]]//[[rand()]]
+                    y: [[msg.y]]
                 }
 
-                //Plotly.relayout('myDiv', minuteView);
                 Plotly.extendTraces('myDiv', update, [0])
             });
         });
@@ -71,7 +122,7 @@
     </script>
 
     <!--<script>
-        // Plot demo
+        // Client side plot demo
         myDiv = document.getElementById('myDiv');
 
         function rand() {
