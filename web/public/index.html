@@ -18,21 +18,25 @@
     <div id="myDiv" style="width:800px;height:500px;"></div> 
 
     <script>
+        'use strict'
 
         // Poll endpoint every second (currently a dev hack)
         // TODO: replace with websocket push model
-        var interval = setInterval(function () {
+        const interval = setInterval(function () {
             getData();
         }, 1000);
 
-        // This is getting ALL the data
+        // This is getting ALL the data for the past minute
         // TODO: needs to be optimized to get only the difference
         // in data and also strip out unnecessary data server-side
         function getData() {
-            fetch('http://localhost:3020/pimd')
+            let minTime = new Date(Date.now() - 1000 * 60).toISOString();
+            let maxTime = new Date().toISOString();
+            const query = `http://localhost:3020/api/pimd/${minTime}/${maxTime}`;
+            fetch(query)
             .then(response => response.json())
             .then(data => {
-                //console.log(data);
+                console.log(data);
                 plotData(data);
             })
             .catch((error) => {
@@ -56,15 +60,8 @@
                 line: { color: '#80CAF6' }
             }]
 
-            // Get the last 500 datapoints (this should really be converted to time)
-            let minTIme;
-            if (update.x[update.x.length - 500] == null) {
-                minTime = update.x[0];
-            } else {
-                minTime = update.x[update.x.length - 500];
-            }
-            maxTime = update.x[update.x.length - 1];
-
+            let minTime = new Date(Date.now() - 1000 * 60).toISOString();
+            let maxTime = new Date().toISOString();
             var minuteView = {
                 xaxis: {
                     type: 'date',
@@ -104,9 +101,9 @@
                 var update = {
                     x: [[msg.t]],
                     y: [[msg.y]]
-                }
+                };
 
-                Plotly.extendTraces('myDiv', update, [0])
+                Plotly.extendTraces('myDiv', update, [0]);
             });
         });
 
@@ -120,65 +117,6 @@
         });
 
     </script>
-
-    <!--<script>
-        // Client side plot demo
-        myDiv = document.getElementById('myDiv');
-
-        function rand() {
-            return Math.random();
-        }
-
-        var time = new Date();
-
-        var data = [{
-            x: [time],
-            y: [rand],
-            mode: 'lines',
-            line: { color: '#80CAF6' }
-        }]
-
-        Plotly.newPlot('myDiv', data);
-
-        var cnt = 0;
-        let rate = 100;
-        let freq = 0.1; // Hz
-        let amp = 2; // amplitude
-
-        let d_0 = new Date();
-        let t_0 = d_0.getTime();
-
-        var interval = setInterval(function () {
-
-            var time = new Date();
-            let t = (time.getTime() - t_0) / 1000;
-            let w = 2 * Math.PI * freq;
-            var y_val = amp * Math.sin(w * (t));
-            //console.log(t);
-            var update = {
-                x: [[time]],
-                y: [[y_val]]//[[rand()]]
-            }
-
-            var olderTime = time.setMinutes(time.getMinutes() - 1);
-            var futureTime = time.setMinutes(time.getMinutes() + 1);
-
-            var minuteView = {
-                xaxis: {
-                    type: 'date',
-                    range: [olderTime, futureTime]
-                },
-                yaxis: {
-                    range: [-amp*1.1, amp*1.1]
-                }
-            };
-
-            Plotly.relayout('myDiv', minuteView);
-            Plotly.extendTraces('myDiv', update, [0])
-
-            if (++cnt === 10000) clearInterval(interval);
-        }, rate);
-    </script>-->
 </body>
 
 </html>
