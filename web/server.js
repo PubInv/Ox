@@ -1,9 +1,12 @@
+'use strict'
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = 3020;
+
+const { Op } = require("sequelize");
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -80,7 +83,7 @@ let Pimd = sequelize.define('pimd', {
 })*/
 
 
-app.post('/pimd', async (req, res) => {
+app.post('/api/pimd', async (req, res) => {
     //res.send('Got a POST request ' + JSON.stringify(req.body));
     res.sendStatus(200);
     console.log(req.body);
@@ -92,13 +95,13 @@ app.post('/pimd', async (req, res) => {
         // insert the record
         await Pimd.create({
             location, value, time
-        });
+            });
     } catch (e) {
         console.log('Error inserting data', e)
     }
 });
 
-app.get('/pimd', async (req, res) => {
+app.get('/api/pimd', async (req, res) => {
     try {
         const data = await Pimd.findAll();
         res.send(data);
@@ -106,6 +109,52 @@ app.get('/pimd', async (req, res) => {
         console.log('Error inserting data', e)
     }
 })
+
+app.get('/api/pimd/:from_time/:to_time', async (req, res) => {
+    try {
+        //const data = await Pimd.findAll();
+        const data = await Pimd.findAll({
+            where: {
+              time: {
+                [Op.lt]: req.params.to_time,//new Date(),
+                [Op.gt]: req.params.from_time//new Date(Date.now() - 1000 * 60)
+              }
+            }
+          })
+        res.send(data);
+    } catch (e) {
+        console.log('Error inserting data', e)
+    }
+})
+
+// PIRCS
+/*
+{ "ack": "S",
+  "err": 0,
+  "com": "C",
+  "par" : "P",
+  "int" : "T",
+  "mod" : 0,
+  "val" : 400
+  }
+*/
+
+// PIRDS:
+/*
+{ "event" : "M",
+  "type" : "T",
+  "loc" : "B",
+  "num" : 2,
+  "ms" : 35,
+  "val" : 250
+  "sht" : 6754328
+  "pid" : "834f44a2-4bf3-40ba-827b-ba2a8cc59531"
+  }
+*/
+
+// /api/pircs/C/P/T/0/400
+// /api/pircs?com=C&par=P&int=T&mod=0&val=400
+
 
 // Serve static files in the /public directory
 app.use(express.static('public'));
