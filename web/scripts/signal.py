@@ -4,17 +4,21 @@ import json
 import time
 import math
 
-current_time = datetime.now().isoformat()
-print(current_time)
+URL = "http://localhost:3020/api/pimd"
 
-URL = "http://localhost:3020/pimd"
+# Equivalent ISO time formate to JavaScript
+def iso_format_js(dt):
+    isostring = datetime.strftime(dt, '%Y-%m-%dT%H:%M:%S.{0}Z')
+    return isostring.format(int(round(dt.microsecond/1000.0)))
+
+print
 
 i = 0
 while i < 1000:
     payload = {
         "location": "D",
-        "value": 10*math.sin(i), #math.ceil(10*math.sin(i)),
-        "time": datetime.now().isoformat()
+        "value": 10*math.sin(i),
+        "time": iso_format_js(datetime.utcnow())
     }
 
     print(payload)
