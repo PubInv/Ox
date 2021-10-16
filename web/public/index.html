@@ -14,79 +14,133 @@
 
 <body>
     <h1>Ox Web</h1>
-    <button onclick="getData()">Get Data</button>
-    <div id="myDiv" style="width:800px;height:500px;"></div> 
+    <!--<button onclick="getData()">Get Data</button>-->
+    <select name="time_view_end" id="time_view_end">
+        <option value="1">1 min</option>
+        <option value="2">2 mins</option>
+        <option value="5">5 mins</option>
+        <option value="10">10 mins</option>
+        <option value="15">15 mins</option>
+        <option value="30">30 mins</option>
+        <option value="60">60 mins</option>
+    </select>
+
+    <div id="plotDiv" style="width:800px;height:500px;"></div>
 
     <script>
         'use strict'
 
+        const API_URL = 'http://localhost:3020/api';
+        const PLOT_REFRESH_RATE = 1000; //ms
+        let timeViewMinutes = 1;
+
+        window.onload = function () {
+            timeViewMinutes = document.getElementById('time_view_end').value;
+            console.log('timeViewMinutes: ', timeViewMinutes);
+        }
+
+        // Set the time axis length when the dropdown is changed
+        document.getElementById('time_view_end').onchange = function () {
+            timeViewMinutes = this.value;
+        }
+
         // Poll endpoint every second (currently a dev hack)
-        // TODO: replace with websocket push model
+        // TODO: replace with websocket
         const interval = setInterval(function () {
-            getData();
-        }, 1000);
+            let startTime = new Date(Date.now() - timeViewMinutes * 1000 * 60).toISOString();
+            let endTime = new Date().toISOString();
+            getData(startTime, endTime);
+
+        }, PLOT_REFRESH_RATE);
 
         // This is getting ALL the data for the past minute
         // TODO: needs to be optimized to get only the difference
         // in data and also strip out unnecessary data server-side
-        function getData() {
-            let minTime = new Date(Date.now() - 1000 * 60).toISOString();
-            let maxTime = new Date().toISOString();
-            const query = `http://localhost:3020/api/pimd/${minTime}/${maxTime}`;
+        function getData(startTime, endTime) {
+            const query = `${API_URL}/pimd/${startTime}/${endTime}`;
             fetch(query)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                plotData(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data == null) {
+                        console.warn('Data is null!');
+                        return;
+                    }
+                    const processedData = processData(data);
+                    updatePlot(processedData, '#80CAF6', timeViewMinutes, -15, 15);// '#80CAF6'  '#ff5733'
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         }
 
-        function plotData(data) {
+        // Take only the x and y values from the JSON data
+        function processData(data) {
             const update = {
                 x: [],
                 y: []
             };
-            for (let i = 0; i < data.length; i++){
+            for (let i = 0; i < data.length; i++) {
+                // Crude algorithm to break the line if the datapoint
+                // time delta is 50% greater than the average delta.
+                // This is probably not very robust.
+                if (i > 3) {
+                    // Calculate the average of the last 3 deltas (4 points)
+                    const d0 = new Date(data[i].time).getTime();
+                    const d1 = new Date(data[i - 1].time).getTime();
+                    const d2 = new Date(data[i - 2].time).getTime();
+                    const d3 = new Date(data[i - 3].time).getTime();
+                    const avg = ((d1 - d0) + (d2 - d1) + (d3 - d2)) / 3;
+
+                    // Check if last delta is 50% greater than the average
+                    // Which would indicate a data break
+                    if ((d1 - d0) > avg * 1.5) {
+                        //console.log('avg:', avg);
+                        //console.log('delta: ', d1-d0);
+                        //console.log('gap!');
+
+                        // Push a null value to break the line
+                        update.x.push(null);
+                        update.y.push(null);
+                        continue;
+                    }
+                }
                 update.x.push(data[i].time);
                 update.y.push(data[i].value);
             }
-            var data = [{
-                x: update.x,
-                y: update.y,
-                mode: 'lines',
-                line: { color: '#80CAF6' }
-            }]
-
-            let minTime = new Date(Date.now() - 1000 * 60).toISOString();
-            let maxTime = new Date().toISOString();
-            var minuteView = {
-                xaxis: {
-                    type: 'date',
-                    range: [minTime, maxTime]
-                },
-                yaxis: {
-                    range: [-11, 11]
-                }
-            };
-
-            //console.log(data);
-            Plotly.react('myDiv', data);
-            Plotly.relayout('myDiv', minuteView);
+            return update;
         }
 
-        myDiv = document.getElementById('myDiv');
+        function updatePlot(data, lineColor, timeWindow, yMin, yMax) {
+            console.log('lineColor: ', lineColor);
+            const plot = [{
+                x: data.x,
+                y: data.y,
+                //mode: 'markers',
+                //type: 'scattergl',
+                mode: 'lines',
+                line: { color: lineColor }//'#80CAF6' }
+            }];
 
-        var data = [{
-            x: [0],
-            y: [0],
-            mode: 'lines',
-            line: { color: '#80CAF6' }
-        }]
+            const minTime = new Date(Date.now() - timeWindow * 1000 * 60).toISOString();
+            const maxTime = new Date().toISOString();
+            const viewWindow = setViewWindow(minTime, maxTime, yMin, yMax);
+            Plotly.react('plotDiv', plot); // Update plot
+            Plotly.relayout('plotDiv', viewWindow); // Update view
+        }
 
-        Plotly.newPlot('myDiv', data);
+        function setViewWindow(startTime, endTime, yMin, yMax) {
+            const view = {
+                xaxis: {
+                    type: 'date',
+                    range: [startTime, endTime]
+                },
+                yaxis: {
+                    range: [yMin, yMax]
+                }
+            };
+            return view;
+        }
 
         // Socket IO
         var socket = io();
@@ -95,7 +149,7 @@
             console.log(socket.id);
 
             // Subscribe to 'plot' websocket
-            socket.on('plot', (msg) => {
+            /*socket.on('plot', (msg) => {
                 console.log('plot: ', msg);
                 
                 var update = {
@@ -103,8 +157,8 @@
                     y: [[msg.y]]
                 };
 
-                Plotly.extendTraces('myDiv', update, [0]);
-            });
+                Plotly.extendTraces('plotDiv', update, [0]);
+            });*/
         });
 
         socket.on("connect_error", (error) => {
