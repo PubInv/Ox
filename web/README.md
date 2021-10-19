@@ -24,6 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 Ox uses a web GUI inspired by Vent Display. Popular desktop GUI frameworks such as Qt and wxWidgets were evaluated and it was determined that a web GUI would be better fit the requirements of the project. Similar to Vent Display, the Ox web GUI aims to provide engineering, medical and device management functionality.
 
 ## Design
+
 In the spirit of simplicity, the frontend uses vanilla JavaScript, HTML5 and CSS3. The backend is also JavaScript using NodeJS with the popular minimalist Express framework. NPM is used for package management. Code should conform to the latest standards and best practices such as ECMA script. The [Mozilla MDN](https://developer.mozilla.org/en-US/docs/Web#web_technology_references) is the default reference material.
 
 [TimescaleDB](https://www.timescale.com/) is used to store PIRDS data. It is an extension to PostgreSQL for time-series data and is fully compatible with the Postgres ecosystem.
@@ -31,6 +32,7 @@ In the spirit of simplicity, the frontend uses vanilla JavaScript, HTML5 and CSS
 ## Development
 
 ### Environment
+
 Ox Web is developed on Ubuntu with VS Code. It is compatible with [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview) so that it can be developed and operated on any low-cost computer such as a Raspberry Pi, in a container or on WSL.
 
 ### Quickstart
