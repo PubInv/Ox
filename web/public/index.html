@@ -67,10 +67,10 @@
                         return;
                     }
                     const processedData = processData(data);
-                    updatePlot(processedData, '#80CAF6', timeViewMinutes, -15, 15);// '#80CAF6'  '#ff5733'
+                    updatePlot(processedData, '#80CAF6', timeViewMinutes, -2, 2);// '#80CAF6'  '#ff5733'
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
+                    console.warn(error);
                 });
         }
 
@@ -149,16 +149,17 @@
             console.log(socket.id);
 
             // Subscribe to 'plot' websocket
-            /*socket.on('plot', (msg) => {
-                console.log('plot: ', msg);
+            socket.on('plot', (data) => {
+                console.log('plot: ', data);
                 
-                var update = {
-                    x: [[msg.t]],
-                    y: [[msg.y]]
-                };
+                //let startTime = new Date(Date.now() - timeViewMinutes * 1000 * 60).toISOString();
+                //let endTime = new Date().toISOString();
+                //getData(startTime, endTime);
 
-                Plotly.extendTraces('plotDiv', update, [0]);
-            });*/
+                const processedData = processData(data);
+                updatePlot(processedData, '#80CAF6', timeViewMinutes, -15, 15);// '#80CAF6'  '#ff5733'
+               
+            });
         });
 
         socket.on("connect_error", (error) => {

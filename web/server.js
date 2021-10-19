@@ -120,7 +120,7 @@ app.get('/api/pimd/:from_time/:to_time', async (req, res) => {
                 [Op.gt]: req.params.from_time//new Date(Date.now() - 1000 * 60)
               }
             }
-          })
+          });
         res.send(data);
     } catch (e) {
         console.log('Error inserting data', e)
@@ -161,10 +161,16 @@ app.use(express.static('public'));
 
 io.on('connection', (socket) => {
     console.log(`a user connected ${socket.id}`);
-    /*socket.emit('plot', {
-        't': 1,
-        'y': 2,
-    });*/
+    /*socket.emit('plot', 
+    await Pimd.findAll({
+        where: {
+          time: {
+            [Op.lt]: new Date(),
+            [Op.gt]: new Date(Date.now() - 1000 * 60)
+          }
+        }
+      })
+    );*/
 });
 
 
