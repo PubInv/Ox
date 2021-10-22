@@ -136,7 +136,6 @@ app.get("/api/pimd/:from_time/:to_time", async (req, res) => {
   }
 });
 
-
 // PIRDS:
 /*
 { "event" : "M",
