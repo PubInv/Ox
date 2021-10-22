@@ -36,15 +36,26 @@ func main() {
 		fmt.Println(t)
 
 		// Create JSON payload
-		payload, _ := json.Marshal(map[string]string{
+		/*payload, _ := json.Marshal(map[string]string{
 			"location": "E",
 			"value":    v,
 			"time":     t,
+		})*/
+		payload, _ := json.Marshal(map[string]string{
+			"event": "E",
+			"type":  "D",
+			"loc":   "O",
+			"num":   "1",
+			"ms":    "2",
+			"val":   v,
+			"sht":   "10",
+			"pid":   "abc",
+			"time":  t,
 		})
 
 		// Post request
 		responseBody := bytes.NewBuffer(payload)
-		resp, err := http.Post("http://localhost:3020/api/pimd", "application/json", responseBody)
+		resp, err := http.Post("http://localhost:3020/api/pirds", "application/json", responseBody)
 		if err != nil {
 			log.Fatalf("An error occured %v", err)
 		}

@@ -52,14 +52,14 @@
           Date.now() - timeViewMinutes * 1000 * 60
         ).toISOString();
         let endTime = new Date().toISOString();
-        getData(startTime, endTime);
+        getData('pirds', startTime, endTime);
       }, PLOT_REFRESH_RATE);
 
       // This is getting ALL the data for the past minute
       // TODO: needs to be optimized to get only the difference
       // in data and also strip out unnecessary data server-side
-      function getData(startTime, endTime) {
-        const query = `${API_URL}/pimd/${startTime}/${endTime}`;
+      function getData(table, startTime, endTime) {
+        const query = `${API_URL}/${table}/${startTime}/${endTime}`;
         fetch(query)
           .then((response) => response.json())
           .then((data) => {
@@ -107,8 +107,8 @@
               continue;
             }
           }
-          update.x.push(data[i].time);
-          update.y.push(data[i].value);
+          update.x.push(data[i].time); // This is a hard-coded PIRDS value
+          update.y.push(data[i].val); // This is a hard-coded PIRDS value
         }
         return update;
       }

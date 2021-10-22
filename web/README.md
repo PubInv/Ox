@@ -40,7 +40,8 @@ Ox Web is developed on Ubuntu with VS Code. It is compatible with [VS Code Remot
 Setup and run Ox Web:
 
 1. Install packages: `npm install`
-1. Create database: `docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12-oss`
+1. Start Postgres in Docker: `docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12-oss`
+1. Create the database: `npx sequelize db:create database_development`
 1. Perform database schema migration: `npx sequelize db:migrate`
 1. Start server: `npm run serve`
 1. Push dummy signal into database: `python3 scripts/signal.py`

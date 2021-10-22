@@ -70,6 +70,7 @@ let Pimd = sequelize.define(
   }
 );
 
+
 /*app.get('/', async (req, res) => {
     // get the user agent and current time
     const userAgent = req.get('user-agent');
@@ -135,17 +136,6 @@ app.get("/api/pimd/:from_time/:to_time", async (req, res) => {
   }
 });
 
-// PIRCS
-/*
-{ "ack": "S",
-  "err": 0,
-  "com": "C",
-  "par" : "P",
-  "int" : "T",
-  "mod" : 0,
-  "val" : 400
-  }
-*/
 
 // PIRDS:
 /*
@@ -159,6 +149,98 @@ app.get("/api/pimd/:from_time/:to_time", async (req, res) => {
   "pid" : "834f44a2-4bf3-40ba-827b-ba2a8cc59531"
   }
 */
+
+let Pirds = sequelize.define(
+  "pirds",
+  {
+    event: Sequelize.STRING,
+    type: Sequelize.STRING,
+    loc: Sequelize.STRING,
+    num: Sequelize.INTEGER,
+    ms: Sequelize.INTEGER,
+    val: Sequelize.INTEGER,
+    sht: Sequelize.INTEGER,
+    pid: Sequelize.STRING,
+    time: Sequelize.DATE,
+  },
+  {
+    freezeTableName: true,
+    createdAt: false,
+    updatedAt: false,
+  }
+);
+
+app.post("/api/pirds", async (req, res) => {
+  //res.send('Got a POST request ' + JSON.stringify(req.body));
+  res.sendStatus(200);
+  console.log(req.body);
+  const event = req.body.event;
+  const type = req.body.type;
+  const loc = req.body.loc;
+  const num = parseInt(req.body.num);
+  const ms = parseInt(req.body.ms);
+  const val = parseFloat(req.body.val);
+  const sht = parseInt(req.body.sht);
+  const pid = req.body.pid;
+  const time = new Date(req.body.time);
+
+  try {
+    // insert the record
+    await Pirds.create({
+      event,
+      type,
+      loc,
+      num,
+      ms,
+      val,
+      sht,
+      pid,
+      time,
+    });
+  } catch (e) {
+    console.log("Error inserting data", e);
+  }
+});
+
+app.get("/api/pirds", async (req, res) => {
+  try {
+    const data = await Pirds.findAll();
+    res.send(data);
+  } catch (e) {
+    console.log("Error inserting data", e);
+  }
+});
+
+app.get("/api/pirds/:from_time/:to_time", async (req, res) => {
+  try {
+    const data = await Pirds.findAll({
+      where: {
+        time: {
+          [Op.lt]: req.params.to_time, //new Date(),
+          [Op.gt]: req.params.from_time, //new Date(Date.now() - 1000 * 60)
+        },
+      },
+    });
+    res.send(data);
+  } catch (e) {
+    console.log("Error getting data", e);
+  }
+
+});
+
+// PIRCS
+/*
+{ "ack": "S",
+  "err": 0,
+  "com": "C",
+  "par" : "P",
+  "int" : "T",
+  "mod" : 0,
+  "val" : 400
+  }
+*/
+
+
 
 // /api/pircs/C/P/T/0/400
 // /api/pircs?com=C&par=P&int=T&mod=0&val=400

@@ -4,7 +4,7 @@
   "description": "Ox Web GUI",
   "main": "server.js",
   "scripts": {
-    "serve": "nodemon ./server.js",
+    "serve": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "npx prettier --write ."
   },
@@ -22,7 +22,8 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.7.0",
     "sequelize-cli": "^6.2.0",
-    "socket.io": "^4.2.0"
+    "socket.io": "^4.2.0",
+    "socket.io-client": "^4.3.2"
   },
   "devDependencies": {
     "prettier": "2.4.1"
