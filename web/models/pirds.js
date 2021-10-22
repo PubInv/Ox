@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class pimd extends Model {
+  class pirds extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,16 +11,22 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  pimd.init(
+  pirds.init(
     {
-      location: DataTypes.STRING,
-      value: DataTypes.INTEGER,
+      event: DataTypes.STRING,
+      type: DataTypes.STRING,
+      loc: DataTypes.STRING,
+      num: DataTypes.INTEGER,
+      ms: DataTypes.INTEGER,
+      val: DataTypes.FLOAT,
+      sht: DataTypes.INTEGER,
+      pid: DataTypes.STRING,
       time: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: "pimd",
+      modelName: "pirds",
     }
   );
-  return pimd;
+  return pirds;
 };
