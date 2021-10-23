@@ -22,49 +22,46 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <scheduler.h>
+#include <unity.h>
+#include <stdio.h>
+#include <iostream>
+#include <cstdint>
+#include <chrono>
 
-namespace OxCore {
-namespace OxScheduler {
+#include <networking.h>
+#include <PIRDS.h>
+#include <task.h>
 
-bool AddNextTask(Task *task) {
-    if (CheckArrayBounds(numberOfTasks, MAX_TASKS)) {
-        tasks[numberOfTasks++] = task;
-        return true;
-    }
-    return false;
+using namespace Ox_Networking;
+
+void test_setup_networking(){
+  NetworkingController nc;
+  Task ct;
+  bool success = nc.setup(&ct);
+  TEST_ASSERT_TRUE(success);
 }
 
-bool AddTask(Task *task, int index) {
-    if (CheckArrayBounds(index, MAX_TASKS)) {
-        tasks[index] = task;
-        return true;
-    }
-    return false;
+void process() {
+  UNITY_BEGIN();
+  //RUN_TEST(test_valve_does_init);
+  RUN_TEST(test_setup_networking);
+  UNITY_END();
 }
 
-bool RunNextTask(uint32_t msNow) {
-    IncrementRunningTask();
-    return tasks[currentRunningTask]->run(msNow);
+#ifdef ARDUINO
+#include <Arduino.h>
+void setup() {
+    // NOTE!!! Wait for >2 secs
+    // if board doesn't support software reset via Serial.DTR/RTS
+    delay(2000);
+    process();
 }
-
-void IncrementRunningTask() {
-    currentRunningTask++;
-    if (currentRunningTask > numberOfTasks) {
-        currentRunningTask = 0;
-    }
+void loop() {
+    //
 }
-
-bool InitAllTasks() {
-    for (int i = 0; i < numberOfTasks; i++) {
-        tasks[i]->init(0, 0); // TODO: need an appropriate place for the init
-    }
-    return true;
+#else
+int main(int argc, char **argv) {
+    process();
+    return 0;
 }
-
-void StartSchedulerClock() {
-    
-}
-
-}
-}
+#endif

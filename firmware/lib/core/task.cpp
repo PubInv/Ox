@@ -39,4 +39,9 @@ bool Task::run(unsigned int ms_now) {
     return _run();
 }
 
+bool Task::callback(char *message) {
+    std::cout << "Task Callback: " << message << std::endl;
+    return true;
+}
+
 }

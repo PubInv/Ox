@@ -24,13 +24,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <display.h>
 #include <cstdint>
+
+#ifdef ARDUINO
 #include <Wire.h>
 #include "SPI.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9341.h"
+#endif
 
 namespace OxDisplay {
 
+#ifdef ARDUINO
   Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
 
   void Ox_Display::displayInit(){
@@ -258,5 +262,6 @@ void Ox_Display::updateGraph() {
   uint16_t Ox_Display::color_convert(uint8_t red, uint8_t green, uint8_t blue){
       return (((red & 0xf8)<<8) + ((green & 0xfc)<<3)+(blue>>3));
   }
+#endif
 
 }

@@ -22,24 +22,24 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <debug.h>
 #include <networking.h>
+
 namespace Ox_Networking {
 
-bool NetworkingController::setup(VentController *vc) {
-  VentOS_Networking::server_init(vc);
+bool NetworkingController::setup(Task *task) {
+  Ox_Networking::server_init(task);
   return true;
 }
 
 bool NetworkingController::run(uint32_t msNow) {
-  VentOS_Networking::server_poll();
+  Ox_Networking::server_poll();
   return true;
 }
 
 bool NetworkingController::connect() { return false; }
 
 bool NetworkingController::send_udp(const void *data, size_t s) {
-  VentOS_Networking::server_send_udp(data, s);
+  Ox_Networking::server_send_udp(data, s);
   return true;
 }
 

@@ -44,7 +44,7 @@ namespace OxPSA {
       int totalRunTime;
   };
 
-  struct Valve {
+  struct ValveConfig {
       char name;
       unsigned num;
       unsigned int state;
@@ -58,9 +58,9 @@ namespace OxPSA {
       OxState Ox_state;
       uint8_t valveBits;
       int numValves;
-      Valve *valves;
+      ValveConfig *valves;
     public:
-        ValveController(Valve* v, int numValves) {
+        ValveController(ValveConfig* v, int numValves) {
         valveBits = 0;
         Ox_state.mode = STARTING;
         Ox_state.totalRunTime = 0;

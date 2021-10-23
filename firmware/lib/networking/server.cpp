@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 #include <PIRCS.h>
-#include <controller.h>
+#include <task.h>
 #include <server.h>
 
 extern "C" {
@@ -37,11 +37,11 @@ bool lock = false;
 struct mg_mgr mgr;
 mg_connection *c_rest;
 mg_connection *c_udp;
-VentController *ventController;
+Task *callbackTask;
 
-bool server_init(VentController *vc) {
+bool server_init(Task *task) {
   lock = true;
-  ventController = vc;
+  callbackTask = callback;
   mg_mgr_init(&mgr);
   c_rest = mg_http_listen(&mgr, s_listen_on, server_rest_cb, NULL);
   c_udp = mg_connect(&mgr, s_udp, server_udp_cb, NULL);
@@ -57,8 +57,7 @@ int server_send_udp(const void *data, size_t s) {
   return mg_send(c_udp, data, s);
 }
 
-void server_rest_cb(struct mg_connection *c, int ev, void *ev_data,
-                    void *fn_data) {
+void server_rest_cb(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
   if (ev == MG_EV_HTTP_MSG) {
     struct mg_http_message *hm = (struct mg_http_message *)ev_data;
     if (mg_http_match_uri(hm, "/api/rest")) {
@@ -72,10 +71,10 @@ void server_rest_cb(struct mg_connection *c, int ev, void *ev_data,
       char *buff = strdup(hm->body.ptr);
       printf("API CALLED");
       printf("%s\n", buff);
-      SetCommand sc = get_set_command_from_JSON(buff, (uint16_t)256); // PIRCS
-      printf("%c %c %c %c %i\n", sc.command, sc.parameter, sc.interpretation,
-             sc.modifier, sc.val);
-      ventController->setCommand(sc);
+      //SetCommand sc = get_set_command_from_JSON(buff, (uint16_t)256); // PIRCS
+      //printf("%c %c %c %c %i\n", sc.command, sc.parameter, sc.interpretation, sc.modifier, sc.val);
+      //ventController->setCommand(sc);
+      callbackTask->callback(buff);
       free(buff);
       mg_http_reply(c, 200, "", "%s\n", hm->body);
     }

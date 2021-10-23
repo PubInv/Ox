@@ -7,18 +7,16 @@
 #include <server.h>
 #include <task.h>
 
-// using Ox_Networking;
-
-namespace Ox {
+namespace Ox_Networking {
 
 class NetworkingController : public Task {
 public:
-  bool setup(VentController *vc);
+  bool setup(Task *callback);
   bool run(uint32_t msNow);
   bool connect();
   bool send_udp(const void *data, size_t s);
 };
 
-} // namespace Ox
+}
 
 #endif

@@ -28,11 +28,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxCore {
 
 enum LogLevel {
-    Debug,
-    Info,
-    Warning, 
-    Error, // Recoverable error
-    Critical // Non-recoverable error
+    LOG_DEBUG,
+    LOG_INFO,
+    LOG_WARN, 
+    LOG_ERROR, // Recoverable error
+    LOG_CRITICAL // Non-recoverable error
 };
 
 // Add log message ids here to enumerate all possible cases

@@ -27,13 +27,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxPSA
 {
 
-    bool PsaCycleTask::_init()
+    bool PsaValveTask::_init()
     {
         tLast = 0;
         valveCycle.Init(OxCore::TimeSinceEpochMs());
+        return true;
     }
 
-    bool PsaCycleTask::_run() 
+    bool PsaValveTask::_run() 
     {
         //std::cout << "Task A" << std::endl;
         valveCycle.Update();
@@ -54,9 +55,11 @@ namespace OxPSA
             valveCycle.Init(OxCore::TimeSinceEpochMs());
             tLast = 0; // TODO: put this in the timer class
         }
+
+        return true;
     }
 
-    void PsaCycleTask::_printValveState(uint8_t vs)
+    void PsaValveTask::_printValveState(uint8_t vs)
     {
 #ifdef ARDUINO
         Serial.print("Valves: ");

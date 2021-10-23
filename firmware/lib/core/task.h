@@ -26,6 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define TASK_H
 
 //#include <cstdint>
+#include <iostream>
 
 namespace OxCore {
 
@@ -35,11 +36,12 @@ class Task {
         int _id;
         char _priority;
         unsigned int _last_ms;
-        virtual bool _init() {}
-        virtual bool _run() {}
+        virtual bool _init() {return false;}
+        virtual bool _run() {return false;}
     public:
         bool init(int id, char priority);
         bool run(unsigned int ms_now);
+        bool callback(char *message);
 };
 
 }

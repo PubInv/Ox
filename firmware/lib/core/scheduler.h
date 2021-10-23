@@ -30,7 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <cstdint>
 
 namespace OxCore {
-
+namespace OxScheduler {
 // [ Task1, Task2, Task3, Task4, Empty ]
 //            ^             ^      ^
 //         current        number  max
@@ -44,7 +44,10 @@ bool AddNextTask(Task *task);
 bool AddTask(Task *task, int index);
 bool RunNextTask(uint32_t msNow);
 void IncrementRunningTask();
+bool InitAllTasks();
+void StartSchedulerClock();
 
+}
 }
 
 #endif

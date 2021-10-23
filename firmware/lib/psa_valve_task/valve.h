@@ -30,9 +30,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxPSA {
 
     enum ValveStatus {
-        OK,
-        MISSED,
-        ERROR
+        VALVE_OK,
+        VALVE_MISSED,
+        VALVE_ERROR
     };
 
     struct ValveState {
@@ -55,7 +55,7 @@ namespace OxPSA {
                 state.onTime = onTime;
                 state.offTime = offTime;
                 state.msLast = 0;
-                state.status = OK;
+                state.status = VALVE_OK;
                 state.isOn = false;
             }
             bool update(uint32_t msNow);

@@ -39,7 +39,7 @@ enum class Error {
 };
 
 // This is the error string to output from the above Error enum
-static const char *ErrorString[] = { "Null", "LessThanZero", "OutOfBounds" };
+//static const char *ErrorString[] = { "Null", "LessThanZero", "OutOfBounds" };
 
 ErrorMode errorMode;
 void InitErrorHandler(ErrorMode mode);

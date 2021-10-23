@@ -68,8 +68,7 @@ RST - this is the TFT reset pin. There's auto-reset circuitry on the breakout so
 
 class Ox_Display {
     public:
-        Ox_Display(){};
-
+#ifdef ARDUINO
         void displayInit();
         void startScreen();
         void debugScreen();
@@ -79,6 +78,7 @@ class Ox_Display {
         uint16_t color_convert(uint8_t red, uint8_t green, uint8_t blue);
         void drawButton();
         void updateGraph();
+#endif
 };
 
 }

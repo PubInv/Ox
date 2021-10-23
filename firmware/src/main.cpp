@@ -24,52 +24,59 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #ifdef ARDUINO
 #include <Arduino.h>
+#include <display.h>
 #else // Native
 #include <iostream>
 #endif
 
-#ifdef ARDUINO
-#include <display.h>
-#endif
-#include <debug.h>
-#include <shift.h>
+#include <core.h>
+//#include <shift.h>
 #include <cstdint>
-#include <config.h>
-#include <task.h>
-#include <scheduler.h>
-#include <psa_valve_task.h>
-#include <display_task.h>
 
-namespace OxCore {
+//#include <psa_valve_task.h>
+//#include <display_task.h>
+
+//namespace OxCore {
+
+//////////////////////
+
+/*OxPSA::ValveConfig valveArray[NUM_VALVES] = {
+  { 'A', 0, 0, 1, 100, 4000, },
+  { 'B', 1, 0, 2, 4000, 8000, },
+  { 'C', 2, 0, 4, 3700, 4000, },
+  { 'D', 3, 0, 8, 7700, 8000, }};
+*/
+//////////////////////
 
 void setup()
 {
 #ifdef ARDUINO
   serialBegin(115200);
 #endif
-  Debug<const char *>("Starting Ox\n");
+  //OxCore::Debug<const char *>("Starting Ox\n");
 
   // Init the shift register
-  shiftInit();
+  //shiftInit();
 
   // Init and add tasks to scheduler
-  OxPSA::PsaCycleTask psa;
+  /*OxPSA::PsaValveTask psa;
   psa.init(0, 10);
+  AddTask(&psa, 0);*/
 
+#ifdef ARDUINO
   OxDisplay::DisplayTask display;
   display.init(1, 20);
-
-  AddTask(&psa, 0);
   AddTask(&display, 1);
+#endif
 }
 
 void loop(void)
 {
   int t_now = 142124124;
-  bool success = RunNextTask(t_now);
-  if (false == success) {
+  bool success = OxCore::OxScheduler::RunNextTask(t_now);
+  //if (false == success) {
     // Task failed
-  }
+  //}
 
   //exit(0);
 }
@@ -83,4 +90,4 @@ int main(int argc, char **argv)
 }
 #endif
 
-}
+//}

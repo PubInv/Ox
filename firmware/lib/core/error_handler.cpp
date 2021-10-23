@@ -39,7 +39,7 @@ void HandleError(Error error) {
 
         break;
         case ErrorMode::StdOut:
-            printf(ErrorString[static_cast<int>(error)]);
+            //printf(ErrorString[static_cast<int>(error)]);
         break;
         default:
 

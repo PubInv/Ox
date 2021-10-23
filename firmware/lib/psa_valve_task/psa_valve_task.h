@@ -30,12 +30,19 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <controller.h>
 #include <config.h>
 #include <timer.h>
+#include <valve.h>
 
 namespace OxPSA
 {
+    OxPSA::ValveConfig valveArray[NUM_VALVES] = {
+        { 'A', 0, 0, 1, 100, 4000, },
+        { 'B', 1, 0, 2, 4000, 8000, },
+        { 'C', 2, 0, 4, 3700, 4000, },
+        { 'D', 3, 0, 8, 7700, 8000, }};
+
     ValveController vc(&valveArray[0], NUM_VALVES);
 
-    class PsaCycleTask : public OxCore::Task
+    class PsaValveTask : public OxCore::Task
     {
     private:
         unsigned int tLast;
