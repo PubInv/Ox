@@ -39,7 +39,7 @@ Checks if the onTime is greater than 40 percent of the OffTime.
 			
    *Since the onTime is higher than the offTime, we can clearly say that the pressure rate will be higher.* 
    *However, there might be certain cases where the current pressure is well above the desired pressure.* 
-   *In such cases, we are making sure that the error is not too large by changing the proportional gain*
+   *In such cases, we are making sure that the error is not too large by changing the proportional gain and making sure pressure does not exceed limits*
 
 ### MultiplyGains (Function):
 
@@ -69,16 +69,12 @@ Checks if the onTime is greater than 40 percent of the OffTime.
      Adjusts the gains if the error at the next time step is higher than the error at the prev time step.
      Kp, Ki and Kd gains are increased to compensate for the error.
     		
-   If the error at the next time step is lesser than the error at the previous time step, 
-     
-     If the error at the next time step is smaller than or equal to error at the previous time step,
-     Kp, Ki and Kd gains are decreased to compensate for the error.
    
    If there is a significant error during the last few time states, we have to check if the pressure
    at the pressure sensor is above/below the desired pressure. We have to close/open the subsequent valves accordingly.
 	
      If the error in pressure is higher, this implies there is a problem with the valve.
-     We are switching to the next valve to make the pressure reading close to the 
+     We are switching to the next valve to make the pressure reading is close to the 
      desired pressure.
 		
       
