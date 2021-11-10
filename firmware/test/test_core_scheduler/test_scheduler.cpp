@@ -35,8 +35,19 @@ class MockTask: public Task {
             return true;
         }
         bool _run() override {
-            //std::cout << "Ran mock task\n";
+            std::cout << "Run mock task\n";
             return true;
+        }
+};
+
+class MockTaskFails: public Task {
+    private:
+        bool _init() override {
+            //std::cout << "Inited mock task\n";
+            return true;
+        }
+        bool _run() override {
+            return false;
         }
 };
 
@@ -79,8 +90,40 @@ void test_can_run_task() {
     TEST_ASSERT_TRUE(success);
     TaskState state = sch.RunTask(100, index);
     std::cout << "state: " << static_cast<int>(state) << std::endl;
-    TEST_ASSERT_EQUAL(TaskState::Running, state);
-    TEST_ASSERT_EQUAL(index, sch.GetRunningTask());
+    TEST_ASSERT_EQUAL(TaskState::RunSuccess, state);
+    //TEST_ASSERT_EQUAL(TaskState::Running, state);
+    //TEST_ASSERT_EQUAL(index, sch.GetRunningTask());
+}
+
+void test_task_didnt_init() {
+    Scheduler sch;
+    MockTask m1;
+    sch.AddTask(&m1, 0);
+    TaskState state1 = sch.RunTask(100, 0);
+    TEST_ASSERT_EQUAL(TaskState::Undefined, state1);
+}
+
+void test_cant_run_task() {
+    Scheduler sch;
+    MockTaskFails m1;
+    m1.Init(10, 50);
+    sch.AddTask(&m1, 0);
+    TaskState state1 = sch.RunTask(100, 0);
+    TEST_ASSERT_EQUAL(TaskState::RunFailed, state1);
+}
+
+void test_can_run_tasks() {
+    Scheduler sch;
+    MockTask m1;
+    MockTask m2;
+    m1.Init(10, 50);
+    m2.Init(11, 51);
+    sch.AddTask(&m1, 0);
+    sch.AddTask(&m2, 1);
+    TaskState state1 = sch.RunTask(100, 0);
+    TEST_ASSERT_EQUAL(TaskState::RunSuccess, state1);
+    TaskState state2 = sch.RunTask(100, 1);
+    TEST_ASSERT_EQUAL(TaskState::RunSuccess, state2);
 }
 
 void process() {
@@ -88,6 +131,10 @@ void process() {
     RUN_TEST(test_can_add_task);
     RUN_TEST(test_can_get_task);
     RUN_TEST(test_can_run_task);
+    
+    RUN_TEST(test_task_didnt_init);
+    RUN_TEST(test_cant_run_task);
+    RUN_TEST(test_can_run_tasks);
     
     UNITY_END();
 }

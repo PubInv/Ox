@@ -35,7 +35,7 @@ namespace OxCore
             _state = TaskState::Initializing;
             _id = id;
             _priority = priority;
-            _state = _init() ? TaskState::Waiting : TaskState::Undefined;
+            _state = _init() ? TaskState::Waiting : TaskState::InitFailed;
             std::cout << "Initialised\n";
         }
         return _state;
@@ -46,9 +46,8 @@ namespace OxCore
         if (_state == TaskState::Waiting) {
             _state = TaskState::Running;
             _last_run = now;
-            _run();
-            //_state = _run() ? TaskState::Completed : TaskState::Undefined;
-            std::cout << "Running\n";
+            _state = _run() ? TaskState::RunSuccess : TaskState::RunFailed;
+            std::cout << "Ran\n";
         }
         return _state;
     }

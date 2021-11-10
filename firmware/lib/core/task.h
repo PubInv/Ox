@@ -33,9 +33,11 @@ namespace OxCore {
 enum class TaskState {
     Undefined = 0,
     Initializing,
+    InitFailed,
     Waiting,
     Running,
-    Completed,
+    RunSuccess,
+    RunFailed,
     Terminating,
     Terminated,
     Failed,
