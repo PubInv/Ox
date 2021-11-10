@@ -26,10 +26,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define SCHEDULER_H
 
 #include "task.h"
-#include "util.h"
+#include <util.h>
 #include <cstdint>
 
 namespace OxCore {
+
 // [ Task1, Task2, Task3, Task4, Empty ]
 //            ^             ^      ^
 //         current        number  max

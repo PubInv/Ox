@@ -26,7 +26,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 #endif
 #include <chrono>
-//#include <iostream>
 #include "timer.h"
 
 namespace OxCore {
