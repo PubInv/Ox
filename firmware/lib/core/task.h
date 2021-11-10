@@ -30,18 +30,54 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
+enum class TaskState {
+    Undefined = 0,
+    Initializing,
+    Waiting,
+    Running,
+    Completed,
+    Terminating,
+    Terminated,
+    Failed,
+};
+
+typedef unsigned long Time;
+typedef int TaskPriority;
+typedef int TaskId;
+
 class Task {
     private:
-        bool _initSuccess;
-        int _id;
-        char _priority;
-        unsigned int _last_ms;
-        virtual bool _init() {return false;}
-        virtual bool _run() {return false;}
+        bool _initialized;
+        virtual bool _init() = 0;
+        virtual bool _run() = 0;
+    protected:
+        TaskId _id;
+        TaskPriority _priority;
+        TaskState _state;
+        Time _last_run;
     public:
-        bool init(int id, char priority);
-        bool run(unsigned int ms_now);
-        bool callback(char *message);
+        Task() {
+            _state = TaskState::Undefined;
+            _initialized = false;
+            _id = -1;
+            _priority = -1;
+            _last_run = 0;
+        };
+        virtual ~Task() = default;
+        // Cannot copy class
+        Task(const Task&) = delete;
+        Task& operator=(const Task&) = delete;
+        // Cannot move class
+        Task(Task&&) = delete;
+        Task& operator=(Task&&) = delete;
+
+        TaskState Init(TaskId id, TaskPriority priority);
+        TaskState Run(Time now);
+        TaskState Wait(Time now);
+        bool Callback(char *message);
+        int GetId() const;
+        int GetPriority() const;
+        TaskState GetState() const;
 };
 
 }

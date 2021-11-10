@@ -22,10 +22,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <error_handler.h>
+#include "error_handler.h"
 #include <iostream>
 
-namespace OxError {
+namespace OxCore {
 
 
 void InitErrorHandler(ErrorMode mode) {

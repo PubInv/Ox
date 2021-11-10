@@ -38,10 +38,10 @@ Queue<T>::Queue(int size) {
 template<class T>
 void Queue<T>::dequeue() {
     if (isEmpty()) {
-        std::cout << "Underflow\nProgram Terminated\n";
+        //std::cout << "Underflow\nProgram Terminated\n";
         exit(EXIT_FAILURE);
     }
-    std::cout << "Removing " << arr[front] << std::endl;
+    //std::cout << "Removing " << arr[front] << std::endl;
     front = (front + 1) % capacity;
     count--;
 }
@@ -49,10 +49,10 @@ void Queue<T>::dequeue() {
 template <class T>
 void Queue<T>::enqueue(T item) {
     if (isFull()){
-        std::cout << "Overflow\nProgram Terminated\n";
+        //std::cout << "Overflow\nProgram Terminated\n";
         exit(EXIT_FAILURE);
     }
-    std::cout << "Inserting " << item << std::endl;
+    //std::cout << "Inserting " << item << std::endl;
     rear = (rear + 1) % capacity;
     arr[rear] = item;
     count++;
@@ -61,7 +61,7 @@ void Queue<T>::enqueue(T item) {
 template <class T>
 T Queue<T>::peek() {
     if (isEmpty()) {
-        std::cout << "Underflow\nProgram Terminated\n";
+        //std::cout << "Underflow\nProgram Terminated\n";
         exit(EXIT_FAILURE);
     }
     return arr[front];

@@ -22,49 +22,65 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <scheduler.h>
+#include "scheduler.h"
 
 namespace OxCore {
-namespace OxScheduler {
 
-bool AddNextTask(Task *task) {
-    if (CheckArrayBounds(numberOfTasks, MAX_TASKS)) {
-        tasks[numberOfTasks++] = task;
+bool Scheduler::AddNextTask(Task *task) {
+    if (CheckArrayBounds(_numberOfTasks, MAX_TASKS)) {
+        _tasks[_numberOfTasks++] = task;
         return true;
     }
     return false;
 }
 
-bool AddTask(Task *task, int index) {
+bool Scheduler::AddTask(Task *task, int index) {
     if (CheckArrayBounds(index, MAX_TASKS)) {
-        tasks[index] = task;
+        _tasks[index] = task;
         return true;
     }
     return false;
 }
 
-bool RunNextTask(uint32_t msNow) {
+TaskState Scheduler::RunNextTask(uint32_t msNow) {
     IncrementRunningTask();
-    return tasks[currentRunningTask]->run(msNow);
+    return _tasks[_currentRunningTask]->Run(msNow);
+}
+    
+TaskState Scheduler::RunTask(uint32_t msNow, int index) {
+    // TODO: bounds checking
+    _currentRunningTask = index;
+    return _tasks[_currentRunningTask]->Run(msNow);
 }
 
-void IncrementRunningTask() {
-    currentRunningTask++;
-    if (currentRunningTask > numberOfTasks) {
-        currentRunningTask = 0;
+void Scheduler::IncrementRunningTask() {
+    _currentRunningTask++;
+    if (_currentRunningTask > _numberOfTasks) {
+        _currentRunningTask = 0;
     }
 }
 
-bool InitAllTasks() {
-    for (int i = 0; i < numberOfTasks; i++) {
-        tasks[i]->init(0, 0); // TODO: need an appropriate place for the init
-    }
-    return true;
-}
-
-void StartSchedulerClock() {
+void Scheduler::StartSchedulerClock() {
     
 }
 
+int Scheduler::GetRunningTask() {
+    return _currentRunningTask;
 }
+
+Task* Scheduler::GetTask(int index) {
+    //return &_tasks[index];
+    return *(_tasks + index);
+}
+
+void Scheduler::RemoveTask(int index) {
+    _tasks[index] = nullptr;
+}
+
+void Scheduler::RemoveAllTasks() {
+    for (int i = 0; i < MAX_TASKS; i++) {
+        _tasks[i] = nullptr;
+    }
+}
+
 }

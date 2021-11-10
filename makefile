@@ -66,3 +66,11 @@ pio-run-mega:
 	cd firmware \
 	&& pio run -e megaatmega2560 -t upload \
 	&& pio device monitor
+
+pio-run-native:
+	cd firmware \
+	&& pio run -e native
+
+pio-clear-cache:
+	cd firmware \
+	&& rm -rf .pio

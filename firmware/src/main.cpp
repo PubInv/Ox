@@ -64,19 +64,23 @@ void setup()
   AddTask(&psa, 0);*/
 
 #ifdef ARDUINO
-  OxDisplay::DisplayTask display;
-  display.init(1, 20);
-  AddTask(&display, 1);
+//  OxDisplay::DisplayTask display;
+//  display.init(1, 20);
+//  AddTask(&display, 1);
 #endif
 }
+
+using namespace OxCore;
+
+Scheduler sch;
 
 void loop(void)
 {
   int t_now = 142124124;
-  bool success = OxCore::OxScheduler::RunNextTask(t_now);
-  //if (false == success) {
+  bool success = sch.RunNextTask(t_now);
+  if (false == success) {
     // Task failed
-  //}
+  }
 
   //exit(0);
 }

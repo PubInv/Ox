@@ -26,10 +26,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCollections {
 
-#define LIST_SIZE 5
-
 template<class T>
-List<T>::List(int size = LIST_SIZE) {
+List<T>::List(int size) {
     arr = new T[size];
     capacity = size;
     count = 0;
@@ -47,18 +45,18 @@ T List<T>::next() {
     if (index > count) {
         index = 0;
     }
-    std::cout << "Return item: " << i << "/" << count << " Index: " << index 
-                    << " Capacity: " << capacity << std::endl;
+    //std::cout << "Return item: " << i << "/" << count << " Index: " << index 
+    //                << " Capacity: " << capacity << std::endl;
     return arr[i];
 }
 
 template<class T>
 bool List<T>::add(T item) {
     if (count >= capacity) {
-        std::cout << "List is full! Cant add item!\n";    
+        //std::cout << "List is full! Cant add item!\n";    
         return false;
     }
-    std::cout << "Added item. Now " << count + 1 << "/" << capacity << " items\n";
+    //std::cout << "Added item. Now " << count + 1 << "/" << capacity << " items\n";
     arr[count++] = item;
     return true;
 }

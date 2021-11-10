@@ -25,29 +25,36 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include <task.h>
-#include <util.h>
+#include "task.h"
+#include "util.h"
 #include <cstdint>
 
 namespace OxCore {
-namespace OxScheduler {
 // [ Task1, Task2, Task3, Task4, Empty ]
 //            ^             ^      ^
 //         current        number  max
 
 const int MAX_TASKS = 5;
-Task *tasks[MAX_TASKS];
-int currentRunningTask = 0;
-int numberOfTasks = 0;
 
-bool AddNextTask(Task *task);
-bool AddTask(Task *task, int index);
-bool RunNextTask(uint32_t msNow);
-void IncrementRunningTask();
-bool InitAllTasks();
-void StartSchedulerClock();
+class Scheduler {
+    private:
+        
+        int _currentRunningTask = 0;
+        int _numberOfTasks = 0;
+    public:
+        Task *_tasks[MAX_TASKS];
+        bool AddNextTask(Task *task);
+        bool AddTask(Task *task, int index);
+        TaskState RunNextTask(uint32_t msNow);
+        TaskState RunTask(uint32_t msNow, int index);
+        void IncrementRunningTask();
+        void StartSchedulerClock();
+        int GetRunningTask();
+        Task *GetTask(int index);
+        void RemoveTask(int index);
+        void RemoveAllTasks();
+};
 
-}
 }
 
 #endif

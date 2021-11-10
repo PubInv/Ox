@@ -25,17 +25,38 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef ERROR_HANDLER_H
 #define ERROR_HANDLER_H
 
-namespace OxError {
+#include <list.h>
+
+namespace OxCore {
 
 enum class ErrorMode {
     Log,
     StdOut
 };
 
-enum class Error {
-    Null,
+enum class ErrorType {
+    Null = 0,
     LessThanZero,
     OutOfBounds
+};
+
+enum class ErrorLevel {
+    Info,
+    Debug,
+    Warning,
+    Error,
+    Critical
+};
+
+const char *ErrorMessage[] = {
+    "Null",
+    "LessThanZero",
+    "OutOfBounds"
+};
+
+struct Error {
+    ErrorLevel level;
+    ErrorType type;
 };
 
 // This is the error string to output from the above Error enum
@@ -44,6 +65,18 @@ enum class Error {
 ErrorMode errorMode;
 void InitErrorHandler(ErrorMode mode);
 void HandleError(Error error);
+
+class ErrorHandler {
+    private:
+        static int count;
+        OxCollections::List<Error> _errors;
+    public:
+        void Log(ErrorLevel level, ErrorType type) {
+            Error error = {level, type};
+            _errors.add(error);
+        }
+
+};
 
 }
 

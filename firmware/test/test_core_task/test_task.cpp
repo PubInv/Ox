@@ -22,40 +22,66 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+#include <iostream>
+#include <unity.h>
+#include <core.h>
+
+using namespace OxCore;
+
+class MockTask: public Task {
+    private:
+        bool _init() override {
+            std::cout << "Inited mock task\n";
+            return true;
+        }
+        bool _run() override {
+            std::cout << "Ran mock task\n";
+            return true;
+        }
+};
+
+void setUp(void) {
+}
+
+void tearDown(void) {
+}
+
+void test_can_init_task() {
+    MockTask m;
+    TaskState taskInited = m.Init(1, 2);
+    TEST_ASSERT_EQUAL(taskInited, TaskState::Initialized);
+    TEST_ASSERT_EQUAL(m.GetId(), 1);
+    TEST_ASSERT_EQUAL(m.GetPriority(), 2);
+}
+
+void test_failed_to_init_task() {
+    MockTask m;
+    TEST_ASSERT_EQUAL(m.GetState(), TaskState::Undefined);
+    TEST_ASSERT_EQUAL(m.GetId(), -1);
+    TEST_ASSERT_EQUAL(m.GetPriority(), -1);
+}
+
+void process() {
+    UNITY_BEGIN();
+    RUN_TEST(test_can_init_task);
+    RUN_TEST(test_failed_to_init_task);
+    UNITY_END();
+}
+
 #ifdef ARDUINO
 #include <Arduino.h>
-#endif
-#include <chrono>
-//#include <iostream>
-#include "timer.h"
-
-namespace OxCore {
-
-uint64_t TimeSinceEpochMs() {
-#ifdef ARDUINO
-    // Time since device powered on
-    return millis();
+void setup() {
+    // NOTE!!! Wait for >2 secs
+    // if board doesn't support software reset via Serial.DTR/RTS
+    delay(2000);
+    process();
+}
+void loop() {
+    //
+}
 #else
-    // Time since Linux epoch
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+int main(int argc, char **argv) {
+    process();
+    return 0;
+}
 #endif
-}
-
-void Timer::Init(uint32_t msStart) {
-    this->msElapsed = 0;
-    this->msStart = msStart;
-}
-
-void Timer::Update(){
-#ifdef ARDUINO
-    this->msElapsed = (uint32_t)millis() - this->msStart;
-#else
-    this->msElapsed = (uint32_t)(TimeSinceEpochMs()) - this->msStart;
-#endif
-}
-
-uint32_t Timer::GetElapsed(){
-    return msElapsed;
-}
-
-}

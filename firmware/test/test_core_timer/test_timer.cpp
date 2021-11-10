@@ -23,14 +23,21 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include <unity.h>
-#include <stdio.h>
 #include <core.h>
-#include <iostream>
-#include <string.h>
-#include <time.h>
-#include <stdlib.h>
+
+using namespace OxCore;
+
+
+void setUp(void) {
+    // set stuff up here
+}
+
+void tearDown(void) {
+    // clean stuff up here
+}
 
 void init() {
+
     TEST_ASSERT_TRUE(true);
 }
 

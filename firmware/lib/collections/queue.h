@@ -25,6 +25,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <stdlib.h>
+
 namespace OxCollections {
 
 #define SIZE 10

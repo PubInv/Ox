@@ -22,26 +22,66 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <task.h>
+#include "task.h"
+#include <iostream>
 
-namespace OxCore {
+namespace OxCore
+{
 
-bool Task::init(int id, char priority) {
-    _id = id;
-    _priority = priority;
-    //std::cout << "id: " << id << std::endl;
-    _initSuccess = _init();
-    return _initSuccess;
-}
-bool Task::run(unsigned int ms_now) {
-    //std::cout << "Running " << id << " at " << ms_now << std::endl;
-    _last_ms = ms_now;
-    return _run();
-}
+    TaskState Task::Init(TaskId id, TaskPriority priority)
+    {
+        if (static_cast<int>(_state) < static_cast<int>(TaskState::Waiting))
+        {
+            _state = TaskState::Initializing;
+            _id = id;
+            _priority = priority;
+            _state = _init() ? TaskState::Waiting : TaskState::Undefined;
+            std::cout << "Initialised\n";
+        }
+        return _state;
+    }
 
-bool Task::callback(char *message) {
-    std::cout << "Task Callback: " << message << std::endl;
-    return true;
-}
+    TaskState Task::Run(Time now)
+    {
+        if (_state == TaskState::Waiting) {
+            _state = TaskState::Running;
+            _last_run = now;
+            _run();
+            //_state = _run() ? TaskState::Completed : TaskState::Undefined;
+            std::cout << "Running\n";
+        }
+        return _state;
+    }
+
+
+    TaskState Task::Wait(Time now)
+    {
+        if (_state == TaskState::Running) {
+            // TODO: do waiting stuff
+            _state = TaskState::Waiting;
+        }
+        return _state;
+    }
+
+    int Task::GetId() const
+    {
+        return _id;
+    }
+
+    int Task::GetPriority() const
+    {
+        return _priority;
+    }
+
+    TaskState Task::GetState() const
+    {
+        return _state;
+    }
+
+    bool Task::Callback(char *message)
+    {
+        std::cout << "Task Callback: " << message << std::endl;
+        return true;
+    }
 
 }
