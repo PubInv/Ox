@@ -52,7 +52,6 @@ namespace OxCore
         return _state;
     }
 
-
     TaskState Task::Wait(Time now)
     {
         if (_state == TaskState::Running) {
@@ -77,10 +76,10 @@ namespace OxCore
         return _state;
     }
 
-    bool Task::Callback(char *message)
+    /*bool Task::Callback(char *message)
     {
         std::cout << "Task Callback: " << message << std::endl;
         return true;
-    }
+    }*/
 
 }

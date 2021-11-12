@@ -58,21 +58,26 @@ void setUp(void) {
 void tearDown(void) {
 }
 
-void test_can_add_task() {
+/*void test_can_add_task() {
     Scheduler sch;
     MockTask m;
     TaskState taskInited = m.Init(1, 2);
     TEST_ASSERT_EQUAL(TaskState::Waiting, taskInited);
     bool success = sch.AddTask(&m, 0);
     TEST_ASSERT_TRUE(success);
+}*/
+
+void test_can_create_task() {
+    Scheduler sch;
+    MockTask m;
+    bool success = sch.AddTask(&m, 1, 2);
+    TEST_ASSERT_TRUE(success);
 }
 
 void test_can_get_task() {
     Scheduler sch;
     MockTask m;
-    TaskState taskInited = m.Init(1, 2);
-    TEST_ASSERT_EQUAL(TaskState::Waiting, taskInited);
-    bool success = sch.AddTask(&m, 0);
+    bool success = sch.AddTask(&m, 1, 2);
     TEST_ASSERT_TRUE(success);
     Task* t = sch.GetTask(0);
     TEST_ASSERT_EQUAL((void*)t, &m);
@@ -83,31 +88,24 @@ void test_can_run_task() {
     MockTask m;
     int id = 1;
     int index = 0;
-    TaskState taskInited = m.Init(id, 2);
-    TEST_ASSERT_EQUAL(TaskState::Waiting, taskInited);
-    std::cout << "taskInited: " << static_cast<int>(taskInited) << std::endl;
-    bool success = sch.AddTask(&m, index);
+    bool success = sch.AddTask(&m, 1, 2);
     TEST_ASSERT_TRUE(success);
     TaskState state = sch.RunTask(100, index);
-    std::cout << "state: " << static_cast<int>(state) << std::endl;
     TEST_ASSERT_EQUAL(TaskState::RunSuccess, state);
-    //TEST_ASSERT_EQUAL(TaskState::Running, state);
-    //TEST_ASSERT_EQUAL(index, sch.GetRunningTask());
 }
 
 void test_task_didnt_init() {
     Scheduler sch;
-    MockTask m1;
-    sch.AddTask(&m1, 0);
+    MockTask m;
+    sch.AddTask(&m, 1, 2);
     TaskState state1 = sch.RunTask(100, 0);
     TEST_ASSERT_EQUAL(TaskState::Undefined, state1);
 }
 
 void test_cant_run_task() {
     Scheduler sch;
-    MockTaskFails m1;
-    m1.Init(10, 50);
-    sch.AddTask(&m1, 0);
+    MockTaskFails m;
+    sch.AddTask(&m, 1, 2);
     TaskState state1 = sch.RunTask(100, 0);
     TEST_ASSERT_EQUAL(TaskState::RunFailed, state1);
 }
@@ -116,10 +114,8 @@ void test_can_run_tasks() {
     Scheduler sch;
     MockTask m1;
     MockTask m2;
-    m1.Init(10, 50);
-    m2.Init(11, 51);
-    sch.AddTask(&m1, 0);
-    sch.AddTask(&m2, 1);
+    sch.AddTask(&m1, 10, 50);
+    sch.AddTask(&m2, 11, 51);
     TaskState state1 = sch.RunTask(100, 0);
     TEST_ASSERT_EQUAL(TaskState::RunSuccess, state1);
     TaskState state2 = sch.RunTask(100, 1);
@@ -128,7 +124,7 @@ void test_can_run_tasks() {
 
 void process() {
     UNITY_BEGIN();
-    RUN_TEST(test_can_add_task);
+    //RUN_TEST(test_can_add_task);
     RUN_TEST(test_can_get_task);
     RUN_TEST(test_can_run_task);
     

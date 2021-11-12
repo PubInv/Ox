@@ -26,10 +26,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define SCHEDULER_H
 
 #include "task.h"
-#include <util.h>
+#include "util.h"
 #include <cstdint>
 
 namespace OxCore {
+
+// This is a lightweight co-operative scheduler.
+// There is no overhead in context switching,
+// there are some conditions:
+// - Tasks must 'yield' by returning 
+//   true (success) or false (failure).
+// - Tasks should be small, fast and non-blocking.
+// - Interrupts are handled by the scheduler.
 
 // [ Task1, Task2, Task3, Task4, Empty ]
 //            ^             ^      ^
@@ -37,23 +45,32 @@ namespace OxCore {
 
 const int MAX_TASKS = 5;
 
+template<typename T, typename U>
+struct Map {
+    T key;
+    U value;
+};
+
 class Scheduler {
     private:
-        
-        int _currentRunningTask = 0;
-        int _numberOfTasks = 0;
-    public:
         Task *_tasks[MAX_TASKS];
-        bool AddNextTask(Task *task);
-        bool AddTask(Task *task, int index);
+        Map<int, TaskId> index_id[MAX_TASKS];
+        TaskId _currentRunningTask = 0;
+        int _numberOfTasks = 0;
+        bool _addToMap(int index, TaskId id);
+        int _idToIndex(TaskId id);
+    public:
+        bool AddTask(Task *task, TaskId id, TaskPriority priority);
         TaskState RunNextTask(uint32_t msNow);
-        TaskState RunTask(uint32_t msNow, int index);
-        void IncrementRunningTask();
-        void StartSchedulerClock();
-        int GetRunningTask();
-        Task *GetTask(int index);
-        void RemoveTask(int index);
+        TaskState RunTaskById(uint32_t msNow, TaskId id);
+        TaskId GetRunningTaskId() const;
+        Task *GetTaskById(TaskId id);
+        void RemoveTaskById(TaskId id);
         void RemoveAllTasks();
+        
+        void StartSchedulerClock();
+        void AutoRun();
+        void RaiseInterrupt();
 };
 
 }

@@ -48,6 +48,23 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 //////////////////////
 
+
+using namespace OxCore;
+
+class MockTask: public Task {
+    private:
+        bool _init() override {
+            //std::cout << "Inited mock task\n";
+            return true;
+        }
+        bool _run() override {
+            std::cout << "Run mock task\n";
+            return true;
+        }
+};
+
+Scheduler sch;
+
 void setup()
 {
 #ifdef ARDUINO
@@ -68,29 +85,21 @@ void setup()
 //  display.init(1, 20);
 //  AddTask(&display, 1);
 #endif
-}
 
-using namespace OxCore;
+  // Add tasks here //
 
-Scheduler sch;
 
-void loop(void)
-{
-  int t_now = 142124124;
-  bool success = sch.RunNextTask(t_now);
-  if (false == success) {
-    // Task failed
-  }
+  ////////////////////
 
-  //exit(0);
+  sch.AutoRun();
 }
 
 #ifndef ARDUINO
 int main(int argc, char **argv)
 {
   setup();
-  while (1)
-    loop();
+  //while (1)
+  //  loop();
 }
 #endif
 

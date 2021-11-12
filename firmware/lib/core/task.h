@@ -26,32 +26,23 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define TASK_H
 
 //#include <cstdint>
+#include "core_defines.h"
 #include <iostream>
 
 namespace OxCore {
 
-enum class TaskState {
-    Undefined = 0,
-    Initializing,
-    InitFailed,
-    Waiting,
-    Running,
-    RunSuccess,
-    RunFailed,
-    Terminating,
-    Terminated,
-    Failed,
-};
-
-typedef unsigned long Time;
-typedef int TaskPriority;
-typedef int TaskId;
-
 class Task {
     private:
         bool _initialized;
+        // User defined:
         virtual bool _init() = 0;
         virtual bool _run() = 0;
+        
+        // Only the scheduler should call these:
+        TaskState Init(TaskId id, TaskPriority priority);
+        TaskState Run(Time now);
+        TaskState Wait(Time now);
+        
     protected:
         TaskId _id;
         TaskPriority _priority;
@@ -73,13 +64,13 @@ class Task {
         Task(Task&&) = delete;
         Task& operator=(Task&&) = delete;
 
-        TaskState Init(TaskId id, TaskPriority priority);
-        TaskState Run(Time now);
-        TaskState Wait(Time now);
-        bool Callback(char *message);
+        //bool Callback(char *message);
+
         int GetId() const;
         int GetPriority() const;
         TaskState GetState() const;
+
+        friend class Scheduler;
 };
 
 }

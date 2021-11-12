@@ -26,54 +26,57 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
-bool Scheduler::AddNextTask(Task *task) {
-    if (CheckArrayBounds(_numberOfTasks, MAX_TASKS)) {
-        _tasks[_numberOfTasks++] = task;
-        return true;
+bool Scheduler::_addToMap(int index, TaskId id) {
+    if (CheckArrayBounds(index, MAX_TASKS)){
+        return false;
     }
-    return false;
+    index_id->key = index;
+    index_id->value = id;
+    return true;
 }
 
-bool Scheduler::AddTask(Task *task, int index) {
-    if (CheckArrayBounds(index, MAX_TASKS)) {
-        _tasks[index] = task;
-        return true;
+int Scheduler::_idToIndex(TaskId id) {
+    for (int i = 0; i < MAX_TASKS; i++) {
+        if (index_id[i].value = id) {
+            return index_id[i].key;
+        }
+    }
+}
+
+bool Scheduler::AddTask(Task *task, TaskId id, TaskPriority priority) {
+    if (CheckArrayBounds(_numberOfTasks, MAX_TASKS)) {
+        TaskState state = task->Init(id, priority);
+        if (state == TaskState::Waiting) {
+            _tasks[_numberOfTasks++] = task;
+            return true;
+        }
     }
     return false;
 }
 
 TaskState Scheduler::RunNextTask(uint32_t msNow) {
-    IncrementRunningTask();
+    //IncrementRunningTask();
+    // TODO: use scheduling algorithm
     return _tasks[_currentRunningTask]->Run(msNow);
 }
-    
-TaskState Scheduler::RunTask(uint32_t msNow, int index) {
-    // TODO: bounds checking
+
+TaskState Scheduler::RunTaskById(uint32_t msNow, TaskId id) {
+    int index = _idToIndex(id);
     _currentRunningTask = index;
     return _tasks[_currentRunningTask]->Run(msNow);
 }
 
-void Scheduler::IncrementRunningTask() {
-    _currentRunningTask++;
-    if (_currentRunningTask > _numberOfTasks) {
-        _currentRunningTask = 0;
-    }
-}
-
-void Scheduler::StartSchedulerClock() {
-    
-}
-
-int Scheduler::GetRunningTask() {
+TaskId Scheduler::GetRunningTaskId() const {
     return _currentRunningTask;
 }
 
-Task* Scheduler::GetTask(int index) {
-    //return &_tasks[index];
+Task* Scheduler::GetTaskById(TaskId id) {
+    int index = _idToIndex(id);
     return *(_tasks + index);
 }
 
-void Scheduler::RemoveTask(int index) {
+void Scheduler::RemoveTaskById(TaskId id) {
+    int index = _idToIndex(id);
     _tasks[index] = nullptr;
 }
 
@@ -81,6 +84,18 @@ void Scheduler::RemoveAllTasks() {
     for (int i = 0; i < MAX_TASKS; i++) {
         _tasks[i] = nullptr;
     }
+}
+
+void Scheduler::StartSchedulerClock() {
+    
+}
+
+void Scheduler::AutoRun() {
+    
+}
+
+void Scheduler::RaiseInterrupt() {
+
 }
 
 }
