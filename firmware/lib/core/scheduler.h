@@ -45,6 +45,7 @@ namespace OxCore {
 
 const int MAX_TASKS = 5;
 
+// TODO: abstract this
 template<typename T, typename U>
 struct Map {
     T key;
@@ -55,7 +56,7 @@ class Scheduler {
     private:
         Task *_tasks[MAX_TASKS];
         Map<int, TaskId> index_id[MAX_TASKS];
-        TaskId _currentRunningTask = 0;
+        TaskId _currentRunningTaskId = 0;
         int _numberOfTasks = 0;
         bool _addToMap(int index, TaskId id);
         int _idToIndex(TaskId id);
@@ -68,9 +69,11 @@ class Scheduler {
         void RemoveTaskById(TaskId id);
         void RemoveAllTasks();
         
-        void StartSchedulerClock();
-        void AutoRun();
+        
+        void ClockTick();
         void RaiseInterrupt();
+        void AnalyzeTasks();
+        void AutoRun();
 };
 
 }

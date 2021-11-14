@@ -26,7 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
-bool CheckArrayBounds(int index, int length) {
+bool WithinArrayBounds(int index, int length) {
     return (index >= 0 && index < length);
 }
 
