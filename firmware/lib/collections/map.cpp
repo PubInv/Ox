@@ -33,49 +33,52 @@ struct KeyValue {
 };
 
 template <typename K, typename V, size_t L>
-class Map {
-    private:
-        KeyValue<K, V> arr[L];
-        int _count = 0;
-    public:
-        bool add(K k, V v) {
-            if (hasKey(k) >= 0) {
-                return false;
-            }
-            if (true == isFull()) {
-                return false;
-            }
-            arr[_count].key = k;
-            arr[_count].value = v;
-            _count++;
-            return true;
-        }
-        V *getValue(K key) {
-            int i = hasKey(key);
-            if (i >= 0) {
-                return &arr[i]->value;
-            } else {
-                return nullptr;
-            }
-        }
-        int hasKey(K key) {
-            for (int i = 0; i < _count; i++) {
-                if (arr[i].key == key) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-        int size() {
-            return L;
-        }
-        bool isEmpty() {
-            return _count > 0;
-        }
-        bool isFull() {
-            return _count == L;
-        }
-};
+bool Map<K, V, L>::add(K k, V v) {
+    if (hasKey(k) >= 0) {
+        return false;
+    }
+    if (true == isFull()) {
+        return false;
+    }
+    arr[_count].key = k;
+    arr[_count].value = v;
+    _count++;
+    return true;
+}
 
+template <typename K, typename V, size_t L>
+V Map<K, V, L>::getValue(K key) {
+    int i = hasKey(key);
+    if (i >= 0) {
+        return &arr[i]->value;
+    } else {
+        return nullptr;
+    }
+}
+
+template <typename K, typename V, size_t L>
+int Map<K, V, L>::hasKey(K key) {
+    for (int i = 0; i < _count; i++) {
+        if (arr[i].key == key) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+template <typename K, typename V, size_t L>
+int Map<K, V, L>::size() {
+    return L;
+}
+
+template <typename K, typename V, size_t L>
+bool Map<K, V, L>::isEmpty() {
+    return _count > 0;
+}
+
+template <typename K, typename V, size_t L>
+bool Map<K, V, L>::isFull() {
+    return _count == L;
+}
 
 }

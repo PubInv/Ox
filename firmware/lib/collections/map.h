@@ -35,17 +35,15 @@ struct KeyValue {
     V value;
 };
 
-template <typename K, typename V, typename L>
+template <typename K, typename V, size_t L>
 class Map {
     private:
-        KeyValue<K, V> *arr[L];
-        int _size;
-        int _count;
+        KeyValue<K, V> arr[L];
+        int _count = 0;
     public:
-        //Map(int size = SIZE);
-        void add(K key, V value);
-        void getValue(K key);
-        void hasKey(K key);
+        bool add(K key, V value);
+        V getValue(K key);
+        int hasKey(K key);
         int size();
         bool isEmpty();
         bool isFull();
