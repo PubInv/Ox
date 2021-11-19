@@ -22,50 +22,36 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <queue.h>
+#ifndef MAP_H
+#define MAP_H
+
+#include <stdlib.h>
 
 namespace OxCollections {
 
-template<class T, size_t L>
-void Queue<T, L>::dequeue() {
-    if (isEmpty()) {
-        exit(EXIT_FAILURE);
-    }
-    front = (front + 1) % capacity;
-    count--;
-}
+template<typename K, typename V>
+struct KeyValue {
+    K key;
+    V value;
+};
 
-template<class T, size_t L>
-void Queue<T, L>::enqueue(T item) {
-    if (isFull()){
-        exit(EXIT_FAILURE);
-    }
-    rear = (rear + 1) % capacity;
-    arr[rear] = item;
-    count++;
-}
+template <typename K, typename V, typename L>
+class Map {
+    private:
+        KeyValue<K, V> *arr[L];
+        int _size;
+        int _count;
+    public:
+        //Map(int size = SIZE);
+        void add(K key, V value);
+        void getValue(K key);
+        void hasKey(K key);
+        int size();
+        bool isEmpty();
+        bool isFull();
+};
 
-template<class T, size_t L>
-T Queue<T, L>::peek() {
-    if (isEmpty()) {
-        exit(EXIT_FAILURE);
-    }
-    return arr[front];
-}
-
-template<class T, size_t L>
-int Queue<T, L>::size() {
-    return count;
-}
-
-template<class T, size_t L>
-bool Queue<T, L>::isEmpty() {
-    return (size() == 0);
-}
-
-template<class T, size_t L>
-bool Queue<T, L>::isFull() {
-    return (size() == capacity);
-}
 
 }
+
+#endif

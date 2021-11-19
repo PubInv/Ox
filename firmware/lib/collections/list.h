@@ -25,19 +25,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef LIST_H
 #define LIST_H
 
+#include <stdlib.h>
+
 namespace OxCollections {
 
-#define LIST_SIZE 5
-
-template <class T>
+template <class T, size_t L>
 class List {
     private:
-        T *arr;
-        int capacity;
-        int count;
-        int index;
+        T arr;
+        int capacity = L;
+        int count = 0;
+        int index = 0;
     public:
-        List(int size = LIST_SIZE);
         int size();
         T next();
         bool add(T item);

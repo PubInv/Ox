@@ -26,37 +26,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCollections {
 
-template<class T>
-List<T>::List(int size) {
-    arr = new T[size];
-    capacity = size;
-    count = 0;
-    index = 0;
-}
-
-template<class T>
-int List<T>::size() {
+template <class T, size_t L>
+int List<T, L>::size() {
     return count;
 }
 
-template<class T>
-T List<T>::next() {
+template <class T, size_t L>
+T List<T, L>::next() {
     int i = index++;
     if (index > count) {
         index = 0;
     }
-    //std::cout << "Return item: " << i << "/" << count << " Index: " << index 
-    //                << " Capacity: " << capacity << std::endl;
     return arr[i];
 }
 
-template<class T>
-bool List<T>::add(T item) {
+template <class T, size_t L>
+bool List<T, L>::add(T item) {
     if (count >= capacity) {
-        //std::cout << "List is full! Cant add item!\n";    
         return false;
     }
-    //std::cout << "Added item. Now " << count + 1 << "/" << capacity << " items\n";
     arr[count++] = item;
     return true;
 }

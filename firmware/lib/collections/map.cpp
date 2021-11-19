@@ -22,50 +22,60 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <queue.h>
+#include <map.h>
 
 namespace OxCollections {
 
-template<class T, size_t L>
-void Queue<T, L>::dequeue() {
-    if (isEmpty()) {
-        exit(EXIT_FAILURE);
-    }
-    front = (front + 1) % capacity;
-    count--;
-}
+template<typename K, typename V>
+struct KeyValue {
+    K key;
+    V value;
+};
 
-template<class T, size_t L>
-void Queue<T, L>::enqueue(T item) {
-    if (isFull()){
-        exit(EXIT_FAILURE);
-    }
-    rear = (rear + 1) % capacity;
-    arr[rear] = item;
-    count++;
-}
+template <typename K, typename V, size_t L>
+class Map {
+    private:
+        KeyValue<K, V> arr[L];
+        int _count = 0;
+    public:
+        bool add(K k, V v) {
+            if (hasKey(k) >= 0) {
+                return false;
+            }
+            if (true == isFull()) {
+                return false;
+            }
+            arr[_count].key = k;
+            arr[_count].value = v;
+            _count++;
+            return true;
+        }
+        V *getValue(K key) {
+            int i = hasKey(key);
+            if (i >= 0) {
+                return &arr[i]->value;
+            } else {
+                return nullptr;
+            }
+        }
+        int hasKey(K key) {
+            for (int i = 0; i < _count; i++) {
+                if (arr[i].key == key) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        int size() {
+            return L;
+        }
+        bool isEmpty() {
+            return _count > 0;
+        }
+        bool isFull() {
+            return _count == L;
+        }
+};
 
-template<class T, size_t L>
-T Queue<T, L>::peek() {
-    if (isEmpty()) {
-        exit(EXIT_FAILURE);
-    }
-    return arr[front];
-}
-
-template<class T, size_t L>
-int Queue<T, L>::size() {
-    return count;
-}
-
-template<class T, size_t L>
-bool Queue<T, L>::isEmpty() {
-    return (size() == 0);
-}
-
-template<class T, size_t L>
-bool Queue<T, L>::isFull() {
-    return (size() == capacity);
-}
 
 }

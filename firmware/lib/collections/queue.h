@@ -29,18 +29,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCollections {
 
-#define SIZE 10
-
-template <class T>
+template <class T, size_t L>
 class Queue {
     private:
-        T *arr;
-        int capacity;
-        int front;
-        int rear;
-        int count;
+        T arr;
+        int capacity = size_t;
+        int front = 0;
+        int rear = -1;
+        int count = 0;
     public:
-        Queue(int size = SIZE);
         void enqueue(T t);
         void dequeue();
         T peek();
