@@ -22,7 +22,8 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <cstdio>
+#include "debug.h"
+#include <iostream>
 #ifdef ARDUINO
 #include <Arduino.h>
 #endif
@@ -33,7 +34,7 @@ namespace OxCore {
     #ifdef ARDUINO
       Serial.begin(baud);
     #else
-      puts("Serial init");
+      std::cout << "Serial init";
     #endif
   }
 

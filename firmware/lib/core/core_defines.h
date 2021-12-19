@@ -7,15 +7,11 @@ typedef int TaskId;
 
 enum class TaskState {
     Undefined = 0,
-    Initializing,
-    InitFailed,
-    Waiting,
+    Ready,
     Running,
-    RunSuccess,
-    RunFailed,
-    Terminating,
-    Terminated,
-    Failed,
+    Blocked,
+    Suspended,
+    Error
 };
 
 #endif

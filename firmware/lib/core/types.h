@@ -22,26 +22,59 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef LIST_H
-#define LIST_H
+#ifndef TYPES_H
+#define TYPES_H
 
-namespace OxCollections {
+#include <cstdint>
 
-#define LIST_SIZE 5
+namespace OxCore {
 
-template <class T>
-class List {
-    private:
-        T *arr;
-        int capacity;
-        int count;
-        int index;
-    public:
-        List(int size = LIST_SIZE);
-        int size();
-        T next();
-        bool add(T item);
-};
+// Rust style types
+#ifdef FLEXIBLE_WIDTH_TYPES
+typedef short i8;
+typedef short i16;
+typedef long i32;
+typedef long long i64;
+typedef unsigned short u8;
+typedef unsigned short u16;
+typedef unsigned long u32;
+typedef unsigned long long u64;
+typedef float f32;
+typedef double f64;
+typedef long double f128;
+typedef unsigned char uchar;
+typedef signed char schar;
+#ifdef ARCH_32
+typedef long isize;
+typedef unsigned long usize;
+#elif ARCH_64
+typedef long long isize;
+typedef unsigned long long usize;
+#endif
+#else // FIXED_WIDTH_TYPES
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
+//typedef __int128_t i128;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
+//typedef __uint128_t u128;
+typedef float f32;
+typedef double f64;
+typedef long double f128;
+typedef unsigned char uchar;
+typedef signed char schar;
+#ifdef ARCH_32
+typedef int32_t isize;
+typedef uint32_t usize;
+#elif ARCH_64
+typedef int64_t isize;
+typedef uint64_t usize;
+#endif
+#endif
 
 }
 

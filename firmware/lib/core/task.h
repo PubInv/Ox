@@ -25,9 +25,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef TASK_H
 #define TASK_H
 
-//#include <cstdint>
 #include "core_defines.h"
-#include <iostream>
+#include "types.h"
 
 namespace OxCore {
 
@@ -40,22 +39,20 @@ class Task {
         
         // Only the scheduler should call these:
         TaskState Init(TaskId id, TaskPriority priority);
-        TaskState Run(Time now);
+        void Run(Time now);
         TaskState Wait(Time now);
         
     protected:
         TaskId _id;
         TaskPriority _priority;
         TaskState _state;
-        Time _last_run;
+        Time _lastRun;
     public:
-        Task() {
-            _state = TaskState::Undefined;
-            _initialized = false;
-            _id = -1;
-            _priority = -1;
-            _last_run = 0;
-        };
+        Task(): _initialized(false),
+                _id(-1),
+                _priority(-1),
+                _state(TaskState::Undefined),
+                _lastRun(0) {};
         virtual ~Task() = default;
         // Cannot copy class
         Task(const Task&) = delete;
@@ -66,8 +63,8 @@ class Task {
 
         //bool Callback(char *message);
 
-        int GetId() const;
-        int GetPriority() const;
+        i32 GetId() const;
+        i32 GetPriority() const;
         TaskState GetState() const;
 
         friend class Scheduler;

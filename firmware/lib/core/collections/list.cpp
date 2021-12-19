@@ -22,33 +22,31 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef QUEUE_H
-#define QUEUE_H
-
-#include <stdlib.h>
+#include "list.h"
 
 namespace OxCollections {
 
-#define SIZE 10
-
-template <class T>
-class Queue {
-    private:
-        T *arr;
-        int capacity;
-        int front;
-        int rear;
-        int count;
-    public:
-        Queue(int size = SIZE);
-        void enqueue(T t);
-        void dequeue();
-        T peek();
-        int size();
-        bool isEmpty();
-        bool isFull();
-};
-
+template <class T, size_t L>
+int List<T, L>::size() {
+    return count;
 }
 
-#endif
+template <class T, size_t L>
+T List<T, L>::next() {
+    int i = index++;
+    if (index > count) {
+        index = 0;
+    }
+    return arr[i];
+}
+
+template <class T, size_t L>
+bool List<T, L>::add(T item) {
+    if (count >= capacity) {
+        return false;
+    }
+    arr[count++] = item;
+    return true;
+}
+
+}

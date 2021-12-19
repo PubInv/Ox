@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef ERROR_HANDLER_H
 #define ERROR_HANDLER_H
 
-#include <list.h>
+#include "collections/list.h"
 
 namespace OxCore {
 
@@ -69,7 +69,7 @@ void HandleError(Error error);
 class ErrorHandler {
     private:
         static int count;
-        OxCollections::List<Error> _errors;
+        OxCollections::List<Error, 10> _errors;
     public:
         void Log(ErrorLevel level, ErrorType type) {
             Error error = {level, type};
