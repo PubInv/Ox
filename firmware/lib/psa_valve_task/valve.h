@@ -22,47 +22,48 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#ifndef VALVE_H
+#define VALVE_H
 
-#include <shift.h>
-//#include <config.h>
 #include <cstdint>
 
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
+namespace OxPSA {
 
-shift_pins sp;
+    enum ValveStatus {
+        VALVE_OK,
+        VALVE_MISSED,
+        VALVE_ERROR
+    };
 
-void shiftInit()
-{
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
+    struct ValveState {
+        uint8_t name;
+        uint8_t pin;
+        uint32_t onTime; //ms the valve will be on
+        uint32_t offTime; //ms the valve will be off
+        uint32_t msLast;
+        ValveStatus status;
+        bool isOn;
+    };
 
-#ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
-#else
-  std::cout << "Shift init" << std::endl;
-#endif
+    class Valve {
+        private:
+            ValveState state;
+        public:
+            Valve(uint8_t name, uint8_t pin, uint32_t onTime, uint32_t offTime){
+                state.name = name;
+                state.pin = pin;
+                state.onTime = onTime;
+                state.offTime = offTime;
+                state.msLast = 0;
+                state.status = VALVE_OK;
+                state.isOn = false;
+            }
+            bool update(uint32_t msNow);
+            ValveStatus getValveStatus();
+            bool changeTiming(uint32_t onTime, uint32_t offTime);
+            bool forceValveTrigger();
+    };
+
 }
 
-void shiftOutValves(uint8_t data_out)
-{
-#ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
 #endif
-}

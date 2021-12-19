@@ -25,67 +25,26 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <unity.h>
 #include <stdio.h>
 #include <iostream>
-#include <string.h>
 #include <cstdint>
 #include <chrono>
-#include <controller.h>
-#include <config.h>
 
-/*void test_valve_does_init() {
-  int success = valve_init();
-  TEST_ASSERT_TRUE(success == 1);
-}*/
+#include <networking.h>
+#include <PIRDS.h>
+#include <task.h>
 
-using namespace OxController;
+using namespace Ox_Networking;
 
-void test_valve_does_tick(){
-  bool x = true;
-  TEST_ASSERT_TRUE(x);
+void test_setup_networking(){
+  NetworkingController nc;
+  Task ct;
+  bool success = nc.setup(&ct);
+  TEST_ASSERT_TRUE(success);
 }
-
-/*void test_valve_does_tick(){
-  //using namespace std;
-  using namespace std::chrono;
-
-  // Record start time
-
-  steady_clock::time_point a = steady_clock::now();
-  int success = valve_init();
-  TEST_ASSERT_TRUE(success == 1);
-
-  for (int i = 0; i < 3; i++){
-    std::cout << "Cycle: " << i << "\n";
-    for (uint32_t i = 0; i < TOTAL_CYCLE_TIME; i += TIME_STEP){
-
-      bool success = valve_tick(i);
-
-      // Wait 100ms during the valve sim
-      steady_clock::time_point start = steady_clock::now();
-      while (1){
-        steady_clock::time_point current = steady_clock::now();
-        duration<double> elapsed = current - start;
-
-        double x = elapsed.count();
-        std::cout << " ";// this needs to be there to show the couts!
-        double y = 0.1; // same as TIME_STEP
-        if (x > y){
-          break;
-        }
-      }
-    // end of waiting
-    }
-
-    steady_clock::time_point b = steady_clock::now();
-    duration<double> e = b - a;
-    std::cout << "\nTotal time: " << e.count() << "\n";
-  }
-  //TEST_ASSERT_TRUE(success);
-}*/
 
 void process() {
   UNITY_BEGIN();
   //RUN_TEST(test_valve_does_init);
-  RUN_TEST(test_valve_does_tick);
+  RUN_TEST(test_setup_networking);
   UNITY_END();
 }
 

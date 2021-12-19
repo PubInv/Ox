@@ -26,10 +26,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
-#include <inttypes.h>
+#include <cstdint>
 #include <debug.h>
 
-using namespace Ox_Debug;
+using namespace OxDebug;
 
 void test_serial(){
   Debug<const char*>("Test text debug\n");

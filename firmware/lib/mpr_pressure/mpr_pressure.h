@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef MPR_PRESSURE
 #define MPR_PRESSURE
 
-#include <inttypes.h>
+#include <cstdint>
 
 namespace Ox_Sensor {
 

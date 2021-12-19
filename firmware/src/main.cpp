@@ -24,109 +24,83 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #ifdef ARDUINO
 #include <Arduino.h>
+#include <display.h>
 #else // Native
 #include <iostream>
 #endif
 
+#include <core.h>
+//#include <shift.h>
+#include <cstdint>
+
+//#include <psa_valve_task.h>
+//#include <display_task.h>
+
+//namespace OxCore {
+
+//////////////////////
+
+/*OxPSA::ValveConfig valveArray[NUM_VALVES] = {
+  { 'A', 0, 0, 1, 100, 4000, },
+  { 'B', 1, 0, 2, 4000, 8000, },
+  { 'C', 2, 0, 4, 3700, 4000, },
+  { 'D', 3, 0, 8, 7700, 8000, }};
+*/
+//////////////////////
+
+
+using namespace OxCore;
+
+class MockTask: public Task {
+    private:
+        bool _init() override {
+            //std::cout << "Inited mock task\n";
+            return true;
+        }
+        bool _run() override {
+            std::cout << "Run mock task\n";
+            return true;
+        }
+};
+
+Scheduler sch;
+
+void setup()
+{
 #ifdef ARDUINO
-#include <display.h>
-#endif
-#include <debug.h>
-#include <shift.h>
-#include <inttypes.h>
-#include <controller.h>
-#include <config.h>
-#include <timer.h>
-
-using namespace Ox_Debug;
-using namespace Ox_Controller;
-using namespace Ox_Timer;
-
-ValveController vc(&valveArray[0], NUM_VALVES);
-Timer valveCycle;
-unsigned int tLast;
-
-#ifdef ARDUINO
-Ox_Display display;
-#endif
-unsigned int displayTick;
-
-void setup() {
   serialBegin(115200);
-  Debug<const char*>("Starting Ox\n");
+#endif
+  //OxCore::Debug<const char *>("Starting Ox\n");
+
+  // Init the shift register
+  //shiftInit();
+
+  // Init and add tasks to scheduler
+  /*OxPSA::PsaValveTask psa;
+  psa.init(0, 10);
+  AddTask(&psa, 0);*/
+
+#ifdef ARDUINO
+//  OxDisplay::DisplayTask display;
+//  display.init(1, 20);
+//  AddTask(&display, 1);
+#endif
+
+  // Add tasks here //
 
 
-  shiftInit();
+  ////////////////////
 
-
-  #ifdef ARDUINO
-  display = Ox_Display();
-  display.displayInit();
-  display.startScreen();
-  delay(2000);
-  display.debugScreen();
-
-  valveCycle = Timer(millis());
-  #else
-  valveCycle = Timer(timeSinceEpochMs());
-  #endif
-
-  /*// Test display layout and graph experiment
-  display.drawButton();
-  display.updateGraph();*/
-
-  tLast = 0;
-  displayTick = 0;
+  sch.AutoRun();
 }
-
-void printValveState(uint8_t vs){
-#ifdef ARDUINO
-  Serial.print("Valves: ");
-  for (int b = 7; b >= 0; b--)
-  {
-    Serial.print(bitRead(vs, b));
-  }
-  Serial.println("");
-#endif
-}
-
-void loop(void) {
-  valveCycle.update();
-
-  if (valveCycle.elapsed() >= tLast + TIME_STEP){
-    tLast = valveCycle.elapsed();
-    vc.updateController(&tLast);
-#ifdef ARDUINO
-    uint8_t out = vc.getValveBits();
-    shiftOutValves(out);
-#endif
-    printValveState(vc.getValveBits());
-  } else if (valveCycle.elapsed() >= TOTAL_CYCLE_TIME){
-    vc.resetValves();
-#ifdef ARDUINO
-    valveCycle = Timer(millis());
-#else
-    valveCycle = Timer(timeSinceEpochMs());
-#endif
-    tLast = 0; // TODO: put this in the timer class
-  }
-
-#ifdef ARDUINO
-  displayTick++; // TODO: make this a timer
-  if (displayTick >= 10000){
-    display.valveState(valveCycle.elapsed(), vc.getValveBits());
-
-    displayTick = 0;
-  }
-#endif
-
-  //exit(0);
-}
-
 
 #ifndef ARDUINO
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   setup();
-  while(1) loop();
+  //while (1)
+  //  loop();
 }
 #endif
+
+//}

@@ -24,69 +24,74 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <unity.h>
 #include <stdio.h>
+#include <logger.h>
 #include <iostream>
 #include <string.h>
-#include <cstdint>
-#include <chrono>
-#include <controller.h>
-#include <config.h>
+#include <time.h>
+#include <stdlib.h>
 
-/*void test_valve_does_init() {
-  int success = valve_init();
-  TEST_ASSERT_TRUE(success == 1);
-}*/
 
-using namespace OxController;
+const char *alpha[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
-void test_valve_does_tick(){
-  bool x = true;
-  TEST_ASSERT_TRUE(x);
-}
-
-/*void test_valve_does_tick(){
-  //using namespace std;
-  using namespace std::chrono;
-
-  // Record start time
-
-  steady_clock::time_point a = steady_clock::now();
-  int success = valve_init();
-  TEST_ASSERT_TRUE(success == 1);
-
-  for (int i = 0; i < 3; i++){
-    std::cout << "Cycle: " << i << "\n";
-    for (uint32_t i = 0; i < TOTAL_CYCLE_TIME; i += TIME_STEP){
-
-      bool success = valve_tick(i);
-
-      // Wait 100ms during the valve sim
-      steady_clock::time_point start = steady_clock::now();
-      while (1){
-        steady_clock::time_point current = steady_clock::now();
-        duration<double> elapsed = current - start;
-
-        double x = elapsed.count();
-        std::cout << " ";// this needs to be there to show the couts!
-        double y = 0.1; // same as TIME_STEP
-        if (x > y){
-          break;
-        }
-      }
-    // end of waiting
+void create_random_chars(int n) {
+    char *ptr = 0;
+    ptr = (char*) malloc(n * sizeof(char));
+    
+    if (ptr == NULL) {
+        printf("Error! memory not allocated.");
+        exit(0);
     }
 
-    steady_clock::time_point b = steady_clock::now();
-    duration<double> e = b - a;
-    std::cout << "\nTotal time: " << e.count() << "\n";
-  }
-  //TEST_ASSERT_TRUE(success);
-}*/
+    /*
+    srand(time(NULL));
+    int s = static_cast<int>(sizeof(alpha) / sizeof(alpha[0])) - 1;
+    
+    char x[n];
+    for (int i = 0; i <= n; i++) {
+        int r = rand() & s;
+        x[i] = *alpha[r];
+    }
+    puts(x);*/
+}
+
+void test_logger_1() {
+    OxLogger::ResetBuffer();
+    const char* msg = "Hello";
+    OxLogger::Log(msg);
+    TEST_ASSERT_EQUAL_INT(strlen(msg), OxLogger::bufferIndex);   
+}
+
+void test_logger_2() {
+    OxLogger::ResetBuffer();
+    puts("Reading buffer");
+    const char* msg = "Test buffer memory";
+    OxLogger::Log(msg);
+    puts(OxLogger::buffer);
+    TEST_ASSERT_TRUE(true);
+}
+
+void test_logger_3() {
+    OxLogger::ResetBuffer();
+    //const char* msg = create_random_chars(100);
+
+    puts("Creating random chars");
+    create_random_chars(1000);
+    //OxLogger::Log(msg);
+    //puts(OxLogger::buffer);
+    TEST_ASSERT_TRUE(true);
+}
+
+void test_logger_4() {
+    OxLogger::ResetBufferPtr();
+}
 
 void process() {
-  UNITY_BEGIN();
-  //RUN_TEST(test_valve_does_init);
-  RUN_TEST(test_valve_does_tick);
-  UNITY_END();
+    UNITY_BEGIN();
+    RUN_TEST(test_logger_1);
+    RUN_TEST(test_logger_2);
+    RUN_TEST(test_logger_3);
+    RUN_TEST(test_logger_4);
+    UNITY_END();
 }
 
 #ifdef ARDUINO

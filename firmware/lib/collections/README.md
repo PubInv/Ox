@@ -1,0 +1,1 @@
+This library contains simple static collections as alternatives to the STL.

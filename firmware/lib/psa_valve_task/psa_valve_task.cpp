@@ -22,47 +22,55 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#include <psa_valve_task.h>
 
-#include <shift.h>
-//#include <config.h>
-#include <cstdint>
-
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
-
-shift_pins sp;
-
-void shiftInit()
+namespace OxPSA
 {
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
 
+    bool PsaValveTask::_init()
+    {
+        tLast = 0;
+        valveCycle.Init(OxCore::TimeSinceEpochMs());
+        return true;
+    }
+
+    bool PsaValveTask::_run() 
+    {
+        //std::cout << "Task A" << std::endl;
+        valveCycle.Update();
+
+        if (valveCycle.GetElapsed() >= tLast + TIME_STEP)
+        {
+            tLast = valveCycle.GetElapsed();
+            vc.updateController(&tLast);
 #ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
+            uint8_t out = vc.getValveBits();
+            shiftOutValves(out);
+#endif
+            _printValveState(vc.getValveBits());
+        }
+        else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME)
+        {
+            vc.resetValves();
+            valveCycle.Init(OxCore::TimeSinceEpochMs());
+            tLast = 0; // TODO: put this in the timer class
+        }
+
+        return true;
+    }
+
+    void PsaValveTask::_printValveState(uint8_t vs)
+    {
+#ifdef ARDUINO
+        Serial.print("Valves: ");
+        for (int b = 7; b >= 0; b--)
+        {
+            Serial.print(bitRead(vs, b));
+        }
+        Serial.println("");
 #else
-  std::cout << "Shift init" << std::endl;
+        // todo
 #endif
-}
+    }
 
-void shiftOutValves(uint8_t data_out)
-{
-#ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
-#endif
 }

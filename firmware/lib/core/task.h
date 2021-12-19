@@ -22,47 +22,57 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
+#ifndef TASK_H
+#define TASK_H
+
+//#include <cstdint>
+#include "core_defines.h"
 #include <iostream>
-#endif
 
-#include <shift.h>
-//#include <config.h>
-#include <cstdint>
+namespace OxCore {
 
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
+class Task {
+    private:
+        bool _initialized;
+        // User defined:
+        virtual bool _init() = 0;
+        virtual bool _run() = 0;
+        
+        // Only the scheduler should call these:
+        TaskState Init(TaskId id, TaskPriority priority);
+        TaskState Run(Time now);
+        TaskState Wait(Time now);
+        
+    protected:
+        TaskId _id;
+        TaskPriority _priority;
+        TaskState _state;
+        Time _last_run;
+    public:
+        Task() {
+            _state = TaskState::Undefined;
+            _initialized = false;
+            _id = -1;
+            _priority = -1;
+            _last_run = 0;
+        };
+        virtual ~Task() = default;
+        // Cannot copy class
+        Task(const Task&) = delete;
+        Task& operator=(const Task&) = delete;
+        // Cannot move class
+        Task(Task&&) = delete;
+        Task& operator=(Task&&) = delete;
 
-shift_pins sp;
+        //bool Callback(char *message);
 
-void shiftInit()
-{
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
+        int GetId() const;
+        int GetPriority() const;
+        TaskState GetState() const;
 
-#ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
-#else
-  std::cout << "Shift init" << std::endl;
-#endif
+        friend class Scheduler;
+};
+
 }
 
-void shiftOutValves(uint8_t data_out)
-{
-#ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
 #endif
-}

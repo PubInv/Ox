@@ -22,47 +22,62 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#ifndef ERROR_HANDLER_H
+#define ERROR_HANDLER_H
 
-#include <shift.h>
-//#include <config.h>
-#include <cstdint>
+#include <list.h>
 
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
+namespace OxCore {
 
-shift_pins sp;
+enum class ErrorMode {
+    Log,
+    StdOut
+};
 
-void shiftInit()
-{
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
+enum class ErrorType {
+    Null = 0,
+    LessThanZero,
+    OutOfBounds
+};
 
-#ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
-#else
-  std::cout << "Shift init" << std::endl;
-#endif
+enum class ErrorLevel {
+    Info,
+    Debug,
+    Warning,
+    Error,
+    Critical
+};
+
+const char *ErrorMessage[] = {
+    "Null",
+    "LessThanZero",
+    "OutOfBounds"
+};
+
+struct Error {
+    ErrorLevel level;
+    ErrorType type;
+};
+
+// This is the error string to output from the above Error enum
+//static const char *ErrorString[] = { "Null", "LessThanZero", "OutOfBounds" };
+
+ErrorMode errorMode;
+void InitErrorHandler(ErrorMode mode);
+void HandleError(Error error);
+
+class ErrorHandler {
+    private:
+        static int count;
+        OxCollections::List<Error> _errors;
+    public:
+        void Log(ErrorLevel level, ErrorType type) {
+            Error error = {level, type};
+            _errors.add(error);
+        }
+
+};
+
 }
 
-void shiftOutValves(uint8_t data_out)
-{
-#ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
 #endif
-}

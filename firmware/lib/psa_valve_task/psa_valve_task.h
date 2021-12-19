@@ -22,47 +22,36 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#ifndef PSA_VALVE_TASK_H
+#define PSA_VALVE_TASK_H
 
-#include <shift.h>
-//#include <config.h>
+#include <task.h>
 #include <cstdint>
+#include <controller.h>
+#include <config.h>
+#include <timer.h>
+#include <valve.h>
 
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
-
-shift_pins sp;
-
-void shiftInit()
+namespace OxPSA
 {
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
+    OxPSA::ValveConfig valveArray[NUM_VALVES] = {
+        { 'A', 0, 0, 1, 100, 4000, },
+        { 'B', 1, 0, 2, 4000, 8000, },
+        { 'C', 2, 0, 4, 3700, 4000, },
+        { 'D', 3, 0, 8, 7700, 8000, }};
 
-#ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
-#else
-  std::cout << "Shift init" << std::endl;
-#endif
+    ValveController vc(&valveArray[0], NUM_VALVES);
+
+    class PsaValveTask : public OxCore::Task
+    {
+    private:
+        unsigned int tLast;
+        OxCore::Timer valveCycle;
+        bool _init() override;
+        bool _run() override;
+        void _printValveState(uint8_t vs);
+    };
+
 }
 
-void shiftOutValves(uint8_t data_out)
-{
-#ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
 #endif
-}

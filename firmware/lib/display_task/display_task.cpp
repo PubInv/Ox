@@ -22,47 +22,39 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#include <display_task.h>
 
-#include <shift.h>
-//#include <config.h>
-#include <cstdint>
-
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
-
-shift_pins sp;
-
-void shiftInit()
+namespace OxDisplay
 {
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
+
+    void DisplayTask::setup()
+    {
 
 #ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
-#else
-  std::cout << "Shift init" << std::endl;
+        this->display = Ox_Display();
+        this->display.displayInit();
+        this->display.startScreen();
+        delay(2000);
+        this->display.debugScreen();
 #endif
-}
+        /*// Test display layout and graph experiment
+        this->display.drawButton();
+        this->display.updateGraph();*/
 
-void shiftOutValves(uint8_t data_out)
-{
+        this->displayTick = 0;
+    }
+
+    void DisplayTask::action()
+    {
 #ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
+        this->displayTick++; // TODO: make this a timer
+        if (this->displayTick >= 10000)
+        {
+            // I dont there is a valid reference for this at the moment - BC
+            //this->display.valveState(valveCycle.elapsed(), vc.getValveBits());
+            this->displayTick = 0;
+        }
 #endif
+    }
+
 }

@@ -22,47 +22,56 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
-#include <shift.h>
-//#include <config.h>
 #include <cstdint>
 
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
+namespace OxPSA {
 
-shift_pins sp;
+#define NUM_VALVES 4
 
-void shiftInit()
-{
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
+  enum OxMode {
+      STARTING,
+      RUNNING,
+      STOPPED,
+      PAUSED,
+      ERROR
+  };
 
-#ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
-#else
-  std::cout << "Shift init" << std::endl;
-#endif
+  struct OxState {
+      OxMode mode;
+      int totalRunTime;
+  };
+
+  struct ValveConfig {
+      char name;
+      unsigned num;
+      unsigned int state;
+      unsigned int pin;
+      unsigned int start;
+      unsigned int stop;
+  };
+
+  class ValveController {
+    private:
+      OxState Ox_state;
+      uint8_t valveBits;
+      int numValves;
+      ValveConfig *valves;
+    public:
+        ValveController(ValveConfig* v, int numValves) {
+        valveBits = 0;
+        Ox_state.mode = STARTING;
+        Ox_state.totalRunTime = 0;
+        valves = v;
+        this->numValves = numValves;
+      }
+      void updateValves(uint32_t *msNow);
+      bool updateController(unsigned int *msNow);
+      bool resetValves();
+      uint8_t getValveBits();
+  };
+
 }
-
-void shiftOutValves(uint8_t data_out)
-{
-#ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
 #endif
-}

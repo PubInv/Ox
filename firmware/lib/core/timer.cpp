@@ -24,45 +24,37 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #ifdef ARDUINO
 #include <Arduino.h>
-#else
-#include <iostream>
 #endif
+#include <chrono>
+#include "timer.h"
 
-#include <shift.h>
-//#include <config.h>
-#include <cstdint>
+namespace OxCore {
 
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
-
-shift_pins sp;
-
-void shiftInit()
-{
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
-
+uint64_t TimeSinceEpochMs() {
 #ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
+    // Time since device powered on
+    return millis();
 #else
-  std::cout << "Shift init" << std::endl;
+    // Time since Linux epoch
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 #endif
 }
 
-void shiftOutValves(uint8_t data_out)
-{
+void Timer::Init(uint32_t msStart) {
+    this->msElapsed = 0;
+    this->msStart = msStart;
+}
+
+void Timer::Update(){
 #ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
+    this->msElapsed = (uint32_t)millis() - this->msStart;
+#else
+    this->msElapsed = (uint32_t)(TimeSinceEpochMs()) - this->msStart;
 #endif
+}
+
+uint32_t Timer::GetElapsed(){
+    return msElapsed;
+}
+
 }

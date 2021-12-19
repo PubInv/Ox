@@ -22,71 +22,50 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <unity.h>
-#include <stdio.h>
 #include <iostream>
-#include <string.h>
-#include <cstdint>
-#include <chrono>
-#include <controller.h>
-#include <config.h>
+#include <unity.h>
+#include <core.h>
 
-/*void test_valve_does_init() {
-  int success = valve_init();
-  TEST_ASSERT_TRUE(success == 1);
-}*/
+using namespace OxCore;
 
-using namespace OxController;
+class MockTask: public Task {
+    private:
+        bool _init() override {
+            std::cout << "Inited mock task\n";
+            return true;
+        }
+        bool _run() override {
+            std::cout << "Ran mock task\n";
+            return true;
+        }
+};
 
-void test_valve_does_tick(){
-  bool x = true;
-  TEST_ASSERT_TRUE(x);
+void setUp(void) {
 }
 
-/*void test_valve_does_tick(){
-  //using namespace std;
-  using namespace std::chrono;
+void tearDown(void) {
+}
 
-  // Record start time
+void test_can_init_task() {
+    MockTask m;
+    TaskState taskInited = m.Init(1, 2);
+    TEST_ASSERT_EQUAL(taskInited, TaskState::Initialized);
+    TEST_ASSERT_EQUAL(m.GetId(), 1);
+    TEST_ASSERT_EQUAL(m.GetPriority(), 2);
+}
 
-  steady_clock::time_point a = steady_clock::now();
-  int success = valve_init();
-  TEST_ASSERT_TRUE(success == 1);
-
-  for (int i = 0; i < 3; i++){
-    std::cout << "Cycle: " << i << "\n";
-    for (uint32_t i = 0; i < TOTAL_CYCLE_TIME; i += TIME_STEP){
-
-      bool success = valve_tick(i);
-
-      // Wait 100ms during the valve sim
-      steady_clock::time_point start = steady_clock::now();
-      while (1){
-        steady_clock::time_point current = steady_clock::now();
-        duration<double> elapsed = current - start;
-
-        double x = elapsed.count();
-        std::cout << " ";// this needs to be there to show the couts!
-        double y = 0.1; // same as TIME_STEP
-        if (x > y){
-          break;
-        }
-      }
-    // end of waiting
-    }
-
-    steady_clock::time_point b = steady_clock::now();
-    duration<double> e = b - a;
-    std::cout << "\nTotal time: " << e.count() << "\n";
-  }
-  //TEST_ASSERT_TRUE(success);
-}*/
+void test_failed_to_init_task() {
+    MockTask m;
+    TEST_ASSERT_EQUAL(m.GetState(), TaskState::Undefined);
+    TEST_ASSERT_EQUAL(m.GetId(), -1);
+    TEST_ASSERT_EQUAL(m.GetPriority(), -1);
+}
 
 void process() {
-  UNITY_BEGIN();
-  //RUN_TEST(test_valve_does_init);
-  RUN_TEST(test_valve_does_tick);
-  UNITY_END();
+    UNITY_BEGIN();
+    RUN_TEST(test_can_init_task);
+    RUN_TEST(test_failed_to_init_task);
+    UNITY_END();
 }
 
 #ifdef ARDUINO

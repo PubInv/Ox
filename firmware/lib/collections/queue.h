@@ -22,47 +22,33 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#ifndef QUEUE_H
+#define QUEUE_H
 
-#include <shift.h>
-//#include <config.h>
-#include <cstdint>
+#include <stdlib.h>
 
-// Shift register
-#define DS 13    // 747HC pin 14 - serial data
-#define ST_CP 12 // 747HC pin 12 - storage register clock (latch)
-#define SH_CP 27 // 747HC pin 11 - shift register clock
+namespace OxCollections {
 
-shift_pins sp;
+#define SIZE 10
 
-void shiftInit()
-{
-  sp.latch = ST_CP;
-  sp.clock = SH_CP;
-  sp.data = DS;
+template <class T>
+class Queue {
+    private:
+        T *arr;
+        int capacity;
+        int front;
+        int rear;
+        int count;
+    public:
+        Queue(int size = SIZE);
+        void enqueue(T t);
+        void dequeue();
+        T peek();
+        int size();
+        bool isEmpty();
+        bool isFull();
+};
 
-#ifdef ARDUINO
-  Serial.print("shift init");
-  pinMode(sp.latch, OUTPUT);
-  pinMode(sp.clock, OUTPUT);
-  pinMode(sp.data, OUTPUT);
-#else
-  std::cout << "Shift init" << std::endl;
-#endif
 }
 
-void shiftOutValves(uint8_t data_out)
-{
-#ifdef ARDUINO
-  // take the latchPin low
-  digitalWrite(ST_CP, LOW);
-  // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
-  //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
 #endif
-}
