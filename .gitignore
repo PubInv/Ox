@@ -4,3 +4,7 @@
 *.vs
 *.vscode*
 __pycache__
+
+// Eagle PCB temp files
+*.b#*
+*.s#*

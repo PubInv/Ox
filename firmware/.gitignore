@@ -4,6 +4,5 @@
 .vscode/launch.json
 .vscode/ipch
 
-// Eagle PCB temp files
-*.b#*
-*.s#*
+# Build artifacts
+*.o
