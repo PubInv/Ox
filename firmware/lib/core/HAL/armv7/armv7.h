@@ -21,44 +21,13 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+//#ifdef __cplusplus
+extern "C" {
+//#endif
 
-#include <list.h>
+void start();
+void run_task(void* thread_func);
 
-namespace OxCollections {
-
-template<class T>
-List<T>::List(int size) {
-    arr = new T[size];
-    capacity = size;
-    count = 0;
-    index = 0;
+//#ifdef __cplusplus
 }
-
-template<class T>
-int List<T>::size() {
-    return count;
-}
-
-template<class T>
-T List<T>::next() {
-    int i = index++;
-    if (index > count) {
-        index = 0;
-    }
-    //std::cout << "Return item: " << i << "/" << count << " Index: " << index 
-    //                << " Capacity: " << capacity << std::endl;
-    return arr[i];
-}
-
-template<class T>
-bool List<T>::add(T item) {
-    if (count >= capacity) {
-        //std::cout << "List is full! Cant add item!\n";    
-        return false;
-    }
-    //std::cout << "Added item. Now " << count + 1 << "/" << capacity << " items\n";
-    arr[count++] = item;
-    return true;
-}
-
-}
+//#endif

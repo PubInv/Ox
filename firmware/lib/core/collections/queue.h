@@ -1,4 +1,3 @@
-
 /*
 Public Invention's Ox Project is an open source hardware design for an oxygen
 concentrator for use by field hospitals around the world. This team aims to
@@ -23,55 +22,73 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include "HAL/linux/linux.h"
-#include "scheduler.h"
-#include "util.h"
-#include <iostream>
+#ifndef QUEUE_H
+#define QUEUE_H
 
-namespace OxCore {
+#include <stdlib.h>
 
-bool Scheduler::AddTask(Task *task, TaskId id, TaskPriority priority) {
-    if (WithinArrayBounds(_numberOfTasks, MAX_TASKS)) {
-        TaskState state = task->Init(id, priority);
-        if (state == TaskState::Undefined) {
-            map.add(id, task);
-            task->_id = id;
-            return true;
-        } else {
-            std::cout << "Something went wrong!\n";
-        }
+namespace OxCollections {
+
+template <class T, size_t L>
+class Queue {
+    private:
+        T arr[L];
+        int capacity = L;
+        int front = 0;
+        int rear = -1;
+        int count = 0;
+    public:
+        void enqueue(T t);
+        void dequeue();
+        T peek();
+        int size();
+        bool isEmpty();
+        bool isFull();
+};
+
+
+template<class T, size_t L>
+void Queue<T, L>::dequeue() {
+    if (isEmpty()) {
+        exit(EXIT_FAILURE);
     }
-    // Out of bounds
-    return false;
+    front = (front + 1) % capacity;
+    count--;
 }
 
-TaskState Scheduler::RunTaskById(uint32_t msNow, TaskId id) {
-    std::cout << "Running task! id: " << id << std::endl;
-    Task* tp = map.getValue(id);
-    if (tp == nullptr) {
-        return TaskState::Error;
-    } else {
-        _currentRunningTaskId = id;
-        tp->Run(msNow);
-        return TaskState::Running;
+template<class T, size_t L>
+void Queue<T, L>::enqueue(T item) {
+    if (isFull()){
+        exit(EXIT_FAILURE);
     }
+    rear = (rear + 1) % capacity;
+    arr[rear] = item;
+    count++;
 }
 
-TaskId Scheduler::GetRunningTaskId() const {
-    return _currentRunningTaskId;
+template<class T, size_t L>
+T Queue<T, L>::peek() {
+    if (isEmpty()) {
+        exit(EXIT_FAILURE);
+    }
+    return arr[front];
 }
 
-Task* Scheduler::GetTaskById(TaskId id) {
-    Task* tp = map.getValue(id);
-    return tp;
+template<class T, size_t L>
+int Queue<T, L>::size() {
+    return count;
 }
 
-void Scheduler::RemoveTaskById(TaskId id) {    
-    //_tasks[index] = nullptr;
+template<class T, size_t L>
+bool Queue<T, L>::isEmpty() {
+    return (size() == 0);
 }
 
-void Scheduler::RemoveAllTasks() {
-    //
+template<class T, size_t L>
+bool Queue<T, L>::isFull() {
+    return (size() == capacity);
 }
 
 }
+
+#endif

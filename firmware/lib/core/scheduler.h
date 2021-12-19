@@ -25,9 +25,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
+#include "collections/map.h"
+#include "types.h"
 #include "task.h"
-#include "util.h"
-#include <cstdint>
 
 namespace OxCore {
 
@@ -43,34 +43,21 @@ namespace OxCore {
 //            ^             ^      ^
 //         current        number  max
 
-const int MAX_TASKS = 5;
-
-template<typename T, typename U>
-struct Map {
-    T key;
-    U value;
-};
+const i32 MAX_TASKS = 5;
 
 class Scheduler {
     private:
-        Task *_tasks[MAX_TASKS];
-        Map<int, TaskId> index_id[MAX_TASKS];
-        TaskId _currentRunningTask = 0;
-        int _numberOfTasks = 0;
-        bool _addToMap(int index, TaskId id);
-        int _idToIndex(TaskId id);
+        OxCollections::Map<TaskId, Task*, MAX_TASKS> map;
+        TaskId _currentRunningTaskId = 0;
+        i32 _numberOfTasks = 0;
     public:
         bool AddTask(Task *task, TaskId id, TaskPriority priority);
-        TaskState RunNextTask(uint32_t msNow);
-        TaskState RunTaskById(uint32_t msNow, TaskId id);
+        TaskState RunNextTask(u32 msNow);
+        TaskState RunTaskById(u32 msNow, TaskId id);
         TaskId GetRunningTaskId() const;
         Task *GetTaskById(TaskId id);
         void RemoveTaskById(TaskId id);
         void RemoveAllTasks();
-        
-        void StartSchedulerClock();
-        void AutoRun();
-        void RaiseInterrupt();
 };
 
 }

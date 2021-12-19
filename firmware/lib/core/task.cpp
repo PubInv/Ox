@@ -30,43 +30,43 @@ namespace OxCore
 
     TaskState Task::Init(TaskId id, TaskPriority priority)
     {
-        if (static_cast<int>(_state) < static_cast<int>(TaskState::Waiting))
+        if (static_cast<i32>(_state) < static_cast<i32>(TaskState::Undefined))
         {
-            _state = TaskState::Initializing;
             _id = id;
             _priority = priority;
-            _state = _init() ? TaskState::Waiting : TaskState::InitFailed;
+            _state = _init() ? TaskState::Ready : TaskState::Error;
             std::cout << "Initialised\n";
         }
         return _state;
     }
 
-    TaskState Task::Run(Time now)
+    void Task::Run(Time now)
     {
-        if (_state == TaskState::Waiting) {
+        if (_state == TaskState::Ready) {
             _state = TaskState::Running;
-            _last_run = now;
-            _state = _run() ? TaskState::RunSuccess : TaskState::RunFailed;
-            std::cout << "Ran\n";
+            _lastRun = now;
+            //_state = _run() ? TaskState::RunSuccess : TaskState::RunFailed;
+            //std::cout << "Ran\n";
+            _run();
         }
-        return _state;
+        //return _state;
     }
 
     TaskState Task::Wait(Time now)
     {
         if (_state == TaskState::Running) {
             // TODO: do waiting stuff
-            _state = TaskState::Waiting;
+            _state = TaskState::Ready;
         }
         return _state;
     }
 
-    int Task::GetId() const
+    i32 Task::GetId() const
     {
         return _id;
     }
 
-    int Task::GetPriority() const
+    i32 Task::GetPriority() const
     {
         return _priority;
     }

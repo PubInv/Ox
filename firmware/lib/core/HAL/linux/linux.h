@@ -1,4 +1,3 @@
-
 /*
 Public Invention's Ox Project is an open source hardware design for an oxygen
 concentrator for use by field hospitals around the world. This team aims to
@@ -22,56 +21,15 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+//#ifdef __cplusplus
+extern "C" {
+//#endif
 
-#include "HAL/linux/linux.h"
-#include "scheduler.h"
-#include "util.h"
-#include <iostream>
+void start();
+void run_task(void* thread_func);
+void suspend_task(void* thread_func);
 
-namespace OxCore {
 
-bool Scheduler::AddTask(Task *task, TaskId id, TaskPriority priority) {
-    if (WithinArrayBounds(_numberOfTasks, MAX_TASKS)) {
-        TaskState state = task->Init(id, priority);
-        if (state == TaskState::Undefined) {
-            map.add(id, task);
-            task->_id = id;
-            return true;
-        } else {
-            std::cout << "Something went wrong!\n";
-        }
-    }
-    // Out of bounds
-    return false;
+//#ifdef __cplusplus
 }
-
-TaskState Scheduler::RunTaskById(uint32_t msNow, TaskId id) {
-    std::cout << "Running task! id: " << id << std::endl;
-    Task* tp = map.getValue(id);
-    if (tp == nullptr) {
-        return TaskState::Error;
-    } else {
-        _currentRunningTaskId = id;
-        tp->Run(msNow);
-        return TaskState::Running;
-    }
-}
-
-TaskId Scheduler::GetRunningTaskId() const {
-    return _currentRunningTaskId;
-}
-
-Task* Scheduler::GetTaskById(TaskId id) {
-    Task* tp = map.getValue(id);
-    return tp;
-}
-
-void Scheduler::RemoveTaskById(TaskId id) {    
-    //_tasks[index] = nullptr;
-}
-
-void Scheduler::RemoveAllTasks() {
-    //
-}
-
-}
+//#endif

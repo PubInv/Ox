@@ -22,64 +22,50 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <queue.h>
+#ifndef LIST_H
+#define LIST_H
+
+#include <cstddef>
 
 namespace OxCollections {
 
-template <class T>
-Queue<T>::Queue(int size) {
-    arr = new T[size];
-    capacity = size;
-    front = 0;
-    rear = -1;
-    count = 0;
-}
+template <class T, std::size_t L>
+class List {
+    private:
+        T arr[L];
+        int capacity = L;
+        int count = 0;
+        int index = 0;
+    public:
+        int size();
+        T next();
+        bool add(T item);
+};
 
-template<class T>
-void Queue<T>::dequeue() {
-    if (isEmpty()) {
-        //std::cout << "Underflow\nProgram Terminated\n";
-        exit(EXIT_FAILURE);
-    }
-    //std::cout << "Removing " << arr[front] << std::endl;
-    front = (front + 1) % capacity;
-    count--;
-}
 
-template <class T>
-void Queue<T>::enqueue(T item) {
-    if (isFull()){
-        //std::cout << "Overflow\nProgram Terminated\n";
-        exit(EXIT_FAILURE);
-    }
-    //std::cout << "Inserting " << item << std::endl;
-    rear = (rear + 1) % capacity;
-    arr[rear] = item;
-    count++;
-}
-
-template <class T>
-T Queue<T>::peek() {
-    if (isEmpty()) {
-        //std::cout << "Underflow\nProgram Terminated\n";
-        exit(EXIT_FAILURE);
-    }
-    return arr[front];
-}
-
-template <class T>
-int Queue<T>::size() {
+template <class T, std::size_t L>
+int List<T, L>::size() {
     return count;
 }
 
-template <class T>
-bool Queue<T>::isEmpty() {
-    return (size() == 0);
+template <class T, std::size_t L>
+T List<T, L>::next() {
+    int i = index++;
+    if (index > count) {
+        index = 0;
+    }
+    return arr[i];
 }
 
-template <class T>
-bool Queue<T>::isFull() {
-    return (size() == capacity);
+template <class T, std::size_t L>
+bool List<T, L>::add(T item) {
+    if (count >= capacity) {
+        return false;
+    }
+    arr[count++] = item;
+    return true;
 }
 
 }
+
+#endif
