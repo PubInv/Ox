@@ -12,9 +12,9 @@ Python 3 is used for scripting and modelling. https://www.python.org/
 
 Jupyter Notebooks are useful for organising Python code, math and notes. https://jupyter.org/
 
-KiCad is used for electronic CAD. https://www.kicad.org/
+EAGLE is used for electronic CAD. https://www.autodesk.com/products/eagle/overview
 
-OnShape is used for mechanical CAD. https://www.onshape.com/
+Fusion 360 is used for mechanical CAD. https://www.autodesk.com/products/fusion-360/personal
 
 Libre Office is used for general engineering calcs and diagrams. https://www.libreoffice.org/
 
