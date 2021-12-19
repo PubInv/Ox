@@ -55,7 +55,27 @@ bool Core::Boot() {
         return false;
     }
 }
+
+void Core::AddTask(Task *task, TaskId id, TaskPriority priority) {
+    bool taskAdded = scheduler.AddTask(task, id, priority);
+    if (taskAdded) {
+        std::cout << "Task Added!\n";
+    } else {
+        std::cout << "Failed to add task!\n";
+    }
+}
+
+void Core::Run() {
+    for (;;) {
+        //scheduler.RunNextTask(10);
+        Task* task = scheduler.GetTaskById(10);
+        std::cout << "TaskId: " << task->GetId() << std::endl;
+        TaskState state = scheduler.RunTaskById(0, 10);
+        std::cout << "TaskState: " << static_cast<int>(state) << std::endl;
+    }
+}
     
+// Private //
 
 void Core::ClockTick() {
 

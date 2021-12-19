@@ -42,22 +42,21 @@ enum class CoreState {
 };
 
 enum class Target {
+    Arduino,
     Linux,
     ARMv6M,
-    ARMv7M
+    ARMv7M,
+    RiscV,
+    AVR
 };
 
 //extern Scheduler scheduler;
 class Core {
     public:
-        Scheduler scheduler;
         bool Configure(Target target);
         bool Boot();
-        void ClockTick();
-        void WriteRegister();
-        void ReadRegister(u32 address);
-        void AllocateMemory(u32 address);
-        void HandleInterupt();
+        void AddTask(Task *task, TaskId id, TaskPriority priority);
+        void Run();
         
         Core(): _state(CoreState::Undefined) {};
         ~Core() = default;
@@ -69,6 +68,13 @@ class Core {
         Core& operator=(Core&&) = delete;
     private:
         CoreState _state;
+        Scheduler scheduler;
+        void ClockTick();
+        void WriteRegister();
+        void ReadRegister(u32 address);
+        void AllocateMemory(u32 address);
+        void HandleInterupt();
+        
 };
 
 }

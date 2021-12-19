@@ -33,10 +33,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //#include <shift.h>
 #include <cstdint>
 
-//#include <psa_valve_task.h>
+#include <psa_valve_task.h>
 //#include <display_task.h>
-
-//namespace OxCore {
 
 //////////////////////
 
@@ -63,7 +61,11 @@ class MockTask: public Task {
         }
 };
 
-Scheduler sch;
+Core core;
+
+
+// Add task references here //
+OxPSA::PsaValveTask psa;
 
 void setup()
 {
@@ -71,27 +73,31 @@ void setup()
   serialBegin(115200);
 #endif
   //OxCore::Debug<const char *>("Starting Ox\n");
+  bool success = false;
+    
+  success = core.Configure(Target::Arduino);
+  if (!success) {
+    //return 1;
+  }
+  success = core.Boot();
+  if (!success) {
+    //return 1;
+  }
 
+  
+#ifdef ARDUINO
   // Init the shift register
   //shiftInit();
 
-  // Init and add tasks to scheduler
-  /*OxPSA::PsaValveTask psa;
-  psa.init(0, 10);
-  AddTask(&psa, 0);*/
-
-#ifdef ARDUINO
-//  OxDisplay::DisplayTask display;
+// OxDisplay::DisplayTask display;
 //  display.init(1, 20);
 //  AddTask(&display, 1);
 #endif
 
-  // Add tasks here //
+  // Add tasks to core here //
+  core.AddTask(&psa, 1, 10);
 
-
-  ////////////////////
-
-  sch.AutoRun();
+  core.Run();
 }
 
 #ifndef ARDUINO
@@ -102,5 +108,3 @@ int main(int argc, char **argv)
   //  loop();
 }
 #endif
-
-//}
