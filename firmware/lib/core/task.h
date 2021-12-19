@@ -46,12 +46,14 @@ class Task {
         TaskId _id;
         TaskPriority _priority;
         TaskState _state;
+        TaskPeriod _period;
         Time _lastRun;
     public:
         Task(): _initialized(false),
                 _id(-1),
                 _priority(-1),
                 _state(TaskState::Undefined),
+                _period(-1),
                 _lastRun(0) {};
         virtual ~Task() = default;
         // Cannot copy class

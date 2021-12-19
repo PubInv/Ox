@@ -55,7 +55,7 @@ class Core {
     public:
         bool Configure(Target target);
         bool Boot();
-        void AddTask(Task *task, TaskId id, TaskPriority priority);
+        void AddTask(Task *task, TaskProperties *properties);
         void Run();
         
         Core(): _state(CoreState::Undefined) {};

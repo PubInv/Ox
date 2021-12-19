@@ -56,8 +56,8 @@ bool Core::Boot() {
     }
 }
 
-void Core::AddTask(Task *task, TaskId id, TaskPriority priority) {
-    bool taskAdded = scheduler.AddTask(task, id, priority);
+void Core::AddTask(Task *task, TaskProperties *properties) {
+    bool taskAdded = scheduler.AddTask(task, properties->id, properties->priority);
     if (taskAdded) {
         std::cout << "Task Added!\n";
     } else {
