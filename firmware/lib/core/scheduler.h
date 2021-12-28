@@ -56,7 +56,8 @@ class IdleTask: public Task {
 };
 
 enum class SchedulerMode {
-    RoundRobin = 0
+    RoundRobin = 0,
+    Dynamic,
 };
 
 struct SchedulerProperties {
@@ -76,8 +77,9 @@ class Scheduler {
         i32 _numberOfTasks = 0;
         SchedulerProperties _properties;
         void setupIdleTask();
-        void sortByPriority();
+        Task* getHighestModifiedPriorityTask();
         Task* getNextTaskToRun(TimeMs currentTime);
+        void PrintTaskState();
     public:
         bool Init();
         bool AddTask(Task *task, TaskProperties *properties);

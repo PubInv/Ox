@@ -54,6 +54,7 @@ enum class ErrorCode {
     TaskPriorityTimeExceededHard,
     TaskPriorityTimeExceededSoft,
     WatchdogExceeeded,
+    NotImplemented,
 };
 
 struct Error {

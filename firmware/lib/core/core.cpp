@@ -38,7 +38,7 @@ bool Core::Boot() {
     // TODO: configure/validate HAL
 
     SchedulerProperties properties;
-    properties.mode = SchedulerMode::RoundRobin;
+    properties.mode = SchedulerMode::Dynamic;
     properties.tickPeriodMs = TICK_PERIOD;
     _scheduler.SetProperties(properties);
 
@@ -81,11 +81,11 @@ bool Core::Run() {
 
     int i = 0;
     while (true) {
-
+        std::cout << "-------------------------\n";
         u32 elapsed = _timer.Update();
         TaskState state = _scheduler.RunNextTask(elapsed);
         std::cout << "State: " << static_cast<int>(state) << std::endl;
-        std::cout << "-------------------------\n";
+
         for (int i = 0; i < 10000000; i++) {
             // waste time
         }

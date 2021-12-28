@@ -38,46 +38,52 @@ void Scheduler::setupIdleTask() {
     _idleTask._properties.hardTiming = false;
 }
 
-void Scheduler::sortByPriority() {
-    std::cout << "sortByPriority\n";
-    std::cout << "Count: " << map.getCount() << std::endl;
-    for (int i = 0; i < map.getCount(); ++i) {
-        std::cout << "i: " << i << std::endl;
-        Task *task = map.getValueByIndex(i);
-        TaskPriority priority = task->GetPriority();
-        std::cout << "Priority: " << priority << std::endl;
+Task* Scheduler::getHighestModifiedPriorityTask() {
+    int highestPriority = 99999;
+    Task* nextTask = nullptr;
+    for (int i = 0; i < map.getCount(); i++) {
+        Task* task = map.getValueByIndex(i);
+        if (task->_modifiedPriority < highestPriority) {            
+            highestPriority = task->_modifiedPriority;
+            nextTask = task;
+        }
     }
+    return nextTask;
 }
 
 Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
-    //std::cout << "\n------ getNextTaskToRun ------\n";
-    // Get state of all tasks
+    // Calculate the modified task priority for each task
     for (int i = 0; i < map.getCount(); ++i) {
-        //std::cout << "i: " << i << std::endl;
         Task *task = map.getValueByIndex(i);
 
         TimeMs lastRunTime = task->GetLastRunTime();
-        //std::cout << "currentTime: " << currentTime << std::endl;
-        //std::cout << "lastRunTime: " << lastRunTime << std::endl;
         TimeMs deltaRunTime = currentTime - lastRunTime;
         TimeMs period = task->GetPeriod();
 
+        // Reset the modified priority
         task->_modifiedPriority = task->GetPriority();
-        // Too long since the task was run so increase priority.
-        //std::cout << "deltaRunTime: " << deltaRunTime << std::endl;
-        //std::cout << "period: " << period << std::endl;
+
+        // Too long since the task was run so increase priority
         if (deltaRunTime > period) {
-            if (task->IsHardTiming()) {
+            if (task->IsHardTiming() == true) {
                 task->_modifiedPriority = TaskPriorityTimeExceededHard;
-                ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::TaskPriorityTimeExceededHard);
+                ErrorHandler::Log(ErrorLevel::Warning, ErrorCode::TaskPriorityTimeExceededHard);
             } else {
                 task->_modifiedPriority = TaskPriorityTimeExceededSoft;
-                ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::TaskPriorityTimeExceededSoft);
+                ErrorHandler::Log(ErrorLevel::Warning, ErrorCode::TaskPriorityTimeExceededSoft);
             }
         }
     }
     
-    /*std::cout << "Listing tasks:\n";
+    //PrintTaskState();
+
+    Task* nextTask = getHighestModifiedPriorityTask();
+    std::cout << "Task to run next: " << nextTask->_properties.id << std::endl;
+    return nextTask;
+}
+
+void Scheduler::PrintTaskState() {
+    std::cout << "Listing tasks:\n";
     for (int i = 0; i < map.getCount(); i++) {
         
         Task *task = map.getValueByIndex(i);
@@ -86,21 +92,7 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
                     << " modifiedPriority: " << task->_modifiedPriority 
                     << " period: " << task->_properties.period 
                     << std::endl;
-    }*/
-
-    int lowestPriority = 99999;
-    TaskId lowestId = 0;
-    Task* nextTask = nullptr;
-    for (int i = 0; i < map.getCount(); i++) {
-        Task* task = map.getValueByIndex(i);
-        if (task->_modifiedPriority < lowestPriority) {            
-            lowestPriority = task->_modifiedPriority;
-            lowestId = task->_properties.id;
-            nextTask = task;
-        }
     }
-    std::cout << "Task to run next: " << nextTask->_properties.id << " priority: " << lowestPriority << std::endl;
-    return nextTask;
 }
 
 bool Scheduler::AddTask(Task *task, TaskProperties *properties) {
@@ -110,7 +102,7 @@ bool Scheduler::AddTask(Task *task, TaskProperties *properties) {
             map.add(properties->id, task);
             return true;
         } else {
-            std::cout << "Failed to add task!\n";
+            ErrorHandler::Log(ErrorLevel::Error, ErrorCode::CoreFailedToAddTask);
         }
     }
     // Out of bounds
@@ -118,12 +110,13 @@ bool Scheduler::AddTask(Task *task, TaskProperties *properties) {
 }
 
 bool Scheduler::Init() {
-    
     switch (_properties.mode) {
         case SchedulerMode::RoundRobin:
-            
-            //sortByPriority();
-
+            //
+            return true;
+        break;
+        case SchedulerMode::Dynamic:
+            //
             return true;
         break;
         default:
@@ -134,7 +127,20 @@ bool Scheduler::Init() {
 
 TaskState Scheduler::RunNextTask(u32 msNow) {
     std::cout << "RunNextTask\n";
-    Task* task = getNextTaskToRun(msNow);
+    Task* task = nullptr;
+    std::cout << static_cast<int>(_properties.mode) << std::endl;
+    switch (_properties.mode) {
+        case SchedulerMode::RoundRobin:
+            ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::NotImplemented);
+        break;
+        case SchedulerMode::Dynamic:
+            task = getNextTaskToRun(msNow);
+        break;
+        default:
+            ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::NotImplemented);
+        break;
+    }
+    
     task->Run(msNow);
     return task->GetState();
 }

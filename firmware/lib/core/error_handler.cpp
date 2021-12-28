@@ -39,6 +39,7 @@ const char *ErrorMessage[] = {
     "TaskPriorityTimeExceededHard",
     "TaskPriorityTimeExceededSoft",
     "WatchdogExceeded",
+    "NotImplemented",
 };
 
 void ErrorHandler::SetErrorMode(ErrorMode mode) {
