@@ -24,55 +24,90 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include "core.h"
 #include <iostream>
-
-#include "HAL/linux/linux.h"
-/*#ifdef LINUX_HAL
-#include "linux.h"
-#elif ARM_HAL
-#include "arm.h"
-#endif*/
+#include "HAL/posix/hal.h"
 
 namespace OxCore {
 
-bool Core::Configure(Target target) {
-    std::cout << "Configure: " << static_cast<int>(target) << std::endl;
-    _state = CoreState::Configured;
-    // TODO: use HAL
-    return true;
-}
+#define TICK_PERIOD 100
+#define WATCHDOG_TIMEOUT_MS 250
 
 bool Core::Boot() {
-    if (_state == CoreState::Undefined) {
-        std::cout << "Please configure before booting!\n";
-        return false;
-    }
-    else if (_state == CoreState::Configured) {
+    bool result = false;
+    
+    ErrorHandler::SetErrorMode(OxCore::ErrorMode::StdOut);
+    // TODO: configure/validate HAL
+
+    SchedulerProperties properties;
+    properties.mode = SchedulerMode::RoundRobin;
+    properties.tickPeriodMs = TICK_PERIOD;
+    _scheduler.SetProperties(properties);
+
+    CreateWatchdog(WATCHDOG_TIMEOUT_MS);
+
+    _state = CoreState::Configured;
+
+    if (_state == CoreState::Configured) {
         std::cout << "Boot\n";
         //start();
-        return true;
+        result = true;
     } else {
-        //
-        return false;
+        ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
     }
+    return result;
 }
 
 void Core::AddTask(Task *task, TaskProperties *properties) {
-    bool taskAdded = scheduler.AddTask(task, properties->id, properties->priority);
+    bool taskAdded = _scheduler.AddTask(task, properties);
     if (taskAdded) {
         std::cout << "Task Added!\n";
     } else {
-        std::cout << "Failed to add task!\n";
+        ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToAddTask);
     }
 }
 
-void Core::Run() {
-    for (;;) {
-        //scheduler.RunNextTask(10);
-        Task* task = scheduler.GetTaskById(10);
-        std::cout << "TaskId: " << task->GetId() << std::endl;
-        TaskState state = scheduler.RunTaskById(0, 10);
-        std::cout << "TaskState: " << static_cast<int>(state) << std::endl;
+// 1. Set properties
+// 2. Add tasks
+// 3. Setup scheduler
+// 4. Run scheduler
+
+bool Core::Run() {
+    std::cout << "Core::Run!" << std::endl;
+    bool success = _scheduler.Init();
+    if (success == false) {
+        return false;
     }
+
+    _timer.Init();
+
+    int i = 0;
+    while (true) {
+
+        u32 elapsed = _timer.Update();
+        TaskState state = _scheduler.RunNextTask(elapsed);
+        std::cout << "State: " << static_cast<int>(state) << std::endl;
+        std::cout << "-------------------------\n";
+        for (int i = 0; i < 10000000; i++) {
+            // waste time
+        }
+
+        // For testing:
+        i++;
+        if (i > 3) {
+            return true;
+        }
+
+        bool reset = ResetWatchdog();
+        if (reset == false) {
+            return false;
+        }
+
+        // intentional shutdown
+        bool shutdown = false;
+        if (shutdown) {
+            return true;
+        }
+    }
+    return false;
 }
     
 // Private //
@@ -81,7 +116,7 @@ void Core::ClockTick() {
 
 }
 
-void Core::WriteRegister() {
+void Core::WriteRegister(u32 address) {
 
 }
 
@@ -95,6 +130,22 @@ void Core::AllocateMemory(u32 address) {
 
 void Core::HandleInterupt() {
     
+}
+
+void Core::CreateWatchdog(u32 timeoutMs) {
+    std::cout << "Create watchdog (todo)\n";
+    _watchdogTimer.Init();
+}
+
+bool Core::ResetWatchdog() {
+    std::cout << "Reset watchdog (todo)\n";
+    u32 elapsed = _watchdogTimer.Update();
+    if (elapsed > WATCHDOG_TIMEOUT_MS) {
+        std::cout << "elapsed: " << elapsed << std::endl;
+        ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeeded);
+        return false;
+    }
+    return true;
 }
 
 

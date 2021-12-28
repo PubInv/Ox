@@ -25,19 +25,16 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef ERROR_HANDLER_H
 #define ERROR_HANDLER_H
 
-#include "collections/list.h"
+#include "../collections/list.h"
+#include <iostream>
 
 namespace OxCore {
+
+#define MAX_ERRORS 50
 
 enum class ErrorMode {
     Log,
     StdOut
-};
-
-enum class ErrorType {
-    Null = 0,
-    LessThanZero,
-    OutOfBounds
 };
 
 enum class ErrorLevel {
@@ -48,34 +45,31 @@ enum class ErrorLevel {
     Critical
 };
 
-const char *ErrorMessage[] = {
-    "Null",
-    "LessThanZero",
-    "OutOfBounds"
+enum class ErrorCode {
+    Null = 0,
+    LessThanZero,
+    OutOfBounds,
+    CoreFailedToAddTask,
+    CoreFailedToBoot,
+    TaskPriorityTimeExceededHard,
+    TaskPriorityTimeExceededSoft,
+    WatchdogExceeeded,
 };
 
 struct Error {
     ErrorLevel level;
-    ErrorType type;
+    ErrorCode type;
 };
 
-// This is the error string to output from the above Error enum
-//static const char *ErrorString[] = { "Null", "LessThanZero", "OutOfBounds" };
-
-ErrorMode errorMode;
-void InitErrorHandler(ErrorMode mode);
-void HandleError(Error error);
-
 class ErrorHandler {
-    private:
-        static int count;
-        OxCollections::List<Error, 10> _errors;
     public:
-        void Log(ErrorLevel level, ErrorType type) {
-            Error error = {level, type};
-            _errors.add(error);
-        }
-
+        static ErrorMode errorMode;
+        static OxCollections::List<Error, MAX_ERRORS> errors;
+        static void SetErrorMode(ErrorMode mode);
+        static void Log(ErrorLevel level, ErrorCode type);
+        ErrorHandler() = delete;
+        ~ErrorHandler() = delete;
+        
 };
 
 }

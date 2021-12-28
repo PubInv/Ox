@@ -28,31 +28,34 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxCore
 {
 
-    TaskState Task::Init(TaskId id, TaskPriority priority)
+    TaskState Task::Init(TaskProperties *properties)
     {
-        if (static_cast<i32>(_state) < static_cast<i32>(TaskState::Undefined))
+        if (_state == TaskState::Undefined)
         {
-            _id = id;
-            _priority = priority;
+            _properties = *properties;
             _state = _init() ? TaskState::Ready : TaskState::Error;
             std::cout << "Initialised\n";
         }
+        //std::cout << "Failed to initialize\n";
+        std::cout << "state: " << (static_cast<i32>(_state)) << std::endl;
         return _state;
     }
 
-    void Task::Run(Time now)
+    void Task::Run(TimeMs now)
     {
         if (_state == TaskState::Ready) {
             _state = TaskState::Running;
             _lastRun = now;
             //_state = _run() ? TaskState::RunSuccess : TaskState::RunFailed;
-            //std::cout << "Ran\n";
             _run();
+            
+        } else {
+            std::cout << "Task state is not Ready!\n";
         }
-        //return _state;
+        _state = TaskState::Ready;
     }
 
-    TaskState Task::Wait(Time now)
+    TaskState Task::Wait(TimeMs now)
     {
         if (_state == TaskState::Running) {
             // TODO: do waiting stuff
@@ -63,17 +66,32 @@ namespace OxCore
 
     i32 Task::GetId() const
     {
-        return _id;
+        return _properties.id;
     }
 
     i32 Task::GetPriority() const
     {
-        return _priority;
+        return _properties.priority;
     }
 
     TaskState Task::GetState() const
     {
         return _state;
+    }
+
+    TimeMs Task::GetLastRunTime() const
+    {
+        return _lastRun;
+    }
+
+    TimeMs Task::GetPeriod() const 
+    {
+        return _properties.period;
+    }
+
+    bool Task::IsHardTiming() const 
+    {
+        return _properties.hardTiming;
     }
 
     /*bool Task::Callback(char *message)

@@ -38,23 +38,27 @@ class Task {
         virtual bool _run() = 0;
         
         // Only the scheduler should call these:
-        TaskState Init(TaskId id, TaskPriority priority);
-        void Run(Time now);
-        TaskState Wait(Time now);
-        
+        TaskState Init(TaskProperties *properties);//TaskId id, TaskPriority priority);
+        void Run(TimeMs now);
+        TaskState Wait(TimeMs now);
+        TaskPriority _modifiedPriority; // Modified priority set every scheduler call
     protected:
-        TaskId _id;
-        TaskPriority _priority;
+        //TaskId _id;
+        //TaskPriority _priority;
         TaskState _state;
-        TaskPeriod _period;
-        Time _lastRun;
+        //Time _period;
+        TimeMs _lastRun;
+        //bool isCritical;
+        TaskProperties _properties;
     public:
         Task(): _initialized(false),
-                _id(-1),
-                _priority(-1),
+                //_id(-1),
+                //_priority(-1),
                 _state(TaskState::Undefined),
-                _period(-1),
-                _lastRun(0) {};
+                //_period(-1),
+                _lastRun(0),
+                _properties({-1,-1,0,false})
+                {};
         virtual ~Task() = default;
         // Cannot copy class
         Task(const Task&) = delete;
@@ -65,10 +69,14 @@ class Task {
 
         //bool Callback(char *message);
 
-        i32 GetId() const;
-        i32 GetPriority() const;
+        TaskId GetId() const;
+        TaskPriority GetPriority() const;
         TaskState GetState() const;
+        TimeMs GetPeriod() const;
+        TimeMs GetLastRunTime() const;
+        bool IsHardTiming() const;
 
+        // The scheduler has privileged access to tasks
         friend class Scheduler;
 };
 

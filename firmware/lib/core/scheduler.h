@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "collections/map.h"
+#include "../collections/map.h"
 #include "types.h"
 #include "task.h"
 
@@ -43,21 +43,51 @@ namespace OxCore {
 //            ^             ^      ^
 //         current        number  max
 
-const i32 MAX_TASKS = 5;
+class IdleTask: public Task {
+    private:
+        bool _init() override {
+            std::cout << "Inited idle task\n";
+            return true;
+        }
+        bool _run() override {
+            std::cout << "Run idle task\n";
+            return true;
+        }
+};
+
+enum class SchedulerMode {
+    RoundRobin = 0
+};
+
+struct SchedulerProperties {
+    SchedulerMode mode;
+    u32 tickPeriodMs;
+};
 
 class Scheduler {
     private:
+        IdleTask _idleTask; // Special task not part of the task map
+        static const i32 TaskPriorityKernal = 0;
+        static const i32 TaskPriorityTimeExceededHard = 5;
+        static const i32 TaskPriorityTimeExceededSoft = 10;
+        static const i32 MAX_TASKS = 5;
         OxCollections::Map<TaskId, Task*, MAX_TASKS> map;
         TaskId _currentRunningTaskId = 0;
         i32 _numberOfTasks = 0;
+        SchedulerProperties _properties;
+        void setupIdleTask();
+        void sortByPriority();
+        Task* getNextTaskToRun(TimeMs currentTime);
     public:
-        bool AddTask(Task *task, TaskId id, TaskPriority priority);
+        bool Init();
+        bool AddTask(Task *task, TaskProperties *properties);
         TaskState RunNextTask(u32 msNow);
         TaskState RunTaskById(u32 msNow, TaskId id);
         TaskId GetRunningTaskId() const;
         Task *GetTaskById(TaskId id);
         void RemoveTaskById(TaskId id);
-        void RemoveAllTasks();
+        void SetProperties(SchedulerProperties properties);
+        SchedulerProperties GetProperties();
 };
 
 }

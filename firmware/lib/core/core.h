@@ -27,6 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include "scheduler.h"
 //#include "logger.h"
+#include "error_handler.h"
 #include "timer.h"
 #include "types.h"
 
@@ -41,22 +42,14 @@ enum class CoreState {
     Terminating
 };
 
-enum class Target {
-    Arduino,
-    Linux,
-    ARMv6M,
-    ARMv7M,
-    RiscV,
-    AVR
-};
-
-//extern Scheduler scheduler;
 class Core {
     public:
-        bool Configure(Target target);
+        bool Configure(void *config);
         bool Boot();
         void AddTask(Task *task, TaskProperties *properties);
-        void Run();
+        bool Run();
+
+        
         
         Core(): _state(CoreState::Undefined) {};
         ~Core() = default;
@@ -67,13 +60,17 @@ class Core {
         Core(Task&&) = delete;
         Core& operator=(Core&&) = delete;
     private:
+        Timer _timer;
+        Timer _watchdogTimer;
         CoreState _state;
-        Scheduler scheduler;
+        Scheduler _scheduler;
         void ClockTick();
-        void WriteRegister();
+        void WriteRegister(u32 address);
         void ReadRegister(u32 address);
         void AllocateMemory(u32 address);
         void HandleInterupt();
+        void CreateWatchdog(u32 timeoutMs);
+        bool ResetWatchdog();
         
 };
 

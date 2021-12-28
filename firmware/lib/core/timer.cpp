@@ -30,7 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
-uint64_t TimeSinceEpochMs() {
+u64 Timer::TimeSinceEpochMs() {
 #ifdef ARDUINO
     // Time since device powered on
     return millis();
@@ -40,21 +40,27 @@ uint64_t TimeSinceEpochMs() {
 #endif
 }
 
-void Timer::Init(uint32_t msStart) {
-    this->msElapsed = 0;
-    this->msStart = msStart;
+void Timer::Init(u32 msStart) {
+    _msElapsed = 0;
+    _msStart = msStart;
 }
 
-void Timer::Update(){
+void Timer::Init() {
+    _msElapsed = 0;
+    _msStart = static_cast<u32>(TimeSinceEpochMs());
+}
+
+u32 Timer::Update() {
 #ifdef ARDUINO
-    this->msElapsed = (uint32_t)millis() - this->msStart;
+    _msElapsed = (u32)millis() - _msStart;
 #else
-    this->msElapsed = (uint32_t)(TimeSinceEpochMs()) - this->msStart;
+    _msElapsed = static_cast<u32>(TimeSinceEpochMs()) - _msStart;
 #endif
+    return _msElapsed;
 }
 
-uint32_t Timer::GetElapsed(){
-    return msElapsed;
+u32 Timer::GetElapsed(){
+    return _msElapsed;
 }
 
 }

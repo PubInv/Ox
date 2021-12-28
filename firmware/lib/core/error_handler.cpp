@@ -27,24 +27,43 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
+ErrorMode ErrorHandler::errorMode = ErrorMode::StdOut;
+OxCollections::List<Error, MAX_ERRORS> ErrorHandler::errors;
 
-void InitErrorHandler(ErrorMode mode) {
+const char *ErrorMessage[] = {
+    "Null",
+    "LessThanZero",
+    "OutOfBounds",
+    "CoreFailedToAddTask",
+    "CoreFailedToBoot",
+    "TaskPriorityTimeExceededHard",
+    "TaskPriorityTimeExceededSoft",
+    "WatchdogExceeded",
+};
+
+void ErrorHandler::SetErrorMode(ErrorMode mode) {
     errorMode = mode;
 }
 
-void HandleError(Error error) {
-
+void ErrorHandler::Log(ErrorLevel level, ErrorCode type) {
+    Error error = {level, type};
+    bool errorLogged = errors.add(error);
+    if (errorLogged == false) {
+        std::cout << "Error failed to log! List is probably full.\n";
+    }
     switch (errorMode) {
         case ErrorMode::Log:
-
+            // TODO
         break;
         case ErrorMode::StdOut:
-            //printf(ErrorString[static_cast<int>(error)]);
+            std::cout << ErrorMessage[static_cast<int>(type)] << std::endl;
         break;
         default:
 
         break;
     }
 }
+
+
 
 }

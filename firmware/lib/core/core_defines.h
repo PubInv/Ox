@@ -5,10 +5,10 @@
 
 namespace OxCore {
 
-typedef unsigned long Time;
+typedef u32 TimeMs;
 typedef i32 TaskPriority;
 typedef i32 TaskId;
-typedef i32 TaskPeriod;
+//typedef 32 TaskPeriod;
 
 enum class TaskState {
     Undefined = 0,
@@ -22,7 +22,8 @@ enum class TaskState {
 struct TaskProperties {
     TaskId id;
     TaskPriority priority;
-    TaskPeriod period;
+    TimeMs period;
+    bool hardTiming;
 };
 
 }

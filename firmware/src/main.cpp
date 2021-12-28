@@ -74,11 +74,7 @@ void setup()
 #endif
   //OxCore::Debug<const char *>("Starting Ox\n");
   bool success = false;
-    
-  success = core.Configure(Target::Arduino);
-  if (!success) {
-    //return 1;
-  }
+  
   success = core.Boot();
   if (!success) {
     //return 1;

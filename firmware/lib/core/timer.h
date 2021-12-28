@@ -25,22 +25,27 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef TIMER_H
 #define TIMER_H
 
+// TODO: This should be for Linux only
 #include <chrono>
+#include "types.h"
 
 namespace OxCore {
 
+// TODO: This should be for Linux only
 using namespace std::chrono;
 
-uint64_t TimeSinceEpochMs();
 
 class Timer {
     private:
-        uint32_t msElapsed;
-        uint32_t msStart;
+        u32 _msElapsed;
+        u32 _msStart;
+        static u64 TimeSinceEpochMs();
     public:
-        void Init(uint32_t msStart);
-        void Update();
-        uint32_t GetElapsed();
+        void Init(u32 msStart);
+        void Init();
+        u32 Update();
+        u32 GetElapsed();
+
 };
 
 }

@@ -48,6 +48,8 @@ class Map {
         int size();
         bool isEmpty();
         bool isFull();
+        V getValueByIndex(int index);
+        int getCount();
 };
 
 
@@ -62,8 +64,8 @@ bool Map<K, V, L>::add(K k, V v) {
     }
     arr[_count].key = k;
     arr[_count].value = v;
-    std::cout << "_count: " << _count << std::endl;
-    std::cout << "K: " << arr[_count].key << " V: " << arr[_count].value << std::endl;
+    //std::cout << "_count: " << _count << std::endl;
+    //std::cout << "K: " << arr[_count].key << " V: " << arr[_count].value << std::endl;
     _count++;
     std::cout << "_count: " << _count << std::endl;
     return true;
@@ -107,6 +109,22 @@ bool Map<K, V, L>::isEmpty() {
 template <typename K, typename V, std::size_t L>
 bool Map<K, V, L>::isFull() {
     return _count == L;
+}
+
+template <typename K, typename V, std::size_t L>
+V Map<K, V, L>::getValueByIndex(int index) {
+    if ((index >= 0) && (index < _count)) {
+        //std::cout << "key: " << arr[index].key << " value: " << arr[index].value << std::endl;
+        return arr[index].value;
+    } else {
+        std::cout << "Cant get value!" << std::endl;
+        return nullptr;
+    }
+}
+
+template <typename K, typename V, std::size_t L>
+int Map<K, V, L>::getCount() {
+    return _count;
 }
 
 }
