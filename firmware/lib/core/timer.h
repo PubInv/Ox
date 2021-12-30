@@ -39,8 +39,8 @@ class Timer {
     private:
         u32 _msElapsed;
         u32 _msStart;
-        static u64 TimeSinceEpochMs();
     public:
+        static u64 TimeSinceEpochMs();
         void Init(u32 msStart);
         void Init();
         u32 Update();

@@ -30,24 +30,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 
 #include <core.h>
-//#include <shift.h>
 #include <cstdint>
 
 #include <psa_valve_task.h>
 //#include <display_task.h>
 
-//////////////////////
-
-/*OxPSA::ValveConfig valveArray[NUM_VALVES] = {
-  { 'A', 0, 0, 1, 100, 4000, },
-  { 'B', 1, 0, 2, 4000, 8000, },
-  { 'C', 2, 0, 4, 3700, 4000, },
-  { 'D', 3, 0, 8, 7700, 8000, }};
-*/
-//////////////////////
-
-
 using namespace OxCore;
+Core core;
 
 class MockTask: public Task {
     private:
@@ -61,39 +50,44 @@ class MockTask: public Task {
         }
 };
 
-Core core;
 
+/***** Declare your tasks here *****/
 
-// Add task references here //
-OxPSA::PsaValveTask psa;
+OxPSA::PsaValveTask psaTask;
+
+/***********************************/
 
 void setup()
 {
 #ifdef ARDUINO
   serialBegin(115200);
 #endif
-  //OxCore::Debug<const char *>("Starting Ox\n");
-  bool success = false;
-  
-  success = core.Boot();
-  if (!success) {
-    //return 1;
+  OxCore::Debug<const char *>("Starting Ox\n");
+
+  if (core.Boot() == false) {
+      ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
+      // TODO: Output error message
+      //return EXIT_FAILURE;
+      return;
   }
 
-  
-#ifdef ARDUINO
-  // Init the shift register
-  //shiftInit();
+  /***** Configure and add your tasks here *****/
 
-// OxDisplay::DisplayTask display;
-//  display.init(1, 20);
-//  AddTask(&display, 1);
-#endif
+  TaskProperties psaProperties;
+  psaProperties.id = 20;
+  psaProperties.period = 50;
+  psaProperties.priority = 50;
+  psaProperties.hardTiming = true;
+  core.AddTask(&psaTask, &psaProperties);
 
-  // Add tasks to core here //
-  core.AddTask(&psa, 1, 10);
-
-  core.Run();
+  /*********************************************/
+    
+  // Blocking call
+  if (core.Run() == false) {
+      ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToRun);
+      //return EXIT_FAILURE;
+      return;
+  }
 }
 
 #ifndef ARDUINO
@@ -102,5 +96,6 @@ int main(int argc, char **argv)
   setup();
   //while (1)
   //  loop();
+  return 0;
 }
 #endif

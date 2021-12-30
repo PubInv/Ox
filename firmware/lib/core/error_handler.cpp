@@ -36,6 +36,7 @@ const char *ErrorMessage[] = {
     "OutOfBounds",
     "CoreFailedToAddTask",
     "CoreFailedToBoot",
+    "CoreFailedToRun",
     "TaskPriorityTimeExceededHard",
     "TaskPriorityTimeExceededSoft",
     "WatchdogExceeded",

@@ -25,11 +25,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef CORE_H
 #define CORE_H
 
+// Header files must be declared here to be used by files including <core.h>
 #include "scheduler.h"
 //#include "logger.h"
 #include "error_handler.h"
 #include "timer.h"
 #include "types.h"
+#include "debug.h"
 
 namespace OxCore {
 

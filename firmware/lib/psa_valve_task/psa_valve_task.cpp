@@ -23,25 +23,36 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include <psa_valve_task.h>
+#include <types.h>
+
+using namespace OxCore;
 
 namespace OxPSA
 {
 
+    OxPSA::ValveConfig valveArray[NUM_VALVES] = {
+        { 'A', 0, 0, 1, 100, 4000, },
+        { 'B', 1, 0, 2, 4000, 8000, },
+        { 'C', 2, 0, 4, 3700, 4000, },
+        { 'D', 3, 0, 8, 7700, 8000, }};
+
+    ValveController vc(&valveArray[0], NUM_VALVES);
+
     bool PsaValveTask::_init()
     {
         tLast = 0;
-        valveCycle.Init(OxCore::TimeSinceEpochMs());
+        valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
         return true;
     }
 
     bool PsaValveTask::_run() 
     {
         //std::cout << "Task A" << std::endl;
-        valveCycle.Update();
+        u32 elapsed = valveCycleTimer.Update();
 
-        if (valveCycle.GetElapsed() >= tLast + TIME_STEP)
+        if (elapsed >= tLast + TIME_STEP)
         {
-            tLast = valveCycle.GetElapsed();
+            tLast = valveCycleTimer.GetElapsed();
             vc.updateController(&tLast);
 #ifdef ARDUINO
             uint8_t out = vc.getValveBits();
@@ -49,10 +60,10 @@ namespace OxPSA
 #endif
             _printValveState(vc.getValveBits());
         }
-        else if (valveCycle.GetElapsed() >= TOTAL_CYCLE_TIME)
+        else if (valveCycleTimer.GetElapsed() >= TOTAL_CYCLE_TIME)
         {
             vc.resetValves();
-            valveCycle.Init(OxCore::TimeSinceEpochMs());
+            valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
             tLast = 0; // TODO: put this in the timer class
         }
 

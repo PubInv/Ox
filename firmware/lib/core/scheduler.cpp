@@ -128,7 +128,7 @@ bool Scheduler::Init() {
 TaskState Scheduler::RunNextTask(u32 msNow) {
     std::cout << "RunNextTask\n";
     Task* task = nullptr;
-    std::cout << static_cast<int>(_properties.mode) << std::endl;
+    //std::cout << static_cast<int>(_properties.mode) << std::endl;
     switch (_properties.mode) {
         case SchedulerMode::RoundRobin:
             ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::NotImplemented);

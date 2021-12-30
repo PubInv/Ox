@@ -70,6 +70,8 @@ pio-run-mega:
 pio-run-native:
 	cd firmware \
 	&& pio run -e native
+# Not working for some reason so in the firmware directory just run:
+# pio run -e native && ./.pio/build/native/program
 
 pio-clear-cache:
 	cd firmware \

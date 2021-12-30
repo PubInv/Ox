@@ -51,6 +51,7 @@ enum class ErrorCode {
     OutOfBounds,
     CoreFailedToAddTask,
     CoreFailedToBoot,
+    CoreFailedToRun,
     TaskPriorityTimeExceededHard,
     TaskPriorityTimeExceededSoft,
     WatchdogExceeeded,
