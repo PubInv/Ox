@@ -59,8 +59,12 @@ u32 Timer::Update() {
     return _msElapsed;
 }
 
-u32 Timer::GetElapsed(){
+u32 Timer::GetElapsed() {
     return _msElapsed;
+}
+
+void Timer::Reset() {
+    Init();
 }
 
 }

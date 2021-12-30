@@ -45,6 +45,7 @@ class Timer {
         void Init();
         u32 Update();
         u32 GetElapsed();
+        void Reset();
 
 };
 

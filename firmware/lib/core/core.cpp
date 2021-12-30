@@ -70,6 +70,9 @@ void Core::AddTask(Task *task, TaskProperties *properties) {
 // 3. Setup scheduler
 // 4. Run scheduler
 
+#define DEV
+#define DEV_LOOPS 5
+
 bool Core::Run() {
     std::cout << "Core::Run!" << std::endl;
     bool success = _scheduler.Init();
@@ -79,7 +82,10 @@ bool Core::Run() {
 
     _timer.Init();
 
+    #ifdef DEV
     int i = 0;
+    #endif
+
     while (true) {
         std::cout << "-------------------------\n";
         u32 elapsed = _timer.Update();
@@ -91,10 +97,12 @@ bool Core::Run() {
         }
 
         // For testing:
+        #ifdef DEV
         i++;
-        if (i > 3) {
+        if (i > DEV_LOOPS) {
             return true;
         }
+        #endif
 
         bool reset = ResetWatchdog();
         if (reset == false) {
@@ -138,14 +146,17 @@ void Core::CreateWatchdog(u32 timeoutMs) {
 }
 
 bool Core::ResetWatchdog() {
-    std::cout << "Reset watchdog (todo)\n";
+    //::cout << "Reset watchdog (todo)\n";
     u32 elapsed = _watchdogTimer.Update();
     if (elapsed > WATCHDOG_TIMEOUT_MS) {
-        std::cout << "elapsed: " << elapsed << std::endl;
+        std::cout << "Watchdog timed out! Elapsed: " << elapsed << std::endl;
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeeded);
         return false;
+    } else {
+        std::cout << "Watchdog reset. Elapsed: " << elapsed << std::endl;
+        _watchdogTimer.Reset();
+        return true;
     }
-    return true;
 }
 
 
