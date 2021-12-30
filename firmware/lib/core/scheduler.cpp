@@ -43,9 +43,11 @@ Task* Scheduler::getHighestModifiedPriorityTask() {
     Task* nextTask = nullptr;
     for (int i = 0; i < map.getCount(); i++) {
         Task* task = map.getValueByIndex(i);
-        if (task->_modifiedPriority < highestPriority) {            
-            highestPriority = task->_modifiedPriority;
-            nextTask = task;
+        if (task->_modifiedPriority != TaskPriorityCanWait) {
+            if (task->_modifiedPriority < highestPriority) {            
+                highestPriority = task->_modifiedPriority;
+                nextTask = task;
+            }
         }
     }
     return nextTask;
@@ -58,6 +60,7 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
 
         TimeMs lastRunTime = task->GetLastRunTime();
         TimeMs deltaRunTime = currentTime - lastRunTime;
+        std::cout << "deltaRunTime 2: " << deltaRunTime << std::endl;
         TimeMs period = task->GetPeriod();
 
         // Reset the modified priority
@@ -72,13 +75,20 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
                 task->_modifiedPriority = TaskPriorityTimeExceededSoft;
                 ErrorHandler::Log(ErrorLevel::Warning, ErrorCode::TaskPriorityTimeExceededSoft);
             }
+        } else {
+            task->_modifiedPriority = TaskPriorityCanWait;
         }
     }
     
     //PrintTaskState();
 
     Task* nextTask = getHighestModifiedPriorityTask();
-    std::cout << "Task to run next: " << nextTask->_properties.id << std::endl;
+    if (nextTask == nullptr) {
+        nextTask = &_idleTask;
+        std::cout << "Next task is idle task\n";
+    } else {
+        std::cout << "Task to run next: " << nextTask->_properties.id << std::endl;
+    }
     return nextTask;
 }
 

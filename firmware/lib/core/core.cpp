@@ -71,7 +71,7 @@ void Core::AddTask(Task *task, TaskProperties *properties) {
 // 4. Run scheduler
 
 #define DEV
-#define DEV_LOOPS 5
+#define DEV_LOOPS 20
 
 bool Core::Run() {
     std::cout << "Core::Run!" << std::endl;
@@ -92,7 +92,7 @@ bool Core::Run() {
         TaskState state = _scheduler.RunNextTask(elapsed);
         std::cout << "State: " << static_cast<int>(state) << std::endl;
 
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             // waste time
         }
 

@@ -71,6 +71,7 @@ class Scheduler {
         static const i32 TaskPriorityKernal = 0;
         static const i32 TaskPriorityTimeExceededHard = 5;
         static const i32 TaskPriorityTimeExceededSoft = 10;
+        static const i32 TaskPriorityCanWait = 500;
         static const i32 MAX_TASKS = 5;
         OxCollections::Map<TaskId, Task*, MAX_TASKS> map;
         TaskId _currentRunningTaskId = 0;

@@ -24,6 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <psa_valve_task.h>
 #include <types.h>
+#include <iostream>
 
 using namespace OxCore;
 
@@ -40,6 +41,7 @@ namespace OxPSA
 
     bool PsaValveTask::_init()
     {
+        std::cout << "Init PSA valve task\n";
         tLast = 0;
         valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
         return true;
