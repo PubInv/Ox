@@ -62,11 +62,12 @@ class Core {
         Core(Task&&) = delete;
         Core& operator=(Core&&) = delete;
     private:
+        u32 _i;
         Timer _timer;
         Timer _watchdogTimer;
         CoreState _state;
         Scheduler _scheduler;
-        void ClockTick();
+        void Tick();
         void WriteRegister(u32 address);
         void ReadRegister(u32 address);
         void AllocateMemory(u32 address);

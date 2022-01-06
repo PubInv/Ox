@@ -23,14 +23,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "debug.h"
-#include <iostream>
 #ifdef ARDUINO
 #include <Arduino.h>
+#else
+#include <iostream>
 #endif
 
 namespace OxCore {
 
-  void serialBegin(int baud){
+  void serialBegin(unsigned long baud){
     #ifdef ARDUINO
       Serial.begin(baud);
     #else

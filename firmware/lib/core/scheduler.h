@@ -46,11 +46,15 @@ namespace OxCore {
 class IdleTask: public Task {
     private:
         bool _init() override {
+            #ifndef ARDUINO
             std::cout << "Inited idle task\n";
+            #endif
             return true;
         }
         bool _run() override {
+            #ifndef ARDUINO
             std::cout << "Run idle task\n";
+            #endif
             return true;
         }
 };
@@ -63,6 +67,13 @@ enum class SchedulerMode {
 struct SchedulerProperties {
     SchedulerMode mode;
     u32 tickPeriodMs;
+};
+
+enum class TaskPriorityReserved {
+    Kernal = 0,
+    ExceededHard = 5,
+    ExceededSoft = 10,
+    CanWait = 500
 };
 
 class Scheduler {
@@ -81,6 +92,7 @@ class Scheduler {
         Task* getHighestModifiedPriorityTask();
         Task* getNextTaskToRun(TimeMs currentTime);
         void PrintTaskState();
+        void createTaskList();
     public:
         bool Init();
         bool AddTask(Task *task, TaskProperties *properties);
@@ -91,6 +103,7 @@ class Scheduler {
         void RemoveTaskById(TaskId id);
         void SetProperties(SchedulerProperties properties);
         SchedulerProperties GetProperties();
+        u32 GetTickPeriod();
 };
 
 }

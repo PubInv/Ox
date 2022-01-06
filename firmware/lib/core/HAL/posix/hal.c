@@ -22,7 +22,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <pthread.h>
+/*#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -136,7 +136,7 @@ void run_task(void* thread_func) {
 
 void suspend_task(void* thread_func) {
 
-}
+}*/
 
 /*
 // Driver code

@@ -25,12 +25,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#ifdef ARDUINO
+#include <Arduino.h>
+#else
 #include <iostream>
+#endif
 
 namespace OxCore {
 
   // For example, call Debug<char*>("Some text") or Debug<bool>(myBoolVar)
-  // to get a debug output on Arduino or native environments
+  // to get a debug output on Arduino or native environments.
+  // Beware that this uses RAM!
   template <class myType>
   void Debug (myType a) {
   #ifdef ARDUINO
@@ -40,7 +45,25 @@ namespace OxCore {
   #endif
   }
 
-  void serialBegin(int baud);
+  template <class myType>
+  void DebugLn (myType a) {
+  #ifdef ARDUINO
+    Serial.print(a);
+    Serial.print("\n");
+  #else
+    std::cout << a << std::endl;
+  #endif
+  }
+
+  // void DebugF(const char * msg) {
+  //   #ifdef ARDUINO
+  //   Serial.print(F(msg));
+  //   #else
+  //   std::cout << msg;
+  //   #endif
+  // }
+
+  void serialBegin(unsigned long baud);
 }
 
 #endif

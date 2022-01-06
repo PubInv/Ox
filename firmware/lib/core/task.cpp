@@ -23,7 +23,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "task.h"
+#ifdef ARDUINO
+#else
 #include <iostream>
+#endif
 
 namespace OxCore
 {
@@ -34,10 +37,14 @@ namespace OxCore
         {
             _properties = *properties;
             _state = _init() ? TaskState::Ready : TaskState::Error;
+            #ifndef ARDUINO
             std::cout << "Initialised\n";
+            #endif
         }
         //std::cout << "Failed to initialize\n";
+        #ifndef ARDUINO
         std::cout << "state: " << (static_cast<i32>(_state)) << std::endl;
+        #endif
         return _state;
     }
 
@@ -50,7 +57,9 @@ namespace OxCore
             _run();
             
         } else {
+            #ifndef ARDUINO
             std::cout << "Task state is not Ready!\n";
+            #endif
         }
         _state = TaskState::Ready;
     }

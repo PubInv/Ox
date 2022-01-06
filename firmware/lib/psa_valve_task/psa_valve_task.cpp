@@ -24,13 +24,29 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <psa_valve_task.h>
 #include <types.h>
+#ifndef ARDUINO
 #include <iostream>
+#endif
 
 using namespace OxCore;
 
 namespace OxPSA
 {
+    // Helper MACRO to display bit pattern for debugging only
+    //https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format
+    // printf("Some text "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(byte));
+    #define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+    #define BYTE_TO_BINARY(byte)  \
+    (byte & 0x80 ? '1' : '0'), \
+    (byte & 0x40 ? '1' : '0'), \
+    (byte & 0x20 ? '1' : '0'), \
+    (byte & 0x10 ? '1' : '0'), \
+    (byte & 0x08 ? '1' : '0'), \
+    (byte & 0x04 ? '1' : '0'), \
+    (byte & 0x02 ? '1' : '0'), \
+    (byte & 0x01 ? '1' : '0')
 
+    // TODO: put this in the config area
     OxPSA::ValveConfig valveArray[NUM_VALVES] = {
         { 'A', 0, 0, 1, 100, 4000, },
         { 'B', 1, 0, 2, 4000, 8000, },
@@ -41,7 +57,6 @@ namespace OxPSA
 
     bool PsaValveTask::_init()
     {
-        std::cout << "Init PSA valve task\n";
         tLast = 0;
         valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
         return true;
@@ -49,17 +64,12 @@ namespace OxPSA
 
     bool PsaValveTask::_run() 
     {
-        //std::cout << "Task A" << std::endl;
         u32 elapsed = valveCycleTimer.Update();
 
         if (elapsed >= tLast + TIME_STEP)
         {
             tLast = valveCycleTimer.GetElapsed();
             vc.updateController(&tLast);
-#ifdef ARDUINO
-            uint8_t out = vc.getValveBits();
-            shiftOutValves(out);
-#endif
             _printValveState(vc.getValveBits());
         }
         else if (valveCycleTimer.GetElapsed() >= TOTAL_CYCLE_TIME)
@@ -72,7 +82,7 @@ namespace OxPSA
         return true;
     }
 
-    void PsaValveTask::_printValveState(uint8_t vs)
+    void PsaValveTask::_printValveState(OxCore::u8 vs)
     {
 #ifdef ARDUINO
         Serial.print("Valves: ");
@@ -82,7 +92,7 @@ namespace OxPSA
         }
         Serial.println("");
 #else
-        // todo
+        printf("Valves: " BYTE_TO_BINARY_PATTERN , BYTE_TO_BINARY(vs));
 #endif
     }
 

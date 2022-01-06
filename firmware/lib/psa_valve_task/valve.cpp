@@ -55,7 +55,7 @@ namespace OxPSA {
         return state.status;
     }
 
-    bool Valve::changeTiming(uint32_t onTime, uint32_t offTime){
+    bool Valve::changeTiming(OxCore::u32 onTime, OxCore::u32 offTime){
         // TODO: error checking
 
         state.onTime = onTime;

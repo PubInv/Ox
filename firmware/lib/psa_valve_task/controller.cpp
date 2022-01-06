@@ -30,44 +30,23 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <controller.h>
 #include <stdio.h>
-#include <cstdint>
+#include <types.h>
+#include <debug.h>
 
 namespace OxPSA {
 
-// Helper MACRO to display bit pattern for debugging only
-//https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format
-// printf("Some text "BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(byte));
-#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
-#define BYTE_TO_BINARY(byte)  \
-  (byte & 0x80 ? '1' : '0'), \
-  (byte & 0x40 ? '1' : '0'), \
-  (byte & 0x20 ? '1' : '0'), \
-  (byte & 0x10 ? '1' : '0'), \
-  (byte & 0x08 ? '1' : '0'), \
-  (byte & 0x04 ? '1' : '0'), \
-  (byte & 0x02 ? '1' : '0'), \
-  (byte & 0x01 ? '1' : '0')
+////////// METHODS ///////////
 
-
-////////// FUNCTIONS //////////
-
-  void printDebugValves(uint32_t tick, int valve_bits, bool start, char name){
-#ifdef ARDUINO
-      //Serial.print(tick);
-#else
-      printf("Valves: " BYTE_TO_BINARY_PATTERN , BYTE_TO_BINARY(valve_bits));
-      printf(" %c%d t_%d\n", name, start, tick);
-#endif
-  }
-
-  void ValveController::updateValves(uint32_t *msNow){
-    for (uint8_t i = 0; i < numValves; i++){
+  void ValveController::updateValves(OxCore::u32 *msNow){
+    for (OxCore::u8 i = 0; i < numValves; i++){
       if (((*(valves+i)).state == 0) && (*msNow >= (*(valves+i)).start)) {
           (*(valves+i)).state = 1;
           valveBits |= (*(valves+i)).pin;
       } else if (((*(valves+i)).state == 1) && (*msNow >= (*(valves+i)).stop)){
         (*(valves+i)).state = 2;
         valveBits ^= (*(valves+i)).pin;
+      } else {
+        // Do nothing - TODO: undefined state?
       }
     }
   }
@@ -80,19 +59,15 @@ namespace OxPSA {
     return true;
   }
 
-  ////////// METHODS ///////////
-
-  bool ValveController::updateController(uint32_t *msNow){
+  bool ValveController::updateController(OxCore::u32 *msNow){
     // TODO: error checking: msNow > msLast, msNow < msLast + tolerance
 
     updateValves(msNow);
-
-    printDebugValves(*msNow, valveBits, false, 'V');
-
+    OxCore::Debug<const char *>("ValveController::updateController\n");
     return true;
   }
 
-  uint8_t ValveController::getValveBits(){
+  OxCore::u8 ValveController::getValveBits(){
     return valveBits;
   }
 

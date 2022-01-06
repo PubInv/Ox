@@ -25,7 +25,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#ifdef ARDUINO
+#include <Arduino.h>
+#else // Native
+#include <iostream>
 #include <stdlib.h>
+#endif
 
 namespace OxCollections {
 

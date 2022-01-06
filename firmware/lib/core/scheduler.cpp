@@ -26,20 +26,31 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //#include "HAL/posix/hal.h"
 #include "scheduler.h"
 #include "util.h"
+#include "debug.h"
+#ifdef ARDUINO
+#else
 #include <iostream>
+#endif
 #include "error_handler.h"
 
 namespace OxCore {
 
 void Scheduler::setupIdleTask() {
     _idleTask._properties.priority = 0;
-    _idleTask._properties.period = 0;
+    _idleTask._properties.period = 1;
     _idleTask._properties.id = 0;
     _idleTask._properties.hardTiming = false;
 }
 
+void Scheduler::createTaskList() {
+    for (int i = 0; i < map.getCount(); i++) {
+        Task* task = map.getValueByIndex(i);
+        
+    }
+}
+
 Task* Scheduler::getHighestModifiedPriorityTask() {
-    int highestPriority = 99999;
+    OxCore::TaskPriority highestPriority = 99999;
     Task* nextTask = nullptr;
     for (int i = 0; i < map.getCount(); i++) {
         Task* task = map.getValueByIndex(i);
@@ -60,7 +71,11 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
 
         TimeMs lastRunTime = task->GetLastRunTime();
         TimeMs deltaRunTime = currentTime - lastRunTime;
-        std::cout << "deltaRunTime 2: " << deltaRunTime << std::endl;
+        // Debug<const char *>("Task: ");
+        // Debug<TaskId>(task->_properties.id);
+        // Debug<const char *>(" deltaRunTime: ");
+        // Debug<TimeMs>(deltaRunTime);
+        // Debug<const char *>("\n");
         TimeMs period = task->GetPeriod();
 
         // Reset the modified priority
@@ -85,23 +100,29 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     Task* nextTask = getHighestModifiedPriorityTask();
     if (nextTask == nullptr) {
         nextTask = &_idleTask;
-        std::cout << "Next task is idle task\n";
+        // Debug<const char *>("Next task is idle task\n");
     } else {
-        std::cout << "Task to run next: " << nextTask->_properties.id << std::endl;
+        // Debug<const char *>("Task to run next: ");
+        // Debug<TaskId>(nextTask->_properties.id);
+        // Debug<const char *>("\n");
     }
     return nextTask;
 }
 
 void Scheduler::PrintTaskState() {
+    #ifndef ARDUINO
     std::cout << "Listing tasks:\n";
+    #endif
     for (int i = 0; i < map.getCount(); i++) {
         
         Task *task = map.getValueByIndex(i);
+        #ifndef ARDUINO
         std::cout << "id: " << task->GetId() 
                     << " priority: " << task->_properties.priority 
                     << " modifiedPriority: " << task->_modifiedPriority 
                     << " period: " << task->_properties.period 
                     << std::endl;
+        #endif
     }
 }
 
@@ -136,7 +157,10 @@ bool Scheduler::Init() {
 }
 
 TaskState Scheduler::RunNextTask(u32 msNow) {
+    #ifndef ARDUINO
     std::cout << "RunNextTask\n";
+    #endif
+    
     Task* task = nullptr;
     //std::cout << static_cast<int>(_properties.mode) << std::endl;
     switch (_properties.mode) {
@@ -156,7 +180,9 @@ TaskState Scheduler::RunNextTask(u32 msNow) {
 }
 
 TaskState Scheduler::RunTaskById(uint32_t msNow, TaskId id) {
+    #ifndef ARDUINO
     std::cout << "Running task! id: " << id << std::endl;
+    #endif
     Task* tp = map.getValue(id);
     if (tp == nullptr) {
         return TaskState::Error;
@@ -188,6 +214,9 @@ SchedulerProperties Scheduler::GetProperties() {
     return _properties;
 }
 
+u32 Scheduler::GetTickPeriod() {
+    return _properties.tickPeriodMs;
+}
 
 
 }

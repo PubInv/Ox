@@ -25,7 +25,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <cstdint>
+#include <types.h>
+#ifdef ARDUINO
+#include <Arduino.h>
+#endif
 
 namespace OxPSA {
 
@@ -56,7 +59,7 @@ namespace OxPSA {
   class ValveController {
     private:
       OxState Ox_state;
-      uint8_t valveBits;
+      OxCore::u8 valveBits;
       int numValves;
       ValveConfig *valves;
     public:
@@ -67,10 +70,10 @@ namespace OxPSA {
         valves = v;
         this->numValves = numValves;
       }
-      void updateValves(uint32_t *msNow);
-      bool updateController(unsigned int *msNow);
+      void updateValves(OxCore::u32 *msNow);
+      bool updateController(OxCore::u32 *msNow);
       bool resetValves();
-      uint8_t getValveBits();
+      OxCore::u8 getValveBits();
   };
 
 }

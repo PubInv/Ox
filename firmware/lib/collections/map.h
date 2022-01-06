@@ -25,8 +25,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef MAP_H
 #define MAP_H
 
-#include <cstddef>
+#ifdef ARDUINO
+#include <Arduino.h>
+#else // Native
 #include <iostream>
+#endif
+//#include <cstddef>
+//#ifndef ARDUINO
+//#include <iostream>
+//#endif
 
 namespace OxCollections {
 
@@ -36,7 +43,7 @@ struct KeyValue {
     V value;
 };
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 class Map {
     private:
         KeyValue<K, V> arr[L];
@@ -53,9 +60,11 @@ class Map {
 };
 
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 bool Map<K, V, L>::add(K k, V v) {
+    #ifndef ARDUINO
     std::cout << "K: " << k << " V: " << v << std::endl;
+    #endif
     if (hasKey(k) >= 0) {
         return false;
     }
@@ -67,26 +76,34 @@ bool Map<K, V, L>::add(K k, V v) {
     //std::cout << "_count: " << _count << std::endl;
     //std::cout << "K: " << arr[_count].key << " V: " << arr[_count].value << std::endl;
     _count++;
+    #ifndef ARDUINO
     std::cout << "_count: " << _count << std::endl;
+    #endif
     return true;
 }
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 V Map<K, V, L>::getValue(K key) {
     int i = hasKey(key);
+    #ifndef ARDUINO
     std::cout << "K: " << key << std::endl;
     std::cout << "i: " << i << std::endl;
+    #endif
     
     if (i >= 0) {
+        #ifndef ARDUINO
         std::cout << "arr[i].value: " << arr[i].value << std::endl;
+        #endif
         return arr[i].value;
     } else {
+        #ifndef ARDUINO
         std::cout << "Cant get value!" << std::endl;
+        #endif
         return nullptr;
     }
 }
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 int Map<K, V, L>::hasKey(K key) {
     for (int i = 0; i < _count; i++) {
         if (arr[i].key == key) {
@@ -96,33 +113,35 @@ int Map<K, V, L>::hasKey(K key) {
     return -1;
 }
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 int Map<K, V, L>::size() {
     return L;
 }
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 bool Map<K, V, L>::isEmpty() {
     return _count > 0;
 }
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 bool Map<K, V, L>::isFull() {
     return _count == L;
 }
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 V Map<K, V, L>::getValueByIndex(int index) {
     if ((index >= 0) && (index < _count)) {
         //std::cout << "key: " << arr[index].key << " value: " << arr[index].value << std::endl;
         return arr[index].value;
     } else {
+        #ifndef ARDUINO
         std::cout << "Cant get value!" << std::endl;
+        #endif
         return nullptr;
     }
 }
 
-template <typename K, typename V, std::size_t L>
+template <typename K, typename V, size_t L>
 int Map<K, V, L>::getCount() {
     return _count;
 }

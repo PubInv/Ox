@@ -25,8 +25,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef PSA_VALVE_TASK_H
 #define PSA_VALVE_TASK_H
 
+#ifdef ARDUINO
+#include <Arduino.h>
+#endif
 #include <task.h>
-#include <cstdint>
 #include <controller.h>
 #include <config.h>
 #include <timer.h>
@@ -34,18 +36,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxPSA
 {
-    
-
     class PsaValveTask : public OxCore::Task
     {
     private:
-        unsigned int tLast;
+        OxCore::u32 tLast;
         OxCore::Timer valveCycleTimer;
         bool _init() override;
         bool _run() override;
-        void _printValveState(uint8_t vs);
+        void _printValveState(OxCore::u8 vs);
     };
-
 }
 
 #endif

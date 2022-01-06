@@ -26,7 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define ERROR_HANDLER_H
 
 #include "../collections/list.h"
-#include <iostream>
+#include "debug.h"
 
 namespace OxCore {
 

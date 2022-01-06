@@ -25,14 +25,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef TIMER_H
 #define TIMER_H
 
-// TODO: This should be for Linux only
+#ifdef ARDUINO
+#include <Arduino.h>
+#else
 #include <chrono>
+#endif
 #include "types.h"
 
 namespace OxCore {
 
 // TODO: This should be for Linux only
-using namespace std::chrono;
+//using namespace std::chrono;
 
 
 class Timer {

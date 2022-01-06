@@ -25,11 +25,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef LIST_H
 #define LIST_H
 
-#include <cstddef>
+#ifdef ARDUINO
+#include <Arduino.h>
+#else // Native
+#include <iostream>
+#endif
+
+//#include <cstddef>
 
 namespace OxCollections {
 
-template <class T, std::size_t L>
+template <class T, size_t L>
 class List {
     private:
         T arr[L];
@@ -43,12 +49,12 @@ class List {
 };
 
 
-template <class T, std::size_t L>
+template <class T, size_t L>
 int List<T, L>::size() {
     return count;
 }
 
-template <class T, std::size_t L>
+template <class T, size_t L>
 T List<T, L>::next() {
     int i = index++;
     if (index > count) {
@@ -57,7 +63,7 @@ T List<T, L>::next() {
     return arr[i];
 }
 
-template <class T, std::size_t L>
+template <class T, size_t L>
 bool List<T, L>::add(T item) {
     if (count >= capacity) {
         return false;

@@ -25,7 +25,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef VALVE_H
 #define VALVE_H
 
-#include <cstdint>
+#include <types.h>
+#ifdef ARDUINO
+#include <Arduino.h>
+#else
+//#include <cstdint>
+#endif
 
 namespace OxPSA {
 
@@ -36,11 +41,11 @@ namespace OxPSA {
     };
 
     struct ValveState {
-        uint8_t name;
-        uint8_t pin;
-        uint32_t onTime; //ms the valve will be on
-        uint32_t offTime; //ms the valve will be off
-        uint32_t msLast;
+        OxCore::u8 name;
+        OxCore::u8 pin;
+        OxCore::u32 onTime; //ms the valve will be on
+        OxCore::u32 offTime; //ms the valve will be off
+        OxCore::u32 msLast;
         ValveStatus status;
         bool isOn;
     };
@@ -49,7 +54,7 @@ namespace OxPSA {
         private:
             ValveState state;
         public:
-            Valve(uint8_t name, uint8_t pin, uint32_t onTime, uint32_t offTime){
+            Valve(OxCore::u8 name, OxCore::u8 pin, OxCore::u32 onTime, OxCore::u32 offTime){
                 state.name = name;
                 state.pin = pin;
                 state.onTime = onTime;
@@ -58,9 +63,9 @@ namespace OxPSA {
                 state.status = VALVE_OK;
                 state.isOn = false;
             }
-            bool update(uint32_t msNow);
+            bool update(OxCore::u32 msNow);
             ValveStatus getValveStatus();
-            bool changeTiming(uint32_t onTime, uint32_t offTime);
+            bool changeTiming(OxCore::u32 onTime, OxCore::u32 offTime);
             bool forceValveTrigger();
     };
 

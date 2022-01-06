@@ -23,7 +23,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "error_handler.h"
+#ifndef ARDUINO
 #include <iostream>
+#endif
 
 namespace OxCore {
 
@@ -51,14 +53,20 @@ void ErrorHandler::Log(ErrorLevel level, ErrorCode type) {
     Error error = {level, type};
     bool errorLogged = errors.add(error);
     if (errorLogged == false) {
+        #ifndef ARDUINO
         std::cout << "Error failed to log! List is probably full.\n";
+        #endif
     }
     switch (errorMode) {
         case ErrorMode::Log:
             // TODO
         break;
         case ErrorMode::StdOut:
+            #ifdef ARDUINO
+            OxCore::DebugLn<const char *>(ErrorMessage[static_cast<int>(type)]);
+            #else
             std::cout << ErrorMessage[static_cast<int>(type)] << std::endl;
+            #endif
         break;
         default:
 

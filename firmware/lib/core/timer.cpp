@@ -24,8 +24,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #ifdef ARDUINO
 #include <Arduino.h>
-#endif
+#else
 #include <chrono>
+#endif
 #include "timer.h"
 
 namespace OxCore {

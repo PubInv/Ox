@@ -23,12 +23,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "core.h"
+#include "debug.h"
+#ifdef ARDUINO
+
+#else
 #include <iostream>
 #include "HAL/posix/hal.h"
+#endif
 
 namespace OxCore {
 
-#define TICK_PERIOD 100
+#define SW_TICK 1
+#define TICK_PERIOD 2
 #define WATCHDOG_TIMEOUT_MS 250
 
 bool Core::Boot() {
@@ -47,19 +53,30 @@ bool Core::Boot() {
     _state = CoreState::Configured;
 
     if (_state == CoreState::Configured) {
+        #ifndef ARDUINO
         std::cout << "Boot\n";
+        #endif
         //start();
         result = true;
     } else {
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
     }
+
+    bool success = _scheduler.Init();
+    if (success == false) {
+        return false;
+    }
+    _timer.Init();
+
     return result;
 }
 
 void Core::AddTask(Task *task, TaskProperties *properties) {
     bool taskAdded = _scheduler.AddTask(task, properties);
     if (taskAdded) {
+        #ifndef ARDUINO
         std::cout << "Task Added!\n";
+        #endif
     } else {
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToAddTask);
     }
@@ -70,58 +87,57 @@ void Core::AddTask(Task *task, TaskProperties *properties) {
 // 3. Setup scheduler
 // 4. Run scheduler
 
-#define DEV
-#define DEV_LOOPS 20
+#define DEV 1
+#define DEV_LOOPS 30
 
 bool Core::Run() {
-    std::cout << "Core::Run!" << std::endl;
-    bool success = _scheduler.Init();
-    if (success == false) {
-        return false;
-    }
+    OxCore::Debug<const char *>("Core::Run!\n");
 
-    _timer.Init();
+#ifdef DEV
+    _i = 0;
+#endif
 
-    #ifdef DEV
-    int i = 0;
-    #endif
-
+#ifdef SW_TICK
     while (true) {
-        std::cout << "-------------------------\n";
         u32 elapsed = _timer.Update();
-        TaskState state = _scheduler.RunNextTask(elapsed);
-        std::cout << "State: " << static_cast<int>(state) << std::endl;
-
-        for (int i = 0; i < 1000000; i++) {
-            // waste time
-        }
-
-        // For testing:
-        #ifdef DEV
-        i++;
-        if (i > DEV_LOOPS) {
-            return true;
-        }
-        #endif
-
+#endif
+        Tick();
         bool reset = ResetWatchdog();
         if (reset == false) {
             return false;
         }
-
-        // intentional shutdown
-        bool shutdown = false;
-        if (shutdown) {
-            return true;
+#ifdef SW_TICK
+        // Wait to simulate tick interrupt
+        bool wait_timer = true;
+        while (wait_timer) {
+            u32 elapsed_wait = _timer.Update() - elapsed;
+            if (elapsed_wait >= _scheduler.GetTickPeriod()) {
+                wait_timer = false;
+            }
         }
+        // For testing:
+        // _i++;
+        // if (_i > DEV_LOOPS) {
+        //     return true;
+        // }
     }
+#endif
+    OxCore::Debug<const char *>("Exiting Core::Run!\n");
+    
     return false;
 }
     
 // Private //
 
-void Core::ClockTick() {
-
+// Called by interrupt in embedded
+// Or by timer in simulation
+void Core::Tick() {
+    // Debug<const char*>("-----------------------------------------\n");
+    u32 elapsed = _timer.Update();
+    TaskState state = _scheduler.RunNextTask(elapsed);
+    #ifndef ARDUINO
+    std::cout << "State: " << static_cast<int>(state) << std::endl;
+    #endif
 }
 
 void Core::WriteRegister(u32 address) {
@@ -141,7 +157,7 @@ void Core::HandleInterupt() {
 }
 
 void Core::CreateWatchdog(u32 timeoutMs) {
-    std::cout << "Create watchdog (todo)\n";
+    Debug<const char*>("Create watchdog (todo)\n");
     _watchdogTimer.Init();
 }
 
@@ -149,11 +165,15 @@ bool Core::ResetWatchdog() {
     //::cout << "Reset watchdog (todo)\n";
     u32 elapsed = _watchdogTimer.Update();
     if (elapsed > WATCHDOG_TIMEOUT_MS) {
+        #ifndef ARDUINO
         std::cout << "Watchdog timed out! Elapsed: " << elapsed << std::endl;
+        #endif
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeeded);
         return false;
     } else {
+        #ifndef ARDUINO
         std::cout << "Watchdog reset. Elapsed: " << elapsed << std::endl;
+        #endif
         _watchdogTimer.Reset();
         return true;
     }

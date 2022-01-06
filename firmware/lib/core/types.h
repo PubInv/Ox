@@ -25,7 +25,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <cstdint>
+#ifdef ARDUINO
+#include <Arduino.h>
+#else // Native
+#include <iostream>
+#endif
+//#include <cstdint>
 
 namespace OxCore {
 

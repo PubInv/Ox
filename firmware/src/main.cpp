@@ -24,16 +24,17 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #ifdef ARDUINO
 #include <Arduino.h>
-#include <display.h>
+//#include <display.h>
 #else // Native
 #include <iostream>
 #endif
 
 #include <core.h>
-#include <cstdint>
+//#include <cstdint>
 
 #include <psa_valve_task.h>
 //#include <display_task.h>
+#include <sensor_read_task.h>
 
 using namespace OxCore;
 Core core;
@@ -45,7 +46,9 @@ class MockTask: public Task {
             return true;
         }
         bool _run() override {
+            #ifndef ARDUINO
             std::cout << "Run mock task\n";
+            #endif
             return true;
         }
 };
@@ -54,15 +57,14 @@ class MockTask: public Task {
 /***** Declare your tasks here *****/
 
 OxPSA::PsaValveTask psaTask;
+Ox::App::SensorReadTask sensorTask;
 
 /***********************************/
 
 void setup()
 {
-#ifdef ARDUINO
-  serialBegin(115200);
-#endif
-  OxCore::Debug<const char *>("Starting Ox\n");
+  OxCore::serialBegin(115200UL);
+  OxCore::Debug<const char *>("Starting Ox...\n");
 
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
@@ -75,13 +77,25 @@ void setup()
 
   TaskProperties psaProperties;
   psaProperties.id = 20;
-  psaProperties.period = 50;
+  psaProperties.period = 100;
   psaProperties.priority = 50;
   psaProperties.hardTiming = true;
   core.AddTask(&psaTask, &psaProperties);
 
+  TaskProperties sensorProperties;
+  sensorProperties.id = 30;
+  sensorProperties.period = 25;
+  sensorProperties.priority = 60;
+  sensorProperties.hardTiming = false;
+  core.AddTask(&sensorTask, &sensorProperties);
+
+  OxCore::Debug<const char *>("Added tasks\n");
+
   /*********************************************/
-    
+}
+
+void loop() {
+  OxCore::Debug<const char *>("Loop starting...\n");
   // Blocking call
   if (core.Run() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToRun);
@@ -94,8 +108,9 @@ void setup()
 int main(int argc, char **argv)
 {
   setup();
-  //while (1)
-  //  loop();
+  while (true) {
+    loop();
+  }
   return 0;
 }
 #endif
