@@ -22,53 +22,26 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef VALVE_H
-#define VALVE_H
+#ifndef PSA_TASK_H
+#define PSA_TASK_H
 
-#include <types.h>
 #ifdef ARDUINO
 #include <Arduino.h>
-#else
-//#include <cstdint>
 #endif
+#include <core.h>
+#include <valve_controller.h>
 
-namespace OxPSA {
-
-    enum ValveStatus {
-        VALVE_OK,
-        VALVE_MISSED,
-        VALVE_ERROR
+namespace OxApp
+{
+    // Runs the Pressure Swing Adsorption cycle
+    class PsaTask : public OxCore::Task
+    {
+    private:
+        OxCore::Timer valveCycleTimer;
+        bool _init() override;
+        bool _run() override;
+        void _printValveState(OxCore::u8 vs);
     };
-
-    struct ValveState {
-        OxCore::u8 name;
-        OxCore::u8 pin;
-        OxCore::u32 onTime; //ms the valve will be on
-        OxCore::u32 offTime; //ms the valve will be off
-        OxCore::u32 msLast;
-        ValveStatus status;
-        bool isOn;
-    };
-
-    class Valve {
-        private:
-            ValveState state;
-        public:
-            Valve(OxCore::u8 name, OxCore::u8 pin, OxCore::u32 onTime, OxCore::u32 offTime){
-                state.name = name;
-                state.pin = pin;
-                state.onTime = onTime;
-                state.offTime = offTime;
-                state.msLast = 0;
-                state.status = VALVE_OK;
-                state.isOn = false;
-            }
-            bool update(OxCore::u32 msNow);
-            ValveStatus getValveStatus();
-            bool changeTiming(OxCore::u32 onTime, OxCore::u32 offTime);
-            bool forceValveTrigger();
-    };
-
 }
 
 #endif

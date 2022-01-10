@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef ERROR_HANDLER_H
 #define ERROR_HANDLER_H
 
-#include "../collections/list.h"
+#include "../collections/circular_list.h"
 #include "debug.h"
 
 namespace OxCore {
@@ -52,8 +52,8 @@ enum class ErrorCode {
     CoreFailedToAddTask,
     CoreFailedToBoot,
     CoreFailedToRun,
-    TaskPriorityTimeExceededHard,
-    TaskPriorityTimeExceededSoft,
+    TaskPriorityTimeExceededRealTime,
+    TaskPriorityTimeExceededSoftDeadline,
     WatchdogExceeeded,
     NotImplemented,
 };
@@ -66,7 +66,7 @@ struct Error {
 class ErrorHandler {
     public:
         static ErrorMode errorMode;
-        static OxCollections::List<Error, MAX_ERRORS> errors;
+        static OxCollections::CircularList<Error, MAX_ERRORS> errors;
         static void SetErrorMode(ErrorMode mode);
         static void Log(ErrorLevel level, ErrorCode type);
         ErrorHandler() = delete;

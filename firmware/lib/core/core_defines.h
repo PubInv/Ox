@@ -6,7 +6,7 @@
 namespace OxCore {
 
 typedef u32 TimeMs;
-typedef i32 TaskPriority;
+//typedef u8 TaskPriority;
 typedef i32 TaskId;
 //typedef 32 TaskPeriod;
 
@@ -19,11 +19,25 @@ enum class TaskState {
     Error
 };
 
+enum class TaskPriorityOS {
+    Kernal = 0,
+    ExceededHigh = 5,
+    ExceededLow = 10,
+    Idle = 200,
+    TimeRemaining = 250
+};
+
+enum class TaskPriority {
+    High = 60,
+    Medium = 70,
+    Low = 80,
+    Undefined = 255
+};
+
 struct TaskProperties {
     TaskId id;
     TaskPriority priority;
     TimeMs period;
-    bool hardTiming;
 };
 
 }

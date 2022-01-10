@@ -22,25 +22,28 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <networking.h>
+#ifndef SERVER_H
+#define SERVER_H
+
+#include <PIRCS.h>
+#include <core/task.h>
+
+extern "C" {
+#include "mongoose.h"
+}
 
 namespace Ox_Networking {
 
-bool NetworkingController::setup(Task *task) {
-  Ox_Networking::server_init(task);
-  return true;
-}
+constexpr char *s_listen_on = (char *)"http://localhost:8001";
+constexpr char *s_udp = (char *)"udp://localhost:6111";
+void server_rest_cb(struct mg_connection *c, int ev, void *ev_data, void *fn_data);
+void server_udp_cb(struct mg_connection *c, int ev, void *ev_data, void *fn_data);
 
-bool NetworkingController::run(uint32_t msNow) {
-  Ox_Networking::server_poll();
-  return true;
-}
+void server_poll();
+int server_send_udp(const void *data, size_t s);
+bool server_init(Task *task);
+bool server_close();
 
-bool NetworkingController::connect() { return false; }
+} // namespace Ox_Networking
 
-bool NetworkingController::send_udp(const void *data, size_t s) {
-  Ox_Networking::server_send_udp(data, s);
-  return true;
-}
-
-}
+#endif

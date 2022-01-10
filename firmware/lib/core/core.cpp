@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "core.h"
 #include "debug.h"
 #ifdef ARDUINO
-
+#include <Arduino.h>
 #else
 #include <iostream>
 #include "HAL/posix/hal.h"
@@ -36,15 +36,16 @@ namespace OxCore {
 #define SW_TICK 1
 #define TICK_PERIOD 2
 #define WATCHDOG_TIMEOUT_MS 250
+bool Core::_criticalError = false;
 
 bool Core::Boot() {
     bool result = false;
-    
+    //bool Core::_criticalError = false;
     ErrorHandler::SetErrorMode(OxCore::ErrorMode::StdOut);
     // TODO: configure/validate HAL
 
     SchedulerProperties properties;
-    properties.mode = SchedulerMode::Dynamic;
+    properties.mode = SchedulerMode::RealTime;
     properties.tickPeriodMs = TICK_PERIOD;
     _scheduler.SetProperties(properties);
 
@@ -53,9 +54,9 @@ bool Core::Boot() {
     _state = CoreState::Configured;
 
     if (_state == CoreState::Configured) {
-        #ifndef ARDUINO
+#ifndef ARDUINO
         std::cout << "Boot\n";
-        #endif
+#endif
         //start();
         result = true;
     } else {
@@ -66,7 +67,7 @@ bool Core::Boot() {
     if (success == false) {
         return false;
     }
-    _timer.Init();
+    _primaryTimer.Init();
 
     return result;
 }
@@ -74,9 +75,9 @@ bool Core::Boot() {
 void Core::AddTask(Task *task, TaskProperties *properties) {
     bool taskAdded = _scheduler.AddTask(task, properties);
     if (taskAdded) {
-        #ifndef ARDUINO
+#ifndef ARDUINO
         std::cout << "Task Added!\n";
-        #endif
+#endif
     } else {
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToAddTask);
     }
@@ -87,19 +88,16 @@ void Core::AddTask(Task *task, TaskProperties *properties) {
 // 3. Setup scheduler
 // 4. Run scheduler
 
-#define DEV 1
-#define DEV_LOOPS 30
-
 bool Core::Run() {
     OxCore::Debug<const char *>("Core::Run!\n");
-
-#ifdef DEV
-    _i = 0;
-#endif
+    
 
 #ifdef SW_TICK
     while (true) {
-        u32 elapsed = _timer.Update();
+        if (_criticalError == true) {
+            return false;
+        }
+        _elapsed = _primaryTimer.Update();
 #endif
         Tick();
         bool reset = ResetWatchdog();
@@ -110,16 +108,11 @@ bool Core::Run() {
         // Wait to simulate tick interrupt
         bool wait_timer = true;
         while (wait_timer) {
-            u32 elapsed_wait = _timer.Update() - elapsed;
+            u32 elapsed_wait = _primaryTimer.Update() - _elapsed;
             if (elapsed_wait >= _scheduler.GetTickPeriod()) {
                 wait_timer = false;
             }
         }
-        // For testing:
-        // _i++;
-        // if (_i > DEV_LOOPS) {
-        //     return true;
-        // }
     }
 #endif
     OxCore::Debug<const char *>("Exiting Core::Run!\n");
@@ -133,11 +126,11 @@ bool Core::Run() {
 // Or by timer in simulation
 void Core::Tick() {
     // Debug<const char*>("-----------------------------------------\n");
-    u32 elapsed = _timer.Update();
+    u32 elapsed = _primaryTimer.Update();
     TaskState state = _scheduler.RunNextTask(elapsed);
-    #ifndef ARDUINO
+#ifndef ARDUINO
     std::cout << "State: " << static_cast<int>(state) << std::endl;
-    #endif
+#endif
 }
 
 void Core::WriteRegister(u32 address) {
@@ -162,24 +155,25 @@ void Core::CreateWatchdog(u32 timeoutMs) {
 }
 
 bool Core::ResetWatchdog() {
-    //::cout << "Reset watchdog (todo)\n";
     u32 elapsed = _watchdogTimer.Update();
     if (elapsed > WATCHDOG_TIMEOUT_MS) {
-        #ifndef ARDUINO
-        std::cout << "Watchdog timed out! Elapsed: " << elapsed << std::endl;
-        #endif
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeeded);
         return false;
     } else {
-        #ifndef ARDUINO
+#ifndef ARDUINO
         std::cout << "Watchdog reset. Elapsed: " << elapsed << std::endl;
-        #endif
+#endif
         _watchdogTimer.Reset();
         return true;
     }
 }
 
+u32 Core::GetElapsedTime() {
+    return _elapsed;
+}
 
-
+void Core::RaiseCriticalError() {
+    _criticalError = true;
+}
 
 }

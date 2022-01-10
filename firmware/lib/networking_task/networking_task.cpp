@@ -22,53 +22,30 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifdef ARDUINO
-#include <Arduino.h>
-#else
-#include <iostream>
-#endif
+#include <networking_task.h>
 
-#include <controller.h>
-#include <stdio.h>
-#include <types.h>
-#include <debug.h>
+namespace Ox_Networking {
 
-namespace OxPSA {
+//:_init()
+bool NetworkingController::setup(Task *task) {
+  Ox_Networking::server_init(task);
+  return true;
+}
 
-////////// METHODS ///////////
+bool NetworkingController::_init() {
+  return true;
+}
 
-  void ValveController::updateValves(OxCore::u32 *msNow){
-    for (OxCore::u8 i = 0; i < numValves; i++){
-      if (((*(valves+i)).state == 0) && (*msNow >= (*(valves+i)).start)) {
-          (*(valves+i)).state = 1;
-          valveBits |= (*(valves+i)).pin;
-      } else if (((*(valves+i)).state == 1) && (*msNow >= (*(valves+i)).stop)){
-        (*(valves+i)).state = 2;
-        valveBits ^= (*(valves+i)).pin;
-      } else {
-        // Do nothing - TODO: undefined state?
-      }
-    }
-  }
+bool NetworkingController::_run() {
+  Ox_Networking::server_poll();
+  return true;
+}
 
-  bool ValveController::resetValves(){
-    for (int i = 0; i < numValves; i++){
-      (*(valves+i)).state = 0;
-    }
-    valveBits = 0;
-    return true;
-  }
+bool NetworkingController::connect() { return false; }
 
-  bool ValveController::updateController(OxCore::u32 *msNow){
-    // TODO: error checking: msNow > msLast, msNow < msLast + tolerance
-
-    updateValves(msNow);
-    OxCore::Debug<const char *>("ValveController::updateController\n");
-    return true;
-  }
-
-  OxCore::u8 ValveController::getValveBits(){
-    return valveBits;
-  }
+bool NetworkingController::send_udp(const void *data, size_t s) {
+  Ox_Networking::server_send_udp(data, s);
+  return true;
+}
 
 }

@@ -28,6 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "../collections/map.h"
 #include "types.h"
 #include "task.h"
+#include "debug.h"
 
 namespace OxCore {
 
@@ -46,22 +47,18 @@ namespace OxCore {
 class IdleTask: public Task {
     private:
         bool _init() override {
-            #ifndef ARDUINO
-            std::cout << "Inited idle task\n";
-            #endif
+            OxCore::Debug<const char *>("Init idle task\n");
             return true;
         }
         bool _run() override {
-            #ifndef ARDUINO
-            std::cout << "Run idle task\n";
-            #endif
+            OxCore::Debug<const char *>("Run idle task\n");
             return true;
         }
 };
 
 enum class SchedulerMode {
     RoundRobin = 0,
-    Dynamic,
+    RealTime,
 };
 
 struct SchedulerProperties {
@@ -69,20 +66,10 @@ struct SchedulerProperties {
     u32 tickPeriodMs;
 };
 
-enum class TaskPriorityReserved {
-    Kernal = 0,
-    ExceededHard = 5,
-    ExceededSoft = 10,
-    CanWait = 500
-};
 
 class Scheduler {
     private:
         IdleTask _idleTask; // Special task not part of the task map
-        static const i32 TaskPriorityKernal = 0;
-        static const i32 TaskPriorityTimeExceededHard = 5;
-        static const i32 TaskPriorityTimeExceededSoft = 10;
-        static const i32 TaskPriorityCanWait = 500;
         static const i32 MAX_TASKS = 5;
         OxCollections::Map<TaskId, Task*, MAX_TASKS> map;
         TaskId _currentRunningTaskId = 0;

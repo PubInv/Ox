@@ -4,19 +4,17 @@
 #endif
 #include <debug.h>
 
-namespace Ox {
-namespace App {
+namespace OxApp {
     bool SensorReadTask::_init()
     {
         //std::cout << "Init Sensor Read task\n";
-        
+        OxCore::Debug<const char *>("SensorReadTask init\n");
         return true;
     }
 
     bool SensorReadTask::_run() 
     {
-        //OxCore::Debug<const char *>("SensorReadTask run\n");
+        OxCore::Debug<const char *>("SensorReadTask run\n");
         return true;
     }
-}
 }

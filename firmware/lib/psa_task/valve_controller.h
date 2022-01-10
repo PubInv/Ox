@@ -22,29 +22,59 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef PSA_VALVE_TASK_H
-#define PSA_VALVE_TASK_H
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
+#include <core.h>
 #ifdef ARDUINO
 #include <Arduino.h>
 #endif
-#include <task.h>
-#include <controller.h>
-#include <config.h>
-#include <timer.h>
-#include <valve.h>
 
-namespace OxPSA
-{
-    class PsaValveTask : public OxCore::Task
-    {
+namespace OxApp {
+
+#define NUM_VALVES 4
+
+  enum class OxMode {
+      STARTING,
+      RUNNING,
+      STOPPED,
+      PAUSED,
+      ERROR
+  };
+
+  struct OxState {
+      OxMode mode;
+      OxCore::u32 totalRunTime;
+  };
+
+  struct ValveConfig {
+      char name;
+      OxCore::u32 num;
+      OxCore::u32 state;
+      OxCore::u32 pin;
+      OxCore::u32 start;
+      OxCore::u32 stop;
+  };
+
+  class ValveController {
     private:
-        OxCore::u32 tLast;
-        OxCore::Timer valveCycleTimer;
-        bool _init() override;
-        bool _run() override;
-        void _printValveState(OxCore::u8 vs);
-    };
-}
+      OxState _oxState;
+      OxCore::u8 valveBits;
+      OxCore::u32 numValves;
+      ValveConfig *valves;
+    public:
+        ValveController(ValveConfig* v, OxCore::u32 numValves) {
+        valveBits = 0;
+        _oxState.mode = OxMode::STARTING;
+        _oxState.totalRunTime = 0;
+        valves = v;
+        this->numValves = numValves;
+      }
+      void updateValves(OxCore::u32 &msNow);
+      bool updateController(OxCore::u32 &msNow);
+      bool resetValves();
+      OxCore::u8 getValveBits();
+  };
 
+}
 #endif

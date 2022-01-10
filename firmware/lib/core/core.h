@@ -50,8 +50,8 @@ class Core {
         bool Boot();
         void AddTask(Task *task, TaskProperties *properties);
         bool Run();
-
-        
+        static void RaiseCriticalError();
+        static bool _criticalError;
         
         Core(): _state(CoreState::Undefined) {};
         ~Core() = default;
@@ -62,8 +62,9 @@ class Core {
         Core(Task&&) = delete;
         Core& operator=(Core&&) = delete;
     private:
-        u32 _i;
-        Timer _timer;
+        
+        u32 _elapsed;
+        Timer _primaryTimer;
         Timer _watchdogTimer;
         CoreState _state;
         Scheduler _scheduler;
@@ -74,6 +75,7 @@ class Core {
         void HandleInterupt();
         void CreateWatchdog(u32 timeoutMs);
         bool ResetWatchdog();
+        u32 GetElapsedTime();
         
 };
 

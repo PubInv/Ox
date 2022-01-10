@@ -22,48 +22,47 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <valve.h>
+#ifdef ARDUINO
+#include <Arduino.h>
+#else
+#include <iostream>
+#endif
 
-namespace OxPSA {
+#include <valve_controller.h>
 
-    bool Valve::update(uint32_t msNow){
-        // Bistable timing
-        //
-        //          ___off___
-        //         |         |
-        // ___on___|         |
-        //
+namespace OxApp {
 
-        if (state.isOn && (msNow - state.msLast >= state.onTime)){
-            // Turn off
-            state.isOn = false;
-            state.msLast = msNow;
-            return true;
-        }
-        else if (!state.isOn && (msNow - state.msLast >= state.offTime)){
-            // Turn on
-            state.isOn = true;
-            state.msLast = msNow;
-            return true;
-        }
-        else {
-            return false;
-        }
+  void ValveController::updateValves(OxCore::u32 &msNow){
+    // TODO: shouldn't be using pointers here
+    for (OxCore::u8 i = 0; i < numValves; i++) {
+      if (((*(valves+i)).state == 0) && (msNow >= (*(valves+i)).start)) {
+          (*(valves+i)).state = 1;
+          valveBits |= (*(valves+i)).pin;
+      } else if (((*(valves+i)).state == 1) && (msNow >= (*(valves+i)).stop)){
+        (*(valves+i)).state = 2;
+        valveBits ^= (*(valves+i)).pin;
+      } else {
+        // Do nothing - TODO: undefined state?
+      }
     }
+  }
 
-    ValveStatus Valve::getValveStatus(){
-        return state.status;
+  bool ValveController::resetValves(){
+    for (int i = 0; i < numValves; i++){
+      (*(valves+i)).state = 0;
     }
+    valveBits = 0;
+    return true;
+  }
 
-    bool Valve::changeTiming(OxCore::u32 onTime, OxCore::u32 offTime){
-        // TODO: error checking
+  bool ValveController::updateController(OxCore::u32 &msNow){
+    updateValves(msNow);
+    OxCore::Debug<const char *>("ValveController::updateController\n");
+    return true;
+  }
 
-        state.onTime = onTime;
-        state.offTime = offTime;
-        return true;
-    }
+  OxCore::u8 ValveController::getValveBits(){
+    return valveBits;
+  }
 
-    bool Valve::forceValveTrigger(){
-        return false;
-    }
 }

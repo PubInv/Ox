@@ -22,15 +22,15 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <psa_valve_task.h>
-#include <types.h>
+#include <psa_task.h>
+#include "psa_config.h"
 #ifndef ARDUINO
 #include <iostream>
 #endif
 
-using namespace OxCore;
+//using namespace OxCore;
 
-namespace OxPSA
+namespace OxApp
 {
     // Helper MACRO to display bit pattern for debugging only
     //https://stackoverflow.com/questions/111928/is-there-a-printf-converter-to-print-in-binary-format
@@ -46,43 +46,33 @@ namespace OxPSA
     (byte & 0x02 ? '1' : '0'), \
     (byte & 0x01 ? '1' : '0')
 
-    // TODO: put this in the config area
-    OxPSA::ValveConfig valveArray[NUM_VALVES] = {
-        { 'A', 0, 0, 1, 100, 4000, },
-        { 'B', 1, 0, 2, 4000, 8000, },
-        { 'C', 2, 0, 4, 3700, 4000, },
-        { 'D', 3, 0, 8, 7700, 8000, }};
+    ValveController vc(&psaValveConfig[0], NUM_VALVES);
 
-    ValveController vc(&valveArray[0], NUM_VALVES);
-
-    bool PsaValveTask::_init()
+    bool PsaTask::_init()
     {
-        tLast = 0;
+        OxCore::Debug<const char *>("PsaTask init\n");
         valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
         return true;
     }
 
-    bool PsaValveTask::_run() 
+    bool PsaTask::_run() 
     {
-        u32 elapsed = valveCycleTimer.Update();
+        OxCore::Debug<const char *>("PsaTask run\n");
+        OxCore::u32 elapsed = valveCycleTimer.Update();
 
-        if (elapsed >= tLast + TIME_STEP)
+        if (elapsed >= TOTAL_CYCLE_TIME)
         {
-            tLast = valveCycleTimer.GetElapsed();
-            vc.updateController(&tLast);
-            _printValveState(vc.getValveBits());
-        }
-        else if (valveCycleTimer.GetElapsed() >= TOTAL_CYCLE_TIME)
-        {
+            valveCycleTimer.Reset();
             vc.resetValves();
-            valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
-            tLast = 0; // TODO: put this in the timer class
+        } else {
+            vc.updateController(elapsed);
+            _printValveState(vc.getValveBits());
         }
 
         return true;
     }
 
-    void PsaValveTask::_printValveState(OxCore::u8 vs)
+    void PsaTask::_printValveState(OxCore::u8 vs)
     {
 #ifdef ARDUINO
         Serial.print("Valves: ");

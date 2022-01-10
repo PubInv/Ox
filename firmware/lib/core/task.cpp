@@ -78,7 +78,7 @@ namespace OxCore
         return _properties.id;
     }
 
-    i32 Task::GetPriority() const
+    TaskPriority Task::GetPriority() const
     {
         return _properties.priority;
     }
@@ -96,11 +96,6 @@ namespace OxCore
     TimeMs Task::GetPeriod() const 
     {
         return _properties.period;
-    }
-
-    bool Task::IsHardTiming() const 
-    {
-        return _properties.hardTiming;
     }
 
     /*bool Task::Callback(char *message)

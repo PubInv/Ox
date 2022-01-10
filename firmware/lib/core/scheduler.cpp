@@ -36,10 +36,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxCore {
 
 void Scheduler::setupIdleTask() {
-    _idleTask._properties.priority = 0;
+    _idleTask._properties.priority = static_cast<TaskPriority>(TaskPriorityOS::Idle);
     _idleTask._properties.period = 1;
     _idleTask._properties.id = 0;
-    _idleTask._properties.hardTiming = false;
 }
 
 void Scheduler::createTaskList() {
@@ -50,11 +49,11 @@ void Scheduler::createTaskList() {
 }
 
 Task* Scheduler::getHighestModifiedPriorityTask() {
-    OxCore::TaskPriority highestPriority = 99999;
+    OxCore::TaskPriorityOS highestPriority = static_cast<TaskPriorityOS>(TaskPriority::Low);
     Task* nextTask = nullptr;
     for (int i = 0; i < map.getCount(); i++) {
         Task* task = map.getValueByIndex(i);
-        if (task->_modifiedPriority != TaskPriorityCanWait) {
+        if (task->_modifiedPriority != TaskPriorityOS::TimeRemaining) {
             if (task->_modifiedPriority < highestPriority) {            
                 highestPriority = task->_modifiedPriority;
                 nextTask = task;
@@ -71,27 +70,27 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
 
         TimeMs lastRunTime = task->GetLastRunTime();
         TimeMs deltaRunTime = currentTime - lastRunTime;
-        // Debug<const char *>("Task: ");
-        // Debug<TaskId>(task->_properties.id);
-        // Debug<const char *>(" deltaRunTime: ");
-        // Debug<TimeMs>(deltaRunTime);
-        // Debug<const char *>("\n");
+        Debug<const char *>("Task: ");
+        Debug<TaskId>(task->_properties.id);
+        Debug<const char *>(" deltaRunTime: ");
+        Debug<TimeMs>(deltaRunTime);
+        Debug<const char *>("\n");
         TimeMs period = task->GetPeriod();
 
         // Reset the modified priority
-        task->_modifiedPriority = task->GetPriority();
+        task->_modifiedPriority = static_cast<TaskPriorityOS>(task->GetPriority());
 
         // Too long since the task was run so increase priority
         if (deltaRunTime > period) {
-            if (task->IsHardTiming() == true) {
-                task->_modifiedPriority = TaskPriorityTimeExceededHard;
-                ErrorHandler::Log(ErrorLevel::Warning, ErrorCode::TaskPriorityTimeExceededHard);
+            if (task->GetPriority() == TaskPriority::High) {
+                task->_modifiedPriority = TaskPriorityOS::ExceededHigh;
+                ErrorHandler::Log(ErrorLevel::Error, ErrorCode::TaskPriorityTimeExceededRealTime);
             } else {
-                task->_modifiedPriority = TaskPriorityTimeExceededSoft;
-                ErrorHandler::Log(ErrorLevel::Warning, ErrorCode::TaskPriorityTimeExceededSoft);
+                task->_modifiedPriority = TaskPriorityOS::ExceededLow;
+                ErrorHandler::Log(ErrorLevel::Warning, ErrorCode::TaskPriorityTimeExceededSoftDeadline);
             }
         } else {
-            task->_modifiedPriority = TaskPriorityCanWait;
+            task->_modifiedPriority = TaskPriorityOS::TimeRemaining;
         }
     }
     
@@ -118,8 +117,8 @@ void Scheduler::PrintTaskState() {
         Task *task = map.getValueByIndex(i);
         #ifndef ARDUINO
         std::cout << "id: " << task->GetId() 
-                    << " priority: " << task->_properties.priority 
-                    << " modifiedPriority: " << task->_modifiedPriority 
+                    << " priority: " << static_cast<int>(task->_properties.priority) 
+                    << " modifiedPriority: " << static_cast<int>(task->_modifiedPriority) 
                     << " period: " << task->_properties.period 
                     << std::endl;
         #endif
@@ -146,7 +145,7 @@ bool Scheduler::Init() {
             //
             return true;
         break;
-        case SchedulerMode::Dynamic:
+        case SchedulerMode::RealTime:
             //
             return true;
         break;
@@ -167,7 +166,7 @@ TaskState Scheduler::RunNextTask(u32 msNow) {
         case SchedulerMode::RoundRobin:
             ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::NotImplemented);
         break;
-        case SchedulerMode::Dynamic:
+        case SchedulerMode::RealTime:
             task = getNextTaskToRun(msNow);
         break;
         default:

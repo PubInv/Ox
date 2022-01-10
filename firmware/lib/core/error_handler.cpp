@@ -22,6 +22,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+#include "core.h"
 #include "error_handler.h"
 #ifndef ARDUINO
 #include <iostream>
@@ -30,19 +31,27 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxCore {
 
 ErrorMode ErrorHandler::errorMode = ErrorMode::StdOut;
-OxCollections::List<Error, MAX_ERRORS> ErrorHandler::errors;
+OxCollections::CircularList<Error, MAX_ERRORS> ErrorHandler::errors;
+
+const char *ErrorLevelText[] = {
+    "Info",
+    "Debug",
+    "Warning",
+    "Error",
+    "Critical",
+};
 
 const char *ErrorMessage[] = {
     "Null",
-    "LessThanZero",
-    "OutOfBounds",
-    "CoreFailedToAddTask",
-    "CoreFailedToBoot",
-    "CoreFailedToRun",
-    "TaskPriorityTimeExceededHard",
-    "TaskPriorityTimeExceededSoft",
-    "WatchdogExceeded",
-    "NotImplemented",
+    "Less Than Zero",
+    "Out Of Bounds",
+    "Core Failed To Add Task",
+    "Core Failed To Boot",
+    "Core Failed To Run",
+    "Task Priority Time Exceeded Hard",
+    "Task Priority Time Exceeded Soft",
+    "Watchdog Exceeded",
+    "Not Implemented",
 };
 
 void ErrorHandler::SetErrorMode(ErrorMode mode) {
@@ -51,26 +60,26 @@ void ErrorHandler::SetErrorMode(ErrorMode mode) {
 
 void ErrorHandler::Log(ErrorLevel level, ErrorCode type) {
     Error error = {level, type};
-    bool errorLogged = errors.add(error);
-    if (errorLogged == false) {
-        #ifndef ARDUINO
-        std::cout << "Error failed to log! List is probably full.\n";
-        #endif
-    }
+    errors.add(error);
     switch (errorMode) {
         case ErrorMode::Log:
             // TODO
         break;
         case ErrorMode::StdOut:
-            #ifdef ARDUINO
+#ifdef ARDUINO
+            OxCore::Debug<const char *>(ErrorLevelText[static_cast<int>(level)]);
+            OxCore::Debug<const char *>(": ");
             OxCore::DebugLn<const char *>(ErrorMessage[static_cast<int>(type)]);
-            #else
+#else
             std::cout << ErrorMessage[static_cast<int>(type)] << std::endl;
-            #endif
+#endif
         break;
         default:
 
         break;
+    }
+    if (level == ErrorLevel::Critical) {
+        Core::RaiseCriticalError();
     }
 }
 

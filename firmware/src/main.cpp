@@ -30,14 +30,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 
 #include <core.h>
-//#include <cstdint>
 
-#include <psa_valve_task.h>
+#include <psa_task.h>
+#include <device_task.h>
 //#include <display_task.h>
 #include <sensor_read_task.h>
 
 using namespace OxCore;
-Core core;
+static Core core;
 
 class MockTask: public Task {
     private:
@@ -56,8 +56,9 @@ class MockTask: public Task {
 
 /***** Declare your tasks here *****/
 
-OxPSA::PsaValveTask psaTask;
-Ox::App::SensorReadTask sensorTask;
+OxApp::DeviceTask deviceTask;
+OxApp::PsaTask psaTask;
+OxApp::SensorReadTask sensorTask;
 
 /***********************************/
 
@@ -75,18 +76,22 @@ void setup()
 
   /***** Configure and add your tasks here *****/
 
+  TaskProperties deviceProperties;
+  deviceProperties.id = 10;
+  deviceProperties.period = 100;
+  deviceProperties.priority = TaskPriority::Medium;
+  core.AddTask(&deviceTask, &deviceProperties);
+
   TaskProperties psaProperties;
   psaProperties.id = 20;
   psaProperties.period = 100;
-  psaProperties.priority = 50;
-  psaProperties.hardTiming = true;
+  psaProperties.priority = TaskPriority::High;
   core.AddTask(&psaTask, &psaProperties);
 
   TaskProperties sensorProperties;
   sensorProperties.id = 30;
   sensorProperties.period = 25;
-  sensorProperties.priority = 60;
-  sensorProperties.hardTiming = false;
+  sensorProperties.priority = TaskPriority::High;
   core.AddTask(&sensorTask, &sensorProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
@@ -99,7 +104,10 @@ void loop() {
   // Blocking call
   if (core.Run() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToRun);
-      //return EXIT_FAILURE;
+#ifdef ARDUINO
+      // Loop endlessly to stop the program from running
+      while (true) {}
+#endif
       return;
   }
 }

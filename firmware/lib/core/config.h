@@ -56,9 +56,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 ///////// VALVES //////////
 
-#define TOTAL_CYCLE_TIME 8000 //ms
-#define TIME_STEP 10 //ms
-#define NUM_VALVES 4 //1-8
+// #define TOTAL_CYCLE_TIME 8000 //ms
+// #define TIME_STEP 10 //ms
+// #define NUM_VALVES 4 //1-8
 
 // { name, num, state, pin, start, stop }
 /*Ox_Controller::Valve valveArray[NUM_VALVES] = {

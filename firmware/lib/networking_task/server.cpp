@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 #include <PIRCS.h>
-#include <task.h>
+#include <core/task.h>
 #include <server.h>
 
 extern "C" {

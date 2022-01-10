@@ -3,8 +3,7 @@
 
 #include <task.h>
 
-namespace Ox {
-namespace App {
+namespace OxApp {
 
 class SensorReadTask : public OxCore::Task
     {
@@ -13,7 +12,6 @@ class SensorReadTask : public OxCore::Task
         bool _run() override;        
     };
 
-}
 }
 
 #endif

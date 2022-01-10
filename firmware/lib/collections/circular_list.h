@@ -22,28 +22,56 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef CIRCULAR_LIST_H
+#define CIRCULAR_LIST_H
 
-#include <PIRCS.h>
-#include <task.h>
+#ifdef ARDUINO
+#include <Arduino.h>
+#else // Native
+//#include <iostream>
+#endif
 
-extern "C" {
-#include "mongoose.h"
+//#include <cstddef>
+
+namespace OxCollections {
+
+template <class T, size_t L>
+class CircularList {
+    private:
+        T arr[L];
+        int capacity = L;
+        int count = 0;
+        int index = 0;
+    public:
+        int size();
+        T next();
+        void add(T item);
+};
+
+
+template <class T, size_t L>
+int CircularList<T, L>::size() {
+    return count;
 }
 
-namespace Ox_Networking {
+template <class T, size_t L>
+T CircularList<T, L>::next() {
+    int i = index++;
+    if (index > count) {
+        index = 0;
+    }
+    return arr[i];
+}
 
-constexpr char *s_listen_on = (char *)"http://localhost:8001";
-constexpr char *s_udp = (char *)"udp://localhost:6111";
-void server_rest_cb(struct mg_connection *c, int ev, void *ev_data, void *fn_data);
-void server_udp_cb(struct mg_connection *c, int ev, void *ev_data, void *fn_data);
+template <class T, size_t L>
+void CircularList<T, L>::add(T item) {
+    if (count >= capacity) {
+        //return false;
+        count = 0;
+    }
+    arr[count++] = item;
+}
 
-void server_poll();
-int server_send_udp(const void *data, size_t s);
-bool server_init(Task *task);
-bool server_close();
-
-} // namespace Ox_Networking
+}
 
 #endif
