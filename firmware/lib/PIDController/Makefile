@@ -1,7 +1,7 @@
 main.o: main.cpp pidcontroller.cpp mocksimulation.cpp
 	g++ -c main.cpp pidcontroller.cpp mocksimulation.cpp -I ~/Ox/firmware/lib/header -lm
 
-mocksimulation.o: mocksimulation.o
+mocksimulation.o: mocksimulation.cpp
 	g++ -c mocksimulation.cpp -I ~/Ox/firmware/lib/header -lm
 	
 
