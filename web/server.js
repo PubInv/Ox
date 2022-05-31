@@ -1,5 +1,6 @@
 "use strict";
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const bodyParser = require("body-parser");
 const server = require("http").createServer(app);
@@ -8,6 +9,7 @@ const port = 3020;
 
 const { Op } = require("sequelize");
 
+app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
@@ -245,7 +247,7 @@ app.get("/api/pirds/:from_time/:to_time", async (req, res) => {
 // /api/pircs?com=C&par=P&int=T&mod=0&val=400
 
 // Serve static files in the /public directory
-app.use(express.static("public"));
+app.use(express.static("src/fe"));
 
 io.on("connection", (socket) => {
   console.log(`a user connected ${socket.id}`);

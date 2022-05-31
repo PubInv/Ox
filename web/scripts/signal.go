@@ -18,7 +18,7 @@ func fourier(amp float64, t float64, n int) float64 {
 	a := 0.0
 	for i := 1; i < n; i += 2 {
 		fi := float64(i)
-		a += amp*math.Sin(fi*t)/fi
+		a += amp * math.Sin(fi*t) / fi
 	}
 	return a
 }
@@ -57,7 +57,7 @@ func main() {
 		responseBody := bytes.NewBuffer(payload)
 		resp, err := http.Post("http://localhost:3020/api/pirds", "application/json", responseBody)
 		if err != nil {
-			log.Fatalf("An error occured %v", err)
+			log.Fatalf("An error occured: %v", err)
 		}
 		defer resp.Body.Close()
 
