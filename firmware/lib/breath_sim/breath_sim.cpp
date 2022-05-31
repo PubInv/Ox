@@ -24,66 +24,57 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // Real-time breathing simulator
 
-#include <cstdio>
+#include <iostream>
 #include <chrono>
 #include <cmath>
+
+// sudo apt install libboost-all-dev
 #include <boost/numeric/odeint.hpp>
 
 using namespace std::chrono;
 using namespace boost::numeric::odeint;
-typedef runge_kutta_dopri5< double > stepper_type;
+typedef runge_kutta_dopri5<double> stepper_type;
 
+////////// HELPER FUNCTIONS //////////
+
+// Time since Linux epoch in milliseconds.
 uint64_t TimeSinceEpochMs()
 {
-#ifdef ARDUINO
-    // Time since device powered on
-    return millis();
-#else
-    // Time since Linux epoch
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-#endif
 }
 
-enum LungCondition
-{
-    Stable,
-    Asthmatic,
-    Covid,
-    Pneumonia,
-    Collapsed
-};
-
+////////// LUNG MODEL //////////
 
 class LungModel
 {
     private:
-        float C_C; // Collapsible airway compliance (l/cmH20)
-        float C_cw; // Chest wall compliance (l/cmH20)
-        float C_l; // Lung compliance (l/cmH20)
-        float C_syst; // Compliance of the lung-chest wall system (l/cmH20)
-        float F; // Airflow at the mouth (cmH20)
-        float P_A; // Alveolar pressure (cmH20)
-        float P_C; // Collapsible airway pressure (cmH20)
-        float P_cw; // Chest wall pressure (cmH20)
-        float P_el; // Dynamic lung elastic recoil (cmH20)
-        float P_ext; // Pressure at mouth (cmH20)
-        float P_l; // Static lung elastic recoil (cmH20)
-        float P_mus; // Muscular pressure (cmH20)
-        float P_pl; // Plural pressure (cmH20)
-        float P_ref; // Environmental pressure (cmH20)
-        float P_syst; // Elastic recoil of the lung-chest wall system (cmH20)
-        float P_tm; // Transmural pressure (cmH20)
-        float R_C; // Collapsible airway resistance (cmH2*l-1*s)
-        float R_LT; // Lung tissue resistance (cmH2*l-1*s)
-        float R_S; // Small airway resistance (cmH2*l-1*s)
-        float R_U; // Upper airway resistance (cmH2*l-1*s)
-        float TLC; // Total lung capacity (l)
-        float V_A; // Aveolar space volume (l)
-        float V_C; // Collapsible airway volume (l)
-        float V_cw; // Chest wall volume (l)
-        float V_D; // Dead space volume (l)
-        float V_L; // Total lung volume (l)
-        float V_R; // Residual volume (l)
+        float C_C;      // Collapsible airway compliance (l/cmH20)
+        float C_cw;     // Chest wall compliance (l/cmH20)
+        float C_l;      // Lung compliance (l/cmH20)
+        float C_syst;   // Compliance of the lung-chest wall system (l/cmH20)
+        float F;        // Airflow at the mouth (cmH20)
+        float P_A;      // Alveolar pressure (cmH20)
+        float P_C;      // Collapsible airway pressure (cmH20)
+        float P_cw;     // Chest wall pressure (cmH20)
+        float P_el;     // Dynamic lung elastic recoil (cmH20)
+        float P_ext;    // Pressure at mouth (cmH20)
+        float P_l;      // Static lung elastic recoil (cmH20)
+        float P_mus;    // Muscular pressure (cmH20)
+        float P_pl;     // Plural pressure (cmH20)
+        float P_ref;    // Environmental pressure (cmH20)
+        float P_syst;   // Elastic recoil of the lung-chest wall system (cmH20)
+        float P_tm;     // Transmural pressure (cmH20)
+        float R_C;      // Collapsible airway resistance (cmH2*l-1*s)
+        // float R_LT;     // Lung tissue resistance (cmH2*l-1*s)
+        float R_S;      // Small airway resistance (cmH2*l-1*s)
+        float R_U;      // Upper airway resistance (cmH2*l-1*s)
+        // float TLC;      // Total lung capacity (l)
+        float V_A;      // Aveolar space volume (l)
+        float V_C;      // Collapsible airway volume (l)
+        float V_cw;     // Chest wall volume (l)
+        // float V_D;      // Dead space volume (l)
+        float V_L;      // Total lung volume (l)
+        // float V_R;      // Residual volume (l)
 
         // Model parameters
         float A_c = 7.09;
@@ -141,6 +132,7 @@ class PleuralPressureWaveformGenerator {
                 RR = rr;
             } else {
                 // rr must be positive
+                std::cout << "Respiratory rate must be positive!" << std::endl;
             }
         }
 };
@@ -164,6 +156,7 @@ class RegularBreathingWaveform : PleuralPressureWaveformGenerator {
                 P_r_pl = a_r + c_r * sin ((M_PI * (t - t_l_r)) / (T_r_r - t_l_r));  // + v_off?
             } else {
                 // t is out of range
+                std::cout << "t is out of range" << std::endl;
             }
         }
 };
@@ -207,14 +200,24 @@ class TidalBreathingWaveform : PleuralPressureWaveformGenerator {
         }
 };
 
+////////// LUNG STATE MACHINE //////////
+
+enum class LungCondition
+{
+    Good,
+    Asthmatic,
+    Covid,
+    Pneumonia,
+    Collapsed
+};
 
 class Lungs
 {
 private:
-    int _volume;
-    int _compliance;
-    int _last_ms;
-    int _delta_ms;
+    uint64_t _volume;
+    uint64_t _compliance;
+    uint64_t _last_ms;
+    uint64_t _delta_ms;
     LungCondition _condition;
 
 public:
@@ -224,9 +227,9 @@ public:
         _compliance = 50;
         _last_ms = 0;
         _delta_ms = 0;
-        _condition = LungCondition::Stable;
+        _condition = LungCondition::Good;
     }
-    Lungs(int volume, int compliance, LungCondition condition)
+    Lungs(uint64_t volume, uint64_t compliance, LungCondition condition)
     {
         _volume = volume;
         _compliance = compliance;
@@ -234,11 +237,11 @@ public:
         _delta_ms = 0;
         _condition = condition;
     }
-    bool Step(int ms)
+    bool Step(uint64_t ms)
     {
-        if (ms <= _last_ms)
+        if (ms < _last_ms)
         {
-            puts("Time must go forward!");
+            std::cout << "Time must go forward!" << std::endl;
             return false;
         }
         _delta_ms = ms - _last_ms;
@@ -246,6 +249,8 @@ public:
 
         // Calculate next step
         // TODO
+        std::cout << "Step..." << std::endl;
+
 
         return true;
     }
@@ -259,11 +264,7 @@ public:
     }
 };
 
-enum PatientState
-{
-    Stable,
-    Crashing
-};
+////////// PATIENT STATE MACHINE //////////
 
 class Patient
 {
@@ -277,19 +278,37 @@ public:
     {
         _mass = 80;
         _age = 40;
-        Lungs _lungs(700, 50, LungCondition::Stable);
+        Lungs _lungs(700, 50, LungCondition::Good);
     };
-    void SetState()
-    {
+    bool Step(int ms) {
+        _lungs->Step(ms);
+        return true;
     }
 };
 
+////////// MAIN //////////
+
 int main(int argc, char **argv)
 {
-    Lungs lung(700, 50, LungCondition::Stable);
-    for (;;)
+    std::cout << "Lung sim" << std::endl;
+    //Patient patient;
+    Lungs lungs;
+
+    uint64_t last_ms = TimeSinceEpochMs();
+    for (int i = 0; i < 10; i++)
     {
-        uint64_t ms = TimeSinceEpochMs();
-        lung.Step(ms);
+        uint64_t ms = last_ms + 1;
+        //uint64_t ms = TimeSinceEpochMs();
+        if (ms > last_ms) {
+            std::cout << "ms: " << ms << std::endl;
+            lungs.Step(ms);
+            last_ms = ms;
+        }
+        // bool result = patient.Step(ms);
+        // if (result == false) {
+        //     return 1; // Program failure
+        // }
     }
+
+    return 0;
 }
