@@ -26,39 +26,23 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 //#include <display.h>
 #else // Native
-#include <iostream>
+//
 #endif
 
 #include <core.h>
 
+// #include <networking_task.h>
 #include <psa_task.h>
-#include <device_task.h>
 //#include <display_task.h>
-#include <sensor_read_task.h>
 
 using namespace OxCore;
 static Core core;
 
-class MockTask: public Task {
-    private:
-        bool _init() override {
-            //std::cout << "Inited mock task\n";
-            return true;
-        }
-        bool _run() override {
-            #ifndef ARDUINO
-            std::cout << "Run mock task\n";
-            #endif
-            return true;
-        }
-};
-
-
 /***** Declare your tasks here *****/
 
-OxApp::DeviceTask deviceTask;
+// OxApp::NetworkingTask networkingTask;
 OxApp::PsaTask psaTask;
-OxApp::SensorReadTask sensorTask;
+// OxApp::SensorReadTask sensorTask;
 
 /***********************************/
 
@@ -76,23 +60,22 @@ void setup()
 
   /***** Configure and add your tasks here *****/
 
-  TaskProperties deviceProperties;
-  deviceProperties.id = 10;
-  deviceProperties.period = 100;
-  deviceProperties.priority = TaskPriority::Medium;
-  core.AddTask(&deviceTask, &deviceProperties);
-
-  TaskProperties psaProperties;
+  OxCore::TaskProperties psaProperties;
+  psaProperties.name = "psa";
   psaProperties.id = 20;
-  psaProperties.period = 100;
-  psaProperties.priority = TaskPriority::High;
+  psaProperties.period = 1000;
+  psaProperties.priority = OxCore::TaskPriority::High;
   core.AddTask(&psaTask, &psaProperties);
 
-  TaskProperties sensorProperties;
-  sensorProperties.id = 30;
-  sensorProperties.period = 25;
-  sensorProperties.priority = TaskPriority::High;
-  core.AddTask(&sensorTask, &sensorProperties);
+  // OxCore::TaskProperties sensorProperties;
+  // sensorProperties.name = "sensor";
+  // sensorProperties.id = 30;
+  // sensorProperties.period = 30;
+  // sensorProperties.priority = OxCore::TaskPriority::High;
+  // core.AddTask(&sensorTask, &sensorProperties);
+
+  // TaskProperties networkingProperties = {"networking", 40, 500, TaskPriority::Medium};
+  // core.AddTask(&networkingTask, &networkingProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
 
@@ -103,7 +86,7 @@ void loop() {
   OxCore::Debug<const char *>("Loop starting...\n");
   // Blocking call
   if (core.Run() == false) {
-      ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToRun);
+      OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);
 #ifdef ARDUINO
       // Loop endlessly to stop the program from running
       while (true) {}
