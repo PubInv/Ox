@@ -56,6 +56,7 @@ The Public Invention OxyCon aims to meet or exceed the WHO specification for oxy
 #### 2.2 Failure Mode and Effects Analysis
 
 #### 2.3 Risk Management
+
 ### 3.0 Literature Review
 #### 3.1 Open Source Projects
 - Project Apollo
@@ -85,6 +86,16 @@ The Public Invention OxyCon aims to meet or exceed the WHO specification for oxy
 #### 6.2 First Protoype
 ![OxyCon Pneumatic Circuit Prototype](img/pneumatic_circuit_prototype_v1.jpg)
 
+### 7.0 Software Architecture
+#### 7.1 Overview
+RTOS
+Timing requirements
+Logging
+Connectivity
+Security
+Libraries
+### 8.0 Electrical
+#### 8.1 Architecture
 
 ### References
 
