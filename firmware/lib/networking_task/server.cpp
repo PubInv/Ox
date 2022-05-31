@@ -22,16 +22,13 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-
-#include <PIRCS.h>
-#include <core/task.h>
 #include <server.h>
 
 extern "C" {
 #include "mongoose.h"
 }
 
-namespace Ox_Networking {
+namespace OxApp {
 
 bool lock = false;
 struct mg_mgr mgr;
@@ -95,4 +92,4 @@ bool server_close() {
   return true;
 }
 
-} // namespace Ox_Networking
+} // namespace OxApp

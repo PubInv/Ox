@@ -24,27 +24,27 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <networking_task.h>
 
-namespace Ox_Networking {
+namespace OxApp {
 
 //:_init()
-bool NetworkingController::setup(Task *task) {
-  Ox_Networking::server_init(task);
+bool NetworkingTask::setup(Task *task) {
+  OxApp::server_init(task);
   return true;
 }
 
-bool NetworkingController::_init() {
+bool NetworkingTask::_init() {
   return true;
 }
 
-bool NetworkingController::_run() {
-  Ox_Networking::server_poll();
+bool NetworkingTask::_run() {
+  OxApp::server_poll();
   return true;
 }
 
-bool NetworkingController::connect() { return false; }
+bool NetworkingTask::connect() { return false; }
 
-bool NetworkingController::send_udp(const void *data, size_t s) {
-  Ox_Networking::server_send_udp(data, s);
+bool NetworkingTask::send_udp(const void *data, size_t s) {
+  OxApp::server_send_udp(data, s);
   return true;
 }
 

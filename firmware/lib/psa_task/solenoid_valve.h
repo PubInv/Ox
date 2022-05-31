@@ -20,27 +20,47 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#ifndef NETWORKING_H
-#define NETWORKING_H
-
-#include <PIRCS.h>
-#include <PIRDS.h>
+#ifndef VALVE_H
+#define VALVE_H
 
 #include <core.h>
-#include "server.h"
+#ifdef ARDUINO
+#include <Arduino.h>
+#else
+//#include <cstdint>
+#endif
 
 namespace OxApp {
 
-class NetworkingTask : public OxCore::Task {
-public:
-  bool setup(Task *callback);
-  //bool run(uint32_t msNow);
-  bool connect();
-  bool send_udp(const void *data, size_t s);
-private:
-  bool _init() override;
-  bool _run() override;
-};
+    struct ValveState {
+        const char * name;
+        uint8_t id;
+        uint8_t pin;
+        uint32_t onTime; //ms the valve will be on
+        uint32_t offTime; //ms the valve will be off
+        uint32_t msLast;
+        bool isOn;
+    };
+
+    class Valve {
+        private:
+            ValveState state;
+        public:
+            Valve(){};
+            Valve(const char * name, uint8_t id, uint8_t pin, uint32_t onTime, uint32_t offTime){
+                state.name = name;
+                state.id = id;
+                state.pin = pin;
+                state.onTime = onTime;
+                state.offTime = offTime;
+                state.msLast = 0;
+                state.isOn = false;
+            };
+            ~Valve(){};
+            void update(const uint32_t &msNow);
+            bool changeTiming(uint32_t onTime, uint32_t offTime);
+            bool forceValveTrigger();
+    };
 
 }
 

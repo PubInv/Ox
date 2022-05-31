@@ -1,6 +1,0 @@
-{
-    "name": "Solenoid Valve",
-    "version": "0.0.1",
-    "frameworks": ["arduino"],
-    "platforms": "*"
-}

@@ -20,28 +20,44 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#ifndef NETWORKING_H
-#define NETWORKING_H
-
-#include <PIRCS.h>
-#include <PIRDS.h>
-
-#include <core.h>
-#include "server.h"
+#include "solenoid_valve.h"
 
 namespace OxApp {
 
-class NetworkingTask : public OxCore::Task {
-public:
-  bool setup(Task *callback);
-  //bool run(uint32_t msNow);
-  bool connect();
-  bool send_udp(const void *data, size_t s);
-private:
-  bool _init() override;
-  bool _run() override;
-};
+    void Valve::update(const uint32_t &msNow) {
 
+        OxCore::Debug<const char *>("Valve update: ");
+        OxCore::Debug<int>(state.id);
+        OxCore::Debug<const char *>("   ");
+        OxCore::Debug<const char *>(state.name);
+        // OxCore::Debug<const char *>("   ");
+        // OxCore::Debug<int>(msNow);
+        // OxCore::Debug<const char *>("   ");
+        // OxCore::Debug<int>(state.onTime);
+        // OxCore::Debug<const char *>("   ");
+        // OxCore::Debug<int>(state.offTime);
+
+        if (msNow >= state.onTime && msNow < state.offTime) {
+            OxCore::DebugLn<const char *>("  On");
+            state.isOn = true;
+        } else {
+            state.isOn = false;
+            OxCore::DebugLn<const char *>("  Off");
+        }
+    }
+
+    bool Valve::changeTiming(uint32_t onTime, uint32_t offTime){
+        // TODO: error checking
+        if (onTime < 0 || offTime < 0) {
+            // Call error handler
+        }
+
+        state.onTime = onTime;
+        state.offTime = offTime;
+        return true;
+    }
+
+    bool Valve::forceValveTrigger() {
+        return false;
+    }
 }
-
-#endif

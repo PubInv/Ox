@@ -25,12 +25,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifdef ARDUINO
 #include <Arduino.h>
 #else
+#include <cstdint>
 #include <iostream>
 #endif
 
 #include <shift.h>
-//#include <config.h>
-#include <cstdint>
 
 // Shift register
 #define DS 13    // 747HC pin 14 - serial data
@@ -59,10 +58,12 @@ void shiftOutValves(uint8_t data_out)
 {
 #ifdef ARDUINO
   // take the latchPin low
-  digitalWrite(ST_CP, LOW);
+  digitalWrite(sp.latch, LOW);
   // shift out the bits:
-  shiftOut(DS, SH_CP, MSBFIRST, data_out); //, numberToDisplay);
+  shiftOut(sp.data, sp.clock, MSBFIRST, data_out);
   //take the latch pin high so the LEDs will light up:
-  digitalWrite(ST_CP, HIGH);
+  digitalWrite(sp.latch, HIGH);
+#else
+  std::cout << "Shift out valves" << std::endl;
 #endif
 }

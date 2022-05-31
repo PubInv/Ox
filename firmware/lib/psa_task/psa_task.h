@@ -29,7 +29,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 #endif
 #include <core.h>
-#include <valve_controller.h>
+#include "../collections/array.h"
+#include "solenoid_valve.h"
+#include <abp_pressure_sensor.h>
 
 namespace OxApp
 {
@@ -37,10 +39,15 @@ namespace OxApp
     class PsaTask : public OxCore::Task
     {
     private:
-        OxCore::Timer valveCycleTimer;
+        OxCollections::Array<OxSensor::AbpPressureSensor, 3> _pressureSensors;
+        OxCore::Timer _valveCycleTimer;
+        OxCollections::Array<Valve, 5> _valves;
         bool _init() override;
         bool _run() override;
-        void _printValveState(OxCore::u8 vs);
+        void _updateValves();
+        void _printValveState(uint8_t vs);
+        void _configPressureSensors();
+        void _readPressureSensors();
     };
 }
 

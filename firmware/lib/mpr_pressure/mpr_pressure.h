@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <cstdint>
 
-namespace Ox_Sensor {
+namespace OxSensor {
 
     // Status byte flags from Table 14 MPR datasheet
     #define POWER_FLAG      0x40 //b01000000

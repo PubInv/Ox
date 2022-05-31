@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Wire.h>
 #include <cmath>
 
-namespace Ox_Sensor {
+namespace OxSensor {
 
     bool MPR_Pressure::setup(){
         Wire.beginTransmission(state.addr);

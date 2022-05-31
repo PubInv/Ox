@@ -26,13 +26,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define SERVER_H
 
 #include <PIRCS.h>
-#include <core/task.h>
+#include <core.h>
 
 extern "C" {
 #include "mongoose.h"
 }
 
-namespace Ox_Networking {
+namespace OxApp {
 
 constexpr char *s_listen_on = (char *)"http://localhost:8001";
 constexpr char *s_udp = (char *)"udp://localhost:6111";
@@ -44,6 +44,6 @@ int server_send_udp(const void *data, size_t s);
 bool server_init(Task *task);
 bool server_close();
 
-} // namespace Ox_Networking
+} // namespace OxApp
 
 #endif
