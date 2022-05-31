@@ -32,10 +32,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <PIRDS.h>
 #include <task.h>
 
-using namespace Ox_Networking;
+using namespace OxApp;
 
 void test_setup_networking(){
-  NetworkingController nc;
+  NetworkingTask nc;
   Task ct;
   bool success = nc.setup(&ct);
   TEST_ASSERT_TRUE(success);

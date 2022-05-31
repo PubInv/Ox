@@ -25,6 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <iostream>
 #include <unity.h>
 #include <core.h>
+#include "test_common.h"
 
 using namespace OxCore;
 
@@ -135,20 +136,6 @@ void process() {
     UNITY_END();
 }
 
-#ifdef ARDUINO
-#include <Arduino.h>
-void setup() {
-    // NOTE!!! Wait for >2 secs
-    // if board doesn't support software reset via Serial.DTR/RTS
-    delay(2000);
-    process();
-}
-void loop() {
-    //
-}
-#else
-int main(int argc, char **argv) {
-    process();
-    return 0;
-}
+TEST_MAIN
+
 #endif
