@@ -10,4 +10,12 @@ Field hospital settings may be urban or rural. Environments such as high tempera
 
 Infrastructure and logistics create additional challenges. This is raised the requirement to design a device that can be manufactured locally, along with sufficient documentation to present to local regulatory authorities. Medical device standards must be met and this project aims to meet regulatory requirements.
 
-Volunteers are needed for this project! Please contact Public Invention if you are interested in joining. Currently we are looking for electrical, mechanical and software engineers.
+**This is not a medical device. Pressure vessels and concentrated oxygen are hazardous!**
+
+## License
+
+This program includes free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
