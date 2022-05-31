@@ -4,7 +4,7 @@
 
 **2 February 2021**
 
-Development of an test rig has been underway. Unfortunately the pressure sensors orignally intended for this purpose were not easy to prototype with which has caused delays. New sensors have been identified for testing, along with additional gas sensors to gain further insight into the process. After much research PCB design for the PIOC will be starting this month.
+Development of an test rig has been underway. Unfortunately the pressure sensors originally intended for this purpose were not easy to prototype with which has caused delays. New sensors have been identified for testing, along with additional gas sensors to gain further insight into the process. After much research PCB design for the PIOC will be starting this month.
 
 **10 January 2021**
 
