@@ -22,75 +22,54 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef CIRCULAR_ARRAY_H
+#define CIRCULAR_ARRAY_H
 
 #ifdef ARDUINO
 #include <Arduino.h>
 #else // Native
-#include <stdlib.h>
+//
 #endif
+
+//#include <cstddef>
 
 namespace OxCollections {
 
 template <class T, size_t L>
-class Queue {
+class CircularArray {
     private:
         T arr[L];
         int capacity = L;
-        int front = 0;
-        int rear = -1;
         int count = 0;
+        int index = 0;
     public:
-        void enqueue(T t);
-        void dequeue();
-        T peek();
         int size();
-        bool isEmpty();
-        bool isFull();
+        T next();
+        void add(T item);
 };
 
 
-template<class T, size_t L>
-void Queue<T, L>::dequeue() {
-    if (isEmpty()) {
-        exit(EXIT_FAILURE);
-    }
-    front = (front + 1) % capacity;
-    count--;
-}
-
-template<class T, size_t L>
-void Queue<T, L>::enqueue(T item) {
-    if (isFull()){
-        exit(EXIT_FAILURE);
-    }
-    rear = (rear + 1) % capacity;
-    arr[rear] = item;
-    count++;
-}
-
-template<class T, size_t L>
-T Queue<T, L>::peek() {
-    if (isEmpty()) {
-        exit(EXIT_FAILURE);
-    }
-    return arr[front];
-}
-
-template<class T, size_t L>
-int Queue<T, L>::size() {
+template <class T, size_t L>
+int CircularArray<T, L>::size() {
     return count;
 }
 
-template<class T, size_t L>
-bool Queue<T, L>::isEmpty() {
-    return (size() == 0);
+template <class T, size_t L>
+T CircularArray<T, L>::next() {
+    int i = index++;
+    if (index > count) {
+        index = 0;
+    }
+    return arr[i];
 }
 
-template<class T, size_t L>
-bool Queue<T, L>::isFull() {
-    return (size() == capacity);
+template <class T, size_t L>
+void CircularArray<T, L>::add(T item) {
+    if (count >= capacity) {
+        //return false;
+        count = 0;
+    }
+    arr[count++] = item;
 }
 
 }

@@ -28,12 +28,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifdef ARDUINO
 #include <Arduino.h>
 #else // Native
-#include <iostream>
+
 #endif
-//#include <cstddef>
-//#ifndef ARDUINO
-//#include <iostream>
-//#endif
 
 namespace OxCollections {
 
@@ -59,12 +55,8 @@ class Map {
         int getCount();
 };
 
-
 template <typename K, typename V, size_t L>
 bool Map<K, V, L>::add(K k, V v) {
-    #ifndef ARDUINO
-    std::cout << "K: " << k << " V: " << v << std::endl;
-    #endif
     if (hasKey(k) >= 0) {
         return false;
     }
@@ -73,32 +65,16 @@ bool Map<K, V, L>::add(K k, V v) {
     }
     arr[_count].key = k;
     arr[_count].value = v;
-    //std::cout << "_count: " << _count << std::endl;
-    //std::cout << "K: " << arr[_count].key << " V: " << arr[_count].value << std::endl;
     _count++;
-    #ifndef ARDUINO
-    std::cout << "_count: " << _count << std::endl;
-    #endif
     return true;
 }
 
 template <typename K, typename V, size_t L>
 V Map<K, V, L>::getValue(K key) {
-    int i = hasKey(key);
-    #ifndef ARDUINO
-    std::cout << "K: " << key << std::endl;
-    std::cout << "i: " << i << std::endl;
-    #endif
-    
+    int i = hasKey(key);    
     if (i >= 0) {
-        #ifndef ARDUINO
-        std::cout << "arr[i].value: " << arr[i].value << std::endl;
-        #endif
         return arr[i].value;
     } else {
-        #ifndef ARDUINO
-        std::cout << "Cant get value!" << std::endl;
-        #endif
         return nullptr;
     }
 }
@@ -131,12 +107,8 @@ bool Map<K, V, L>::isFull() {
 template <typename K, typename V, size_t L>
 V Map<K, V, L>::getValueByIndex(int index) {
     if ((index >= 0) && (index < _count)) {
-        //std::cout << "key: " << arr[index].key << " value: " << arr[index].value << std::endl;
         return arr[index].value;
     } else {
-        #ifndef ARDUINO
-        std::cout << "Cant get value!" << std::endl;
-        #endif
         return nullptr;
     }
 }
