@@ -39,7 +39,12 @@ void Scheduler::setupIdleTask() {
 
 Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     // Record how long the previous task took to run
+        //        OxCore::Debug<const long>(_lastTaskRan->_lastRunDuration);
+
+  // NOTE TO BEN: Rob added this as a guard for native run without much though!
+        if (_lastTaskRan) {
     _lastTaskRan->_lastRunDuration = currentTime - _lastTaskRan->_lastRun;
+        }
 
     Task* nextTask = nullptr;
     TimeMs maxTimeUntilDeadline = -99999;
@@ -64,7 +69,6 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
             nextTask = nullptr;
         }
     }
-    
     if (nextTask == nullptr) {
         nextTask = &_idleTask;
     }
@@ -115,7 +119,7 @@ TaskState Scheduler::RunNextTask(uint32_t msNow) {
             ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::NotImplemented);
         break;
     }
-    
+
     nextTask->Run(msNow);
     _lastTaskRan = nextTask;
     return nextTask->GetState();
