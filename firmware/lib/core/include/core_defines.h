@@ -3,6 +3,8 @@
 
 #ifdef ARDUINO
 #include <Arduino.h>
+#else
+#include <stdint.h>
 #endif
 
 namespace OxCore {

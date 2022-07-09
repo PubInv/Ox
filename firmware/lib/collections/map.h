@@ -28,7 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifdef ARDUINO
 #include <Arduino.h>
 #else // Native
-
+#include <stddef.h>
 #endif
 
 namespace OxCollections {
@@ -71,7 +71,7 @@ bool Map<K, V, L>::add(K k, V v) {
 
 template <typename K, typename V, size_t L>
 V Map<K, V, L>::getValue(K key) {
-    int i = hasKey(key);    
+    int i = hasKey(key);
     if (i >= 0) {
         return arr[i].value;
     } else {

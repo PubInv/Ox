@@ -39,7 +39,10 @@ void Scheduler::setupIdleTask() {
 
 Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     // Record how long the previous task took to run
-    _lastTaskRan->_lastRunDuration = currentTime - _lastTaskRan->_lastRun;
+    
+    if (_lastTaskRan != nullptr) {
+        _lastTaskRan->_lastRunDuration = currentTime - _lastTaskRan->_lastRun;
+    }
 
     Task* nextTask = nullptr;
     TimeMs maxTimeUntilDeadline = -99999;
@@ -64,7 +67,6 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
             nextTask = nullptr;
         }
     }
-    
     if (nextTask == nullptr) {
         nextTask = &_idleTask;
     }
@@ -115,7 +117,7 @@ TaskState Scheduler::RunNextTask(uint32_t msNow) {
             ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::NotImplemented);
         break;
     }
-    
+
     nextTask->Run(msNow);
     _lastTaskRan = nextTask;
     return nextTask->GetState();

@@ -28,7 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 #else
 #include <iostream>
-#include "HAL/posix/hal.h"
+// #include "HAL/posix/hal.h"
 #endif
 
 namespace OxCore {
@@ -48,7 +48,6 @@ bool Core::Boot() {
     properties.mode = SchedulerMode::RealTime;
     properties.tickPeriodMs = TICK_PERIOD;
     _scheduler.SetProperties(properties);
-
     CreateWatchdog(WATCHDOG_TIMEOUT_MS);
 
     _state = CoreState::Configured;
@@ -68,7 +67,6 @@ bool Core::Boot() {
         return false;
     }
     _primaryTimer.Init();
-
     return result;
 }
 
@@ -90,7 +88,6 @@ void Core::AddTask(Task *task, TaskProperties *properties) {
 
 bool Core::Run() {
     OxCore::Debug<const char *>("Core::Run!\n");
-    
 
 #ifdef SW_TICK
     while (true) {
@@ -116,10 +113,9 @@ bool Core::Run() {
     }
 #endif
     OxCore::Debug<const char *>("Exiting Core::Run!\n");
-    
     return false;
 }
-    
+
 ////////// Private //////////
 
 void Core::Tick() {
