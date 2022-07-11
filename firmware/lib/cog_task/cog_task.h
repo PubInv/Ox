@@ -30,7 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 #include <core.h>
 #include "../collections/array.h"
-#include "heater_prim.h"
+#include "heater.h"
 #include <mock_temperature_sensor.h>
 
 namespace OxApp
@@ -41,7 +41,7 @@ namespace OxApp
     private:
         OxCollections::Array<MockTemp::MockTemperatureSensor, 3> _temperatureSensors;
         OxCore::Timer _valveCycleTimer;
-        OxCollections::Array<Valve, 5> _valves;
+        OxCollections::Array<Heater, 2> _heaters;
         bool _init() override;
         bool _run() override;
         void _updatePowerComponents();

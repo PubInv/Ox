@@ -14,13 +14,13 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#include "heater_prim.h"
+#include "heater.h"
 
 namespace OxApp {
 
-    void Valve::update(const uint32_t &msNow) {
+    void Heater::update(const uint32_t &msNow) {
 
-        OxCore::Debug<const char *>("Valve update: ");
+        OxCore::Debug<const char *>("Heater update: ");
         OxCore::Debug<int>(state.id);
         OxCore::Debug<const char *>("   ");
         OxCore::Debug<const char *>(state.name);
@@ -40,7 +40,7 @@ namespace OxApp {
         }
     }
 
-    bool Valve::changeTiming(uint32_t onTime, uint32_t offTime){
+    bool Heater::changeTiming(uint32_t onTime, uint32_t offTime){
         // TODO: error checking
         if (onTime < 0 || offTime < 0) {
             // Call error handler
@@ -51,7 +51,7 @@ namespace OxApp {
         return true;
     }
 
-    bool Valve::forceValveTrigger() {
+    bool Heater::forceValveTrigger() {
         return false;
     }
 }

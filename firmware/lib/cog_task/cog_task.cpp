@@ -54,16 +54,10 @@ namespace OxApp
 
         _configTemperatureSensors();
 
-        Valve v1("Fill_A", 1, 50, 500, 1000);
-        _valves.add(v1);
-        Valve v2("Exhaust_A",2, 51, 1000, 1500);
-        _valves.add(v2);
-        Valve v3("Fill_B",3, 52, 1500, 2000);
-        _valves.add(v3);
-        Valve v4("Exhaust_B",4, 53, 2000, 2500);
-        _valves.add(v4);
-        Valve v5("Balance",5, 54, 2500, 2600);
-        _valves.add(v5);
+        Heater v1("PRIMARY_HEATER", 1, 50, 500, 1000);
+        _heaters.add(v1);
+        Heater v2("SECONDARY_HEATER",2, 51, 1000, 1500);
+        _heaters.add(v2);
 
         _valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
 
@@ -92,12 +86,12 @@ namespace OxApp
     }
 
     void CogTask::_updatePowerComponents() {
-        OxCore::Debug<const char *>("_updateValves\n");
+        OxCore::Debug<const char *>("_updateHeaterPrims\n");
         uint32_t elapsed = _valveCycleTimer.Update();
         OxCore::DebugLn<uint32_t>(elapsed);
-        for (int i = 0; i < _valves.size(); i++) {
-            Valve valve = _valves.get(i);
-            valve.update(elapsed);
+        for (int i = 0; i < _heaters.size(); i++) {
+            Heater heater = _heaters.get(i);
+            heater.update(elapsed);
         }
         if (elapsed > 2600) {
             _valveCycleTimer.Reset();

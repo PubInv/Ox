@@ -25,7 +25,7 @@
 
 namespace OxApp {
 
-    struct ValveState {
+    struct HeaterState {
         const char * name;
         uint8_t id;
         uint8_t pin;
@@ -35,12 +35,12 @@ namespace OxApp {
         bool isOn;
     };
 
-    class Valve {
+    class Heater {
         private:
-            ValveState state;
+            HeaterState state;
         public:
-            Valve(){};
-            Valve(const char * name, uint8_t id, uint8_t pin, uint32_t onTime, uint32_t offTime){
+            Heater(){};
+            Heater(const char * name, uint8_t id, uint8_t pin, uint32_t onTime, uint32_t offTime){
                 state.name = name;
                 state.id = id;
                 state.pin = pin;
@@ -49,7 +49,7 @@ namespace OxApp {
                 state.msLast = 0;
                 state.isOn = false;
             };
-            ~Valve(){};
+            ~Heater(){};
             void update(const uint32_t &msNow);
             bool changeTiming(uint32_t onTime, uint32_t offTime);
             bool forceValveTrigger();
