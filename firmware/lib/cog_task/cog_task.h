@@ -44,7 +44,7 @@ namespace OxApp
         OxCollections::Array<Valve, 5> _valves;
         bool _init() override;
         bool _run() override;
-        void _updateValves();
+        void _updatePowerComponents();
         void _printValveState(uint8_t vs);
         void _configTemperatureSensors();
         void _readTemperatureSensors();

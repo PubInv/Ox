@@ -77,7 +77,7 @@ namespace OxApp
 
         _readTemperatureSensors();
 
-        _updateValves();
+        _updatePowerComponents();
 
         // if (elapsed >= TOTAL_CYCLE_TIME)
         // {
@@ -91,7 +91,7 @@ namespace OxApp
         return true;
     }
 
-    void CogTask::_updateValves() {
+    void CogTask::_updatePowerComponents() {
         OxCore::Debug<const char *>("_updateValves\n");
         uint32_t elapsed = _valveCycleTimer.Update();
         OxCore::DebugLn<uint32_t>(elapsed);
@@ -123,7 +123,7 @@ namespace OxApp
     }
 
     void CogTask::_readTemperatureSensors() {
-        OxCore::Debug<const char *>("_readPressureSensors\n");
+        OxCore::Debug<const char *>("_readTemperatureSensors\n");
         OxCore::DebugLn<int>(_temperatureSensors.size());
         for (int i = 0; i < _temperatureSensors.size(); i++) {
             MockTemp::MockTemperatureSensor sensor = _temperatureSensors.get(i);

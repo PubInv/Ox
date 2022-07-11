@@ -32,7 +32,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 
 // #include <networking_task.h>
-#include <psa_task.h>
 #include <cog_task.h>
 //#include <display_task.h>
 

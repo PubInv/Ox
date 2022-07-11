@@ -1,12 +1,5 @@
 /*
-Public Invention's Ox Project is an open source hardware design for an oxygen
-concentrator for use by field hospitals around the world. This team aims to
-design an oxygen concentrator that can be manufactured locally while overcoming
-challenges posed by human resources, hospital location (geographically),
-infrastructure and logistics; in addition, this project attempts the minimum
-documentation expected of their design for international approval whilst
-tackling regulatory requirements for medical devices. Copyright (C) 2021
-Robert Read, Ben Coombs, and Darío Hereñú.
+Copyright (C) 2021 Robert Read, Ben Coombs.
 
 This program includes free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -35,7 +28,11 @@ namespace OxCore {
 
 #define SW_TICK 1
 #define TICK_PERIOD 2
-#define WATCHDOG_TIMEOUT_MS 250
+
+  // The WATCHDOG is nice but annoying if too fast;
+  // I'm configuring it to every 25 seconds
+  // #define WATCHDOG_TIMEOUT_MS 250
+#define WATCHDOG_TIMEOUT_MS 250000
 bool Core::_criticalError = false;
 
 bool Core::Boot() {
@@ -123,7 +120,7 @@ void Core::Tick() {
     uint32_t elapsed = _primaryTimer.Update();
     TaskState state = _scheduler.RunNextTask(elapsed);
 #ifndef ARDUINO
-    std::cout << "State: " << static_cast<int>(state) << std::endl;
+    //    std::cout << "State: " << static_cast<int>(state) << std::endl;
 #endif
 }
 
@@ -139,7 +136,7 @@ bool Core::ResetWatchdog() {
         return false;
     } else {
 #ifndef ARDUINO
-        std::cout << "Watchdog reset. Elapsed: " << elapsed << std::endl;
+      //        std::cout << "Watchdog reset. Elapsed: " << elapsed << std::endl;
 #endif
         _watchdogTimer.Reset();
         return true;
