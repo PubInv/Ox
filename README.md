@@ -1,18 +1,40 @@
-# Public Invention Oxygen Concentrator
+# NASA-COG
 
 ## Introduction
 
-Medical grade oxygen is an essential component of respiratory therapy. Typically this is provided by industrial scale cryogenic oxygen concentrators. The COVID-19 pandemic has highlighted the existing need for medical oxygen in field hospital settings around the world. These settings create a variety of challenges that need to be overcome to deliver oxygen to communities around the world.
+This is a repo for a control system made for NASA to drive a Ceramic Oxygen Generation
+technology they have developed. It was forked from ["The Ox"]() project of Public Invention run by Mr. Ben Coombs, which was in turn a fork of the VentOS project of Helpful Engineering let my Ben Coombs, Dr. Erich Schulz, and Robert L. Read.
 
-Human resources are be limited both medically and technically. Medical staff communicate in a variety of local languages and may have little experience. Staff to patient ratios are much higher than is acceptable in a fully equipped hospital. Technical support staff face challenges such as lack of training and basic maintenance equipment.
+However, the main reason we are starting with this fork is not that the Pressure Swing
+Adsorption system of the Ox is a particularly relevant, but rather that the code
+represents a nice platform of simple microcontroller control of related machines.
 
-Field hospital settings may be urban or rural. Environments such as high temperatures, high humidity and fine dust particles create engineering challenges.
+To wit, includes PlatformIO configuration, a state machine (finite automata),
+a superloop architecutre, and a hardware abstraction layer.
 
-Infrastructure and logistics create additional challenges. This is raised the requirement to design a device that can be manufactured locally, along with sufficient documentation to present to local regulatory authorities. Medical device standards must be met and this project aims to meet regulatory requirements.
+This particular project of NASA will improve life support technology in space,
+but may eventually greatly improve global health.
 
-**This is not a medical device. Pressure vessels and concentrated oxygen are hazardous!**
+## How to run
+
+At present, this code does little (for the NASA COG project). We intend
+to build a native (that is, laptop) simulation using mock hardware components.
+The fundamental way to run this is to perform:
+> cd firmware
+> pio run -e native && ./.pio/build/native/program
+
+## Plans for week of July 11th, 2022
+
+Our initial plan is to get the naitve code to run a "hello, world" version
+of the state machine and Harware Abstraction Layer that will eventually grow
+into a control system.
 
 ## License
+
+In general we intend to follow the [Public Invention Licensed Guidelines](https://github.com/PubInv/PubInv-License-Guidelines) unless
+NASA requests something different. If you are starting your own project, please
+feel free to fork the license guidelines as a starting point if you like our
+license policy.
 
 This program includes free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
