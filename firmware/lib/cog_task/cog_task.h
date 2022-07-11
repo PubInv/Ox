@@ -30,7 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 #include <core.h>
 #include "../collections/array.h"
-#include "solenoid_valve.h"
+#include "heater_prim.h"
 #include <mock_temperature_sensor.h>
 
 namespace OxApp

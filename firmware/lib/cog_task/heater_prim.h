@@ -1,11 +1,4 @@
-// Public Invention's Ox Project is an open source hardware design for an oxygen
-// concentrator for use by field hospitals around the world. This team aims to
-// design an oxygen concentrator that can be manufactured locally while overcoming
-// challenges posed by human resources, hospital location (geographically),
-// infrastructure and logistics; in addition, this project attempts the minimum
-// documentation expected of their design for international approval whilst
-// tackling regulatory requirements for medical devices. Copyright (C) 2021
-// Robert Read, Ben Coombs, and Darío Hereñú.
+// Copyright (C) 2021 Robert Read, Ben Coombs.
 
 // This program includes free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,8 +13,8 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#ifndef VALVE_H
-#define VALVE_H
+#ifndef HEATER_PRIM_H
+#define HEATER_PRIM_H
 
 #include <core.h>
 #ifdef ARDUINO
