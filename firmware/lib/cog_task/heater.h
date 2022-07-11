@@ -13,8 +13,8 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#ifndef HEATER_PRIM_H
-#define HEATER_PRIM_H
+#ifndef HEATER_H
+#define HEATER_H
 
 #include <core.h>
 #ifdef ARDUINO
