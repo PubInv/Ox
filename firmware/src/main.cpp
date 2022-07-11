@@ -33,6 +33,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // #include <networking_task.h>
 #include <psa_task.h>
+#include <cog_task.h>
 //#include <display_task.h>
 
 using namespace OxCore;
@@ -41,7 +42,7 @@ static Core core;
 /***** Declare your tasks here *****/
 
 // OxApp::NetworkingTask networkingTask;
-OxApp::PsaTask psaTask;
+OxApp::CogTask cogTask;
 // OxApp::SensorReadTask sensorTask;
 
 /***********************************/
@@ -60,22 +61,12 @@ void setup()
 
   /***** Configure and add your tasks here *****/
 
-  OxCore::TaskProperties psaProperties;
-  psaProperties.name = "psa";
-  psaProperties.id = 20;
-  psaProperties.period = 1000;
-  psaProperties.priority = OxCore::TaskPriority::High;
-  core.AddTask(&psaTask, &psaProperties);
-
-  // OxCore::TaskProperties sensorProperties;
-  // sensorProperties.name = "sensor";
-  // sensorProperties.id = 30;
-  // sensorProperties.period = 30;
-  // sensorProperties.priority = OxCore::TaskPriority::High;
-  // core.AddTask(&sensorTask, &sensorProperties);
-
-  // TaskProperties networkingProperties = {"networking", 40, 500, TaskPriority::Medium};
-  // core.AddTask(&networkingTask, &networkingProperties);
+  OxCore::TaskProperties cogProperties;
+  cogProperties.name = "cog";
+  cogProperties.id = 20;
+  cogProperties.period = 1000;
+  cogProperties.priority = OxCore::TaskPriority::High;
+  core.AddTask(&cogTask, &cogProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
 

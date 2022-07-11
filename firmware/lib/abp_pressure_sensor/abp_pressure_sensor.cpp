@@ -1,11 +1,5 @@
-// Public Invention's Ox Project is an open source hardware design for an oxygen
-// concentrator for use by field hospitals around the world. This team aims to
-// design an oxygen concentrator that can be manufactured locally while overcoming
-// challenges posed by human resources, hospital location (geographically),
-// infrastructure and logistics; in addition, this project attempts the minimum
-// documentation expected of their design for international approval whilst
-// tackling regulatory requirements for medical devices. Copyright (C) 2021
-// Robert Read, Ben Coombs, and Darío Hereñú.
+// Copyright (C) 2021
+// Robert Read, Ben Coombs.
 
 // This program includes free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -47,18 +41,18 @@ namespace OxSensor {
         uint8_t val2 = SPI.transfer(0);
         uint8_t val3 = SPI.transfer(0);
         uint8_t val4 = SPI.transfer(0);
-        
+
         OxCore::Debug<const char *>("SPI transfered.\n");
-        
+
         //SPI.endTransaction();
         digitalWrite(_config.pin, HIGH);
-        
+
         OxCore::Debug<const char *>("Count: ");
         OxCore::DebugLn<uint8_t>(val1);
         OxCore::DebugLn<uint8_t>(val2);
         OxCore::DebugLn<uint8_t>(val3);
         OxCore::DebugLn<uint8_t>(val4);
-        
+
         // OxCore::Debug<const char *>("boop4\n");
         // From table 6 of the ABP datasheet
         // const uint32_t count_at_10_percent = 1638; // 0x0666
