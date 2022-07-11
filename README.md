@@ -21,6 +21,7 @@ At present, this code does little (for the NASA COG project). We intend
 to build a native (that is, laptop) simulation using mock hardware components.
 The fundamental way to run this is to perform:
 > cd firmware
+
 > pio run -e native && ./.pio/build/native/program
 
 ## Plans for week of July 11th, 2022
