@@ -35,8 +35,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <psa_task.h>
 //#include <display_task.h>
 
-using namespace OxCore;
-static Core core;
+// using namespace OxCore;
+static OxCore::Core core;
 
 /***** Declare your tasks here *****/
 
@@ -52,7 +52,7 @@ void setup()
   OxCore::Debug<const char *>("Starting Ox...\n");
 
   if (core.Boot() == false) {
-      ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
+      OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToBoot);
       // TODO: Output error message
       //return EXIT_FAILURE;
       return;

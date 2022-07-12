@@ -22,45 +22,32 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+#ifdef ARDUINO
+#include <Arduino.h>
+#endif
+
 #include <unity.h>
-#include <core.h>
+#include <stdio.h>
+#include <iostream>
+#include <cstdint>
+#include <chrono>
 
-using namespace OxCore;
+#include <networking.h>
+#include <PIRDS.h>
+#include <task.h>
 
+using namespace OxApp;
 
-void setUp(void) {
-    // set stuff up here
-}
-
-void tearDown(void) {
-    // clean stuff up here
-}
-
-void init() {
-
-    TEST_ASSERT_TRUE(true);
+void test_setup_networking(){
+  NetworkingTask nc;
+  Task ct;
+  bool success = nc.setup(&ct);
+  TEST_ASSERT_TRUE(success);
 }
 
 void process() {
-    UNITY_BEGIN();
-    RUN_TEST(init);
-    UNITY_END();
+  UNITY_BEGIN();
+  //RUN_TEST(test_valve_does_init);
+  RUN_TEST(test_setup_networking);
+  UNITY_END();
 }
-
-#ifdef ARDUINO
-#include <Arduino.h>
-void setup() {
-    // NOTE!!! Wait for >2 secs
-    // if board doesn't support software reset via Serial.DTR/RTS
-    delay(2000);
-    process();
-}
-void loop() {
-    //
-}
-#else
-int main(int argc, char **argv) {
-    process();
-    return 0;
-}
-#endif

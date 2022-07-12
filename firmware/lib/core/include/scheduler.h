@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "../collections/map.h"
+#include <map.h>
 #include "task.h"
 #include "debug.h"
 

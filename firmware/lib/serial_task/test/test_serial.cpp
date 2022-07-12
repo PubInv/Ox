@@ -22,23 +22,16 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+#ifdef ARDUINO
+#include <Arduino.h>
+#endif
+
 #include <iostream>
 #include <unity.h>
 #include <core.h>
+#include <serial_task.h>
 
-using namespace OxCore;
-
-class MockTask: public Task {
-    private:
-        bool _init() override {
-            std::cout << "Inited mock task\n";
-            return true;
-        }
-        bool _run() override {
-            std::cout << "Ran mock task\n";
-            return true;
-        }
-};
+static OxCore::Core core;
 
 void setUp(void) {
 }
@@ -46,42 +39,12 @@ void setUp(void) {
 void tearDown(void) {
 }
 
-void test_can_init_task() {
-    MockTask m;
-    TaskState taskInited = m.Init(1, 2);
-    TEST_ASSERT_EQUAL(taskInited, TaskState::Initialized);
-    TEST_ASSERT_EQUAL(m.GetId(), 1);
-    TEST_ASSERT_EQUAL(m.GetPriority(), 2);
-}
 
-void test_failed_to_init_task() {
-    MockTask m;
-    TEST_ASSERT_EQUAL(m.GetState(), TaskState::Undefined);
-    TEST_ASSERT_EQUAL(m.GetId(), -1);
-    TEST_ASSERT_EQUAL(m.GetPriority(), -1);
-}
 
-void process() {
-    UNITY_BEGIN();
-    RUN_TEST(test_can_init_task);
-    RUN_TEST(test_failed_to_init_task);
-    UNITY_END();
+void test_can_write_serial() {
+    OxApp::SerialTask serialTask;
+    // TaskProperties networkingProperties = {"networking", 40, 500, TaskPriority::Medium};
+  // core.AddTask(&networkingTask, &networkingProperties);
+    bool success = serialTask._init(1,2);
+    TEST_ASSERT_TRUE(success);
 }
-
-#ifdef ARDUINO
-#include <Arduino.h>
-void setup() {
-    // NOTE!!! Wait for >2 secs
-    // if board doesn't support software reset via Serial.DTR/RTS
-    delay(2000);
-    process();
-}
-void loop() {
-    //
-}
-#else
-int main(int argc, char **argv) {
-    process();
-    return 0;
-}
-#endif

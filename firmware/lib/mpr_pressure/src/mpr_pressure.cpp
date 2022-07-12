@@ -22,9 +22,11 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+#ifdef ARDUINO
 #include <Arduino.h>
-#include <mpr_pressure.h>
 #include <Wire.h>
+#endif
+#include <mpr_pressure.h>
 #include <cmath>
 
 namespace OxSensor {

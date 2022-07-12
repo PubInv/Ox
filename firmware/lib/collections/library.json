@@ -1,6 +1,15 @@
 {
     "name": "Collections",
     "version": "0.0.1",
+    "authors":
+    [
+        {
+        "name": "Ben Coombs",
+        "email": "bencoombs@protonmail.com",
+        "maintainer": true
+        }
+    ],
+    "license": "AGPL-3.0",
     "frameworks": "*",
     "platforms": "*"
 }

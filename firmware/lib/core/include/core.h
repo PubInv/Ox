@@ -27,10 +27,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // Header files must be declared here to be used by files including <core.h>
 #include "scheduler.h"
-//#include "logger.h"
+#include "task.h"
+#include "logger.h"
 #include "error_handler.h"
 #include "timer.h"
 #include "debug.h"
+#include "util.h"
 
 namespace OxCore {
 

@@ -25,43 +25,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <unity.h>
 #include <stdio.h>
 #include <iostream>
+#include <string.h>
 #include <cstdint>
 #include <chrono>
+#include <mpr_pressure.h>
 
-#include <networking.h>
-#include <PIRDS.h>
-#include <task.h>
+using namespace Ox_Sensor;
 
-using namespace OxApp;
-
-void test_setup_networking(){
-  NetworkingTask nc;
-  Task ct;
-  bool success = nc.setup(&ct);
-  TEST_ASSERT_TRUE(success);
+void test_sensor_does_read(){
+  MPR_Pressure mpr;
+  TEST_ASSERT_TRUE(mpr.setup());
+  float p = mpr.readPressure();
+  Serial.print("Pressure: ");
+  Serial.println(p);
+  TEST_ASSERT_TRUE(p != NAN);
 }
-
-void process() {
-  UNITY_BEGIN();
-  //RUN_TEST(test_valve_does_init);
-  RUN_TEST(test_setup_networking);
-  UNITY_END();
-}
-
-#ifdef ARDUINO
-#include <Arduino.h>
-void setup() {
-    // NOTE!!! Wait for >2 secs
-    // if board doesn't support software reset via Serial.DTR/RTS
-    delay(2000);
-    process();
-}
-void loop() {
-    //
-}
-#else
-int main(int argc, char **argv) {
-    process();
-    return 0;
-}
-#endif

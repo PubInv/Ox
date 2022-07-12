@@ -1,5 +1,5 @@
 {
-    "name": "Core",
+    "name": "Serial Task",
     "version": "0.0.1",
     "authors":
     [
@@ -10,10 +10,6 @@
         }
     ],
     "license": "AGPL-3.0",
-    "dependencies": {
-        "collections": "~0.0.1"
-    },
     "frameworks": "*",
     "platforms": "*"
-    
 }

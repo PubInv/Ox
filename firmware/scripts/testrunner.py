@@ -2,7 +2,14 @@ import os
 import glob
 import re
 
-RUN1 = '''#include <unity.h>
+HEADERS = '''#include <unity.h>
+#ifdef ARDUINO
+#include <Arduino.h>
+#endif
+
+'''
+
+RUN1 = '''
 
 void process() {
     UNITY_BEGIN();
@@ -13,7 +20,6 @@ RUN2 ='''    UNITY_END();
 }
 
 #ifdef ARDUINO
-#include <Arduino.h>
 void setup() {
     // NOTE!!! Wait for >2 secs
     // if board doesn't support software reset via Serial.DTR/RTS
@@ -41,18 +47,26 @@ int main(int argc, char **argv) {
 #cwd = os.getcwd()
 #tmpDir = os.path.join(cwd, '.tmp')
 #os.mkdir(tmpDir)
-cwd = '~/git/Ox_cpp/firmware'
+cwd = '..'
 
 # Build a list of test function calls
 test_funcs = []
-tests = glob.glob('/home/ben/git/Ox_cpp/firmware/**/test_*.cpp', recursive=True)
+# tests = glob.glob('../**/test_*.cpp', recursive=True)
+test_headers = glob.glob('../**/test_*.h', recursive=True)
 
-if len(tests) == 0:
+header_includes = []
+
+if len(test_headers) == 0:
     print("No tests found. Exiting...")
     exit()
 
-for t in tests:
+# get test function declarations from the header files
+for t in test_headers:
     print(t)
+    h = re.search("(test_)\w+(.h)", t) # search for: test_*.h
+    # print(h.group(0))
+    header_includes.append(h.group(0))
+
     with open(t) as temp_f:
         data = temp_f.readlines()
     for line in data:
@@ -60,7 +74,6 @@ for t in tests:
         if m != None:
             test_func = m.group(0)
             test_funcs.append(test_func)
-
 
 # Format test functions and wrap in macro
 run_test_funcs = []
@@ -71,8 +84,24 @@ for f in test_funcs:
     #print(run_test_str)
     run_test_funcs.append(run_test_str)
 
+
 # Write runner cpp
-runner = open('runner.cpp', 'w')
+runner = open('test_all.cpp', 'w')
+runner.write(HEADERS)
+for h in header_includes:
+    runner.write("#include <" + h + ">")
+
 runner.write(RUN1)
 runner.writelines(run_test_funcs)
 runner.write(RUN2)
+
+# Write h
+GUARD_H = '''#ifndef RUNNER_H
+#define RUNNER_H
+
+'''
+x = open('test_all.h', 'w')
+x.write(GUARD_H)
+for y in test_funcs:
+    x.write('void ' + y + ';\n')
+x.writelines('\n#endif\n')
