@@ -25,35 +25,31 @@
 
 namespace OxApp {
 
-    struct HeaterState {
-        const char * name;
-        uint8_t id;
-        uint8_t pin;
-        uint32_t onTime; //ms the valve will be on
-        uint32_t offTime; //ms the valve will be off
-        uint32_t msLast;
-        bool isOn;
+  class Heater {
+  public:
+    const char * name;
+    uint8_t id;
+    uint8_t pin;
+    // A joule heater has a fixed resistance (in Ohms)
+    // (this actually varies with temperature but we will ignore that.)
+    float _resistance = 2.0;
+    // The instantaneous state of an ideal Joule heater is described
+    // by only voltage and resistance. Wattage = V^2/R.
+    float _voltage = 5.0;
+    bool isOn;
+  public:
+    Heater(){};
+    Heater(const char * name, uint8_t id, uint8_t pin, float voltage, float resistance){
+      this->name = name;
+      this->id = id;
+      this->pin = pin;
+      this->_voltage = voltage;
+      this->_resistance = resistance;
+      this->isOn = false;
     };
-
-    class Heater {
-        private:
-            HeaterState state;
-        public:
-            Heater(){};
-            Heater(const char * name, uint8_t id, uint8_t pin, uint32_t onTime, uint32_t offTime){
-                state.name = name;
-                state.id = id;
-                state.pin = pin;
-                state.onTime = onTime;
-                state.offTime = offTime;
-                state.msLast = 0;
-                state.isOn = false;
-            };
-            ~Heater(){};
-            void update(const uint32_t &msNow);
-            bool changeTiming(uint32_t onTime, uint32_t offTime);
-            bool forceValveTrigger();
-    };
+    ~Heater(){};
+    void update(float voltage);
+  };
 
 }
 

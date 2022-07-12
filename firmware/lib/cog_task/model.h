@@ -25,9 +25,14 @@
 
 #ifndef MODEL_H
 #define MODEL_H
+#include "cog_task.h"
+
 
 // we need to change this!
 namespace OxApp {
+  // forward declaration
+  class CogTask;
+
   struct Location {
     const char *name;
     float temp_C;
@@ -35,6 +40,11 @@ namespace OxApp {
 
   class Model {
   public:
+    float air_flow_slm = 340.0;
+    float flow_l_per_s = air_flow_slm/60.0;
+    float heat_capacity_air = 1.115; // kJ/(kg * degree K)
+    float air_kg_per_l =  0.001293;
+    float watts_per_degree = 1000.0 * air_kg_per_l * heat_capacity_air * flow_l_per_s;
 
     // locations
     Location locations[2];

@@ -32,22 +32,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "../collections/array.h"
 #include "heater.h"
 #include <mock_temperature_sensor.h>
+#include "model.h"
 
 namespace OxApp
 {
     // Runs the Pressure Swing Adsorption cycle
     class CogTask : public OxCore::Task
     {
+    public:
+      const static int NUM_HEATERS = 2;
+      const static int NUM_TEMPERATURE_SENSORS = 3;
+        MockTemp::MockTemperatureSensor _temperatureSensors[NUM_TEMPERATURE_SENSORS];
+        Heater _heaters[NUM_HEATERS];
     private:
-        OxCollections::Array<MockTemp::MockTemperatureSensor, 3> _temperatureSensors;
-        OxCore::Timer _valveCycleTimer;
-        OxCollections::Array<Heater, 2> _heaters;
         bool _init() override;
         bool _run() override;
         void _updatePowerComponents();
         void _printValveState(uint8_t vs);
         void _configTemperatureSensors();
         void _readTemperatureSensors();
+      // We will use a model for mocking, which may grow into
+      // something...
+        Model model;
     };
 }
 

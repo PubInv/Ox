@@ -54,13 +54,12 @@ namespace OxApp
 
         _configTemperatureSensors();
 
-        Heater v1("PRIMARY_HEATER", 1, 50, 500, 1000);
-        _heaters.add(v1);
-        Heater v2("SECONDARY_HEATER",2, 51, 1000, 1500);
-        _heaters.add(v2);
-
-        _valveCycleTimer.Init(OxCore::Timer::TimeSinceEpochMs());
-
+        // Create a one ohm joule heater
+        Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
+        _heaters[0] = v1;
+        // Create a two ohm (smaller) heater for the pure O2 stream
+        Heater v2("SECONDARY_HEATER",2, 51, 3.6, 2.0);
+        _heaters[1] = v2;
 
         return true;
     }
@@ -73,55 +72,53 @@ namespace OxApp
 
         _updatePowerComponents();
 
-        // if (elapsed >= TOTAL_CYCLE_TIME)
-        // {
-        //     valveCycleTimer.Reset();
-        //     //vc.resetValves();
-        // } else {
-        //     //vc.updateController(elapsed);
-        //     //_printValveState(vc.getValveBits());
-        // }
+        // Somewhere we have a true clock value, I would have thought
+        // it would be an input to this routine....
+        model.RunForward(1.0,this);
+
+        OxCore::Debug<const char *>("Exhaust Temperature (C): ");
+        OxCore::DebugLn<float>(model.locations[1].temp_C);
 
         return true;
     }
 
     void CogTask::_updatePowerComponents() {
         OxCore::Debug<const char *>("_updateHeaterPrims\n");
-        uint32_t elapsed = _valveCycleTimer.Update();
-        OxCore::DebugLn<uint32_t>(elapsed);
-        for (int i = 0; i < _heaters.size(); i++) {
-            Heater heater = _heaters.get(i);
-            heater.update(elapsed);
+        for (int i = 0; i < NUM_HEATERS; i++) {
+            Heater heater = _heaters[i];
+            OxCore::Debug<const char *>("Checking resistance ");
+            OxCore::DebugLn<float>(_heaters[i]._resistance);
+            OxCore::DebugLn<float>(_heaters[i]._voltage);
+            // actually we will compute the new voltage based on
+            // whether we are hitting our thermostatic set point or not
+            float voltage = 13.2;
+
+            _heaters[i].update(voltage);
+            OxCore::Debug<const char *>("Checking Voltage Set ");
+            OxCore::DebugLn<float>(_heaters[i]._voltage);
+
         }
-        if (elapsed > 2600) {
-            _valveCycleTimer.Reset();
-        }
+        OxCore::Debug<const char *>("Checking Voltage Set AAA ");
+        OxCore::DebugLn<float>(_heaters[0]._voltage);
+
     }
 
     void CogTask::_configTemperatureSensors() {
         OxCore::Debug<const char *>("_configPressureSensors\n");
         MockTemp::MockTemperatureSensor sensor1(config[0]);
-        _temperatureSensors.add(sensor1);
+        _temperatureSensors[0] = sensor1;
 
         MockTemp::MockTemperatureSensor sensor2(config[1]);
-        _temperatureSensors.add(sensor2);
+        _temperatureSensors[1] = sensor2;
 
         MockTemp::MockTemperatureSensor sensor3(config[2]);
-        _temperatureSensors.add(sensor3);
+        _temperatureSensors[2] = sensor3;
 
-        // for (int i = 0; i < _temperatureSensors.size(); i++) {
-        //     OxCore::Debug<const char *>("A\n");
-        //     MockTemp::AbpPressureSensor sensor = _temperatureSensors.get(i);
-        //     sensor.Config(config[i]);
-        // }
     }
 
     void CogTask::_readTemperatureSensors() {
-        OxCore::Debug<const char *>("_readTemperatureSensors\n");
-        OxCore::DebugLn<int>(_temperatureSensors.size());
-        for (int i = 0; i < _temperatureSensors.size(); i++) {
-            MockTemp::MockTemperatureSensor sensor = _temperatureSensors.get(i);
-            float temperature = sensor.ReadTemperature();
+        for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+            float temperature = _temperatureSensors[i].ReadTemperature();
             OxCore::Debug<const char *>("Temperature: ");
             OxCore::DebugLn<float>(temperature);
         }

@@ -23,11 +23,20 @@
 // and will include some thermal inetial.
 #include "cog_task.h"
 #include "model.h"
+#include<cmath>
 
+using namespace std;
 namespace OxApp
 {
   void Model::RunForward(float t,CogTask* ct) {
-    // This is just a phony thing to show it is alive
-    locations[1].temp_C += 1.0;
+    Heater heater = ct->_heaters[0];
+    float watts = pow(heater._voltage,2) / heater._resistance;
+    float degrees_delta = watts / watts_per_degree;
+    // now really need to know the airflow
+
+    OxCore::Debug<const char *>("Heater 1 air flow degrees delta ");
+    OxCore::DebugLn<float>(degrees_delta);
+
+    locations[1].temp_C += degrees_delta;
   }
 }

@@ -18,40 +18,16 @@
 
 namespace OxApp {
 
-    void Heater::update(const uint32_t &msNow) {
+    void Heater::update(float voltage) {
+        _voltage = voltage;
 
         OxCore::Debug<const char *>("Heater update: ");
-        OxCore::Debug<int>(state.id);
+        OxCore::Debug<int>(id);
         OxCore::Debug<const char *>("   ");
-        OxCore::Debug<const char *>(state.name);
-        // OxCore::Debug<const char *>("   ");
-        // OxCore::Debug<int>(msNow);
-        // OxCore::Debug<const char *>("   ");
-        // OxCore::Debug<int>(state.onTime);
-        // OxCore::Debug<const char *>("   ");
-        // OxCore::Debug<int>(state.offTime);
+        OxCore::Debug<const char *>(name);
+        OxCore::Debug<const char *>(" Voltage: ");
+        OxCore::DebugLn<float>(_voltage);
 
-        if (msNow >= state.onTime && msNow < state.offTime) {
-            OxCore::DebugLn<const char *>("  On");
-            state.isOn = true;
-        } else {
-            state.isOn = false;
-            OxCore::DebugLn<const char *>("  Off");
-        }
     }
 
-    bool Heater::changeTiming(uint32_t onTime, uint32_t offTime){
-        // TODO: error checking
-        if (onTime < 0 || offTime < 0) {
-            // Call error handler
-        }
-
-        state.onTime = onTime;
-        state.offTime = offTime;
-        return true;
-    }
-
-    bool Heater::forceValveTrigger() {
-        return false;
-    }
 }
