@@ -25,13 +25,12 @@
 
 #ifndef MODEL_H
 #define MODEL_H
-#include "cog_task.h"
 
 
 // we need to change this!
 namespace OxApp {
   // forward declaration
-  class CogTask;
+  //  class CogTask;
 
   struct Location {
     const char *name;
@@ -60,7 +59,7 @@ namespace OxApp {
     }
     // This is the heart of the heat simulation,
     // if the heater has a known wattage, we can move forward
-    void RunForward(float t,CogTask* ct);
+    //    void RunForward(float t,CogTask* ct);
   };
 }
 

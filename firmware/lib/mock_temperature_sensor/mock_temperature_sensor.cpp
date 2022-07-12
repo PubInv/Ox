@@ -21,7 +21,23 @@
 #include <mock_temperature_sensor.h>
 #include <core.h>
 
+
 namespace MockTemp {
+  MockTemperatureSensor::MockTemperatureSensor() {
+#ifdef ARDUINO
+        pinMode(config.pin, OUTPUT);
+        //SPI.begin();
+#endif
+    }
+
+  MockTemperatureSensor::MockTemperatureSensor(OxApp::Model& m,SensorConfig &config) {
+    _m = m;
+        _config = config;
+#ifdef ARDUINO
+        pinMode(config.pin, OUTPUT);
+        //SPI.begin();
+#endif
+    }
   MockTemperatureSensor::MockTemperatureSensor(SensorConfig &config) {
         _config = config;
 #ifdef ARDUINO

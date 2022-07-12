@@ -23,6 +23,8 @@
 #include <cstdint>
 #endif
 
+#include <model.h>
+
 namespace MockTemp {
   // TODO: these enums are universal, should be in a separate file
     enum class SensorMode {
@@ -52,7 +54,9 @@ namespace MockTemp {
             SensorConfig _config;
             float _temperature;
         public:
-            MockTemperatureSensor() = default;
+      OxApp::Model _m;
+      MockTemperatureSensor();
+      MockTemperatureSensor(OxApp::Model& m,SensorConfig &config);
             MockTemperatureSensor(SensorConfig &config);
             ~MockTemperatureSensor() {};
             void Config(SensorConfig &config);

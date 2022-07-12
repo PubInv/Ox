@@ -14,6 +14,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "cog_task.h"
+#include<cmath>
+
+using namespace std;
+
 
 namespace OxApp
 {
@@ -74,7 +78,7 @@ namespace OxApp
 
         // Somewhere we have a true clock value, I would have thought
         // it would be an input to this routine....
-        model.RunForward(1.0,this);
+        RunForward(1.0,model);
 
         OxCore::Debug<const char *>("Exhaust Temperature (C): ");
         OxCore::DebugLn<float>(model.locations[1].temp_C);
@@ -105,13 +109,13 @@ namespace OxApp
 
     void CogTask::_configTemperatureSensors() {
         OxCore::Debug<const char *>("_configPressureSensors\n");
-        MockTemp::MockTemperatureSensor sensor1(config[0]);
+        MockTemp::MockTemperatureSensor sensor1(model,config[0]);
         _temperatureSensors[0] = sensor1;
 
-        MockTemp::MockTemperatureSensor sensor2(config[1]);
+        MockTemp::MockTemperatureSensor sensor2(model,config[1]);
         _temperatureSensors[1] = sensor2;
 
-        MockTemp::MockTemperatureSensor sensor3(config[2]);
+        MockTemp::MockTemperatureSensor sensor3(model,config[2]);
         _temperatureSensors[2] = sensor3;
 
     }
@@ -123,4 +127,15 @@ namespace OxApp
             OxCore::DebugLn<float>(temperature);
         }
     }
+  void CogTask::RunForward(float t,Model& m) {
+    // This math only works for 1 second, I think
+    float watts = pow(_heaters[0]._voltage,2) / _heaters[0]._resistance;
+    float degrees_delta = watts / m.watts_per_degree;
+    // now really need to know the airflow
+
+    OxCore::Debug<const char *>("Heater 1 air flow degrees delta ");
+    OxCore::DebugLn<float>(degrees_delta);
+
+    m.locations[1].temp_C += degrees_delta;
+  }
 }

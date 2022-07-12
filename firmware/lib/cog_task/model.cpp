@@ -28,15 +28,4 @@
 using namespace std;
 namespace OxApp
 {
-  void Model::RunForward(float t,CogTask* ct) {
-    Heater heater = ct->_heaters[0];
-    float watts = pow(heater._voltage,2) / heater._resistance;
-    float degrees_delta = watts / watts_per_degree;
-    // now really need to know the airflow
-
-    OxCore::Debug<const char *>("Heater 1 air flow degrees delta ");
-    OxCore::DebugLn<float>(degrees_delta);
-
-    locations[1].temp_C += degrees_delta;
-  }
 }
