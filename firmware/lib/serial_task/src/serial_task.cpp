@@ -16,7 +16,7 @@ bool SerialTask::send(myMessage &msg) {
   for (int i = 0; i < 80; i++) {
     buffer[i] = '\0';
   }
-  memcopy(&buffer[0], msg, 80);
+  // memcopy(&buffer[0], msg, 80);
   int bytesSent = 0;
 #ifdef ARDUINO
   bytesSent = SerialUSB.write(buffer, 80);
@@ -36,6 +36,7 @@ bool SerialTask::_init() {
 #else
   // No need to init on native
 #endif
+  return true;
 }
 
 bool SerialTask::_run() {
@@ -51,7 +52,7 @@ bool SerialTask::_run() {
   MyFile << "Writing something";
   MyFile.close();
 #endif
-
+  return true;
 }
 
 }
