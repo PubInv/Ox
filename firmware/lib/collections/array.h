@@ -36,42 +36,50 @@ namespace OxCollections {
 template <class T, size_t L>
 class Array {
     private:
-        T arr[L];
-        int capacity = L;
-        int count = 0;
-        int index = 0;
+        T _arr[L];
+        int _capacity = L;
+        int _count = 0;
+        int _index = 0;
     public:
+        int capacity();
         int size();
         T next();
         T get(int i);
         bool add(T item);
 };
 
+
+template <class T, size_t L>
+int Array<T, L>::capacity() {
+    return _capacity;
+}
+
 template <class T, size_t L>
 int Array<T, L>::size() {
-    return count;
+    return _count;
 }
 
 template <class T, size_t L>
 T Array<T, L>::next() {
-    int i = index++;
-    if (index > count) {
-        index = 0;
+    int i = _index++;
+    if (_index > _count) {
+        _index = 0;
     }
-    return arr[i];
+    return _arr[i];
 }
 
 template <class T, size_t L>
 T Array<T, L>::get(int i) {
-    return arr[i];
+    return _arr[i];
 }
 
 template <class T, size_t L>
 bool Array<T, L>::add(T item) {
-    if (count >= capacity) {
+    if (_count >= _capacity) {
         return false;
     }
-    arr[count++] = item;
+    _arr[_count] = item;
+    _count++;
     return true;
 }
 

@@ -28,7 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifdef ARDUINO
 #include <Arduino.h>
 #else // Native
-#include <stddef.h>
+#include <stddef.h> // size_t
 #endif
 
 namespace OxCollections {
@@ -42,16 +42,16 @@ struct KeyValue {
 template <typename K, typename V, size_t L>
 class Map {
     private:
-        KeyValue<K, V> arr[L];
+        KeyValue<K, V> _arr[L];
         int _count = 0;
     public:
         bool add(K key, V value);
         V getValue(K key);
+        V getValueByIndex(int index);
         int hasKey(K key);
         int size();
-        bool isEmpty();
-        bool isFull();
-        V getValueByIndex(int index);
+        bool empty();
+        bool full();
         int getCount();
 };
 
@@ -60,11 +60,11 @@ bool Map<K, V, L>::add(K k, V v) {
     if (hasKey(k) >= 0) {
         return false;
     }
-    if (true == isFull()) {
+    if (true == full()) {
         return false;
     }
-    arr[_count].key = k;
-    arr[_count].value = v;
+    _arr[_count].key = k;
+    _arr[_count].value = v;
     _count++;
     return true;
 }
@@ -73,7 +73,16 @@ template <typename K, typename V, size_t L>
 V Map<K, V, L>::getValue(K key) {
     int i = hasKey(key);
     if (i >= 0) {
-        return arr[i].value;
+        return _arr[i].value;
+    } else {
+        return nullptr;
+    }
+}
+
+template <typename K, typename V, size_t L>
+V Map<K, V, L>::getValueByIndex(int index) {
+    if ((index >= 0) && (index < _count)) {
+        return _arr[index].value;
     } else {
         return nullptr;
     }
@@ -82,7 +91,7 @@ V Map<K, V, L>::getValue(K key) {
 template <typename K, typename V, size_t L>
 int Map<K, V, L>::hasKey(K key) {
     for (int i = 0; i < _count; i++) {
-        if (arr[i].key == key) {
+        if (_arr[i].key == key) {
             return i;
         }
     }
@@ -95,22 +104,13 @@ int Map<K, V, L>::size() {
 }
 
 template <typename K, typename V, size_t L>
-bool Map<K, V, L>::isEmpty() {
+bool Map<K, V, L>::empty() {
     return _count > 0;
 }
 
 template <typename K, typename V, size_t L>
-bool Map<K, V, L>::isFull() {
+bool Map<K, V, L>::full() {
     return _count == L;
-}
-
-template <typename K, typename V, size_t L>
-V Map<K, V, L>::getValueByIndex(int index) {
-    if ((index >= 0) && (index < _count)) {
-        return arr[index].value;
-    } else {
-        return nullptr;
-    }
 }
 
 template <typename K, typename V, size_t L>

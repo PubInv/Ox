@@ -31,17 +31,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 #endif
 
-//#include <cstddef>
-
 namespace OxCollections {
 
 template <class T, size_t L>
 class CircularArray {
     private:
-        T arr[L];
-        int capacity = L;
-        int count = 0;
-        int index = 0;
+        T _arr[L];
+        int _capacity = L;
+        int _count = 0;
+        int _index = 0;
     public:
         int size();
         T next();
@@ -51,25 +49,24 @@ class CircularArray {
 
 template <class T, size_t L>
 int CircularArray<T, L>::size() {
-    return count;
+    return _count;
 }
 
 template <class T, size_t L>
 T CircularArray<T, L>::next() {
-    int i = index++;
-    if (index > count) {
-        index = 0;
+    int i = _index++;
+    if (_index > _count) {
+        _index = 0;
     }
-    return arr[i];
+    return _arr[i];
 }
 
 template <class T, size_t L>
 void CircularArray<T, L>::add(T item) {
-    if (count >= capacity) {
-        //return false;
-        count = 0;
+    if (_count >= _capacity) {
+        _count = 0;
     }
-    arr[count++] = item;
+    _arr[_count++] = item;
 }
 
 }

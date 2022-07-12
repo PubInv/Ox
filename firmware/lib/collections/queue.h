@@ -28,7 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifdef ARDUINO
 #include <Arduino.h>
 #else // Native
-#include <stdlib.h>
+#include <stdlib.h> // size_t
 #endif
 
 namespace OxCollections {
@@ -36,61 +36,61 @@ namespace OxCollections {
 template <class T, size_t L>
 class Queue {
     private:
-        T arr[L];
-        int capacity = L;
-        int front = 0;
-        int rear = -1;
-        int count = 0;
+        T _arr[L];
+        int _capacity = L;
+        int _front = 0;
+        int _rear = -1;
+        int _count = 0;
     public:
         void enqueue(T t);
         void dequeue();
         T peek();
         int size();
-        bool isEmpty();
-        bool isFull();
+        bool empty();
+        bool full();
 };
 
 
 template<class T, size_t L>
 void Queue<T, L>::dequeue() {
-    if (isEmpty()) {
+    if (empty()) {
         exit(EXIT_FAILURE);
     }
-    front = (front + 1) % capacity;
-    count--;
+    _front = (_front + 1) % _capacity;
+    _count--;
 }
 
 template<class T, size_t L>
 void Queue<T, L>::enqueue(T item) {
-    if (isFull()){
+    if (full()){
         exit(EXIT_FAILURE);
     }
-    rear = (rear + 1) % capacity;
-    arr[rear] = item;
-    count++;
+    _rear = (_rear + 1) % _capacity;
+    arr[_rear] = item;
+    _count++;
 }
 
 template<class T, size_t L>
 T Queue<T, L>::peek() {
-    if (isEmpty()) {
+    if (empty()) {
         exit(EXIT_FAILURE);
     }
-    return arr[front];
+    return _arr[_front];
 }
 
 template<class T, size_t L>
 int Queue<T, L>::size() {
-    return count;
+    return _count;
 }
 
 template<class T, size_t L>
-bool Queue<T, L>::isEmpty() {
+bool Queue<T, L>::empty() {
     return (size() == 0);
 }
 
 template<class T, size_t L>
-bool Queue<T, L>::isFull() {
-    return (size() == capacity);
+bool Queue<T, L>::full() {
+    return (size() == _capacity);
 }
 
 }
