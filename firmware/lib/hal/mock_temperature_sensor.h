@@ -41,7 +41,9 @@ namespace Temperature {
     ~MockTemperatureSensor() {};
     void Config(SensorConfig &config);
     float ReadTemperature();
-    float GetTemperature() const;
+    float GetTemperature();
+    float GetTemperature(int idx);
+
     SensorConfig GetConfig() const;
   };
 

@@ -15,6 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include "cog_task.h"
 #include<cmath>
+#include <abstract_temperature.h>
 
 using namespace std;
 
@@ -133,35 +134,40 @@ namespace OxApp
 
     void CogTask::_configTemperatureSensors() {
         OxCore::Debug<const char *>("_configPressureSensors\n");
-#if BUILD_ENV_NAME != due_ribbonfish
-        Temperature::MockTemperatureSensor sensor1(model,config[0]);
-        _temperatureSensors[0] = sensor1;
 
-        Temperature::MockTemperatureSensor sensor2(model,config[1]);
-        _temperatureSensors[1] = sensor2;
 
-        Temperature::MockTemperatureSensor sensor3(model,config[2]);
-        _temperatureSensors[2] = sensor3;
+#ifdef RIBBONFISH
+        _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::DS18B20Temperature[1];
+        _temperatureSensors[0]._config = config[0];
 #else
-        Temperature::DS18B20Temperature sensor1(config[0]);
-        _temperatureSensors[0] = sensor1;
+        _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MockTemperatureSensor[NUM_TEMPERATURE_SENSORS];
+        for(int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+          _temperatureSensors[i]._config = config[i];
 
-        Temperature::DS18B20Temperature sensor2(config[1]);
-        _temperatureSensors[1] = sensor2;
-
-        Temperature::DS18B20Temperature sensor3(config[2]);
-        _temperatureSensors[2] = sensor3;
-
-        OxCore::Debug<const char *>("RIBBONFISH\n");
+        }
 #endif
 
     }
 
     void CogTask::_readTemperatureSensors() {
-        for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
-            float temperature = _temperatureSensors[i].ReadTemperature();
-            OxCore::Debug<const char *>("Temperature: ");
-            OxCore::DebugLn<float>(temperature);
-        }
+      OxCore::Debug<const char *>("AAA: ");
+#ifdef RIBBONFISH
+      float temperature = _temperatureSensors[0].ReadTemperature();
+      OxCore::Debug<const char *>("DDD: ");
+      for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+        float temperature = _temperatureSensors[0].GetTemperature(i);
+        OxCore::Debug<const char *>("Temperature: ");
+        OxCore::DebugLn<float>(temperature);
+      }
+#else
+      OxCore::Debug<const char *>("DDD: ");
+      for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+         _temperatureSensors[i].ReadTemperature();
+        float temperature = _temperatureSensors[i].GetTemperature();
+        OxCore::Debug<const char *>("Temperature: ");
+        OxCore::DebugLn<float>(temperature);
+      }
+#endif
+
     }
 }

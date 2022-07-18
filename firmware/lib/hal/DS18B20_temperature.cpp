@@ -15,32 +15,62 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #ifdef ARDUINO
+#ifdef ARDUINO
 #include <Arduino.h>
 #include <SPI.h>
 #endif
 #include <DS18B20_temperature.h>
+
 #include <core.h>
 
 
 namespace Temperature {
   DS18B20Temperature::DS18B20Temperature() {
-    }
+    oneWire.begin(THERMOCOUPLE_PIN);
+    // Pass our oneWire reference to Dallas Temperature.
+
+    sensors.setOneWire(&oneWire);
+  }
 
   DS18B20Temperature::DS18B20Temperature(SensorConfig &config) {
-        _config = config;
-    }
+    Serial.print(F("Debug DS18B20 Constructed! "));
+    oneWire.begin(THERMOCOUPLE_PIN);
+    // Pass our oneWire reference to Dallas Temperature.
+
+    sensors.setOneWire(&oneWire);
+  }
+
 
   float DS18B20Temperature::ReadTemperature() {
-    // TODO : This needs to be replaced with the OneWire call
-        _temperature = (_config.temperatureMax - _config.temperatureMin)/2;
-        return _temperature;
-    }
+        OxCore::Debug<const char *>("BBB: ");
+    this->sensors.requestTemperatures(); // Send the command to get temperatures
+        OxCore::Debug<const char *>("CCC: ");
+    return GetTemperature(0);
+  }
+  float DS18B20Temperature::GetTemperature() {
+    return GetTemperature(0);
+  }
+  float DS18B20Temperature::GetTemperature(int idx) {
+    OxCore::Debug<const char *>("DS18B20 XXX ");
+    Serial.print(F("Debug DS18B20 Get! "));
+    float tempC = this->sensors.getTempCByIndex(idx);
 
-  float DS18B20Temperature::GetTemperature() const {
-        return _temperature;
-    }
+    if (tempC != DEVICE_DISCONNECTED_C)
+      {
+        Serial.print(F("Debug tempC: "));
+        Serial.println(idx);
+        Serial.println(tempC);
+      }
+    else
+      {
+        Serial.print(F("Error: Could not read temperature data: "));
+        Serial.println(idx);
+      }
+    return tempC;
 
+  }
   SensorConfig DS18B20Temperature::GetConfig() const {
-        return _config;
-    }
+    return _config;
+  }
 }
+#endif

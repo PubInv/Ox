@@ -18,36 +18,30 @@
 #include <Arduino.h>
 #include <SPI.h>
 #endif
-#include <mock_temperature_sensor.h>
 #include <core.h>
-
+#include "abstract_temperature.h"
 
 namespace Temperature {
-  MockTemperatureSensor::MockTemperatureSensor() {
+  AbstractTemperature::AbstractTemperature() {
     }
 
-  MockTemperatureSensor::MockTemperatureSensor(OxApp::Model& m,SensorConfig &config) {
-    _m = m;
-        _config = config;
-    }
-  MockTemperatureSensor::MockTemperatureSensor(SensorConfig &config) {
+  AbstractTemperature::AbstractTemperature(SensorConfig &config) {
         _config = config;
     }
 
-  float MockTemperatureSensor::ReadTemperature() {
-        // Mock sensor
-        _temperature = (_config.temperatureMax - _config.temperatureMin)/2;
-        return _temperature;
-    }
-  float MockTemperatureSensor::GetTemperature(int idx) {
-    return GetTemperature(0);
-    }
-
-  float MockTemperatureSensor::GetTemperature() {
+  float AbstractTemperature::ReadTemperature() {
         return _temperature;
     }
 
-  SensorConfig MockTemperatureSensor::GetConfig() const {
+  float AbstractTemperature::GetTemperature() {
+        return _temperature;
+    }
+
+  float AbstractTemperature::GetTemperature(int idx) {
+        return _temperature;
+    }
+
+  SensorConfig AbstractTemperature::GetConfig() const {
         return _config;
     }
 }

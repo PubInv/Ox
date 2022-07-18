@@ -17,6 +17,10 @@
 #ifndef DS18B20_TEMPERATURE
 #define DS18B20_TEMPERATURE
 
+// Put guard for Arduino here
+
+#ifdef ARDUINO
+
 #ifdef ARDUINO
 #include <Arduino.h>
 #else
@@ -25,22 +29,42 @@
 
 #include "abstract_temperature.h"
 
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+
+// Note: In a real solution, we need to know the addresses for the temperature sensors
+// so that we can be definite about which one is where. See:
+// https://lastminuteengineers.com/multiple-ds18b20-arduino-tutorial/
+// For now, we will rely on "indexing" and if it is wrong just switch the sensors.
+// This is a quick-and-dirty approach for the "RibbonFish" POC.
+#define POST_STACK_0_IDX 0
+#define POST_HEATER_0_IDX 1
+#define BOOGALOO 2
+#define THERMOCOUPLE_PIN 2
+
 namespace Temperature {
   class DS18B20Temperature : public AbstractTemperature {
-  private:
+  public:
     SensorConfig _config;
     float _temperature;
+    OneWire oneWire;
+    DallasTemperature sensors;
+    // Pass our oneWire reference to Dallas Temperature.
   public:
     DS18B20Temperature();
     DS18B20Temperature(SensorConfig &config);
     void Config(SensorConfig &config);
     float ReadTemperature();
-    float GetTemperature() const;
+    float GetTemperature();
+    float GetTemperature(int idx);
     SensorConfig GetConfig() const;
 
     //    ~DS18B20Temperature() {};
   };
 
 }
+
+#endif
 
 #endif

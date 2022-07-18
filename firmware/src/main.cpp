@@ -50,6 +50,13 @@ void setup()
       return;
   }
 
+
+  //TODO: This needs to be placed inthe task init feature!
+  //#if BUILD_ENV_NAME == due_ribbonfish
+#ifdef RIBBONFISH
+      pinMode(2, INPUT);
+#endif
+
   /***** Configure and add your tasks here *****/
 
   OxCore::TaskProperties cogProperties;

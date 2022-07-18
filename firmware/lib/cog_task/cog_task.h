@@ -31,7 +31,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include "../collections/array.h"
 #include "heater.h"
-#if BUILD_ENV_NAME != due_ribbonfish
+
+
+#include <abstract_temperature.h>
+
+#ifndef RIBBONFISH
 #include <mock_temperature_sensor.h>
 #else
 #include <DS18B20_temperature.h>
@@ -47,10 +51,19 @@ namespace OxApp
     class CogTask : public OxCore::Task
     {
     public:
+
+      // TODO: This should probably be done dynamically, not here...
+
+#if BUILD_ENV_NAME != due_ribbonfish
       const static int NUM_HEATERS = 2;
       const static int NUM_TEMPERATURE_SENSORS = 3;
-      Temperature::AbstractTemperature
-      _temperatureSensors[NUM_TEMPERATURE_SENSORS];
+#else // RIBBONFISH
+      const static int NUM_HEATERS = 2;
+      // There are really several senosrs, but they are indexed!
+      const static int NUM_TEMPERATURE_SENSORS = 1;
+#endif
+
+      Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
     private:
         bool _init() override;

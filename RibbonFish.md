@@ -30,3 +30,13 @@ In the two joints between the three pipes, a heating cloth is rolled up into a c
 The leads are exposed to power the heating cloths.
 
 ![IMG-2837](https://user-images.githubusercontent.com/5296671/179431945-5230cd6c-c835-47c4-acae-b7c6fa9ac5d0.JPG)
+
+## Libraries
+
+PlatformIO provides useful package and configuration management, but
+it still requires thought and documentation.
+
+We believe teh DS18B20 thermometers require these libraries
+
+> pio lib install paulstoffregen/OneWire
+> pio lib install milesburton/DallasTemperature
