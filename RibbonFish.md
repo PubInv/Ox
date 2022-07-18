@@ -21,3 +21,5 @@ The Fan is a simple DC 12 Vote Fan that fits inside a 4" PVC pipe. The heaters a
 Note: We do not believe an unfiltered PWM signal is appropriate for the actual chemical stacks due to internal chemistry,
 or at least this has not yet been tested. However, as a prelude to a real system, PWM can be used with the heating cloth
 using simple power transistors.
+
+![IMG-2837](https://user-images.githubusercontent.com/5296671/179431945-5230cd6c-c835-47c4-acae-b7c6fa9ac5d0.JPG)
