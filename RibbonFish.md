@@ -22,4 +22,11 @@ Note: We do not believe an unfiltered PWM signal is appropriate for the actual c
 or at least this has not yet been tested. However, as a prelude to a real system, PWM can be used with the heating cloth
 using simple power transistors.
 
+## Photo of the RibbonFish
+
+The Ribbon Fish consists of a PVC vent fan (12V, inline) connected via a heavy paper cone to piece of 3/4" PVC piping.
+There are 3 such pipe sgements, each about 16mm long. These each have a 1/4" hole for the temeperature sensor in the middle.
+In the two joints between the three pipes, a heating cloth is rolled up into a cylinder and inserted into both pipes.
+The leads are exposed to power the heating cloths.
+
 ![IMG-2837](https://user-images.githubusercontent.com/5296671/179431945-5230cd6c-c835-47c4-acae-b7c6fa9ac5d0.JPG)
