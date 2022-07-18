@@ -24,6 +24,15 @@ The fundamental way to run this is to perform:
 
 > pio run -e native && ./.pio/build/native/program
 
+We are currently creating the [RibbonFish](https://github.com/PubInv/NASA-COG/blob/develop/RibbonFish.md) proof-of-concept.
+
+This can be run on a Due by executing:
+
+> make pio-run-due_ribbonfish
+
+As this develops, it will use a specific Due hardware configuration,
+please see the [documentation](https://github.com/PubInv/NASA-COG/blob/develop/RibbonFish.md) for details to build your own.
+
 ## Plans for week of July 11th, 2022
 
 Our initial plan is to get the naitve code to run a "hello, world" version
