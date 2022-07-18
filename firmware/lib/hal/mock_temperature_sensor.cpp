@@ -22,7 +22,7 @@
 #include <core.h>
 
 
-namespace MockTemp {
+namespace Temperature {
   MockTemperatureSensor::MockTemperatureSensor() {
     }
 

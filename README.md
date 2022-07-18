@@ -33,11 +33,19 @@ This can be run on a Due by executing:
 As this develops, it will use a specific Due hardware configuration,
 please see the [documentation](https://github.com/PubInv/NASA-COG/blob/develop/RibbonFish.md) for details to build your own.
 
-## Plans for week of July 11th, 2022
 
-Our initial plan is to get the naitve code to run a "hello, world" version
-of the state machine and Harware Abstraction Layer that will eventually grow
-into a control system.
+## Annoyances
+
+AFAIK, PlatformIO forces a directory tree depth of 5 levels.
+
+This is not enough to organize the Hardware Abstraction Level they way I would prefer, forcing us to make some messy directories that are less than clear.
+
+For example, to implement a Temperature Sensor, we would ideally have an
+abstract (or virtual) implementation, a folder for real hardware,
+and a folder for mock sensors.  I have no choice now but to jam
+the mock sensors into the same directory with the real hardware and
+use a naming convnention.
+
 
 ## License
 

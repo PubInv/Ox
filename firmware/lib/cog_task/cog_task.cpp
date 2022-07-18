@@ -22,11 +22,11 @@ using namespace std;
 namespace OxApp
 {
 
-    MockTemp::SensorConfig config[3] = {
+    Temperature::SensorConfig config[3] = {
         {
             0,
-            MockTemp::SensorMode::SPI,
-            MockTemp::TemperatureUnits::C,
+            Temperature::SensorMode::SPI,
+            Temperature::TemperatureUnits::C,
             45,
             1,
             0,
@@ -34,8 +34,8 @@ namespace OxApp
         },
         {
             1,
-            MockTemp::SensorMode::SPI,
-            MockTemp::TemperatureUnits::C,
+            Temperature::SensorMode::SPI,
+            Temperature::TemperatureUnits::C,
             47,
             1,
             0,
@@ -43,8 +43,8 @@ namespace OxApp
         },
         {
             2,
-            MockTemp::SensorMode::SPI,
-            MockTemp::TemperatureUnits::C,
+            Temperature::SensorMode::SPI,
+            Temperature::TemperatureUnits::C,
             49,
             1,
             0,
@@ -133,14 +133,27 @@ namespace OxApp
 
     void CogTask::_configTemperatureSensors() {
         OxCore::Debug<const char *>("_configPressureSensors\n");
-        MockTemp::MockTemperatureSensor sensor1(model,config[0]);
+#if BUILD_ENV_NAME != due_ribbonfish
+        Temperature::MockTemperatureSensor sensor1(model,config[0]);
         _temperatureSensors[0] = sensor1;
 
-        MockTemp::MockTemperatureSensor sensor2(model,config[1]);
+        Temperature::MockTemperatureSensor sensor2(model,config[1]);
         _temperatureSensors[1] = sensor2;
 
-        MockTemp::MockTemperatureSensor sensor3(model,config[2]);
+        Temperature::MockTemperatureSensor sensor3(model,config[2]);
         _temperatureSensors[2] = sensor3;
+#else
+        Temperature::DS18B20Temperature sensor1(config[0]);
+        _temperatureSensors[0] = sensor1;
+
+        Temperature::DS18B20Temperature sensor2(config[1]);
+        _temperatureSensors[1] = sensor2;
+
+        Temperature::DS18B20Temperature sensor3(config[2]);
+        _temperatureSensors[2] = sensor3;
+
+        OxCore::Debug<const char *>("RIBBONFISH\n");
+#endif
 
     }
 
