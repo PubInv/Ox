@@ -24,35 +24,20 @@
 
 namespace MockTemp {
   MockTemperatureSensor::MockTemperatureSensor() {
-#ifdef ARDUINO
-        pinMode(config.pin, OUTPUT);
-        //SPI.begin();
-#endif
     }
 
   MockTemperatureSensor::MockTemperatureSensor(OxApp::Model& m,SensorConfig &config) {
     _m = m;
         _config = config;
-#ifdef ARDUINO
-        pinMode(config.pin, OUTPUT);
-        //SPI.begin();
-#endif
     }
   MockTemperatureSensor::MockTemperatureSensor(SensorConfig &config) {
         _config = config;
-#ifdef ARDUINO
-        pinMode(config.pin, OUTPUT);
-        //SPI.begin();
-#endif
     }
 
   float MockTemperatureSensor::ReadTemperature() {
-#ifdef ARDUINO
-#else
         // Mock sensor
         _temperature = (_config.temperatureMax - _config.temperatureMin)/2;
         return _temperature;
-#endif
     }
 
   float MockTemperatureSensor::GetTemperature() const {

@@ -20,7 +20,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# 
+#
 # For some reason 'sudo' is required before the commands when using Mac OSX
 
 pio-run-mac:
@@ -49,22 +49,16 @@ docker-pio-run:
 	docker build --tag pioc .
 	docker run --rm -it --name pi pioc bash -c 'cd firmware && platformio lib install && platformio lib list && pio run -e native && .pio/build/native/program'
 
-# Build and run on FeatherESP32 and start serial monitor
-pio-run-esp32:
-	cd firmware \
-	&& pio run -e featheresp32 -t upload \
-	&& pio device monitor
-
-# Build and run on Adafruit Grand Central Arm-M4F and start serial monitor
-pio-run-gcm4:
-	cd firmware \
-	&& pio run -e adafruit_grandcentral_m4 -t upload \
-	&& pio device monitor
-
 # Build and run on Arduino Mega 2560 and start serial monitor
 pio-run-mega:
 	cd firmware \
 	&& pio run -e megaatmega2560 -t upload \
+	&& pio device monitor
+
+# Build and run on Arduino Due
+pio-run-due:
+	cd firmware \
+	&& pio run -e due -t upload \
 	&& pio device monitor
 
 pio-run-native:
