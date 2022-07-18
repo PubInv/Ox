@@ -86,16 +86,27 @@ namespace OxApp
         return true;
     }
 
+  static float compute_change_in_voltage(float current_C,float current_V,float desired_C) {
+  }
+
     void CogTask::_updatePowerComponents() {
         OxCore::Debug<const char *>("_updateHeaterPrims\n");
-        for (int i = 0; i < NUM_HEATERS; i++) {
-            Heater heater = _heaters[i];
+        // For now, i want to do only the first heater to simplify
+        for (int i = 0; i < NUM_HEATERS && i < 1; i++) {
             OxCore::Debug<const char *>("Checking resistance ");
             OxCore::DebugLn<float>(_heaters[i]._resistance);
             OxCore::DebugLn<float>(_heaters[i]._voltage);
             // actually we will compute the new voltage based on
             // whether we are hitting our thermostatic set point or not
-            float voltage = 13.2;
+            // This will be a really simple model for now...
+            float current_C = model.locations[1].temp_C;
+            float current_V = _heaters[i]._voltage;
+            float desired_C = 650.0;
+            float voltage = _heaters[i].
+              compute_change_in_voltage(current_C,
+                                        current_V,
+                                        desired_C,
+                                        model.watts_per_degree);
 
             _heaters[i].update(voltage);
             OxCore::Debug<const char *>("Checking Voltage Set ");
@@ -106,6 +117,19 @@ namespace OxApp
         OxCore::DebugLn<float>(_heaters[0]._voltage);
 
     }
+  void CogTask::RunForward(float t,Model& m) {
+    // This math only works for 1 second, I think
+    float watts = pow(_heaters[0]._voltage,2) / _heaters[0]._resistance;
+    float degrees_delta = watts / m.watts_per_degree;
+    // now really need to know the airflow
+
+    OxCore::Debug<const char *>("Heater 1 air flow degrees delta ");
+    OxCore::DebugLn<float>(degrees_delta);
+
+    // We'll assume that the watts added directly increase the
+    // the temperature at the output
+    m.locations[1].temp_C = m.locations[0].temp_C + degrees_delta;
+  }
 
     void CogTask::_configTemperatureSensors() {
         OxCore::Debug<const char *>("_configPressureSensors\n");
@@ -127,15 +151,4 @@ namespace OxApp
             OxCore::DebugLn<float>(temperature);
         }
     }
-  void CogTask::RunForward(float t,Model& m) {
-    // This math only works for 1 second, I think
-    float watts = pow(_heaters[0]._voltage,2) / _heaters[0]._resistance;
-    float degrees_delta = watts / m.watts_per_degree;
-    // now really need to know the airflow
-
-    OxCore::Debug<const char *>("Heater 1 air flow degrees delta ");
-    OxCore::DebugLn<float>(degrees_delta);
-
-    m.locations[1].temp_C += degrees_delta;
-  }
 }

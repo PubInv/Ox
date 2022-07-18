@@ -30,4 +30,23 @@ namespace OxApp {
 
     }
 
+
+  float Heater::compute_change_in_voltage(float current_C,float current_V,float desired_C, float watts_per_degree) {
+
+    // We compute the number of degrees across the heater that we seek,
+    // then compute watts from that, then change the heater
+    // to aim at that many watts.
+    float delta_C = desired_C - current_C;
+    float delta_watts = watts_per_degree * delta_C;
+    float current_watts = current_V * current_V / _resistance;
+    OxCore::Debug<const char *>("current watts ");
+    OxCore::DebugLn<float>(current_watts);
+    float new_watts = current_watts + delta_watts;
+    float new_volts = sqrt( new_watts * _resistance);
+    OxCore::Debug<const char *>("delta_C ");
+    OxCore::DebugLn<float>(delta_C);
+
+    return new_volts;
+  }
+
 }

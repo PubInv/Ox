@@ -21,6 +21,7 @@
 #include <Arduino.h>
 #else
 //#include <cstdint>
+#include <math.h>
 #endif
 
 namespace OxApp {
@@ -49,6 +50,7 @@ namespace OxApp {
     };
     ~Heater(){};
     void update(float voltage);
+    float compute_change_in_voltage(float current_C,float current_V,float desired_C, float watts_per_degree);
   };
 
 }
