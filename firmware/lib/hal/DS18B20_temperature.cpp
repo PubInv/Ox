@@ -33,7 +33,6 @@ namespace Temperature {
   }
 
   DS18B20Temperature::DS18B20Temperature(SensorConfig &config) {
-    Serial.print(F("Debug DS18B20 Constructed! "));
     oneWire.begin(THERMOCOUPLE_PIN);
     // Pass our oneWire reference to Dallas Temperature.
 
@@ -42,24 +41,17 @@ namespace Temperature {
 
 
   float DS18B20Temperature::ReadTemperature() {
-        OxCore::Debug<const char *>("BBB: ");
     this->sensors.requestTemperatures(); // Send the command to get temperatures
-        OxCore::Debug<const char *>("CCC: ");
     return GetTemperature(0);
   }
   float DS18B20Temperature::GetTemperature() {
     return GetTemperature(0);
   }
   float DS18B20Temperature::GetTemperature(int idx) {
-    OxCore::Debug<const char *>("DS18B20 XXX ");
-    Serial.print(F("Debug DS18B20 Get! "));
     float tempC = this->sensors.getTempCByIndex(idx);
 
     if (tempC != DEVICE_DISCONNECTED_C)
       {
-        Serial.print(F("Debug tempC: "));
-        Serial.println(idx);
-        Serial.println(tempC);
       }
     else
       {

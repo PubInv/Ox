@@ -21,12 +21,29 @@ namespace OxApp {
     void Heater::update(float voltage) {
         _voltage = voltage;
 
+
+#ifdef RIBBONFISH
         OxCore::Debug<const char *>("Heater update: ");
         OxCore::Debug<int>(id);
         OxCore::Debug<const char *>("   ");
         OxCore::Debug<const char *>(name);
         OxCore::Debug<const char *>(" Voltage: ");
+
+        if (voltage > 6.0) {
+          digitalWrite(this->pin,HIGH);
+          OxCore::DebugLn<float>(12);
+        } else {
+          digitalWrite(this->pin,LOW);
+          OxCore::DebugLn<float>(0);
+        }
+
+#else
+        OxCore::Debug<const char *>("Heater update: ");
+        OxCore::Debug<const char *>("   ");
+        OxCore::Debug<const char *>(name);
+        OxCore::Debug<const char *>(" Voltage: ");
         OxCore::DebugLn<float>(_voltage);
+#endif
 
     }
 

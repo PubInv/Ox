@@ -61,6 +61,7 @@ namespace OxApp
       const static int NUM_HEATERS = 2;
       // There are really several senosrs, but they are indexed!
       const static int NUM_TEMPERATURE_SENSORS = 1;
+      const static int NUM_TEMPERATURE_INDICES = 2;
 #endif
 
       Temperature::AbstractTemperature* _temperatureSensors;

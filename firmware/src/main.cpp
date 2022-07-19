@@ -55,6 +55,9 @@ void setup()
   //#if BUILD_ENV_NAME == due_ribbonfish
 #ifdef RIBBONFISH
       pinMode(2, INPUT);
+      pinMode(3, OUTPUT);
+      pinMode(4, OUTPUT);
+      pinMode(5, OUTPUT);
 #endif
 
   /***** Configure and add your tasks here *****/

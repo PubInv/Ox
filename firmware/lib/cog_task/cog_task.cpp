@@ -59,6 +59,19 @@ namespace OxApp
 
         _configTemperatureSensors();
 
+
+#ifdef RIBBONFISH
+        // Our pre-heater measured 5.8 ohms
+        // Our main heater measured 5.6 ohms
+        // We wil use DUE pins 4 and 5 for these heaters
+        // (3 will be for the fan)
+        // These are PWM pins if we need them...
+        Heater v1("PRIMARY_HEATER", 1, 4, 0, 5.8);
+        _heaters[0] = v1;
+
+        Heater v2("SECONDARY_HEATER",2, 5, 0, 5.6);
+        _heaters[1] = v2;
+#else
         // Create a one ohm joule heater
         Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
         _heaters[0] = v1;
@@ -66,23 +79,27 @@ namespace OxApp
         Heater v2("SECONDARY_HEATER",2, 51, 3.6, 2.0);
         _heaters[1] = v2;
 
+#endif
+
         return true;
     }
 
     bool CogTask::_run()
     {
-        OxCore::Debug<const char *>("CogTask run\n");
-
         _readTemperatureSensors();
 
         _updatePowerComponents();
 
         // Somewhere we have a true clock value, I would have thought
         // it would be an input to this routine....
+#ifndef RIBBONFISH
         RunForward(1.0,model);
 
         OxCore::Debug<const char *>("Exhaust Temperature (C): ");
         OxCore::DebugLn<float>(model.locations[1].temp_C);
+#endif
+
+        delay(3000);
 
         return true;
     }
@@ -90,6 +107,35 @@ namespace OxApp
   static float compute_change_in_voltage(float current_C,float current_V,float desired_C) {
   }
 
+#ifdef RIBBONFISH
+
+  // The RibbonFish has two heaters. We just want to turn them on and off as a simple
+  // thermostate problem, using the PWMs of our dues to power transistors.
+  // However, the process should be slow enough, we can just use "full on" and "full off"
+  // as a first cut.
+    void CogTask::_updatePowerComponents() {
+        // For now, i want to do only the first heater to simplify
+        int heater_indices[2];
+        heater_indices[0] = 0;
+        heater_indices[1] = 1;
+        for (int i = 0; i < NUM_HEATERS && i < 2; i++) {
+
+        float temperature = _temperatureSensors[0].GetTemperature(heater_indices[i]);
+        // It would be nice to tie this temperature
+        // to the model location, but that will have to wait!
+        // float current_C = model.locations[1].temp_C;
+        //            float current_V = _heaters[i]._voltage;
+        float current_C = temperature;
+        float desired_C = 30;
+        // We could compute the actual voltage, but
+        // we will use the simpler on/off algorithm here...
+        float voltage = (current_C >= desired_C) ? 0.0 : 12.0;
+        _heaters[i].update(voltage);
+        }
+
+    }
+#else
+  // This is a mock, simulated update
     void CogTask::_updatePowerComponents() {
         OxCore::Debug<const char *>("_updateHeaterPrims\n");
         // For now, i want to do only the first heater to simplify
@@ -118,14 +164,13 @@ namespace OxApp
         OxCore::DebugLn<float>(_heaters[0]._voltage);
 
     }
+#endif
+
   void CogTask::RunForward(float t,Model& m) {
     // This math only works for 1 second, I think
     float watts = pow(_heaters[0]._voltage,2) / _heaters[0]._resistance;
     float degrees_delta = watts / m.watts_per_degree;
     // now really need to know the airflow
-
-    OxCore::Debug<const char *>("Heater 1 air flow degrees delta ");
-    OxCore::DebugLn<float>(degrees_delta);
 
     // We'll assume that the watts added directly increase the
     // the temperature at the output
@@ -150,11 +195,9 @@ namespace OxApp
     }
 
     void CogTask::_readTemperatureSensors() {
-      OxCore::Debug<const char *>("AAA: ");
 #ifdef RIBBONFISH
       float temperature = _temperatureSensors[0].ReadTemperature();
-      OxCore::Debug<const char *>("DDD: ");
-      for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+      for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
         float temperature = _temperatureSensors[0].GetTemperature(i);
         OxCore::Debug<const char *>("Temperature: ");
         OxCore::DebugLn<float>(temperature);
