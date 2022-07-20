@@ -25,6 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <serial_task.h>
 #include <stdio.h>
 #include <string.h>
+#include <PIRCS.h>
 
 using namespace OxCore;
 #define DEBUG_SERIAL_LISTEN 3
@@ -39,10 +40,34 @@ bool SerialTask::_init() {
   return initialization_success = true;
 } // Setup communication channel
 
+void render_set_command_raw(SetCommand* m) {
+  Debug<const char *>("Command :");
+  DebugLn<char>(m->command);
+  Debug<const char *>("Parameter :");
+  DebugLn<char>(m->parameter);
+  Debug<const char *>("Interpretation :");
+  DebugLn<char>(m->interpretation);
+  Debug<const char *>("Modifier :");
+  DebugLn<char>(m->modifier);
+  Debug<const char *>("Val :");
+  DebugLn<int>(m->val);
+}
+
 
   bool SerialTask::_run()
     {
-        OxCore::Debug<const char *>("Serial_task_run");
+      //        OxCore::Debug<const char *>("Serial_task_run");
+        char buffer[256];
+        SetCommand sc;
+        if (listen(buffer, 256)) {
+#if DEBUG_INPUT > 0
+          DebugLnCC("read buffer\n");
+          DebugLn<const char *>(buffer);
+#endif
+          sc = get_set_command_from_JSON(buffer, (uint16_t)256);
+          render_set_command_raw(&sc);
+          DebugLn<const char *>("command");
+        }
     }
 // The clears out the current Serial buffer, and
 // also sets the current input_buffer to null.

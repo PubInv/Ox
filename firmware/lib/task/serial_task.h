@@ -40,7 +40,6 @@ namespace OxApp
 
     int number_of_actions;
     size_t action_number;
-  private:
     bool _init() override;
     bool _run() override;
 

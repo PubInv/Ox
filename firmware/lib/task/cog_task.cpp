@@ -98,12 +98,6 @@ namespace OxApp
         OxCore::Debug<const char *>("Exhaust Temperature (C): ");
         OxCore::DebugLn<float>(model.locations[1].temp_C);
 #endif
-
-
-        // TODO: Replace this with configuration for when it is run,
-        // don't do a hard stop here!
-        delay(3000);
-
         return true;
     }
 
