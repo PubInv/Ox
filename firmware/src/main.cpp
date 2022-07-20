@@ -25,6 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // #include <networking_task.h>
 #include <cog_task.h>
+#include <serial_task.h>
 //#include <display_task.h>
 
 using namespace OxCore;
@@ -34,6 +35,8 @@ static Core core;
 
 // OxApp::NetworkingTask networkingTask;
 OxApp::CogTask cogTask;
+OxApp::SerialTask serialTask;
+
 // OxApp::SensorReadTask sensorTask;
 
 /***********************************/
@@ -41,7 +44,7 @@ OxApp::CogTask cogTask;
 void setup()
 {
   OxCore::serialBegin(115200UL);
-  OxCore::Debug<const char *>("Starting Ox...\n");
+  Debug<const char *>("Starting Ox...\n");
 
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
@@ -65,9 +68,17 @@ void setup()
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 20;
-  cogProperties.period = 1000;
+  cogProperties.period = 3000;
   cogProperties.priority = OxCore::TaskPriority::High;
   core.AddTask(&cogTask, &cogProperties);
+
+
+  OxCore::TaskProperties serialProperties;
+  serialProperties.name = "serial";
+  serialProperties.id = 21;
+  serialProperties.period = 250;
+  serialProperties.priority = OxCore::TaskPriority::High;
+  core.AddTask(&serialTask, &serialProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
 
