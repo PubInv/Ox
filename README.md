@@ -46,6 +46,53 @@ and a folder for mock sensors.  I have no choice now but to jam
 the mock sensors into the same directory with the real hardware and
 use a naming convnention.
 
+## The Command System
+
+The NASA-COG system needs to allow the user to enter commands. The most obvious of these is "turn off".
+Because the system should avoid thermal shocks, this is actually not simple.
+
+We have previously used an [approach](https://github.com/PubInv/PIRCS-pubinv-respiration-control-standard) of using simple JSON objects to represent commands. We propose to use the same idea here, but obviously,
+the command will be custom to the NASA-COG.
+
+### Parameter Setting Commands
+The general scheme is to use a JSON object like:
+
+```JavaScript
+{ "com": "T",
+  "par": 7,
+  "mod": "T",
+  "val" : 732.3
+  }
+```
+
+1. "com" is the command. For example, "T" can mean "set Temperature".
+2. "par" is a parameter used to specify something about how to execute the command. For example, 7 could mean location 7, which might be between the 6th and 7th stack.
+3. "mod" is a modifier of the command. For example, the "set Temperature" command could be used to
+set the minimum, maximum, or the target temperature.
+4. "val" is the value that is to be set.
+
+For this problem space, we can specify some global parameters of the problem, some of which
+involve safety. These can of course have default values "hard wired" into the code, but an
+experimenter may wish to change these values (carefully).
+
+1. The maximum rate of voltage change applied to a stack. Nominally we have defined this as 1 volt/second.
+We have evidence that too rapid a voltage change (such as that caused by pulse-width modulation) can destroy
+a stack.
+2. The maximum rate of temperature change for a stack. Nominally we may say this as 2 degree K per minute,
+which would allow the machine to reach operating temperature in 6 hours.
+3. The maximum temperature difference across a stack in any dimenstion. We may not be able to control
+this directly, but we can use it as a target.
+4. The maximum voltage applied to a stack.
+5. The maximum amperage applied to a stack.
+
+### Event-like Commands
+
+We will need other commands that represent discrete events in time. For example, each transition in the
+state transition diagram below may be initiated by a command from the user (they may also occur
+automatically due to an internal fault or even normal operation.)
+
+
+
 
 ## License
 
