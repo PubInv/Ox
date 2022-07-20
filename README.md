@@ -91,6 +91,7 @@ We will need other commands that represent discrete events in time. For example,
 state transition diagram below may be initiated by a command from the user (they may also occur
 automatically due to an internal fault or even normal operation.)
 
+![COG State Machine](https://user-images.githubusercontent.com/5296671/180069835-ce7cdff7-c445-45c1-967d-089810e837db.png)
 
 
 
