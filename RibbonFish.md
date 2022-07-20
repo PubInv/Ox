@@ -40,3 +40,54 @@ We believe teh DS18B20 thermometers require these libraries
 
 > pio lib install paulstoffregen/OneWire
 > pio lib install milesburton/DallasTemperature
+
+
+## Simple Commands for the RibbonFish
+
+In order to continue moving to more versimilitude, we need to implement a serial-port based
+command structure within the RibbonFish.  Without being ready to specify everything,
+let me describe a few commands.
+
+### Parameter Commands
+
+The first commands for the Ribbon Fish are:
+
+1. W - Warmup
+2. C - Cool Down
+3. Set exhuast temperature than (first or second) heater
+4. Set the speed of the fan
+
+The command set the target temperatures for the first and second heater
+```JavaScript
+{ "com": "T",
+  "par": 0,
+  "mod": "T",
+  "val" : 34.3
+  }
+```
+
+```JavaScript
+{ "com": "T",
+  "par": 1,
+  "mod": "T",
+  "val" : 36.0
+  }
+```
+
+This command says enter the cool down mode:
+```JavaScript
+{ "com": "C",
+  "par": 0,
+  "mod": "U",
+  "val" : 0.0
+  }
+```
+
+This command says enter the warm up mode:
+```JavaScript
+{ "com": "W",
+  "par": 0,
+  "mod": "U",
+  "val" : 0.0
+  }
+```

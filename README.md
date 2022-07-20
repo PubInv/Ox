@@ -93,6 +93,25 @@ automatically due to an internal fault or even normal operation.)
 
 ![COG State Machine](https://user-images.githubusercontent.com/5296671/180069835-ce7cdff7-c445-45c1-967d-089810e837db.png)
 
+We can implement particular commands with the same scheme.
+
+For example, the simple object:
+
+```JavaScript
+{ "com": "C",
+  "par": 0,
+  "mod": "U",
+  "val" : 0.0
+  }
+```
+
+Could mean "Cool Down". The value "U" is used becasue the "mod" command is "unusued" in this case.
+
+In actual practice, these commands will be pasted into the serial port using either PlatformIO or the Arduino IDE.
+
+Eventually, a user interface may be implemented that uses a knob or a nice webpage to enter commands.
+However, by having each of these take only actions that can be implemented as such a command,
+we bring discipline to the internal code.
 
 
 ## License
