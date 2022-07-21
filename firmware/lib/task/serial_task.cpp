@@ -26,6 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <stdio.h>
 #include <string.h>
 #include <PIRCS.h>
+#include <machine.h>
 
 using namespace OxCore;
 #define DEBUG_SERIAL_LISTEN 3
@@ -67,6 +68,21 @@ void render_set_command_raw(SetCommand* m) {
           sc = get_set_command_from_JSON(buffer, (uint16_t)256);
           render_set_command_raw(&sc);
           DebugLn<const char *>("command");
+          // This is an over simplifcation of possible state transitions!
+          // This needs to be taken out to a separate routine, probably
+          // implemented in the machine
+          if (sc.command == 'W') {
+            if (ms == Off) {
+              ms = Warmup;
+              Debug<const char *>("New State: Warmup!");
+            }
+          } else if (sc.command == 'C') {
+            if (ms != Off) {
+              ms = Cooldown;
+              Debug<const char *>("New State: Cooldown!");
+            }
+          }
+
         }
     }
 // The clears out the current Serial buffer, and
@@ -98,12 +114,15 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
   // in a different part of the code.
   char c = 0;
   if ((num_read == 2 &&
-       (input_buffer[k - 1] == 's' || input_buffer[k - 1] == 'c' ||
-        input_buffer[k - 1] == '1' || input_buffer[k - 1] == 'h'))) {
+       (input_buffer[k - 1] == 'w' || input_buffer[k - 1] == 'c'
+        // || input_buffer[k - 1] == '1' || input_buffer[k - 1] == 'h'
+        )))
+    {
     c = input_buffer[k - 1];
   }
-  if ((num_read == 1 && (input_buffer[k] == 's' || input_buffer[k] == 'c' ||
-                         input_buffer[k] == '1' || input_buffer[k] == 'h'))) {
+  if ((num_read == 1 && (input_buffer[k] == 'w' || input_buffer[k] == 'c'
+        // || input_buffer[k] == '1' || input_buffer[k] == 'h'
+                         ))) {
     c = input_buffer[k];
   }
 #if DEBUG_SERIAL_LISTEN > 0
@@ -111,34 +130,26 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
 #endif
 
   switch (c) {
-  case 's':
+    // WARMUP!
+  case 'w':
     strcpy(
         buffer,
-        "{\"com\":\"C\",\"par\":\"M\",\"int\":\"s\",\"mod\":\"U\",\"val\":0}");
+        "{\"com\":\"W\",\"par\":\"M\",\"int\":\"s\",\"mod\":\"U\",\"val\":0}");
     //      clear_buffers(input_buffer);
+    DebugLn<const char *>("Returning Warmup!\n");
     return true;
     break;
+    // COOLDOWN!
   case 'c':
     strcpy(
         buffer,
         "{\"com\":\"C\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
     //      clear_buffers(input_buffer);
+    DebugLn<const char *>("Returning Cooldown!\n");
     return true;
     break;
-  case '1':
-    strcpy(
-        buffer,
-        "{\"com\":\"C\",\"par\":\"M\",\"int\":\"1\",\"mod\":\"U\",\"val\":0}");
-    //      clear_buffers(input_buffer);
-    return true;
-    break;
-  case 'h':
-    strcpy(
-        buffer,
-        "{\"com\":\"C\",\"par\":\"M\",\"int\":\"h\",\"mod\":\"U\",\"val\":0}");
-    //      clear_buffers(input_buffer);
-    return true;
-    break;
+  default:
+        DebugLn<const char *>("Unkown command!\n");
   }
   return false;
 }

@@ -38,6 +38,9 @@ OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 
 // OxApp::SensorReadTask sensorTask;
+#include <machine.h>
+
+MachineState ms;
 
 /***********************************/
 
@@ -62,6 +65,9 @@ void setup()
       pinMode(4, OUTPUT);
       pinMode(5, OUTPUT);
 #endif
+
+      // Now we will set the machine state to "Off"
+      ms = Off;
 
   /***** Configure and add your tasks here *****/
 
