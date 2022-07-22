@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include "../collections/array.h"
 #include "heater.h"
-
+#include <machine.h>
 
 #include <abstract_temperature.h>
 
@@ -60,15 +60,24 @@ namespace OxApp
       Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
     private:
-        bool _init() override;
-        bool _run() override;
-        void _updatePowerComponents();
-        void _printValveState(uint8_t vs);
-        void _configTemperatureSensors();
-        void _readTemperatureSensors();
+      bool _init() override;
+      bool _run() override;
+      // This would go into the abstract class.
+
+      MachineState _executeBasedOnState(MachineState ms);
+      MachineState _updatePowerComponentsOperation();
+      MachineState _updatePowerComponentsOff();
+      MachineState _updatePowerComponentsWarmup();
+      MachineState _updatePowerComponentsIdle();
+      MachineState _updatePowerComponentsCooldown();
+      MachineState _updatePowerComponentsCritialFault();
+      MachineState _updatePowerComponentsEmergencyShutdown();
+      MachineState _updatePowerComponentsOffUserAck();
+      void _configTemperatureSensors();
+      void _readTemperatureSensors();
       // We will use a model for mocking, which may grow into
       // something...
-        Model model;
+      Model model;
       void RunForward(float t,Model& m);
     };
 }

@@ -71,14 +71,17 @@ void render_set_command_raw(SetCommand* m) {
           // This is an over simplifcation of possible state transitions!
           // This needs to be taken out to a separate routine, probably
           // implemented in the machine
+          MachineState *ms = (MachineState *) _properties.state_and_config;
           if (sc.command == 'W') {
-            if (ms == Off) {
-              ms = Warmup;
+            // Note: This is a global variable. I don't like this style much. I believe we should
+            // find a way to pass the machine state into every task!
+            if (*ms == Off) {
+              *ms = Warmup;
               Debug<const char *>("New State: Warmup!");
             }
           } else if (sc.command == 'C') {
-            if (ms != Off) {
-              ms = Cooldown;
+            if (*ms != Off) {
+              *ms = Cooldown;
               Debug<const char *>("New State: Cooldown!");
             }
           }
@@ -97,16 +100,14 @@ int SerialTask::clear_buffers(char buffer[]) {
   input_buffer[0] = '\0';
 }
 
+
+  // Note this code can be cleaned up.
 bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
 
   // HACK ALERT!! For debugging, we want VERY FAST commands to disable and
   // and home the ventilator. Because this is actully being
   // done by a human being, we want this to be a single, one-character command:
-  // s - enter emergency stop; enter emergency stop mode.
-  // c - exit emergency stop mode; continue operations.
-  // 1 - perform precisely 1 breath, then enter emergency stop mode
-  // 9 - perform precisely 9 breaths, then enter emergency stop mode
-  // h - home the machine, even if in emergency stop mode.
+  // c
   // Because this routine is designed to return a buffer that
   // contains a PIRCS command, we expand the PIRCS commands,
   // and return the command in the buffer, where it will be read

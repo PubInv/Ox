@@ -87,8 +87,10 @@ namespace OxApp
     bool CogTask::_run()
     {
         _readTemperatureSensors();
+        MachineState *ms = (MachineState *) _properties.state_and_config;
 
-        _updatePowerComponents();
+        MachineState new_state = _executeBasedOnState(*ms);
+        // if the state really changes, we want to log that and take some action!
 
         // Somewhere we have a true clock value, I would have thought
         // it would be an input to this routine....
@@ -104,13 +106,82 @@ namespace OxApp
   static float compute_change_in_voltage(float current_C,float current_V,float desired_C) {
   }
 
+  // There is significant COG dependent logic here.
+  // At the expense of extra lines of code, I'm
+  // going to keep this mostly simple by making it look
+  // "table-driven"
+  MachineState CogTask::_executeBasedOnState(MachineState ms) {
+    MachineState new_ms;
+    switch(ms) {
+    case Off:
+        new_ms = _updatePowerComponentsOff();
+      break;
+    case Warmup:
+        new_ms = _updatePowerComponentsWarmup();
+      break;
+    case Operation:
+        new_ms = _updatePowerComponentsOperation();
+      break;
+    case Idle:
+        new_ms = _updatePowerComponentsIdle();
+      break;
+    case Cooldown:
+        new_ms = _updatePowerComponentsCooldown();
+      break;
+    case CriticalFault:
+        new_ms = _updatePowerComponentsCritialFault();
+      break;
+    case EmergencyShutdown:
+        new_ms = _updatePowerComponentsEmergencyShutdown();
+      break;
+    case OffUserAck:
+        new_ms = _updatePowerComponentsOffUserAck();
+        break;
+    default:
+      OxCore::Debug<const char *>("INTERNAL ERROR: UNKOWN MACHINE STATE\n");
+      // This is not really enough information; we need a way to
+      // record what the fault is, but it will do for now.
+      new_ms = CriticalFault;
+    }
+    return new_ms;
+
+  }
+  MachineState CogTask::_updatePowerComponentsOff() {
+    MachineState new_ms = CriticalFault;
+    return new_ms;
+  }
+  MachineState CogTask::_updatePowerComponentsWarmup() {
+    MachineState new_ms = CriticalFault;
+    return new_ms;
+  }
+  MachineState CogTask::_updatePowerComponentsIdle() {
+    MachineState new_ms = CriticalFault;
+    return new_ms;
+  }
+  MachineState CogTask::_updatePowerComponentsCooldown() {
+    MachineState new_ms = CriticalFault;
+    return new_ms;
+  }
+  MachineState CogTask::_updatePowerComponentsCritialFault() {
+    MachineState new_ms = CriticalFault;
+    return new_ms;
+  }
+  MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
+    MachineState new_ms = CriticalFault;
+    return new_ms;
+  }
+  MachineState CogTask::_updatePowerComponentsOffUserAck() {
+    MachineState new_ms = CriticalFault;
+    return new_ms;
+  }
+
 #ifdef RIBBONFISH
 
   // The RibbonFish has two heaters. We just want to turn them on and off as a simple
   // thermostate problem, using the PWMs of our dues to power transistors.
   // However, the process should be slow enough, we can just use "full on" and "full off"
   // as a first cut.
-    void CogTask::_updatePowerComponents() {
+   MachineState CogTask::_updatePowerComponentsOperation() {
         // For now, i want to do only the first heater to simplify
         int heater_indices[2];
         heater_indices[0] = 0;
@@ -133,7 +204,7 @@ namespace OxApp
     }
 #else
   // This is a mock, simulated update
-    void CogTask::_updatePowerComponents() {
+    MachineState CogTask::_updatePowerComponentsOperation() {
         OxCore::Debug<const char *>("_updateHeaterPrims\n");
         // For now, i want to do only the first heater to simplify
         for (int i = 0; i < NUM_HEATERS && i < 1; i++) {

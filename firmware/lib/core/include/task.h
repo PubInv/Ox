@@ -35,7 +35,7 @@ class Task {
         // User defined:
         virtual bool _init() = 0;
         virtual bool _run() = 0;
-        
+
         // Only the scheduler should call these:
         TaskState Init(TaskProperties *properties);
         void Run(TimeMs now);

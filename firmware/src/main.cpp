@@ -76,6 +76,7 @@ void setup()
   cogProperties.id = 20;
   cogProperties.period = 3000;
   cogProperties.priority = OxCore::TaskPriority::High;
+  cogProperties.state_and_config = (void *) &ms;
   core.AddTask(&cogTask, &cogProperties);
 
 
@@ -84,6 +85,7 @@ void setup()
   serialProperties.id = 21;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
+  cogProperties.state_and_config = (void *) &ms;
   core.AddTask(&serialTask, &serialProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
