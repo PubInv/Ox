@@ -238,6 +238,15 @@ namespace OxApp
         }
     }
 
+  // updateTheFanSpeed to a percentage of the maximum flow.
+  // We may have the ability to specify flow absolutely in the future,
+  // but this is genertic.
+   void CogTask::_updateFanSpeed(float percentage) {
+        for (int i = 0; i < NUM_FANS; i++) {
+        _fans[i].update(percentage);
+        }
+    }
+
 #ifdef RIBBONFISH
 
   // The RibbonFish has two heaters. We just want to turn them on and off as a simple

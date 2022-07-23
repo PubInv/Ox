@@ -24,6 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include "../collections/array.h"
 #include "heater.h"
+#include "fan.h"
 #include <machine.h>
 
 #include <abstract_temperature.h>
@@ -59,6 +60,9 @@ namespace OxApp
 
       Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
+
+      const static int NUM_FANS = 1;
+      Fan _fans[NUM_FANS];
     private:
       bool _init() override;
       bool _run() override;
@@ -76,6 +80,9 @@ namespace OxApp
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
       void _readTemperatureSensors();
+
+      void _updateFanSpeed(float percentage);
+
       // We will use a model for mocking, which may grow into
       // something...
       Model model;
