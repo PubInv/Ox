@@ -86,25 +86,34 @@ namespace OxApp
 
     bool CogTask::_run()
     {
-        _readTemperatureSensors();
-        COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+      COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+      // If we are in the off state there is nothing to do!
+      if (cogConfig->ms == OffUserAck) {
+          OxCore::DebugLn<const char *>("AN ERROR OCCURED. WILL NOT ENTER OFF STATE ");
+          OxCore::DebugLn<const char *>("UNTIL ACKNOWLEDGED. ENTER A SINGLE 'a' TO ACKNOWLEDGE:");
+          return true;
+      }
+      if (cogConfig->ms == Off) {
+          OxCore::DebugLn<const char *>("Currrently Off. Enter a single 'w' to warmup: ");
+          return true;
+      }
+      _readTemperatureSensors();
+      MachineState new_state = _executeBasedOnState(cogConfig->ms);
+      // if the state really changes, we want to log that and take some action!
+      if (new_state != cogConfig->ms) {
+        cogConfig->ms = new_state;
+        OxCore::Debug<const char *>("CHANGING STATE TO: ");
+        OxCore::DebugLn<const char *>(COGConfig::MachineStateNames[cogConfig->ms]);
+        OxCore::DebugLn<const char *>("");
+      }
 
-        MachineState new_state = _executeBasedOnState(cogConfig->ms);
-        // if the state really changes, we want to log that and take some action!
-        if (new_state != cogConfig->ms) {
-          cogConfig->ms = new_state;
-          OxCore::Debug<const char *>("CHANGING STATE TO: ");
-          OxCore::DebugLn<const char *>(COGConfig::MachineStateNames[cogConfig->ms]);
-          OxCore::DebugLn<const char *>("");
-        }
-
-        // Somewhere we have a true clock value, I would have thought
-        // it would be an input to this routine....
+      // Somewhere we have a true clock value, I would have thought
+      // it would be an input to this routine....
 #ifndef RIBBONFISH
-        RunForward(1.0,model);
+      RunForward(1.0,model);
 
-        OxCore::Debug<const char *>("Exhaust Temperature (C): ");
-        OxCore::DebugLn<float>(model.locations[1].temp_C);
+      OxCore::Debug<const char *>("Exhaust Temperature (C): ");
+      OxCore::DebugLn<float>(model.locations[1].temp_C);
 #endif
         return true;
     }
@@ -190,10 +199,7 @@ namespace OxApp
   }
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
-    // once we reach this target we can go into the "off" state.
-    const float COOLDOWN_TARGET_C = 26.0;
     float postHeaterTemp;
-
     int heater_indices[2];
     heater_indices[0] = 0;
     heater_indices[1] = 1;
@@ -216,7 +222,8 @@ namespace OxApp
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
-    MachineState new_ms = EmergencyShutdown;
+    _updatePowerComponentsVoltage(0);
+    MachineState new_ms = OffUserAck;
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsOffUserAck() {
@@ -303,7 +310,6 @@ namespace OxApp
     void CogTask::_configTemperatureSensors() {
         OxCore::Debug<const char *>("_configPressureSensors\n");
 
-
 #ifdef RIBBONFISH
         _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::DS18B20Temperature[1];
         _temperatureSensors[0]._config = config[0];
@@ -311,15 +317,13 @@ namespace OxApp
         _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MockTemperatureSensor[NUM_TEMPERATURE_SENSORS];
         for(int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
           _temperatureSensors[i]._config = config[i];
-
         }
 #endif
-
     }
 
     void CogTask::_readTemperatureSensors() {
 #ifdef RIBBONFISH
-      float temperature = _temperatureSensors[0].ReadTemperature();
+      _temperatureSensors[0].ReadTemperature();
       for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
         float temperature = _temperatureSensors[0].GetTemperature(i);
         OxCore::Debug<const char *>("Temperature: ");

@@ -71,9 +71,11 @@ void render_set_command_raw(SetCommand* m) {
           // This needs to be taken out to a separate routine, probably
           // implemented in the machine
           COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+          // TODO: This would probably be better handled by setting
+          // the most recent command into the state, and having the
+          // the cog_task remove it. Then all state changes would be made in
+          // one place!
           if (sc.command == 'W') {
-            // Note: This is a global variable. I don't like this style much. I believe we should
-            // find a way to pass the machine state into every task!
             if (cogConfig->ms == Off) {
               cogConfig->ms = Warmup;
               Debug<const char *>("New State: Warmup!");
@@ -82,6 +84,16 @@ void render_set_command_raw(SetCommand* m) {
             if (cogConfig->ms != Off) {
               cogConfig->ms = Cooldown;
               Debug<const char *>("New State: Cooldown!");
+            }
+          } else if (sc.command == 'E') {
+            if (cogConfig->ms != Off) {
+              cogConfig->ms = EmergencyShutdown;
+              Debug<const char *>("New State: Emergency Shutdown!");
+            }
+          } else if (sc.command == 'A') {
+            if (cogConfig->ms == OffUserAck) {
+              cogConfig->ms = Off;
+              Debug<const char *>("New State: Off!");
             }
           }
 
@@ -99,6 +111,8 @@ int SerialTask::clear_buffers(char buffer[]) {
   input_buffer[0] = '\0';
 }
 
+  const int NUM_ONE_CHAR_COMMANDS = 4;
+  const char one_char_commands[NUM_ONE_CHAR_COMMANDS] = {'w','c','e','a'};
 
   // Note this code can be cleaned up.
 bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
@@ -113,18 +127,17 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
   // by the PIRCS library. Then how we interpret it later happens
   // in a different part of the code.
   char c = 0;
-  if ((num_read == 2 &&
-       (input_buffer[k - 1] == 'w' || input_buffer[k - 1] == 'c'
-        // || input_buffer[k - 1] == '1' || input_buffer[k - 1] == 'h'
-        )))
-    {
-    c = input_buffer[k - 1];
+  if (num_read == 2) {
+    for(int i = 0; !c && i < NUM_ONE_CHAR_COMMANDS; i++) {
+      if (input_buffer[k-1] == one_char_commands[i])
+            c = input_buffer[k - 1];
+    }
   }
-  if ((num_read == 1 &&
-       (input_buffer[k] == 'w' || input_buffer[k] == 'c'
-        // || input_buffer[k] == '1' || input_buffer[k] == 'h'
-                         ))) {
-    c = input_buffer[k];
+  if (num_read == 1) {
+    for(int i = 0; !c && i < NUM_ONE_CHAR_COMMANDS; i++) {
+      if (input_buffer[k] == one_char_commands[i])
+            c = input_buffer[k];
+    }
   }
 #if DEBUG_SERIAL_LISTEN > 0
   DebugLn<const char*>("testing one character command");
@@ -147,6 +160,22 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
         "{\"com\":\"C\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
     //      clear_buffers(input_buffer);
     DebugLn<const char *>("Returning Cooldown!\n");
+    return true;
+    break;
+  case 'e':
+    strcpy(
+        buffer,
+        "{\"com\":\"E\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
+    //      clear_buffers(input_buffer);
+    DebugLn<const char *>("Returning Emergency Shutdown!\n");
+    return true;
+    break;
+  case 'a':
+    strcpy(
+        buffer,
+        "{\"com\":\"A\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
+    //      clear_buffers(input_buffer);
+    DebugLn<const char *>("Returning Emergency Shutdown!\n");
     return true;
     break;
   default:
