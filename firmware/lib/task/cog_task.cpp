@@ -87,10 +87,16 @@ namespace OxApp
     bool CogTask::_run()
     {
         _readTemperatureSensors();
-        MachineState *ms = (MachineState *) _properties.state_and_config;
+        COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
 
-        MachineState new_state = _executeBasedOnState(*ms);
+        MachineState new_state = _executeBasedOnState(cogConfig->ms);
         // if the state really changes, we want to log that and take some action!
+        if (new_state != cogConfig->ms) {
+          cogConfig->ms = new_state;
+          OxCore::Debug<const char *>("CHANGING STATE TO: ");
+          OxCore::DebugLn<const char *>(COGConfig::MachineStateNames[cogConfig->ms]);
+          OxCore::DebugLn<const char *>("");
+        }
 
         // Somewhere we have a true clock value, I would have thought
         // it would be an input to this routine....
@@ -144,22 +150,65 @@ namespace OxApp
       new_ms = CriticalFault;
     }
     return new_ms;
-
   }
   MachineState CogTask::_updatePowerComponentsOff() {
-    MachineState new_ms = CriticalFault;
+    MachineState new_ms = Off;
+    _updatePowerComponentsVoltage(0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsWarmup() {
-    MachineState new_ms = CriticalFault;
+    MachineState new_ms = Warmup;
+    OxCore::Debug<const char *>("Warmup Mode! ");
+    // This algorithm will have to be improved, but
+    // for now, we check the temperature, and turn the heaters on
+    // full-blast until we reach the warmup-target
+    // This will be based on the post-heater temperature
+    const float WARMUP_TARGET_C = 28.0;
+    float postHeaterTemp;
+
+    int heater_indices[2];
+    heater_indices[0] = 0;
+    heater_indices[1] = 1;
+#ifdef RIBBONFISH
+    postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
+#else
+    postHeaterTemp = model.locations[1].temp_C;
+#endif
+    if (postHeaterTemp >= WARMUP_TARGET_C) {
+      new_ms = Operation;
+      _updatePowerComponentsOperation();
+    } else {
+      COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+      _updatePowerComponentsVoltage(cogConfig->MAXIMUM_HEATER_VOLTAGE);
+    }
     return new_ms;
   }
+
   MachineState CogTask::_updatePowerComponentsIdle() {
     MachineState new_ms = CriticalFault;
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCooldown() {
-    MachineState new_ms = CriticalFault;
+    MachineState new_ms = Cooldown;
+    // once we reach this target we can go into the "off" state.
+    const float COOLDOWN_TARGET_C = 26.0;
+    float postHeaterTemp;
+
+    int heater_indices[2];
+    heater_indices[0] = 0;
+    heater_indices[1] = 1;
+#ifdef RIBBONFISH
+    postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
+#else
+    postHeaterTemp = model.locations[1].temp_C;
+#endif
+
+      COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+    if (postHeaterTemp <= cogConfig->COOLDOWN_TARGET_C) {
+      new_ms = Off;
+    } else {
+      _updatePowerComponentsVoltage(0);
+    }
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCritialFault() {
@@ -167,13 +216,20 @@ namespace OxApp
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
-    MachineState new_ms = CriticalFault;
+    MachineState new_ms = EmergencyShutdown;
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsOffUserAck() {
     MachineState new_ms = CriticalFault;
     return new_ms;
   }
+  // This is use primarily for maximum power at warmup or
+  // maximum cooldown when we don't have to compute based on temperature
+   void CogTask::_updatePowerComponentsVoltage(float voltage) {
+        for (int i = 0; i < NUM_HEATERS; i++) {
+        _heaters[i].update(voltage);
+        }
+    }
 
 #ifdef RIBBONFISH
 
@@ -186,19 +242,18 @@ namespace OxApp
         int heater_indices[2];
         heater_indices[0] = 0;
         heater_indices[1] = 1;
-        for (int i = 0; i < NUM_HEATERS && i < 2; i++) {
-
-        float temperature = _temperatureSensors[0].GetTemperature(heater_indices[i]);
-        // It would be nice to tie this temperature
-        // to the model location, but that will have to wait!
-        // float current_C = model.locations[1].temp_C;
-        //            float current_V = _heaters[i]._voltage;
-        float current_C = temperature;
-        float desired_C = 30;
-        // We could compute the actual voltage, but
-        // we will use the simpler on/off algorithm here...
-        float voltage = (current_C >= desired_C) ? 0.0 : 12.0;
-        _heaters[i].update(voltage);
+        for (int i = 0; i < NUM_HEATERS; i++) {
+          float temperature = _temperatureSensors[0].GetTemperature(heater_indices[i]);
+          // It would be nice to tie this temperature
+          // to the model location, but that will have to wait!
+          // float current_C = model.locations[1].temp_C;
+          //            float current_V = _heaters[i]._voltage;
+          float current_C = temperature;
+          float desired_C = 30;
+          // We could compute the actual voltage, but
+          // we will use the simpler on/off algorithm here...
+          float voltage = (current_C >= desired_C) ? 0.0 : 12.0;
+          _heaters[i].update(voltage);
         }
 
     }

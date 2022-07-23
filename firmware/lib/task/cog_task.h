@@ -73,6 +73,7 @@ namespace OxApp
       MachineState _updatePowerComponentsCritialFault();
       MachineState _updatePowerComponentsEmergencyShutdown();
       MachineState _updatePowerComponentsOffUserAck();
+      void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
       void _readTemperatureSensors();
       // We will use a model for mocking, which may grow into

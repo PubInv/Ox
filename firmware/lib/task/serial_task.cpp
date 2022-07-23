@@ -67,21 +67,20 @@ void render_set_command_raw(SetCommand* m) {
 #endif
           sc = get_set_command_from_JSON(buffer, (uint16_t)256);
           render_set_command_raw(&sc);
-          DebugLn<const char *>("command");
           // This is an over simplifcation of possible state transitions!
           // This needs to be taken out to a separate routine, probably
           // implemented in the machine
-          MachineState *ms = (MachineState *) _properties.state_and_config;
+          COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
           if (sc.command == 'W') {
             // Note: This is a global variable. I don't like this style much. I believe we should
             // find a way to pass the machine state into every task!
-            if (*ms == Off) {
-              *ms = Warmup;
+            if (cogConfig->ms == Off) {
+              cogConfig->ms = Warmup;
               Debug<const char *>("New State: Warmup!");
             }
           } else if (sc.command == 'C') {
-            if (*ms != Off) {
-              *ms = Cooldown;
+            if (cogConfig->ms != Off) {
+              cogConfig->ms = Cooldown;
               Debug<const char *>("New State: Cooldown!");
             }
           }
@@ -121,7 +120,8 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
     {
     c = input_buffer[k - 1];
   }
-  if ((num_read == 1 && (input_buffer[k] == 'w' || input_buffer[k] == 'c'
+  if ((num_read == 1 &&
+       (input_buffer[k] == 'w' || input_buffer[k] == 'c'
         // || input_buffer[k] == '1' || input_buffer[k] == 'h'
                          ))) {
     c = input_buffer[k];

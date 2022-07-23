@@ -40,8 +40,7 @@ OxApp::SerialTask serialTask;
 // OxApp::SensorReadTask sensorTask;
 #include <machine.h>
 
-MachineState ms;
-
+COGConfig cogConfig;
 /***********************************/
 
 void setup()
@@ -56,7 +55,6 @@ void setup()
       return;
   }
 
-
   //TODO: This needs to be placed inthe task init feature!
   //#if BUILD_ENV_NAME == due_ribbonfish
 #ifdef RIBBONFISH
@@ -67,7 +65,7 @@ void setup()
 #endif
 
       // Now we will set the machine state to "Off"
-      ms = Off;
+      cogConfig.ms = Off;
 
   /***** Configure and add your tasks here *****/
 
@@ -76,7 +74,7 @@ void setup()
   cogProperties.id = 20;
   cogProperties.period = 3000;
   cogProperties.priority = OxCore::TaskPriority::High;
-  cogProperties.state_and_config = (void *) &ms;
+  cogProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&cogTask, &cogProperties);
 
 
@@ -85,7 +83,7 @@ void setup()
   serialProperties.id = 21;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
-  cogProperties.state_and_config = (void *) &ms;
+  serialProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&serialTask, &serialProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");

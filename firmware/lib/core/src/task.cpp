@@ -29,6 +29,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <iostream>
 #endif
 
+#include <debug.h>
+
 namespace OxCore
 {
 
@@ -48,7 +50,7 @@ namespace OxCore
             _state = TaskState::Running;
             _lastRun = now;
             _run(); // TODO: use result
-            
+
         } else {
             // Not ready to run
             // TODO: report
@@ -85,7 +87,7 @@ namespace OxCore
         return _lastRun;
     }
 
-    TimeMs Task::GetPeriod() const 
+    TimeMs Task::GetPeriod() const
     {
         return _properties.period;
     }
