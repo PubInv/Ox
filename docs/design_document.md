@@ -26,7 +26,7 @@ The Public Invention OxyCon aims to meet or exceed the WHO specification for oxy
 1. Pressure shall be +- 5% of the target value.
 1. Oxygen concentration shall be += 3% of the target value.
 1. No more than 70W electrical power is to be consumed per LPM of oxygen delivered.
-1. Operational temperature 0-50 degrees Celcius.
+1. Operational temperature 0-50 degrees Celsius.
 1. Operational humidity 0-95% humidity.
 #### 1.3 Usability
 1. Multi-language UI
