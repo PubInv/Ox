@@ -43,10 +43,27 @@ OxApp::SerialTask serialTask;
 COGConfig cogConfig;
 /***********************************/
 
+/* HACK: Rob is testing the DS3502 POT Here. */
+#include <DS3502_digital_pot.h>
+
+/* For this example, make the following connections:
+    * DS3502 RH to 5V
+    * DS3502 RL to GND
+    * DS3502 RW to the pin specified by WIPER_VALUE_PIN
+*/
+
+#define WIPER_VALUE_PIN A0
+
+DS3502DigitalPot* ds3502;
+
+// TODO: we need to have setups for individual pieces
+// of the Hardware Abstraction Layer
 void setup()
 {
   OxCore::serialBegin(115200UL);
   Debug<const char *>("Starting Ox...\n");
+
+  *ds3502 = DS3502DigitalPot();
 
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
@@ -91,8 +108,18 @@ void setup()
   /*********************************************/
 }
 
+#define WIPER_VALUE_PIN A0
+
+float n = 0;
 void loop() {
   OxCore::Debug<const char *>("Loop starting...\n");
+
+  // This is a HACK to test the DS3502..
+  delay(200);
+  // Count up the Wiper value as a fraction.
+  ds3502->setWiper(n / 100.0);
+  return;
+
   // Blocking call
   if (core.Run() == false) {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);
