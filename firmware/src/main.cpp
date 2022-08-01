@@ -26,6 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // #include <networking_task.h>
 #include <cog_task.h>
 #include <serial_task.h>
+#include <fault_task.h>
 //#include <display_task.h>
 
 using namespace OxCore;
@@ -36,6 +37,7 @@ static Core core;
 // OxApp::NetworkingTask networkingTask;
 OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
+OxApp::FaultTask faultTask;
 
 // OxApp::SensorReadTask sensorTask;
 #include <machine.h>
@@ -102,6 +104,14 @@ void setup()
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&serialTask, &serialProperties);
+
+  OxCore::TaskProperties faultProperties;
+  serialProperties.name = "fault";
+  serialProperties.id = 22;
+  serialProperties.period = 3000;
+  serialProperties.priority = OxCore::TaskPriority::High;
+  serialProperties.state_and_config = (void *) &cogConfig;
+  core.AddTask(&faultTask, &faultProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
 
