@@ -134,11 +134,8 @@ namespace OxApp
     case Warmup:
         new_ms = _updatePowerComponentsWarmup();
       break;
-    case Operation:
+    case NormalOperation:
         new_ms = _updatePowerComponentsOperation();
-      break;
-    case Idle:
-        new_ms = _updatePowerComponentsIdle();
       break;
     case Cooldown:
         new_ms = _updatePowerComponentsCooldown();
@@ -184,7 +181,7 @@ namespace OxApp
     postHeaterTemp = model.locations[1].temp_C;
 #endif
     if (postHeaterTemp >= WARMUP_TARGET_C) {
-      new_ms = Operation;
+      new_ms = NormalOperation;
       _updatePowerComponentsOperation();
     } else {
       COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;

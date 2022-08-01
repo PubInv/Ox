@@ -8,9 +8,7 @@ enum MachineState {
   // Attempting to reach operational temperatures.
   Warmup,
   // Operating
-  Operation,
-  // Stay warm but produce minimal oxygen
-  Idle,
+  NormalOperation,
   // Attempt to cool down slowly
   Cooldown,
   // A critical fault has occurred or an acknowledgement has not been received
@@ -21,11 +19,18 @@ enum MachineState {
   OffUserAck
 };
 
+enum IdleOrOperateSubState {
+  // Operate means to produce maximum oxygen. It is the default substates
+  Operate,
+  // Idle means to produce minimum possible oxygen, but stay warm.
+  Idle
+};
+
 struct COGConfig {
   constexpr inline static char const *MachineStateNames[8] = {
     "Off",
     "Warmup",
-    "Operation",
+    "NormalOperation",
     "Idle",
     "Cooldown",
     "CriticalFault",
@@ -33,6 +38,7 @@ struct COGConfig {
     "OffUserAck"
   };
   MachineState ms;
+  IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float COOLDOWN_TARGET_C = 26.0;
   char const* errors[10];

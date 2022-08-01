@@ -29,7 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <machine.h>
 
 using namespace OxCore;
-#define DEBUG_SERIAL_LISTEN 3
+#define DEBUG_SERIAL_LISTEN 1
 
 namespace OxApp
 {
@@ -61,12 +61,14 @@ void render_set_command_raw(SetCommand* m) {
         char buffer[256];
         SetCommand sc;
         if (listen(buffer, 256)) {
-#if DEBUG_INPUT > 0
+#if DEBUG_INPUT > 2
           DebugLnCC("read buffer\n");
           DebugLn<const char *>(buffer);
 #endif
           sc = get_set_command_from_JSON(buffer, (uint16_t)256);
+#if DEBUG_INPUT > 2
           render_set_command_raw(&sc);
+#endif
           // This is an over simplifcation of possible state transitions!
           // This needs to be taken out to a separate routine, probably
           // implemented in the machine
@@ -95,6 +97,16 @@ void render_set_command_raw(SetCommand* m) {
               cogConfig->ms = Off;
               Debug<const char *>("New State: Off!");
             }
+          } else if (sc.command == 'I') {
+            if (cogConfig->ms == OffUserAck) {
+              cogConfig->idleOrOperate = Idle;
+              Debug<const char *>("New SubState: Idle!");
+            }
+          } else if (sc.command == 'O') {
+            if (cogConfig->ms == OffUserAck) {
+              cogConfig->idleOrOperate = Operate;
+              Debug<const char *>("New SubState: Operate");
+            }
           }
 
         }
@@ -109,10 +121,17 @@ int SerialTask::clear_buffers(char buffer[]) {
   Serial.readBytesUntil('\n', buffer, INPUT_BUFFER_SIZE - 1);
 #endif
   input_buffer[0] = '\0';
+  return 0;
 }
 
-  const int NUM_ONE_CHAR_COMMANDS = 4;
-  const char one_char_commands[NUM_ONE_CHAR_COMMANDS] = {'w','c','e','a'};
+  const int NUM_ONE_CHAR_COMMANDS = 6;
+  // "warmup"
+  // "cooldown"
+  // "emergency shutdown"
+  // "acknowledge"
+  // "idle"
+  // "operate"
+  const char one_char_commands[NUM_ONE_CHAR_COMMANDS] = {'w','c','e','a','i','o'};
 
   // Note this code can be cleaned up.
 bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
@@ -139,7 +158,7 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
             c = input_buffer[k];
     }
   }
-#if DEBUG_SERIAL_LISTEN > 0
+#if DEBUG_SERIAL_LISTEN > 3
   DebugLn<const char*>("testing one character command");
 #endif
 
@@ -174,6 +193,22 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
     strcpy(
         buffer,
         "{\"com\":\"A\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
+    //      clear_buffers(input_buffer);
+    DebugLn<const char *>("Returning Emergency Shutdown!\n");
+    return true;
+    break;
+  case 'i':
+    strcpy(
+        buffer,
+        "{\"com\":\"I\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
+    //      clear_buffers(input_buffer);
+    DebugLn<const char *>("Returning Emergency Shutdown!\n");
+    return true;
+    break;
+  case 'o':
+    strcpy(
+        buffer,
+        "{\"com\":\"O\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
     //      clear_buffers(input_buffer);
     DebugLn<const char *>("Returning Emergency Shutdown!\n");
     return true;
@@ -253,7 +288,7 @@ bool SerialTask::listen(char buffer[], int length) {
     // now see if a closing brace exists in the buffer...
     n = strlen(input_buffer);
 
-#if DEBUG_SERIAL_LISTEN > 0
+#if DEBUG_SERIAL_LISTEN > 3
     DebugLn<const char *>("length after read: ");
     DebugLn<int>(n);
     // now what we really want to do is look for a closing curly brace...
@@ -264,18 +299,18 @@ bool SerialTask::listen(char buffer[], int length) {
 #endif
 
     if (input_buffer[n - 1] == '}') {
-#if DEBUG_SERIAL_LISTEN > 0
+#if DEBUG_SERIAL_LISTEN > 3
       DebugLn<const char *>("Found End of Line!");
 #endif
       strcpy(buffer, input_buffer);
       input_buffer[0] = '\0';
-#if DEBUG_SERIAL_LISTEN > 0
+#if DEBUG_SERIAL_LISTEN > 3
       DebugLn<const char *>("Done");
 #endif
       return true;
     } else {
       // These lines don't compile and I don't know why!
-#if DEBUG_SERIAL_LISTEN > 0
+#if DEBUG_SERIAL_LISTEN > 3
       DebugLn<const char *>("Available bytes:\n");
       DebugLn<const int>(Serial.available());
 #endif
