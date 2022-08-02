@@ -65,7 +65,7 @@ void setup()
   OxCore::serialBegin(115200UL);
   Debug<const char *>("Starting Ox...\n");
 
-  *ds3502 = DS3502DigitalPot();
+  ds3502 = new DS3502DigitalPot();
 
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
@@ -121,16 +121,29 @@ void setup()
 #define WIPER_VALUE_PIN A0
 
 float n = 0;
+#define TEST_DS3502 0
 void loop() {
   OxCore::Debug<const char *>("Loop starting...\n");
 
-  if (ds3502->foundPot) {
-    // This is a HACK to test the DS3502..
-    delay(200);
-    // Count up the Wiper value as a fraction.
-    ds3502->setWiper(n / 100.0);
-    return;
-  }
+      OxCore::Debug<const char *>("Found Pot\n");
+      OxCore::DebugLn<int>(ds3502->foundPot);
+
+      if (TEST_DS3502) {
+        if (ds3502->foundPot) {
+          OxCore::Debug<const char *>("Settting wiper\n");
+          // This is a HACK to test the DS3502..
+          delay(5000);
+          // Count up the Wiper value as a fraction
+
+          OxCore::DebugLn<float>( n / 128.0);
+          ds3502->setWiper(0);
+          delay(300);
+          ds3502->setWiper(n / 128.0);
+          n = n + 127.0;
+          n = (((int) n) % 128);
+          return;
+        }
+      }
   // Blocking call
   if (core.Run() == false) {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);

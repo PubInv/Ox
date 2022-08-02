@@ -32,12 +32,13 @@
     } else {
       Serial.println("Found DS3502 chip");
       foundPot = true;
+      OxCore::DebugLn<int>(this->foundPot);
     }
   }
 void DS3502DigitalPot::setWiper(float fraction) {
   if (foundPot) {
     delay(200);
-    int n = fraction*127;
+    int n = (int) (fraction * 127.0);
 
     Serial.print("PRE Wiper voltage with wiper set to N: ");
     Serial.print(n);
