@@ -171,20 +171,16 @@ namespace OxApp
     // This will be based on the post-heater temperature
     float postHeaterTemp;
 
-    int heater_indices[2];
-    heater_indices[0] = 0;
-    heater_indices[1] = 1;
 #ifdef RIBBONFISH
-    postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
+    postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[0]);
 #else
     postHeaterTemp = model.locations[1].temp_C;
 #endif
-    MachineConfig *cogConfig = getConfig();
-    if (postHeaterTemp >= cogConfig->WARMUP_TARGET_C) {
+    if (postHeaterTemp >= getConfig()->WARMUP_TARGET_C) {
       new_ms = NormalOperation;
       _updatePowerComponentsOperation();
     } else {
-      _updatePowerComponentsVoltage(cogConfig->MAXIMUM_HEATER_VOLTAGE);
+      _updatePowerComponentsVoltage(getConfig()->MAXIMUM_HEATER_VOLTAGE);
     }
     return new_ms;
   }
@@ -196,17 +192,12 @@ namespace OxApp
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
     float postHeaterTemp;
-    int heater_indices[2];
-    heater_indices[0] = 0;
-    heater_indices[1] = 1;
 #ifdef RIBBONFISH
-    postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
+    postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[0]);
 #else
     postHeaterTemp = model.locations[1].temp_C;
 #endif
-
-    MachineConfig *cogConfig = getConfig();
-    if (postHeaterTemp <= cogConfig->COOLDOWN_TARGET_C) {
+    if (postHeaterTemp <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
     } else {
       _updatePowerComponentsVoltage(0);
@@ -252,28 +243,23 @@ namespace OxApp
    MachineState CogTask::_updatePowerComponentsOperation() {
      MachineState new_ms = NormalOperation;
         // For now, i want to do only the first heater to simplify
-        int heater_indices[2];
-        heater_indices[0] = 0;
-        heater_indices[1] = 1;
         for (int i = 0; i < NUM_HEATERS; i++) {
-          float temperature = _temperatureSensors[0].GetTemperature(heater_indices[i]);
+          float temperature = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[i]);
           // It would be nice to tie this temperature
           // to the model location, but that will have to wait!
           // float current_C = model.locations[1].temp_C;
           //            float current_V = _heaters[i]._voltage;
           float current_C = temperature;
-          float desired_C = 30;
+          float desired_C = getConfig()->DESIRED_STACK_C;
           // We could compute the actual voltage, but
           // we will use the simpler on/off algorithm here...
-          float voltage = (current_C >= desired_C) ? 0.0 : 12.0;
+          float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_HEATER_VOLTAGE;
           _heaters[i].update(voltage);
         }
 
-        // TODO: Move all of this out to the machine model
-        MachineConfig *cogConfig = getConfig();
         float postHeaterTemp;
-        postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
-        if (postHeaterTemp < cogConfig->WARMUP_TARGET_C) {
+        postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[0]);
+        if (postHeaterTemp < getConfig()->WARMUP_TARGET_C) {
           return Warmup;
         }
         return new_ms;
@@ -293,7 +279,7 @@ namespace OxApp
             // This will be a really simple model for now...
             float current_C = model.locations[1].temp_C;
             float current_V = _heaters[i]._voltage;
-            float desired_C = 650.0;
+            float desired_C = getConfig()->DESIRED_STACK_C;
             float voltage = _heaters[i].
               compute_change_in_voltage(current_C,
                                         current_V,

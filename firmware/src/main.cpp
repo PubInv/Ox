@@ -127,25 +127,6 @@ float n = 0;
 void loop() {
   OxCore::Debug<const char *>("Loop starting...\n");
 
-      OxCore::Debug<const char *>("Found Pot\n");
-      OxCore::DebugLn<int>(ds3502->foundPot);
-
-      if (TEST_DS3502) {
-        if (ds3502->foundPot) {
-          OxCore::Debug<const char *>("Settting wiper\n");
-          // This is a HACK to test the DS3502..
-          delay(5000);
-          // Count up the Wiper value as a fraction
-
-          OxCore::DebugLn<float>( n / 128.0);
-          ds3502->setWiper(0);
-          delay(300);
-          ds3502->setWiper(n / 128.0);
-          n = n + 127.0;
-          n = (((int) n) % 128);
-          return;
-        }
-      }
   // Blocking call
   if (core.Run() == false) {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);
