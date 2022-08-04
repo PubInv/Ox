@@ -93,6 +93,8 @@ void setup()
   cogProperties.id = 20;
   cogProperties.period = 3000;
   cogProperties.priority = OxCore::TaskPriority::High;
+  // Note: The cogConfig is universal to all tasks.
+  // It respresents the entire machine.
   cogProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&cogTask, &cogProperties);
 

@@ -49,6 +49,7 @@ namespace OxApp
     class CogTask : public OxCore::Task
     {
     public:
+        COGConfig* getConfig();
 
       // TODO: This should probably be done dynamically, not here...
 
@@ -91,6 +92,8 @@ namespace OxApp
       // something...
       Model model;
       void RunForward(float t,Model& m);
+
+
     };
 }
 

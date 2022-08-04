@@ -41,6 +41,7 @@ struct COGConfig {
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float COOLDOWN_TARGET_C = 26.0;
+  float WARMUP_TARGET_C = 28.0;
   char const* errors[10];
 };
 

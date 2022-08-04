@@ -86,7 +86,7 @@ namespace OxApp
 
     bool CogTask::_run()
     {
-      COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+      COGConfig *cogConfig = getConfig();
       // If we are in the off state there is nothing to do!
       if (cogConfig->ms == OffUserAck) {
           OxCore::DebugLn<const char *>("AN ERROR OCCURED. WILL NOT ENTER OFF STATE ");
@@ -117,6 +117,11 @@ namespace OxApp
 #endif
         return true;
     }
+
+
+  COGConfig *CogTask::getConfig() {
+    return (COGConfig *) _properties.state_and_config;
+  }
 
   static float compute_change_in_voltage(float current_C,float current_V,float desired_C) {
   }
@@ -169,7 +174,6 @@ namespace OxApp
     // for now, we check the temperature, and turn the heaters on
     // full-blast until we reach the warmup-target
     // This will be based on the post-heater temperature
-    const float WARMUP_TARGET_C = 28.0;
     float postHeaterTemp;
 
     int heater_indices[2];
@@ -180,11 +184,11 @@ namespace OxApp
 #else
     postHeaterTemp = model.locations[1].temp_C;
 #endif
-    if (postHeaterTemp >= WARMUP_TARGET_C) {
+    COGConfig *cogConfig = getConfig();
+    if (postHeaterTemp >= cogConfig->WARMUP_TARGET_C) {
       new_ms = NormalOperation;
       _updatePowerComponentsOperation();
     } else {
-      COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
       _updatePowerComponentsVoltage(cogConfig->MAXIMUM_HEATER_VOLTAGE);
     }
     return new_ms;
@@ -206,7 +210,7 @@ namespace OxApp
     postHeaterTemp = model.locations[1].temp_C;
 #endif
 
-      COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+    COGConfig *cogConfig = getConfig();
     if (postHeaterTemp <= cogConfig->COOLDOWN_TARGET_C) {
       new_ms = Off;
     } else {
@@ -271,10 +275,10 @@ namespace OxApp
         }
 
         // TODO: Move all of this out to the machine model
-        const float WARMUP_TARGET_C = 28.0;
+        COGConfig *cogConfig = getConfig();
         float postHeaterTemp;
         postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
-        if (postHeaterTemp < WARMUP_TARGET_C) {
+        if (postHeaterTemp < cogConfig->WARMUP_TARGET_C) {
           return Warmup;
         }
         return new_ms;

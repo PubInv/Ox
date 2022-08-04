@@ -72,7 +72,7 @@ void render_set_command_raw(SetCommand* m) {
           // This is an over simplifcation of possible state transitions!
           // This needs to be taken out to a separate routine, probably
           // implemented in the machine
-          COGConfig *cogConfig = (COGConfig *) _properties.state_and_config;
+          COGConfig *cogConfig = getConfig();
           // TODO: This would probably be better handled by setting
           // the most recent command into the state, and having the
           // the cog_task remove it. Then all state changes would be made in
@@ -111,6 +111,14 @@ void render_set_command_raw(SetCommand* m) {
 
         }
     }
+
+  // TODO: This is a duplication that could be moved
+  // to the Task class, but then we would have to make include
+  // the machine task there.
+  COGConfig *SerialTask::getConfig() {
+    return  (COGConfig *) _properties.state_and_config;
+  }
+
 // The clears out the current Serial buffer, and
 // also sets the current input_buffer to null.
 // This is appropriate to call when we know we

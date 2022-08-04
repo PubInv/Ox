@@ -9,6 +9,8 @@
 
 #include <core.h>
 
+#include <machine.h>
+
 #define SERIAL_BAUD_RATE 19200
 // #define SERIAL_BAUD_RATE 9600
 #define SERIAL_DELAY 1000
@@ -42,6 +44,7 @@ namespace OxApp
     size_t action_number;
     bool _init() override;
     bool _run() override;
+    COGConfig* getConfig();
 
     virtual int clear_buffers(char buffer[]);
 
