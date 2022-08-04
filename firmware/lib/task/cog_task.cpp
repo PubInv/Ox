@@ -251,6 +251,7 @@ namespace OxApp
   // However, the process should be slow enough, we can just use "full on" and "full off"
   // as a first cut.
    MachineState CogTask::_updatePowerComponentsOperation() {
+     MachineState new_ms = NormalOperation;
         // For now, i want to do only the first heater to simplify
         int heater_indices[2];
         heater_indices[0] = 0;
@@ -269,10 +270,19 @@ namespace OxApp
           _heaters[i].update(voltage);
         }
 
+        // TODO: Move all of this out to the machine model
+        const float WARMUP_TARGET_C = 28.0;
+        float postHeaterTemp;
+        postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
+        if (postHeaterTemp < WARMUP_TARGET_C) {
+          return Warmup;
+        }
+        return new_ms;
     }
 #else
   // This is a mock, simulated update
     MachineState CogTask::_updatePowerComponentsOperation() {
+      MachineState new_ms = NormalOperation;
         OxCore::Debug<const char *>("_updateHeaterPrims\n");
         // For now, i want to do only the first heater to simplify
         for (int i = 0; i < NUM_HEATERS && i < 1; i++) {
@@ -298,7 +308,7 @@ namespace OxApp
         }
         OxCore::Debug<const char *>("Checking Voltage Set AAA ");
         OxCore::DebugLn<float>(_heaters[0]._voltage);
-
+        return new_ms;
     }
 #endif
 
