@@ -49,8 +49,6 @@ namespace OxApp
     class CogTask : public OxCore::Task
     {
     public:
-        COGConfig* getConfig();
-
       // TODO: This should probably be done dynamically, not here...
 
 #if BUILD_ENV_NAME != due_ribbonfish

@@ -26,7 +26,7 @@ enum IdleOrOperateSubState {
   Idle
 };
 
-struct COGConfig {
+struct MachineConfig {
   constexpr inline static char const *MachineStateNames[8] = {
     "Off",
     "Warmup",

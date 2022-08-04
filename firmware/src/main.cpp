@@ -42,7 +42,7 @@ OxApp::FaultTask faultTask;
 // OxApp::SensorReadTask sensorTask;
 #include <machine.h>
 
-COGConfig cogConfig;
+MachineConfig cogConfig;
 /***********************************/
 
 /* HACK: Rob is testing the DS3502 POT Here. */

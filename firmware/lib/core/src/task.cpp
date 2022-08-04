@@ -91,6 +91,10 @@ namespace OxCore
     {
         return _properties.period;
     }
+  MachineConfig *Task::getConfig() {
+    return  (MachineConfig *) _properties.state_and_config;
+  }
+
 
     /*bool Task::Callback(char *message)
     {

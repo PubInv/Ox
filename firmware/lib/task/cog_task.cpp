@@ -86,7 +86,7 @@ namespace OxApp
 
     bool CogTask::_run()
     {
-      COGConfig *cogConfig = getConfig();
+      MachineConfig *cogConfig = getConfig();
       // If we are in the off state there is nothing to do!
       if (cogConfig->ms == OffUserAck) {
           OxCore::DebugLn<const char *>("AN ERROR OCCURED. WILL NOT ENTER OFF STATE ");
@@ -103,7 +103,7 @@ namespace OxApp
       if (new_state != cogConfig->ms) {
         cogConfig->ms = new_state;
         OxCore::Debug<const char *>("CHANGING STATE TO: ");
-        OxCore::DebugLn<const char *>(COGConfig::MachineStateNames[cogConfig->ms]);
+        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[cogConfig->ms]);
         OxCore::DebugLn<const char *>("");
       }
 
@@ -117,11 +117,6 @@ namespace OxApp
 #endif
         return true;
     }
-
-
-  COGConfig *CogTask::getConfig() {
-    return (COGConfig *) _properties.state_and_config;
-  }
 
   static float compute_change_in_voltage(float current_C,float current_V,float desired_C) {
   }
@@ -184,7 +179,7 @@ namespace OxApp
 #else
     postHeaterTemp = model.locations[1].temp_C;
 #endif
-    COGConfig *cogConfig = getConfig();
+    MachineConfig *cogConfig = getConfig();
     if (postHeaterTemp >= cogConfig->WARMUP_TARGET_C) {
       new_ms = NormalOperation;
       _updatePowerComponentsOperation();
@@ -210,7 +205,7 @@ namespace OxApp
     postHeaterTemp = model.locations[1].temp_C;
 #endif
 
-    COGConfig *cogConfig = getConfig();
+    MachineConfig *cogConfig = getConfig();
     if (postHeaterTemp <= cogConfig->COOLDOWN_TARGET_C) {
       new_ms = Off;
     } else {
@@ -275,7 +270,7 @@ namespace OxApp
         }
 
         // TODO: Move all of this out to the machine model
-        COGConfig *cogConfig = getConfig();
+        MachineConfig *cogConfig = getConfig();
         float postHeaterTemp;
         postHeaterTemp = _temperatureSensors[0].GetTemperature(heater_indices[0]);
         if (postHeaterTemp < cogConfig->WARMUP_TARGET_C) {

@@ -44,7 +44,6 @@ namespace OxApp
     size_t action_number;
     bool _init() override;
     bool _run() override;
-    COGConfig* getConfig();
 
     virtual int clear_buffers(char buffer[]);
 

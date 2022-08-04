@@ -26,6 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define TASK_H
 
 #include "core_defines.h"
+#include <machine.h>
 
 namespace OxCore {
 
@@ -52,6 +53,7 @@ class Task {
                 _lastRun(0),
                 _properties({"noname", -1,TaskPriority::Undefined,0})
                 {};
+        MachineConfig* getConfig();
         virtual ~Task() = default;
         // Cannot copy class
         Task(const Task&) = delete;
