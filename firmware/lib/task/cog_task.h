@@ -32,7 +32,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef RIBBONFISH
 #include <mock_temperature_sensor.h>
 #else
+#ifdef USE_MAX31850_THERMOCOUPLES
+#include <MAX31850.h>
+#else
 #include <DS18B20_temperature.h>
+#endif
 #endif
 
 

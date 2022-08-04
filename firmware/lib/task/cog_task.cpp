@@ -317,8 +317,13 @@ namespace OxApp
         OxCore::Debug<const char *>("_configPressureSensors\n");
 
 #ifdef RIBBONFISH
+#ifdef USE_MAX31850_THERMOCOUPLES
+        _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31850Temperature[1];
+#else
         _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::DS18B20Temperature[1];
+#endif
         _temperatureSensors[0]._config = config[0];
+
 #else
         _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MockTemperatureSensor[NUM_TEMPERATURE_SENSORS];
         for(int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {

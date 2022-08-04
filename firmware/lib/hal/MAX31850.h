@@ -14,8 +14,8 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-#ifndef DS18B20_TEMPERATURE
-#define DS18B20_TEMPERATURE
+#ifndef MAX31850_TEMPERATURE
+#define MAX31850_TEMPERATURE
 
 // Put guard for Arduino here
 
@@ -40,10 +40,10 @@
 // This is a quick-and-dirty approach for the "RibbonFish" POC.
 #define POST_STACK_0_IDX 0
 #define POST_HEATER_0_IDX 1
-#define THERMOCOUPLE_PIN 2
+#define MAX31850_DATA_PIN 2
 
 namespace Temperature {
-  class DS18B20Temperature : public AbstractTemperature {
+  class MAX31850Temperature : public AbstractTemperature {
   public:
     SensorConfig _config;
     float _temperature;
@@ -51,15 +51,18 @@ namespace Temperature {
     DallasTemperature sensors;
     // Pass our oneWire reference to Dallas Temperature.
   public:
-    DS18B20Temperature();
-    DS18B20Temperature(SensorConfig &config);
+    MAX31850Temperature();
+    MAX31850Temperature(SensorConfig &config);
+
+// function to print a device address
+    void printAddress(DeviceAddress deviceAddress);
     void Config(SensorConfig &config);
     float ReadTemperature();
     float GetTemperature();
     float GetTemperature(int idx);
     SensorConfig GetConfig() const;
 
-    //    ~DS18B20Temperature() {};
+    //    ~MAX31850Temperature() {};
   };
 
 }
