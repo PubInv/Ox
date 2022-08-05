@@ -32,15 +32,15 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-
+#include <machine.h>
 // Note: In a real solution, we need to know the addresses for the temperature sensors
 // so that we can be definite about which one is where. See:
 // https://lastminuteengineers.com/multiple-ds18b20-arduino-tutorial/
 // For now, we will rely on "indexing" and if it is wrong just switch the sensors.
 // This is a quick-and-dirty approach for the "RibbonFish" POC.
-#define POST_STACK_0_IDX 0
-#define POST_HEATER_0_IDX 1
-#define MAX31850_DATA_PIN 2
+// #define POST_STACK_0_IDX 0
+//#define POST_HEATER_0_IDX 1
+// #define MAX31850_DATA_PIN 2
 
 namespace Temperature {
   class MAX31850Temperature : public AbstractTemperature {

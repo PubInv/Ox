@@ -53,6 +53,7 @@ namespace OxApp
         }
     };
 
+  // TODO: Most of this should be moved into the machine definition
     bool CogTask::_init()
     {
         OxCore::Debug<const char *>("CogTask init\n");
@@ -63,24 +64,26 @@ namespace OxApp
 #ifdef RIBBONFISH
         // Our pre-heater measured 5.8 ohms
         // Our main heater measured 5.6 ohms
-        // We wil use DUE pins 4 and 5 for these heaters
-        // (3 will be for the fan)
-        // These are PWM pins if we need them...
-        Heater v1("PRIMARY_HEATER", 1, 4, 0, 5.8);
+        Heater v1("PRIMARY_HEATER", 1, RF_HEATER, 0, 5.8);
         _heaters[0] = v1;
 
-        Heater v2("SECONDARY_HEATER",2, 5, 0, 5.6);
-        _heaters[1] = v2;
+        //        Heater v2("SECONDARY_HEATER",2, 5, 0, 5.6);
+        //        _heaters[1] = v2;
+
+        Fan f("FIRST_FAN",0,RF_FAN,1.0);
+        _fans[0] = f;
+
+        Stack s("FIRST_STACK",0,RF_STACK,1.0);
+        _stacks[0] = s;
 #else
         // Create a one ohm joule heater
         Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
         _heaters[0] = v1;
         // Create a two ohm (smaller) heater for the pure O2 stream
-        Heater v2("SECONDARY_HEATER",2, 51, 3.6, 2.0);
-        _heaters[1] = v2;
+        //        Heater v2("SECONDARY_HEATER",2, 51, 3.6, 2.0);
+        //        _heaters[1] = v2;
 
 #endif
-
         return true;
     }
 
@@ -160,6 +163,8 @@ namespace OxApp
   MachineState CogTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
     _updatePowerComponentsVoltage(0);
+    _updateFanSpeed(0.0);
+    _updateStackVoltage(0.0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsWarmup() {
@@ -182,11 +187,14 @@ namespace OxApp
     } else {
       _updatePowerComponentsVoltage(getConfig()->MAXIMUM_HEATER_VOLTAGE);
     }
+    _updateFanSpeed(1.0);
+    _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
     return new_ms;
   }
 
   MachineState CogTask::_updatePowerComponentsIdle() {
     MachineState new_ms = CriticalFault;
+    _updateFanSpeed(1.0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCooldown() {
@@ -202,19 +210,27 @@ namespace OxApp
     } else {
       _updatePowerComponentsVoltage(0);
     }
+    _updateFanSpeed(1.0);
+    _updateStackVoltage(0.0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCritialFault() {
     MachineState new_ms = CriticalFault;
+    _updateFanSpeed(1.0);
+    _updateStackVoltage(0.0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
     _updatePowerComponentsVoltage(0);
     MachineState new_ms = OffUserAck;
+    _updateFanSpeed(1.0);
+    _updateStackVoltage(0.0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsOffUserAck() {
     MachineState new_ms = CriticalFault;
+    _updateFanSpeed(1.0);
+    _updateStackVoltage(0.0);
     return new_ms;
   }
   // This is use primarily for maximum power at warmup or
@@ -231,6 +247,14 @@ namespace OxApp
    void CogTask::_updateFanSpeed(float percentage) {
         for (int i = 0; i < NUM_FANS; i++) {
         _fans[i].update(percentage);
+        }
+    }
+
+  // In theory, this could take an array rather than
+  // a fixed voltage; that will have to be added later
+   void CogTask::_updateStackVoltage(float voltage) {
+        for (int i = 0; i < NUM_STACKS; i++) {
+          _stacks[i].update(voltage);
         }
     }
 
@@ -262,7 +286,9 @@ namespace OxApp
         if (postHeaterTemp < getConfig()->WARMUP_TARGET_C) {
           return Warmup;
         }
-        return new_ms;
+        _updateFanSpeed(1.0);
+    _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
+    return new_ms;
     }
 #else
   // This is a mock, simulated update
@@ -291,7 +317,9 @@ namespace OxApp
             OxCore::DebugLn<float>(_heaters[i]._voltage);
 
         }
-        OxCore::Debug<const char *>("Checking Voltage Set AAA ");
+        _updateFanSpeed(1.0);
+    _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
+    OxCore::Debug<const char *>("Checking Voltage Set AAA ");
         OxCore::DebugLn<float>(_heaters[0]._voltage);
         return new_ms;
     }

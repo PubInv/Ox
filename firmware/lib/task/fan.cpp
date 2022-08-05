@@ -16,17 +16,24 @@
 
 #include "fan.h"
 
+#define DEBUG_FAN 0
 namespace OxApp {
 
     void Fan::update(float pwm_ratio) {
         _pwm_ratio = pwm_ratio;
+        int pwm_setting = _pwm_ratio * 255;
+        analogWrite(this->pin,pwm_setting);
 #ifdef RIBBONFISH
-        OxCore::Debug<const char *>("Fan update: ");
-        OxCore::Debug<int>(id);
-        OxCore::Debug<const char *>("   ");
-        OxCore::Debug<const char *>(name);
-        OxCore::Debug<const char *>(" Voltage: ");
-        analogWrite(this->pin,_pwm_ratio);
+        if (DEBUG_FAN) {
+          OxCore::Debug<const char *>("Fan update: ");
+          OxCore::Debug<int>(id);
+          OxCore::Debug<const char *>("   ");
+          OxCore::DebugLn<const char *>(name);
+          OxCore::DebugLn<const char *>(" Voltage: ");
+          // TODO: Replace this with the OUTPUT_RESOLOUTION
+          OxCore::Debug<const char *>(" pwm_setting: ");
+          OxCore::DebugLn<float>(pwm_setting);
+        }
 #else
         OxCore::Debug<const char *>("Fan update: (NOT IMPLEMENTED)");
         OxCore::Debug<const char *>("   ");

@@ -37,16 +37,15 @@
   }
 void DS3502DigitalPot::setWiper(float fraction) {
   if (foundPot) {
-    delay(200);
     int n = (int) (fraction * 127.0);
-
     Serial.print("PRE Wiper voltage with wiper set to N: ");
-    Serial.print(n);
-    delay(200);
+    Serial.println(n);
     ds3502.setWiper(n);
-    Serial.print("POST Wiper voltage with wiper set to N: ");
-    Serial.print(n);
-    delay(200);
+    int verify = ds3502.getWiper();
+    if (verify != n) {
+      Serial.println("FAILURE OF DS3502");
+    }
+
     return;
   } else {
     Serial.println("No Digital Pot Found");

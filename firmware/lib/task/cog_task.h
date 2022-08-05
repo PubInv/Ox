@@ -25,6 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "../collections/array.h"
 #include "heater.h"
 #include "fan.h"
+#include "stack.h"
 #include <machine.h>
 
 #include <abstract_temperature.h>
@@ -55,17 +56,18 @@ namespace OxApp
       const static int NUM_HEATERS = 2;
       const static int NUM_TEMPERATURE_SENSORS = 3;
 #else // RIBBONFISH
-      const static int NUM_HEATERS = 2;
       // There are really several senosrs, but they are indexed!
       const static int NUM_TEMPERATURE_SENSORS = 1;
       const static int NUM_TEMPERATURE_INDICES = 2;
+      const static int NUM_HEATERS = 1;
+      const static int NUM_FANS = 1;
+      const static int NUM_STACKS = 1;
 #endif
 
       Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
-
-      const static int NUM_FANS = 1;
       Fan _fans[NUM_FANS];
+      Stack _stacks[NUM_STACKS];
     private:
       bool _init() override;
       bool _run() override;
@@ -85,6 +87,7 @@ namespace OxApp
       void _readTemperatureSensors();
 
       void _updateFanSpeed(float percentage);
+      void _updateStackVoltage(float voltage);
 
       // We will use a model for mocking, which may grow into
       // something...

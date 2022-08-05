@@ -2,7 +2,36 @@
 #define MACHINE_H
 
 
+
 #define HAND_TEST 1
+
+/* Connections:
+RibbonFish
+D2 - the fan
+D3 - the heater
+DAC0 - the stack
+D4 - MAX31850_DATA_PIN
+ */
+
+#ifdef ARDUINO
+#include <Arduino.h>
+
+
+#ifdef RIBBONFISH
+#define RF_FAN 2
+#define RF_HEATER 3
+#define RF_STACK DAC0
+#define MAX31850_DATA_PIN 4
+
+// This is the order in which the thermocouples are wired;
+// in a perfect world we might use device address
+#define POST_STACK_0_IDX 0
+#define POST_HEATER_0_IDX 1
+
+#endif
+#endif
+
+
 
 enum MachineState {
   // Off is the initial state. It is a zero-power state.
@@ -42,6 +71,7 @@ struct MachineConfig {
   MachineState ms;
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
+  float MAXIMUM_STACK_VOLTAGE = 12.0;
   char const* errors[10];
   int heater_indices[2] = {0,1};
 

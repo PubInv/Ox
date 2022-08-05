@@ -56,6 +56,8 @@ MachineConfig cogConfig;
 
 #define WIPER_VALUE_PIN A0
 
+#define TEST_PWM DAC0
+
 DS3502DigitalPot* ds3502;
 
 // TODO: we need to have setups for individual pieces
@@ -77,10 +79,10 @@ void setup()
   //TODO: This needs to be placed inthe task init feature!
   //#if BUILD_ENV_NAME == due_ribbonfish
 #ifdef RIBBONFISH
-      pinMode(2, INPUT);
-      pinMode(3, OUTPUT);
-      pinMode(4, OUTPUT);
-      pinMode(5, OUTPUT);
+      pinMode(MAX31850_DATA_PIN, INPUT);
+      pinMode(RF_FAN, OUTPUT);
+      pinMode(RF_HEATER, OUTPUT);
+      pinMode(RF_STACK, OUTPUT);
 #endif
 
       // Now we will set the machine state to "Off"
@@ -120,13 +122,46 @@ void setup()
   /*********************************************/
 }
 
+float n_ds3502 = 0;
+
+void test_ds3502() {
+
+      OxCore::Debug<const char *>("Found Pot: ");
+      OxCore::DebugLn<int>(ds3502->foundPot);
+
+        //        if (ds3502->foundPot) {
+          OxCore::Debug<const char *>("Settting wiper\n");
+          // This is a HACK to test the DS3502..
+          delay(10000);
+          // Count up the Wiper value as a fraction
+
+          OxCore::DebugLn<float>((128 - n_ds3502) / 128.0);
+          //          ds3502->setWiper(127);
+          //          delay(10);
+          //          ds3502->setWiper(0);
+          //          ds3502->setWiper(0);
+          //          delay(10);
+          ds3502->setWiper((128 - n_ds3502) / 128.0);
+
+          analogWrite(TEST_PWM,0);
+          delay(10000);
+          analogWrite(TEST_PWM,127);
+          delay(10000);
+          analogWrite(TEST_PWM,255);
+          n_ds3502 = n_ds3502 + 2.0;
+          n_ds3502 = (((int) n_ds3502) % 128);
+          return;
+          //        }
+}
 #define WIPER_VALUE_PIN A0
 
-float n = 0;
 #define TEST_DS3502 0
 void loop() {
   OxCore::Debug<const char *>("Loop starting...\n");
 
+  if (TEST_DS3502) {
+    test_ds3502();
+  }
   // Blocking call
   if (core.Run() == false) {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);

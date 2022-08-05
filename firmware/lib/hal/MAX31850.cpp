@@ -28,6 +28,8 @@
 
 namespace Temperature {
 
+  // TODO: Turn this into a Loop to support any number of thermocouples.
+  // Print out an ordering so we can match ID against index
   // arrays to hold device addresses
 DeviceAddress insideThermometer, outsideThermometer;
 
