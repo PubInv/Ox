@@ -74,7 +74,7 @@ namespace OxApp
       // This would go into the abstract class.
 
       MachineState _executeBasedOnState(MachineState ms);
-      MachineState _updatePowerComponentsOperation();
+      MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o);
       MachineState _updatePowerComponentsOff();
       MachineState _updatePowerComponentsWarmup();
       MachineState _updatePowerComponentsIdle();

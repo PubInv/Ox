@@ -19,6 +19,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 using namespace std;
 
+#define DEBUG_LEVEL 1
 
 namespace OxApp
 {
@@ -130,6 +131,13 @@ namespace OxApp
   // "table-driven"
   MachineState CogTask::_executeBasedOnState(MachineState ms) {
     MachineState new_ms;
+
+    if (DEBUG_LEVEL > 0) {
+      OxCore::Debug<const char *>("\nMachine State: ");
+      OxCore::Debug<const char *>(getConfig()->MachineStateNames[ms]);
+      OxCore::Debug<const char *>(" : ");
+      OxCore::DebugLn<const char *>(getConfig()->MachineSubStateNames[getConfig()->idleOrOperate]);
+    }
     switch(ms) {
     case Off:
         new_ms = _updatePowerComponentsOff();
@@ -138,7 +146,8 @@ namespace OxApp
         new_ms = _updatePowerComponentsWarmup();
       break;
     case NormalOperation:
-        new_ms = _updatePowerComponentsOperation();
+      OxCore::Debug<const char *>(" : ");
+      new_ms = _updatePowerComponentsOperation(getConfig()->idleOrOperate);
       break;
     case Cooldown:
         new_ms = _updatePowerComponentsCooldown();
@@ -175,15 +184,19 @@ namespace OxApp
     // full-blast until we reach the warmup-target
     // This will be based on the post-heater temperature
     float postHeaterTemp;
+    float postStackTemp;
 
 #ifdef RIBBONFISH
-    postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[0]);
+    postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
+    postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
 #else
     postHeaterTemp = model.locations[1].temp_C;
 #endif
-    if (postHeaterTemp >= getConfig()->WARMUP_TARGET_C) {
+    if ((postHeaterTemp >= getConfig()->WARMUP_TARGET_C) ||
+        (postStackTemp >= getConfig()->WARMUP_TARGET_C)) {
       new_ms = NormalOperation;
-      _updatePowerComponentsOperation();
+      getConfig()->idleOrOperate = Operate;
+      _updatePowerComponentsOperation(getConfig()->idleOrOperate);
     } else {
       _updatePowerComponentsVoltage(getConfig()->MAXIMUM_HEATER_VOLTAGE);
     }
@@ -193,17 +206,23 @@ namespace OxApp
   }
 
   MachineState CogTask::_updatePowerComponentsIdle() {
-    MachineState new_ms = CriticalFault;
+    OxCore::Debug<const char *>("IN IDLE FUNCTION ");
+    MachineState new_ms = NormalOperation;
+    getConfig()->idleOrOperate = Idle;
     _updateFanSpeed(1.0);
+    _updateStackVoltage(0.0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
     float postHeaterTemp;
+    float postStackTemp;
 #ifdef RIBBONFISH
-    postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[0]);
+    postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
+    postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
 #else
     postHeaterTemp = model.locations[1].temp_C;
+    postStackTemp = model.locations[2].temp_C;
 #endif
     if (postHeaterTemp <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
@@ -264,35 +283,45 @@ namespace OxApp
   // thermostate problem, using the PWMs of our dues to power transistors.
   // However, the process should be slow enough, we can just use "full on" and "full off"
   // as a first cut.
-   MachineState CogTask::_updatePowerComponentsOperation() {
+   MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
      MachineState new_ms = NormalOperation;
-        // For now, i want to do only the first heater to simplify
-        for (int i = 0; i < NUM_HEATERS; i++) {
-          float temperature = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[i]);
-          // It would be nice to tie this temperature
-          // to the model location, but that will have to wait!
-          // float current_C = model.locations[1].temp_C;
-          //            float current_V = _heaters[i]._voltage;
-          float current_C = temperature;
-          float desired_C = getConfig()->DESIRED_STACK_C;
-          // We could compute the actual voltage, but
-          // we will use the simpler on/off algorithm here...
-          float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_HEATER_VOLTAGE;
-          _heaters[i].update(voltage);
-        }
+     float desired_C = getConfig()->DESIRED_STACK_C;
+     // For now, i want to do only the first heater to simplify
+     for (int i = 0; i < NUM_HEATERS; i++) {
+       float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[i]);
+       float current_C = temperature;
+       float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_HEATER_VOLTAGE;
+       _heaters[i].update(voltage);
+     }
+     for (int i = 0; i < NUM_STACKS; i++) {
+       float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[i]);
+       float current_C = temperature;
+       float desired_C = getConfig()->DESIRED_STACK_C;
+       // TODO: In actuality, we need something more controllable
+       // than MAX on and zero off!
+       float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_STACK_VOLTAGE;
+       // This is a little complicated, because we may actually
+       // want a tricle charge---cut for now, if we are in Idle
+       // mode, we just set the stack voltage to zero
+       if (i_or_o == Idle) {
+         voltage = 0.0;
+       }
+       _updateStackVoltage(voltage);
+     }
 
-        float postHeaterTemp;
-        postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->heater_indices[0]);
-        if (postHeaterTemp < getConfig()->WARMUP_TARGET_C) {
-          return Warmup;
-        }
-        _updateFanSpeed(1.0);
-    _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
-    return new_ms;
+
+
+     float postHeaterTemp;
+     postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
+     if (postHeaterTemp < getConfig()->WARMUP_TARGET_C) {
+       return Warmup;
+     }
+     _updateFanSpeed(1.0);
+     return new_ms;
     }
 #else
   // This is a mock, simulated update
-    MachineState CogTask::_updatePowerComponentsOperation() {
+    MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
       MachineState new_ms = NormalOperation;
         OxCore::Debug<const char *>("_updateHeaterPrims\n");
         // For now, i want to do only the first heater to simplify
@@ -360,7 +389,9 @@ namespace OxApp
       _temperatureSensors[0].ReadTemperature();
       for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
         float temperature = _temperatureSensors[0].GetTemperature(i);
-        OxCore::Debug<const char *>("Temperature: ");
+        OxCore::Debug<const char *>("Temp : ");
+        OxCore::Debug<const char *>(getConfig()->TempLocationNames[i]);
+        OxCore::Debug<const char *>(": ");
         OxCore::DebugLn<float>(temperature);
       }
 #else
@@ -368,7 +399,9 @@ namespace OxApp
       for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
          _temperatureSensors[i].ReadTemperature();
         float temperature = _temperatureSensors[i].GetTemperature();
-        OxCore::Debug<const char *>("Temperature: ");
+        OxCore::Debug<const char *>("Temp: ");
+        OxCore::Debug<const char *>(getConfig()->TempLocationNames[i]);
+        OxCore::Debug<const char *>(": ");
         OxCore::DebugLn<float>(temperature);
       }
 #endif

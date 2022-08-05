@@ -62,18 +62,29 @@ struct MachineConfig {
     "Off",
     "Warmup",
     "NormalOperation",
-    "Idle",
     "Cooldown",
     "CriticalFault",
     "EmergencyShutdown",
     "OffUserAck"
+  };
+  constexpr inline static char const *MachineSubStateNames[2] = {
+    "(Not Idling)",
+    "(Idling)"
+  };
+  constexpr inline static char const *TempLocationNames[2] = {
+    "Post Heater",
+    "Post Stack"
   };
   MachineState ms;
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float MAXIMUM_STACK_VOLTAGE = 12.0;
   char const* errors[10];
-  int heater_indices[2] = {0,1};
+  // Until we have a good machine model here,
+  // we need to separately identify pre- and post-
+  // element temperature sensor indices
+  int post_heater_indices[1] = {0};
+  int post_stack_indices[1] = {1};
 
   // These values are useful for testing by hand
 #ifdef HAND_TEST

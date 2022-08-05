@@ -30,6 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 using namespace OxCore;
 #define DEBUG_SERIAL_LISTEN 1
+#define DEBUG_INPUT 3
 
 namespace OxApp
 {
@@ -62,7 +63,7 @@ void render_set_command_raw(SetCommand* m) {
         SetCommand sc;
         if (listen(buffer, 256)) {
 #if DEBUG_INPUT > 2
-          DebugLnCC("read buffer\n");
+          DebugLn("read buffer\n");
           DebugLn<const char *>(buffer);
 #endif
           sc = get_set_command_from_JSON(buffer, (uint16_t)256);
@@ -98,15 +99,11 @@ void render_set_command_raw(SetCommand* m) {
               Debug<const char *>("New State: Off!");
             }
           } else if (sc.command == 'I') {
-            if (cogConfig->ms == OffUserAck) {
               cogConfig->idleOrOperate = Idle;
               Debug<const char *>("New SubState: Idle!");
-            }
           } else if (sc.command == 'O') {
-            if (cogConfig->ms == OffUserAck) {
               cogConfig->idleOrOperate = Operate;
               Debug<const char *>("New SubState: Operate");
-            }
           }
 
         }
@@ -195,7 +192,7 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
         buffer,
         "{\"com\":\"A\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
     //      clear_buffers(input_buffer);
-    DebugLn<const char *>("Returning Emergency Shutdown!\n");
+    DebugLn<const char *>("Returning Acknowledge!\n");
     return true;
     break;
   case 'i':
@@ -203,7 +200,7 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
         buffer,
         "{\"com\":\"I\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
     //      clear_buffers(input_buffer);
-    DebugLn<const char *>("Returning Emergency Shutdown!\n");
+    DebugLn<const char *>("Returning Idle!\n");
     return true;
     break;
   case 'o':
@@ -211,7 +208,7 @@ bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
         buffer,
         "{\"com\":\"O\",\"par\":\"M\",\"int\":\"c\",\"mod\":\"U\",\"val\":0}");
     //      clear_buffers(input_buffer);
-    DebugLn<const char *>("Returning Emergency Shutdown!\n");
+    DebugLn<const char *>("Returning Operate Normally!\n");
     return true;
     break;
   default:
