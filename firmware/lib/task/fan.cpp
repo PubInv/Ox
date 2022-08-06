@@ -16,15 +16,58 @@
 
 #include "fan.h"
 
-#define DEBUG_FAN 0
+#define DEBUG_FAN 1
+
+#define PERIOD 100
+unsigned long volatile ts=0;
+unsigned long volatile cnt = 0;
+unsigned long volatile ocnt = 0;
+unsigned long volatile duration = 0;
+
+void refresh() {
+  unsigned long m = millis();
+  if (ts + PERIOD < m) {
+    ocnt = cnt;
+    duration = m - ts;
+    ts = m;
+    cnt = 0;
+  }
+}
+//Calculates the RPM based on the timestamps of the last 2 interrupts. Can be called at any time.
+
 namespace OxApp {
+ void tachISR() {
+   cnt++;
+    refresh();
+ }
+
+  void Fan::_init() {
+    attachInterrupt(digitalPinToInterrupt(RF_FAN_TACH),tachISR,FALLING);
+  }
+
+  unsigned long Fan::_calcRPM(){
+  refresh();
+  if (DEBUG_FAN) {
+    Serial.println("CALC:");
+    Serial.println(ocnt);
+    Serial.println(duration);
+  }
+  if (duration != 0) {
+    return (long) (60000.0 * (float) ocnt / ((float) duration * 2.0));
+  } else {
+    return 0;
+  }
+}
 
     void Fan::update(float pwm_ratio) {
         _pwm_ratio = pwm_ratio;
         int pwm_setting = _pwm_ratio * 255;
         analogWrite(this->pin,pwm_setting);
 #ifdef RIBBONFISH
+        float rpm = _calcRPM();
         if (DEBUG_FAN) {
+          OxCore::Debug<const char *>("Fan RPM:");
+          OxCore::DebugLn<float>(rpm);
           OxCore::Debug<const char *>("Fan update: ");
           OxCore::Debug<int>(id);
           OxCore::Debug<const char *>("   ");

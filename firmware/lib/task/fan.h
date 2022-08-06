@@ -32,6 +32,8 @@
 
 namespace OxApp {
 
+  void tachISR();
+
   class Fan {
   public:
     const char * name;
@@ -39,8 +41,13 @@ namespace OxApp {
     uint8_t pin;
     float _pwm_ratio = 0; // Between 0.0 and 1.0
   public:
-    Fan(){};
+    void _init();
+    unsigned long _calcRPM();
+    Fan() {
+      _init();
+    };
     Fan(const char * name, uint8_t id, uint8_t pin, float pwm_ratio){
+      _init();
       this->name = name;
       this->id = id;
       this->pin = pin;
