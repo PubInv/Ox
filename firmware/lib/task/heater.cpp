@@ -16,6 +16,8 @@
 
 #include "heater.h"
 
+#define DEBUG_LEVEL 0
+
 namespace OxApp {
 
     void Heater::update(float voltage) {
@@ -23,26 +25,35 @@ namespace OxApp {
 
 
 #ifdef RIBBONFISH
-        OxCore::Debug<const char *>("Heater update: ");
-        OxCore::Debug<int>(id);
-        OxCore::Debug<const char *>("   ");
-        OxCore::Debug<const char *>(name);
-        OxCore::Debug<const char *>(" Voltage: ");
+        if (DEBUG_LEVEL > 0) {
+          OxCore::Debug<const char *>("Heater update: ");
+          OxCore::Debug<int>(id);
+          OxCore::Debug<const char *>("   ");
+          OxCore::Debug<const char *>(name);
+          OxCore::Debug<const char *>(" Voltage: ");
+        }
 
         if (voltage > 6.0) {
           digitalWrite(this->pin,HIGH);
-          OxCore::DebugLn<float>(12);
+          if (DEBUG_LEVEL > 0) {
+            OxCore::DebugLn<float>(12);
+          }
         } else {
           digitalWrite(this->pin,LOW);
-          OxCore::DebugLn<float>(0);
+          if (DEBUG_LEVEL > 0) {
+            OxCore::DebugLn<float>(0);
+          }
         }
 
+
 #else
-        OxCore::Debug<const char *>("Heater update: ");
-        OxCore::Debug<const char *>("   ");
-        OxCore::Debug<const char *>(name);
-        OxCore::Debug<const char *>(" Voltage: ");
-        OxCore::DebugLn<float>(_voltage);
+        if (DEBUG_LEVEL > 0) {
+          OxCore::Debug<const char *>("Heater update: ");
+          OxCore::Debug<const char *>("   ");
+          OxCore::Debug<const char *>(name);
+          OxCore::Debug<const char *>(" Voltage: ");
+          OxCore::DebugLn<float>(_voltage);
+        }
 #endif
 
     }

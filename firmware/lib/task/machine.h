@@ -60,6 +60,15 @@ enum IdleOrOperateSubState {
   Idle
 };
 
+struct MachineStatusReport {
+  float post_heater_C;
+  float post_stack_C;
+  float heater_voltage;
+  float stack_voltage;
+  float fan_speed;
+  boolean air_flow_sufficient;
+};
+
 struct MachineConfig {
   constexpr inline static char const *MachineStateNames[8] = {
     "Off",
@@ -93,13 +102,18 @@ struct MachineConfig {
 #ifdef HAND_TEST
   float COOLDOWN_TARGET_C = 26.0;
   float WARMUP_TARGET_C = 28.0;
-  float DESIRED_STACK_C = 30.0;
+  float MAX_POST_HEATER_C = 30.0;
+  float MAX_POST_STACK_C = 33.0;
 #else
   float COOLDOWN_TARGET_C = 26.0;
   float WARMUP_TARGET_C = 600.0;
   float DESIRED_STACK_C = 700.0;
 #endif
 
+  MachineStatusReport report;
+
 };
+
+void outputReport(MachineStatusReport msr);
 
 #endif

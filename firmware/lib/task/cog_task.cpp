@@ -93,8 +93,6 @@ namespace OxApp
 
     bool CogTask::_run()
     {
-    OxCore::Debug<const char *>("Air Flow : ");
-    OxCore::DebugLn<boolean>(_flowsensor.isAirFlowing());
 
 
       MachineConfig *cogConfig = getConfig();
@@ -125,6 +123,10 @@ namespace OxApp
       OxCore::Debug<const char *>("Exhaust Temperature (C): ");
       OxCore::DebugLn<float>(model.locations[1].temp_C);
 #endif
+
+#ifdef RIBBONFISH
+      outputReport(getConfig()->report);
+#endif
         return true;
     }
 
@@ -152,7 +154,6 @@ namespace OxApp
         new_ms = _updatePowerComponentsWarmup();
       break;
     case NormalOperation:
-      OxCore::Debug<const char *>(" : ");
       new_ms = _updatePowerComponentsOperation(getConfig()->idleOrOperate);
       break;
     case Cooldown:
@@ -178,8 +179,16 @@ namespace OxApp
   MachineState CogTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
     _updatePowerComponentsVoltage(0);
+    getConfig()->report.heater_voltage = 0.0;
     _updateFanSpeed(0.0);
+    getConfig()->report.fan_speed = 0.0;
     _updateStackVoltage(0.0);
+    getConfig()->report.stack_voltage = 0.0;
+
+    if (_flowsensor.isAirFlowing()) {
+      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR IS STILL FLOWING ");
+    }
+    getConfig()->report.air_flow_sufficient = _flowsensor.isAirFlowing();
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsWarmup() {
@@ -195,6 +204,8 @@ namespace OxApp
 #ifdef RIBBONFISH
     postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
     postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
+    getConfig()->report.post_heater_C = postHeaterTemp;
+    getConfig()->report.post_stack_C = postStackTemp;
 #else
     postHeaterTemp = model.locations[1].temp_C;
 #endif
@@ -207,7 +218,10 @@ namespace OxApp
       _updatePowerComponentsVoltage(getConfig()->MAXIMUM_HEATER_VOLTAGE);
     }
     _updateFanSpeed(1.0);
+    getConfig()->report.fan_speed = 1.0;
+
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
+    getConfig()->report.stack_voltage = getConfig()->MAXIMUM_STACK_VOLTAGE;
     return new_ms;
   }
 
@@ -216,7 +230,9 @@ namespace OxApp
     MachineState new_ms = NormalOperation;
     getConfig()->idleOrOperate = Idle;
     _updateFanSpeed(1.0);
+    getConfig()->report.fan_speed = 1.0;
     _updateStackVoltage(0.0);
+    getConfig()->report.stack_voltage = 0.0;
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCooldown() {
@@ -226,6 +242,8 @@ namespace OxApp
 #ifdef RIBBONFISH
     postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
     postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
+    getConfig()->report.post_heater_C = postHeaterTemp;
+    getConfig()->report.post_stack_C = postStackTemp;
 #else
     postHeaterTemp = model.locations[1].temp_C;
     postStackTemp = model.locations[2].temp_C;
@@ -237,12 +255,22 @@ namespace OxApp
     }
     _updateFanSpeed(1.0);
     _updateStackVoltage(0.0);
+    getConfig()->report.fan_speed = 1.0 ;
+    getConfig()->report.stack_voltage = 0.0;
+
+    if (!_flowsensor.isAirFlowing()) {
+      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
+    }
+    getConfig()->report.air_flow_sufficient = _flowsensor.isAirFlowing();
+
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCritialFault() {
     MachineState new_ms = CriticalFault;
     _updateFanSpeed(1.0);
     _updateStackVoltage(0.0);
+    getConfig()->report.fan_speed = 1.0;
+    getConfig()->report.stack_voltage = 0.0;
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
@@ -250,12 +278,16 @@ namespace OxApp
     MachineState new_ms = OffUserAck;
     _updateFanSpeed(1.0);
     _updateStackVoltage(0.0);
+    getConfig()->report.fan_speed = 1.0;
+    getConfig()->report.stack_voltage = 0.0;
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsOffUserAck() {
     MachineState new_ms = CriticalFault;
     _updateFanSpeed(1.0);
     _updateStackVoltage(0.0);
+    getConfig()->report.fan_speed = 1.0;
+    getConfig()->report.stack_voltage = 0.0;
     return new_ms;
   }
   // This is use primarily for maximum power at warmup or
@@ -291,21 +323,26 @@ namespace OxApp
   // as a first cut.
    MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
      MachineState new_ms = NormalOperation;
-     float desired_C = getConfig()->DESIRED_STACK_C;
+     float desired_C = getConfig()->MAX_POST_HEATER_C;
      // For now, i want to do only the first heater to simplify
      for (int i = 0; i < NUM_HEATERS; i++) {
        float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[i]);
        float current_C = temperature;
        float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_HEATER_VOLTAGE;
+
+       // These two statements are really atomic, but I don't what the devices to become dependent on the machine!!
        _heaters[i].update(voltage);
+       getConfig()->report.heater_voltage = voltage;
+
      }
      for (int i = 0; i < NUM_STACKS; i++) {
        float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[i]);
        float current_C = temperature;
-       float desired_C = getConfig()->DESIRED_STACK_C;
+       getConfig()->report.post_stack_C = current_C;
+       float max_post_stack_C = getConfig()->MAX_POST_STACK_C;
        // TODO: In actuality, we need something more controllable
        // than MAX on and zero off!
-       float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_STACK_VOLTAGE;
+       float voltage = (current_C >= max_post_stack_C) ? 0.0 : getConfig()->MAXIMUM_STACK_VOLTAGE;
        // This is a little complicated, because we may actually
        // want a tricle charge---cut for now, if we are in Idle
        // mode, we just set the stack voltage to zero
@@ -313,16 +350,26 @@ namespace OxApp
          voltage = 0.0;
        }
        _updateStackVoltage(voltage);
+       getConfig()->report.stack_voltage = voltage;
      }
-
-
-
      float postHeaterTemp;
+     float postStackTemp;
      postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
+    postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
+    getConfig()->report.post_heater_C = postHeaterTemp;
+    getConfig()->report.post_stack_C = postStackTemp;
+
+
      if (postHeaterTemp < getConfig()->WARMUP_TARGET_C) {
        return Warmup;
      }
      _updateFanSpeed(1.0);
+     getConfig()->report.fan_speed = 1.0;
+
+    if (!_flowsensor.isAirFlowing()) {
+      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
+    }
+    getConfig()->report.air_flow_sufficient = _flowsensor.isAirFlowing();
      return new_ms;
     }
 #else
@@ -340,7 +387,7 @@ namespace OxApp
             // This will be a really simple model for now...
             float current_C = model.locations[1].temp_C;
             float current_V = _heaters[i]._voltage;
-            float desired_C = getConfig()->DESIRED_STACK_C;
+            float desired_C = getConfig()->MAX_POST_HEATER_C;
             float voltage = _heaters[i].
               compute_change_in_voltage(current_C,
                                         current_V,
