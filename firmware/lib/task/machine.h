@@ -23,6 +23,8 @@ D4 - MAX31850_DATA_PIN
 #define RF_STACK DAC0
 #define MAX31850_DATA_PIN 4
 #define RF_FAN_TACH 5
+#define RF_MOSTPLUS_FLOW_PIN A0
+#define RF_MOSTPLUS_FLOW_LOW_CUTOFF_VOLTAGE 1.75
 
 // This is the order in which the thermocouples are wired;
 // in a perfect world we might use device address

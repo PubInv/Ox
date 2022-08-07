@@ -16,7 +16,7 @@
 
 #include "fan.h"
 
-#define DEBUG_FAN 1
+#define DEBUG_FAN 0
 
 #define PERIOD 100
 unsigned long volatile ts=0;

@@ -26,6 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "heater.h"
 #include "fan.h"
 #include "stack.h"
+#include "mostplus_flow.h"
 #include <machine.h>
 
 #include <abstract_temperature.h>
@@ -68,6 +69,7 @@ namespace OxApp
       Heater _heaters[NUM_HEATERS];
       Fan _fans[NUM_FANS];
       Stack _stacks[NUM_STACKS];
+      MostPlusFlow _flowsensor;
     private:
       bool _init() override;
       bool _run() override;

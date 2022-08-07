@@ -76,6 +76,9 @@ namespace OxApp
 
         Stack s("FIRST_STACK",0,RF_STACK,1.0);
         _stacks[0] = s;
+
+        MostPlusFlow m;
+        _flowsensor = m;
 #else
         // Create a one ohm joule heater
         Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
@@ -90,6 +93,10 @@ namespace OxApp
 
     bool CogTask::_run()
     {
+    OxCore::Debug<const char *>("Air Flow : ");
+    OxCore::DebugLn<boolean>(_flowsensor.isAirFlowing());
+
+
       MachineConfig *cogConfig = getConfig();
       // If we are in the off state there is nothing to do!
       if (cogConfig->ms == OffUserAck) {
@@ -99,7 +106,6 @@ namespace OxApp
       }
       if (cogConfig->ms == Off) {
           OxCore::DebugLn<const char *>("Currrently Off. Enter a single 'w' to warmup: ");
-          return true;
       }
       _readTemperatureSensors();
       MachineState new_state = _executeBasedOnState(cogConfig->ms);
