@@ -11,6 +11,8 @@ void outputReport(MachineStatusReport msr) {
         OxCore::DebugLn<float>(msr.heater_voltage);
         OxCore::Debug<const char *>("Stack       V: ");
         OxCore::DebugLn<float>(msr.stack_voltage);
+        OxCore::Debug<const char *>("Flow (ml / s): ");
+        OxCore::DebugLn<float>(msr.flow_ml_per_s);
         OxCore::Debug<const char *>("Fan Speed    : ");
         OxCore::DebugLn<float>(msr.fan_speed);
 }

@@ -77,8 +77,9 @@ namespace OxApp
         Stack s("FIRST_STACK",0,RF_STACK,1.0);
         _stacks[0] = s;
 
-        MostPlusFlow m;
-        _flowsensor = m;
+        _flowsensor = new SensirionFlow();
+
+
 #else
         // Create a one ohm joule heater
         Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
@@ -114,6 +115,11 @@ namespace OxApp
         OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[cogConfig->ms]);
         OxCore::DebugLn<const char *>("");
       }
+
+      OxCore::Debug<const char *>("FLOW SLM: ");
+      float flow_slm = _flowsensor->flowInSLM();
+      OxCore::DebugLn<float>(flow_slm);
+
 
       // Somewhere we have a true clock value, I would have thought
       // it would be an input to this routine....
@@ -185,10 +191,11 @@ namespace OxApp
     _updateStackVoltage(0.0);
     getConfig()->report.stack_voltage = 0.0;
 
-    if (_flowsensor.isAirFlowing()) {
+    if (_flowsensor->isAirFlowing()) {
       OxCore::Debug<const char *>("POTENTIAL ERROR, AIR IS STILL FLOWING ");
     }
-    getConfig()->report.air_flow_sufficient = _flowsensor.isAirFlowing();
+    getConfig()->report.air_flow_sufficient = _flowsensor->isAirFlowing();
+    getConfig()->report.flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsWarmup() {
@@ -258,10 +265,11 @@ namespace OxApp
     getConfig()->report.fan_speed = 1.0 ;
     getConfig()->report.stack_voltage = 0.0;
 
-    if (!_flowsensor.isAirFlowing()) {
+    if (!_flowsensor->isAirFlowing()) {
       OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
     }
-    getConfig()->report.air_flow_sufficient = _flowsensor.isAirFlowing();
+    getConfig()->report.air_flow_sufficient = _flowsensor->isAirFlowing();
+    getConfig()->report.flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
 
     return new_ms;
   }
@@ -366,10 +374,11 @@ namespace OxApp
      _updateFanSpeed(1.0);
      getConfig()->report.fan_speed = 1.0;
 
-    if (!_flowsensor.isAirFlowing()) {
+    if (!_flowsensor->isAirFlowing()) {
       OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
     }
-    getConfig()->report.air_flow_sufficient = _flowsensor.isAirFlowing();
+    getConfig()->report.air_flow_sufficient = _flowsensor->isAirFlowing();
+    getConfig()->report.flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
      return new_ms;
     }
 #else

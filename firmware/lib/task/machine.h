@@ -66,6 +66,7 @@ struct MachineStatusReport {
   float heater_voltage;
   float stack_voltage;
   float fan_speed;
+  float flow_ml_per_s;
   boolean air_flow_sufficient;
 };
 
