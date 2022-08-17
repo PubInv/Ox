@@ -103,7 +103,10 @@ struct MachineConfig {
   float COOLDOWN_TARGET_C = 26.0;
   float WARMUP_TARGET_C = 28.0;
   float MAX_POST_HEATER_C = 30.0;
+  float TARGET_STACK_C = 30.0;
   float MAX_POST_STACK_C = 33.0;
+  float TARGET_STACK_CURRENT_mA = 1.0;
+  float TARGET_FLOW_ml_per_S = 10.0;
 #else
   float COOLDOWN_TARGET_C = 26.0;
   float WARMUP_TARGET_C = 600.0;

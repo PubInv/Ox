@@ -109,27 +109,57 @@ void render_set_command_raw(SetCommand* m) {
           } else if (sc.command == 'P') {
               // HERE BEGIN THE PARAMETER SET Commands.
             if (sc.parameter == 'T') {
-              Debug<const char *>("Changing Temperature!");
+              DebugLn<const char *>("Changing Temperature!");
               if (sc.interpretation != 'T') {
                 Debug<const char *>("Can only recognize \"Target\" interpretation at present!");
               } else {
-                float new_temp = sc.val;
+                int new_temp_C = sc.val;
                 // now a little sanity check...
-                if (new_temp < 20.0 || new_temp > 1000.0) {
+                if (new_temp_C < 20 || new_temp_C > 1000) {
                   Debug<const char *>("Temperature out of range!");
                 } else {
-                  cogConfig->MAX_POST_STACK_C = new_temp;
-                  Debug<const char *>("Post Stack Temp changed to:");
+                  cogConfig->MAX_POST_STACK_C = new_temp_C;
+                  Debug<const char *>("Post Stack Temp changed to: ");
                   Debug<float>(cogConfig->MAX_POST_STACK_C);
+                  DebugLn<const char *>(" degrees C");
+                }
+              }
+            } if (sc.parameter == 'C') {
+              Debug<const char *>("Changing Current!");
+              if (sc.interpretation != 'T') {
+                DebugLn<const char *>("Can only recognize \"Target\" interpretation at present!");
+              } else {
+                int new_current_mA = sc.val;
+                // now a little sanity check... We should probably regularize these
+                if (new_current_mA < 0 || new_current_mA > 40000) {
+                  Debug<const char *>("Amperage out of range!");
+                } else {
+                  cogConfig->TARGET_STACK_CURRENT_mA = new_current_mA;
+                  Debug<const char *>("Stack Current Amperage changed to: ");
+                  Debug<float>(cogConfig->TARGET_STACK_CURRENT_mA);
+                  DebugLn<const char *>(" milliamps");
+                }
+              }
+            } else if (sc.parameter == 'F') {
+              DebugLn<const char *>("Changing Flow!");
+              if (sc.interpretation != 'T') {
+                Debug<const char *>("Can only recognize \"Target\" interpretation at present!");
+              } else {
+                float new_flow_ml_per_S = sc.val;
+                // now a little sanity check... We should probably regularize these
+                if (new_flow_ml_per_S < 0.0 || new_flow_ml_per_S > 1000.0) {
+                  Debug<const char *>("Flow out of range!");
+                } else {
+                  cogConfig->TARGET_FLOW_ml_per_S = new_flow_ml_per_S;
+                  Debug<const char *>("Post Stack Temp changed to: ");
+                  Debug<float>(cogConfig->TARGET_FLOW_ml_per_S);
+                  DebugLn<const char *>("ml per second");
                 }
               }
             } else {
               Debug<const char *>("Unrecognized parameter type!");
             }
-
           }
-
-
         }
     }
 

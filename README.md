@@ -153,15 +153,15 @@ In fact, each "one character" command is a short hand for these commands.
 The following format can be used to set parameters (P).
 The three most important parameters are:
 1. T : Temperature (in C) going into the stack
-2. C : Current (in Amperes) going into the stack
+2. C : Current (in milliamps) going into the stack
 3. F : Fan speed in RPM (we expect this to change to flow rate in SLM)
-> { "com": "P", "par": "T", "int": "T", "mod": "U", "val" : 35.0 }
-> { "com": "P", "par": "C", "int": "T", "mod": "U", "val" : 0.5 }
-> { "com": "P", "par": "F", "int": "T", "mod": "U", "val" : 20000.0 }
+> { "com": "P", "par": "T", "int": "T", "mod": "U", "val" : 35 }
+> { "com": "P", "par": "C", "int": "T", "mod": "U", "val" : 500 }
+> { "com": "P", "par": "F", "int": "T", "mod": "U", "val" : 2000 }
 These three commands set the:
 1. Temperature into the stack to 35C
-2. Set the Target current into the stack to 0.5
-3. Set the fan speed RPM to 20,000 revolutions per minute
+2. Set the Target current into the stack to 500 milliamps
+3. Set the flow rate to 2000 ml/seconds
 
 
 
