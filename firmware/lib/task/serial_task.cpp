@@ -78,6 +78,8 @@ void render_set_command_raw(SetCommand* m) {
           // the most recent command into the state, and having the
           // the cog_task remove it. Then all state changes would be made in
           // one place!
+
+          // These are the STATE CHANGE COMMANDS
           if (sc.command == 'W') {
             if (cogConfig->ms == Off) {
               cogConfig->ms = Warmup;
@@ -104,7 +106,29 @@ void render_set_command_raw(SetCommand* m) {
           } else if (sc.command == 'O') {
               cogConfig->idleOrOperate = Operate;
               Debug<const char *>("New SubState: Operate");
+          } else if (sc.command == 'P') {
+              // HERE BEGIN THE PARAMETER SET Commands.
+            if (sc.parameter == 'T') {
+              Debug<const char *>("Changing Temperature!");
+              if (sc.interpretation != 'T') {
+                Debug<const char *>("Can only recognize \"Target\" interpretation at present!");
+              } else {
+                float new_temp = sc.val;
+                // now a little sanity check...
+                if (new_temp < 20.0 || new_temp > 1000.0) {
+                  Debug<const char *>("Temperature out of range!");
+                } else {
+                  cogConfig->MAX_POST_STACK_C = new_temp;
+                  Debug<const char *>("Post Stack Temp changed to:");
+                  Debug<float>(cogConfig->MAX_POST_STACK_C);
+                }
+              }
+            } else {
+              Debug<const char *>("Unrecognized parameter type!");
+            }
+
           }
+
 
         }
     }

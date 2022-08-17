@@ -100,6 +100,7 @@ For example, the simple object:
 ```JavaScript
 { "com": "C",
   "par": 0,
+  "int": "s",
   "mod": "U",
   "val" : 0.0
   }
@@ -107,11 +108,62 @@ For example, the simple object:
 
 Could mean "Cool Down". The value "U" is used becasue the "mod" command is "unusued" in this case.
 
+```JavaScript
+{ "com": "W",
+  "par": M,
+  "int": "s",
+  "mod": "U",
+  "val" : 0.0
+  }
+```
+
+
 In actual practice, these commands will be pasted into the serial port using either PlatformIO or the Arduino IDE.
 
 Eventually, a user interface may be implemented that uses a knob or a nice webpage to enter commands.
 However, by having each of these take only actions that can be implemented as such a command,
 we bring discipline to the internal code.
+
+## Actual Serial Commands
+
+The serial port currently supports 6 one-character commands: w,c,e,a,i,o.
+These mean:
+1. warmup
+2. cool down
+3. emergency shutdown
+4. acknowledge
+5. idle
+6. operate
+
+Note: "acknowledge" means that the operator acknowledges that a critical
+state has occurred and asserts it is okay to return to normal operation,
+either because the problem as been removed or for some other reason.
+
+Addtionally, the system supports "full commands", that look like this:
+
+> { "com": "W", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+> { "com": "C", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+> { "com": "E", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+> { "com": "A", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+> { "com": "I", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+> { "com": "O", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+
+In fact, each "one character" command is a short hand for these commands.
+
+The following format can be used to set parameters (P).
+The three most important parameters are:
+1. T : Temperature (in C) going into the stack
+2. C : Current (in Amperes) going into the stack
+3. F : Fan speed in RPM (we expect this to change to flow rate in SLM)
+> { "com": "P", "par": "T", "int": "T", "mod": "U", "val" : 35.0 }
+> { "com": "P", "par": "C", "int": "T", "mod": "U", "val" : 0.5 }
+> { "com": "P", "par": "F", "int": "T", "mod": "U", "val" : 20000.0 }
+These three commands set the:
+1. Temperature into the stack to 35C
+2. Set the Target current into the stack to 0.5
+3. Set the fan speed RPM to 20,000 revolutions per minute
+
+
 
 
 ## License
