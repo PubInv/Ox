@@ -186,16 +186,28 @@ namespace OxApp
     MachineState new_ms = Off;
     _updatePowerComponentsVoltage(0);
     getConfig()->report.heater_voltage = 0.0;
-    _updateFanSpeed(0.0);
-    getConfig()->report.fan_speed = 0.0;
+
+    getConfig()->fanPWM = 0.0;
+    _updateFanSpeed(getConfig()->fanPWM);
+    getConfig()->report.fan_speed = getConfig()->fanPWM;
+
     _updateStackVoltage(0.0);
     getConfig()->report.stack_voltage = 0.0;
 
-    if (_flowsensor->isAirFlowing()) {
+    bool flowing = _flowsensor->isAirFlowing();
+    if (flowing) {
       OxCore::Debug<const char *>("POTENTIAL ERROR, AIR IS STILL FLOWING ");
     }
-    getConfig()->report.air_flow_sufficient = _flowsensor->isAirFlowing();
-    getConfig()->report.flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
+    getConfig()->report.air_flow_sufficient = flowing;
+
+    delay(10);
+    double flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
+
+    if (flow_ml_per_s >= 4550.0) {
+      // This is the error condition for this sensor!
+    } else {
+      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    }
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsWarmup() {
@@ -224,8 +236,9 @@ namespace OxApp
     } else {
       _updatePowerComponentsVoltage(getConfig()->MAXIMUM_HEATER_VOLTAGE);
     }
-    _updateFanSpeed(1.0);
-    getConfig()->report.fan_speed = 1.0;
+    _updateFanSpeed(getConfig()->fanPWM);
+    getConfig()->report.fan_speed = getConfig()->fanPWM;
+
 
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
     getConfig()->report.stack_voltage = getConfig()->MAXIMUM_STACK_VOLTAGE;
@@ -236,8 +249,10 @@ namespace OxApp
     OxCore::Debug<const char *>("IN IDLE FUNCTION ");
     MachineState new_ms = NormalOperation;
     getConfig()->idleOrOperate = Idle;
-    _updateFanSpeed(1.0);
-    getConfig()->report.fan_speed = 1.0;
+
+    _updateFanSpeed(getConfig()->fanPWM);
+    getConfig()->report.fan_speed = getConfig()->fanPWM;
+
     _updateStackVoltage(0.0);
     getConfig()->report.stack_voltage = 0.0;
     return new_ms;
@@ -260,22 +275,34 @@ namespace OxApp
     } else {
       _updatePowerComponentsVoltage(0);
     }
-    _updateFanSpeed(1.0);
-    _updateStackVoltage(0.0);
+    _updateFanSpeed(getConfig()->fanPWM);
+    getConfig()->report.fan_speed = getConfig()->fanPWM;
+
+
     getConfig()->report.fan_speed = 1.0 ;
     getConfig()->report.stack_voltage = 0.0;
 
-    if (!_flowsensor->isAirFlowing()) {
+    bool flowing = _flowsensor->isAirFlowing();
+    if (!flowing) {
       OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
     }
-    getConfig()->report.air_flow_sufficient = _flowsensor->isAirFlowing();
-    getConfig()->report.flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
+    getConfig()->report.air_flow_sufficient = flowing;
+
+    delay(10);
+    double flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
+
+    if (flow_ml_per_s >= 4550.0) {
+      // This is the error condition for this sensor!
+    } else {
+      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    }
 
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsCritialFault() {
     MachineState new_ms = CriticalFault;
-    _updateFanSpeed(1.0);
+    _updateFanSpeed(getConfig()->fanPWM);
+    getConfig()->report.fan_speed = getConfig()->fanPWM;
     _updateStackVoltage(0.0);
     getConfig()->report.fan_speed = 1.0;
     getConfig()->report.stack_voltage = 0.0;
@@ -284,7 +311,9 @@ namespace OxApp
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
     _updatePowerComponentsVoltage(0);
     MachineState new_ms = OffUserAck;
-    _updateFanSpeed(1.0);
+
+    _updateFanSpeed(getConfig()->fanPWM);
+    getConfig()->report.fan_speed = getConfig()->fanPWM;
     _updateStackVoltage(0.0);
     getConfig()->report.fan_speed = 1.0;
     getConfig()->report.stack_voltage = 0.0;
@@ -292,7 +321,9 @@ namespace OxApp
   }
   MachineState CogTask::_updatePowerComponentsOffUserAck() {
     MachineState new_ms = CriticalFault;
-    _updateFanSpeed(1.0);
+
+    _updateFanSpeed(getConfig()->fanPWM);
+    getConfig()->report.fan_speed = getConfig()->fanPWM;
     _updateStackVoltage(0.0);
     getConfig()->report.fan_speed = 1.0;
     getConfig()->report.stack_voltage = 0.0;
@@ -371,14 +402,22 @@ namespace OxApp
      if (postHeaterTemp < getConfig()->WARMUP_TARGET_C) {
        return Warmup;
      }
-     _updateFanSpeed(1.0);
-     getConfig()->report.fan_speed = 1.0;
+     _updateFanSpeed(getConfig()->fanPWM);
+     getConfig()->report.fan_speed = getConfig()->fanPWM;
 
-    if (!_flowsensor->isAirFlowing()) {
+     bool flowing = _flowsensor->isAirFlowing();
+    if (!flowing) {
       OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
     }
-    getConfig()->report.air_flow_sufficient = _flowsensor->isAirFlowing();
-    getConfig()->report.flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
+    getConfig()->report.air_flow_sufficient = flowing;
+    delay(10);
+    double flow_ml_per_s = _flowsensor->flowIn_ml_per_s();
+
+    if (flow_ml_per_s >= 4550.0) {
+      // This is the error condition for this sensor!
+    } else {
+      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    }
      return new_ms;
     }
 #else
@@ -408,7 +447,8 @@ namespace OxApp
             OxCore::DebugLn<float>(_heaters[i]._voltage);
 
         }
-        _updateFanSpeed(1.0);
+     _updateFanSpeed(getConfig()->fanPWM);
+     getConfig()->report.fan_speed = getConfig()->fanPWM;
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
     OxCore::Debug<const char *>("Checking Voltage Set AAA ");
         OxCore::DebugLn<float>(_heaters[0]._voltage);

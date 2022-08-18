@@ -46,7 +46,7 @@
 class SensirionFlow {
 public:
   SensirionFlow();
-  const float MINIMUM_FLOW_ml_per_s = 20; // Completely arbitrary
+  const float MINIMUM_FLOW_ml_per_s = 10; // Completely arbitrary
 
   SFM3X00 *flowSensor;
 

@@ -147,7 +147,7 @@ void render_set_command_raw(SetCommand* m) {
               } else {
                 float new_flow_ml_per_S = sc.val;
                 // now a little sanity check... We should probably regularize these
-                if (new_flow_ml_per_S < 0.0 || new_flow_ml_per_S > 1000.0) {
+                if (new_flow_ml_per_S < 0.0 || new_flow_ml_per_S > 4000.0) {
                   Debug<const char *>("Flow out of range!");
                 } else {
                   cogConfig->TARGET_FLOW_ml_per_S = new_flow_ml_per_S;

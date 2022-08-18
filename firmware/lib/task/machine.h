@@ -92,6 +92,9 @@ struct MachineConfig {
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float MAXIMUM_STACK_VOLTAGE = 12.0;
+
+  float fanPWM = 0.5;
+
   char const* errors[10];
   // Until we have a good machine model here,
   // we need to separately identify pre- and post-
@@ -107,7 +110,7 @@ struct MachineConfig {
   float TARGET_STACK_C = 30.0;
   float MAX_POST_STACK_C = 33.0;
   float TARGET_STACK_CURRENT_mA = 1.0;
-  float TARGET_FLOW_ml_per_S = 10.0;
+  float TARGET_FLOW_ml_per_S = 100.0;
 #else
   float COOLDOWN_TARGET_C = 26.0;
   float WARMUP_TARGET_C = 600.0;

@@ -27,6 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <cog_task.h>
 #include <serial_task.h>
 #include <fault_task.h>
+#include <fanPID_task.h>
 //#include <display_task.h>
 
 using namespace OxCore;
@@ -38,6 +39,7 @@ static Core core;
 OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 OxApp::FaultTask faultTask;
+OxApp::FanPIDTask fanPIDTask;
 
 // OxApp::SensorReadTask sensorTask;
 #include <machine.h>
@@ -112,12 +114,21 @@ void setup()
   core.AddTask(&serialTask, &serialProperties);
 
   OxCore::TaskProperties faultProperties;
-  serialProperties.name = "fault";
-  serialProperties.id = 22;
-  serialProperties.period = 3000;
-  serialProperties.priority = OxCore::TaskPriority::High;
-  serialProperties.state_and_config = (void *) &cogConfig;
+  faultProperties.name = "fault";
+  faultProperties.id = 22;
+  faultProperties.period = 3000;
+  faultProperties.priority = OxCore::TaskPriority::High;
+  faultProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&faultTask, &faultProperties);
+
+
+  OxCore::TaskProperties fanPIDProperties;
+  fanPIDProperties.name = "fanPID";
+  fanPIDProperties.id = 23;
+  fanPIDProperties.period = 6000;
+  fanPIDProperties.priority = OxCore::TaskPriority::High;
+  fanPIDProperties.state_and_config = (void *) &cogConfig;
+  core.AddTask(&fanPIDTask, &fanPIDProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
 
