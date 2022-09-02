@@ -69,6 +69,7 @@ void setup()
   OxCore::serialBegin(115200UL);
   Debug<const char *>("Starting Ox...\n");
 
+
   ds3502 = new DS3502DigitalPot();
 
   if (core.Boot() == false) {
@@ -81,6 +82,10 @@ void setup()
   //TODO: This needs to be placed inthe task init feature!
   //#if BUILD_ENV_NAME == due_ribbonfish
 #ifdef RIBBONFISH
+  // TODO: I am not sure where to put this; and it is
+  // probably only valid on Due...nonetheless it is
+  // absolutely needed byt the TF800A12K.cpp/SL_PS class...
+  // it really should be there...
       pinMode(MAX31850_DATA_PIN, INPUT);
       pinMode(RF_FAN, OUTPUT);
       pinMode(RF_HEATER, OUTPUT);

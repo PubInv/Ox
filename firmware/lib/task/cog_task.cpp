@@ -16,6 +16,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "cog_task.h"
 #include<cmath>
 #include <abstract_temperature.h>
+#include <TF800A12K.h>
 
 using namespace std;
 
@@ -74,9 +75,14 @@ namespace OxApp
         Fan f("FIRST_FAN",0,RF_FAN,1.0);
         _fans[0] = f;
 
-        Stack s("FIRST_STACK",0,RF_STACK,1.0);
-        _stacks[0] = s;
+        //        _stacks[0] = new Stack("FIRST_STACK",0,RF_STACK,1.0);
 
+        _stacks[0] = new SL_PS("FIRST_STACK",0);
+
+        // This would be better done in the setup, really, but
+        // that should remain generic...I'm afraid I need to regularize all
+        // of this but am out of time -- RLR
+        _stacks[0]->init();
         _flowsensor = new SensirionFlow();
 
 
@@ -350,7 +356,7 @@ namespace OxApp
   // a fixed voltage; that will have to be added later
    void CogTask::_updateStackVoltage(float voltage) {
         for (int i = 0; i < NUM_STACKS; i++) {
-          _stacks[i].update(voltage);
+          _stacks[i]->updateVoltage(voltage);
         }
     }
 

@@ -431,32 +431,32 @@ void setup() {
   Serial.print(F("Using mac index = "));
   Serial.println(index);
 
-  Ethernet.begin(mac[index]);
-
-  byte tmac[6];
-  Ethernet.MACAddress(tmac);
-  Serial.print(F("The MAC address is: "));
-  for (byte octet = 0; octet < 6; octet++) {
-    Serial.print(tmac[octet], HEX);
-    if (octet < 5) {
-      Serial.print(':');
-    }
-  }
-  Serial.println();
-
-  Serial.print(F("Version 5200 ")); Serial.print(readcommreg(0x001F));
-  Serial.print(F("  PHY Status ")); Serial.print(readcommreg(0x0035));
-  Serial.println();
-
-  Udp.begin((uint16_t)localPort);
-
-  Serial.print(F("IP address: ")); Serial.println(Ethernet.localIP());
-  Serial.print(F("Gateway: ")); Serial.println(Ethernet.gatewayIP());
-  Serial.print(F("Subnet Mask: ")); Serial.println(Ethernet.subnetMask());
-  Serial.print(F("DNS Server: ")); Serial.println(Ethernet.dnsServerIP());
-  Serial.println();
-
-  getTime();
+//  Ethernet.begin(mac[index]);
+//
+//  byte tmac[6];
+//  Ethernet.MACAddress(tmac);
+//  Serial.print(F("The MAC address is: "));
+//  for (byte octet = 0; octet < 6; octet++) {
+//    Serial.print(tmac[octet], HEX);
+//    if (octet < 5) {
+//      Serial.print(':');
+//    }
+//  }
+//  Serial.println();
+//
+//  Serial.print(F("Version 5200 ")); Serial.print(readcommreg(0x001F));
+//  Serial.print(F("  PHY Status ")); Serial.print(readcommreg(0x0035));
+//  Serial.println();
+//
+//  Udp.begin((uint16_t)localPort);
+//
+//  Serial.print(F("IP address: ")); Serial.println(Ethernet.localIP());
+//  Serial.print(F("Gateway: ")); Serial.println(Ethernet.gatewayIP());
+//  Serial.print(F("Subnet Mask: ")); Serial.println(Ethernet.subnetMask());
+//  Serial.print(F("DNS Server: ")); Serial.println(Ethernet.dnsServerIP());
+//  Serial.println();
+//
+//  getTime();
 
   getPS_Manuf(ADDRESS);
   Serial.print("Manuf: ");

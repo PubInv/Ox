@@ -23,20 +23,20 @@
 #include <math.h>
 #endif
 
+#include "abstract_ps.h"
 
 // NOTE: AT present, this is really a transistory in front
 // of a twelve-volt fan. So we will control it with a PWM signal.
 // Different Fans may require different drivers in the future.
 // In particular, we hope to use a 4-wire fan with a tachometer.
 
-namespace OxApp {
 
-  class Stack {
+  class Stack : public AbstractPS {
   public:
-    const char * name;
-    uint8_t id;
+    //    const char * name;
+    //    uint8_t id;
     uint8_t pin;
-    float _voltage = 0; // Between 0.0 and 1.0
+    //    float _voltage = 0; // Between 0.0 and 1.0
   public:
     Stack(){};
     Stack(const char * name, uint8_t id, uint8_t pin, float voltage){
@@ -46,9 +46,9 @@ namespace OxApp {
       this->_voltage = voltage;
     };
     ~Stack(){};
-    void update(float voltage);
+    void updateVoltage(float voltage) override;
+    void updateAmperage(float amperage) override;
   };
 
-}
 
 #endif

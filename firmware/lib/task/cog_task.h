@@ -26,6 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "heater.h"
 #include "fan.h"
 #include "stack.h"
+#include "abstract_ps.h"
 #include "mostplus_flow.h"
 #include "SensirionSFM3X00.h"
 #include <machine.h>
@@ -69,7 +70,7 @@ namespace OxApp
       Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
       Fan _fans[NUM_FANS];
-      Stack _stacks[NUM_STACKS];
+      AbstractPS* _stacks[NUM_STACKS];
       //      MostPlusFlow _flowsensor;
       SensirionFlow *_flowsensor;
     private:
