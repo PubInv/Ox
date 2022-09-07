@@ -29,8 +29,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <machine.h>
 
 using namespace OxCore;
-#define DEBUG_SERIAL_LISTEN 1
-#define DEBUG_INPUT 3
+#define DEBUG_SERIAL_LISTEN 5
+#define DEBUG_INPUT 5
 
 namespace OxApp
 {
@@ -188,9 +188,6 @@ int SerialTask::clear_buffers(char buffer[]) {
   // Note this code can be cleaned up.
 bool SerialTask::one_char_command_found(int num_read, char buffer[], int k) {
 
-  // HACK ALERT!! For debugging, we want VERY FAST commands to disable and
-  // and home the ventilator. Because this is actully being
-  // done by a human being, we want this to be a single, one-character command:
   // c
   // Because this routine is designed to return a buffer that
   // contains a PIRCS command, we expand the PIRCS commands,

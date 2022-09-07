@@ -20,6 +20,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 using namespace std;
 
+
 #define DEBUG_LEVEL 1
 
 namespace OxApp
@@ -72,8 +73,9 @@ namespace OxApp
         //        Heater v2("SECONDARY_HEATER",2, 5, 0, 5.6);
         //        _heaters[1] = v2;
 
-        Fan f("FIRST_FAN",0,RF_FAN,1.0);
-        _fans[0] = f;
+        //        Fan f("FIRST_FAN",0,RF_FAN,1.0);
+        //        _fans[0] = f;
+        _dfans[0] = DeltaFans("FIRST_FAN",0,RF_FAN,1.0);
 
         //        _stacks[0] = new Stack("FIRST_STACK",0,RF_STACK,1.0);
 
@@ -84,7 +86,6 @@ namespace OxApp
         // of this but am out of time -- RLR
         _stacks[0]->init();
         _flowsensor = new SensirionFlow();
-
 
 #else
         // Create a one ohm joule heater
