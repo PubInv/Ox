@@ -30,16 +30,11 @@
 //Calculates the RPM based on the timestamps of the last 2 interrupts. Can be called at any time.
 //namespace tach_data {
 
-unsigned long meta_cnt = 0;
-
-
   void tachISR(uint8_t i) {
     tach_data_cnt[i]++;
-    meta_cnt++;
     refresh_tach_data(i);
   }
   void tachISR0() {
-    meta_cnt++;
     tachISR(0);
   };
   void tachISR1() {     meta_cnt++;
@@ -150,9 +145,9 @@ void DeltaFans::update(float pwm_ratio) {
     this->PWMMotorControl(_pwm_ratio[i],i);
   }
   // Let's turn two fans off to slow this down...
-  for(int i = 2; i < 4; i++) {
-      this->PWMMotorControl(0,i);
-  }
+  //  for(int i = 2; i < 4; i++) {
+  //      this->PWMMotorControl(0,i);
+  //}
 
 #ifdef RIBBONFISH
   if (DEBUG_FAN) {
