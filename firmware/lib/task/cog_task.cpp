@@ -75,7 +75,8 @@ namespace OxApp
 
         //        Fan f("FIRST_FAN",0,RF_FAN,1.0);
         //        _fans[0] = f;
-        _dfans[0] = DeltaFans("FIRST_FAN",0,RF_FAN,1.0);
+        _fans[0] = DeltaFans("FIRST_FAN",0,RF_FAN,1.0);
+        _fans[0]._init();
 
         //        _stacks[0] = new Stack("FIRST_STACK",0,RF_STACK,1.0);
 

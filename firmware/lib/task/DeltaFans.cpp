@@ -26,18 +26,28 @@
 
 
 
+
 //Calculates the RPM based on the timestamps of the last 2 interrupts. Can be called at any time.
 //namespace tach_data {
+
+unsigned long meta_cnt = 0;
+
+
   void tachISR(uint8_t i) {
     tach_data_cnt[i]++;
+    meta_cnt++;
     refresh_tach_data(i);
   }
-  void tachISR0() { tachISR(0); };
-  void tachISR1() { tachISR(1); };
-  void tachISR2() { tachISR(2); };
-  void tachISR3() { tachISR(3); };
-
-
+  void tachISR0() {
+    meta_cnt++;
+    tachISR(0);
+  };
+  void tachISR1() {     meta_cnt++;
+    tachISR(1); };
+  void tachISR2() {     meta_cnt++;
+    tachISR(2); };
+  void tachISR3() {     meta_cnt++;
+    tachISR(3); };
 
   void refresh_tach_data(uint8_t i) {
     unsigned long m = millis();
@@ -71,9 +81,13 @@ unsigned long DeltaFans::_calcRPM(uint8_t i){
 
 void DeltaFans::printRPMS() {
   Serial.println("RPMS:");
+  Serial.print("META COUNT:");
+  Serial.println(meta_cnt);
   for(uint8_t i = 0; i < 4; i++) {
     long rpm = _calcRPM(i);
-     Serial.print(i); Serial.print(" : ");
+    Serial.print("rpm: ");
+     Serial.print(i);
+     Serial.print(" : ");
      Serial.println(rpm);
   }
 }
@@ -86,16 +100,13 @@ void DeltaFans::printRPMS() {
 void DeltaFans::motorControl(int s)
 {
   s = map(s, SPEED_MIN, SPEED_MAX, 0, 255);
-  Serial.print("Speed: "); Serial.println(s);
   analogWrite(MOTOR_OUT_PIN, s);
 }
 
 // m = motor -- 0 - 3
 void DeltaFans::PWMMotorControl(int s, int m)
 {
-  s = map(s, SPEED_MIN, SPEED_MAX, 0, 255);
-  Serial.print("Speed: "); Serial.println(s);
-  Serial.print("Motor: "); Serial.println(m);
+  s = map(s*100, SPEED_MIN, SPEED_MAX, 0, 255);
   analogWrite(PWM_PIN[m], s);
 }
 
@@ -112,13 +123,15 @@ void DeltaFans::_init() {
   TACH_PIN[3] = A3;
 
   pinMode(MOTOR_OUT_PIN, OUTPUT);
+  analogWrite(MOTOR_OUT_PIN, 255);
+
   for(int i = 0; i < 4; i++) {
     tach_data_ts[i] = 0;
     tach_data_cnt[i] = 0;
     tach_data_ocnt[i] = 0;
     tach_data_duration[i] = 0;
-      pinMode(PWM_PIN[i], OUTPUT);
-      pinMode(TACH_PIN[i],INPUT_PULLUP);
+    pinMode(PWM_PIN[i], OUTPUT);
+    pinMode(TACH_PIN[i],INPUT_PULLUP);
   }
   attachInterrupt(digitalPinToInterrupt(TACH_PIN[0]),tachISR0,FALLING);
   attachInterrupt(digitalPinToInterrupt(TACH_PIN[1]),tachISR1,FALLING);
@@ -133,8 +146,12 @@ void DeltaFans::_init() {
 // this is an oversimplification
 void DeltaFans::update(float pwm_ratio) {
   for(int i = 0; i < 4; i++) {
-    _pwm_ratio[i] = pwm_ratio * 100.0;
-    this->PWMMotorControl(_pwm_ratio[i]*100.0,i);
+    _pwm_ratio[i] = pwm_ratio;
+    this->PWMMotorControl(_pwm_ratio[i],i);
+  }
+  // Let's turn two fans off to slow this down...
+  for(int i = 2; i < 4; i++) {
+      this->PWMMotorControl(0,i);
   }
 
 #ifdef RIBBONFISH

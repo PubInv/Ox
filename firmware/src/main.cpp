@@ -90,8 +90,8 @@ void setup()
       pinMode(RF_FAN, OUTPUT);
       pinMode(RF_HEATER, OUTPUT);
       pinMode(RF_STACK, OUTPUT);
-      pinMode(RF_FAN_TACH,INPUT_PULLUP);
-      attachInterrupt(digitalPinToInterrupt(RF_FAN_TACH),OxApp::tachISR,FALLING);
+      //      pinMode(RF_FAN_TACH,INPUT_PULLUP);
+      //      attachInterrupt(digitalPinToInterrupt(RF_FAN_TACH),OxApp::tachISR,FALLING);
 #endif
 
       // Now we will set the machine state to "Off"
@@ -108,7 +108,6 @@ void setup()
   // It respresents the entire machine.
   cogProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&cogTask, &cogProperties);
-
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";
@@ -150,7 +149,7 @@ void test_ds3502() {
         //        if (ds3502->foundPot) {
           OxCore::Debug<const char *>("Settting wiper\n");
           // This is a HACK to test the DS3502..
-          delay(10000);
+          //          delay(10000);
           // Count up the Wiper value as a fraction
 
           OxCore::DebugLn<float>((128 - n_ds3502) / 128.0);

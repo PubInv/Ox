@@ -70,8 +70,8 @@ namespace OxApp
 
       Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
-      DeltaFans _dfans[NUM_FANS];
-      Fan _fans[NUM_FANS];
+      DeltaFans _fans[NUM_FANS];
+//      Fan _fans[NUM_FANS];
       AbstractPS* _stacks[NUM_STACKS];
       //      MostPlusFlow _flowsensor;
       SensirionFlow *_flowsensor;
@@ -100,8 +100,6 @@ namespace OxApp
       // something...
       Model model;
       void RunForward(float t,Model& m);
-
-
     };
 }
 

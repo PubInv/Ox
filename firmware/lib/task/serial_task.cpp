@@ -29,8 +29,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <machine.h>
 
 using namespace OxCore;
-#define DEBUG_SERIAL_LISTEN 5
-#define DEBUG_INPUT 5
+#define DEBUG_SERIAL_LISTEN 1
+#define DEBUG_INPUT 3
 
 namespace OxApp
 {

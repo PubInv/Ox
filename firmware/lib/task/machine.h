@@ -110,7 +110,12 @@ struct MachineConfig {
   float TARGET_STACK_C = 30.0;
   float MAX_POST_STACK_C = 33.0;
   float TARGET_STACK_CURRENT_mA = 1.0;
-  float TARGET_FLOW_ml_per_S = 100.0;
+
+  // I'm not sure what the real value here should be!
+  // but to activate the fans we have to make this
+  // higher than 205 ml/s, because the fans seem to
+  // produce that at idle!
+  float TARGET_FLOW_ml_per_S = 500.0;
 #else
   float COOLDOWN_TARGET_C = 26.0;
   float WARMUP_TARGET_C = 600.0;

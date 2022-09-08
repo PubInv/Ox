@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Robert Read, Ben Coombs.
+// Copyright (C) 2022 Robert Read.
 
 // This program includes free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -60,12 +60,13 @@ public:
   const char * name;
   uint8_t id;
   uint8_t pin;
+  // This is a ration from 0.0 to 1.0
   float _pwm_ratio[NUMBER_OF_FANS] = {0.0,0.0,0.0,0.0};
 
   int DEBUG_FAN = 1;
   int MOTOR_OUT_PIN = 8;
-  unsigned int PWM_PIN[NUMBER_OF_FANS];
-  unsigned int TACH_PIN[NUMBER_OF_FANS];
+  int PWM_PIN[NUMBER_OF_FANS];
+  int TACH_PIN[NUMBER_OF_FANS];
 
   int SPEED_MAX = 100;// in %
   int SPEED_MIN = 0;//in %
