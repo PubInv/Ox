@@ -15,6 +15,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include "DeltaFans.h"
+#include <math.h>
 
 
 #define PERIOD 1000
@@ -25,7 +26,7 @@
   unsigned long volatile tach_data_duration[NUMBER_OF_FANS];
 
 
-
+const int DEBUG_FAN = 1;
 
 //Calculates the RPM based on the timestamps of the last 2 interrupts. Can be called at any time.
 //namespace tach_data {
@@ -59,10 +60,10 @@
 
 unsigned long DeltaFans::_calcRPM(uint8_t i){
   refresh_tach_data(i);
-  if (DEBUG_FAN) {
+  if (DEBUG_FAN > 1) {
     Serial.print("CALC: " );
-    Serial.println(i);
-    Serial.println(tach_data_ocnt[i]);
+    Serial.print(i);
+    Serial.print(tach_data_ocnt[i]);
     Serial.println(tach_data_duration[i]);
   }
   if (tach_data_duration[i] != 0) {
@@ -103,10 +104,12 @@ void DeltaFans::PWMMotorControl(float s, int m)
 {
   int q = map(s*100, SPEED_MIN, SPEED_MAX, 0, 255);
 
-  Serial.print("XXX s : q");
-  Serial.print(s);
-  Serial.print(" : ");
-  Serial.println(q);
+  if (DEBUG_FAN > 0 ) {
+    Serial.print("m : q");
+    Serial.print(m);
+    Serial.print(" : ");
+    Serial.println(q);
+  }
   analogWrite(PWM_PIN[m], q);
 }
 
@@ -149,22 +152,31 @@ void DeltaFans::update(float pwm_ratio) {
                0 :
                100);
 
-  for(int i = 0; i < 4; i++) {
+  // this is an experiment...
+  // The 4 fans are really two powerful. We need some
+  // way to selectively turn fans on and off.
+  // Exactly how to do this is unclear.
+  // A simple approach is that if the pwm_ration is
+  // greater than 0.75, use all four, if greater than 0.5,
+  // use 3, if greater than 0.25, use 2, if less than 0.25,
+  // use 1.
+
+  int num = ceil(pwm_ratio * 4.0);
+
+  for(int i = 0; i < num; i++) {
     _pwm_ratio[i] = pwm_ratio;
     this->PWMMotorControl(_pwm_ratio[i],i);
   }
-  // Let's turn two fans off to slow this down...
-  //  for(int i = 2; i < 4; i++) {
-  //      this->PWMMotorControl(0,i);
-  //}
-
-#ifdef RIBBONFISH
-  if (DEBUG_FAN) {
-    Serial.print("PWM ratio");
-    Serial.println(pwm_ratio);
-    printRPMS();
+  for(int i = num; i < 4; i++) {
+    _pwm_ratio[i] = 0.0;
+    this->PWMMotorControl(_pwm_ratio[i],i);
   }
-#endif
 
-
+  if (DEBUG_FAN > 0 ) {
+    Serial.print("PWM ratio:  num / ratio : ");
+    Serial.print(num);
+    Serial.print(" : ");
+    Serial.println(pwm_ratio);
+  }
+  printRPMS();
 }

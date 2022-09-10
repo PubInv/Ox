@@ -18,6 +18,15 @@
 // https://www.delta-fan.com/Download/Spec/GFC0412DS-TP01.pdf
 
 
+// NOTE: The current configuration does not allow less than
+// 500 ml / s flow. These fans are very hard to control at
+// low speeds. Possibly some other solution is required if
+// that flow is too high. These fans can be turned off
+// if we are remove the tachometer wire.
+// If I separated these fans (I would have to desolder them).
+// This would let us get down to 250 ml / s.
+
+
 #ifndef DELTAFANS_H
 #define DELTAFANS_H
 
