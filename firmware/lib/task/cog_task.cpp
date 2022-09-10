@@ -76,13 +76,6 @@ namespace OxApp
         _stacks[0]->init();
 
 
-  bool initSuccess  = getConfig()->hal->init();
-  Serial.println("COG_TASK!");
-  if (!initSuccess) {
-    Serial.println("Could not init Hardware Abastraction Layer Properly!");
-    delay(1000);
-    while(1);
-  }
 
 #else
         // Create a one ohm joule heater

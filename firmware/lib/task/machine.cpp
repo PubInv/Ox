@@ -1,6 +1,8 @@
 #include <machine.h>
 // there is not yet anything for this to do
 #include <core.h>
+#include <Wire.h>
+
 
 void outputReport(MachineStatusReport msr) {
         OxCore::Debug<const char *>("Post Heater C: ");
@@ -20,6 +22,9 @@ void outputReport(MachineStatusReport msr) {
 bool MachineHAL::init() {
   // we should probably check that we can read this effectively here
   // and return false if not
+
+  Wire.begin();
+
   _flowsensor = new SensirionFlow();
 
   if (_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {

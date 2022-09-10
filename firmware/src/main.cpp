@@ -28,9 +28,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <serial_task.h>
 #include <fault_task.h>
 #include <fanPID_task.h>
-//#include <display_task.h>
-
-#include <DS3502_digital_pot.h>
 
 using namespace OxCore;
 static Core core;
@@ -50,8 +47,6 @@ MachineConfig cogConfig;
 /***********************************/
 
 
-DS3502DigitalPot* ds3502;
-
 
 #define WIPER_VALUE_PIN A0
 
@@ -64,7 +59,8 @@ void setup()
   OxCore::serialBegin(115200UL);
   Debug<const char *>("Starting Ox...\n");
 
-  ds3502 = new DS3502DigitalPot();
+
+
 
 
   if (core.Boot() == false) {
@@ -72,6 +68,23 @@ void setup()
       // TODO: Output error message
       //return EXIT_FAILURE;
       return;
+  }
+
+
+  //  Eventually we will migrate all hardware to the MachineHAL..
+  cogConfig.hal = new MachineHAL();
+  bool initSuccess  = cogConfig.hal->init();
+  if (!initSuccess) {
+    Serial.println("Could not init Hardware Abastraction Layer Properly!");
+    while(1);
+  }
+  Serial.print("FLOW SENSOR SERIAL NUMBER : ");
+  Serial.println(cogConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
+
+  if (cogConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
+    Serial.println("FLOW SENSOR NOT AVIALABLE!");
+    Serial.println("THIS IS A CRITICAL ERROR!");
+    while(1);
   }
 
 
@@ -134,21 +147,6 @@ void setup()
   OxCore::Debug<const char *>("Added tasks\n");
 
 
-  Eventually we will migrate all hardware to the MachineHAL..
-  cogConfig.hal = new MachineHAL();
-  bool initSuccess  = cogConfig.hal->init();
-  if (!initSuccess) {
-    Serial.println("Could not init Hardware Abastraction Layer Properly!");
-    while(1);
-  }
-  Serial.print("FLOW SENSOR SERIAL NUMBER : ");
-  Serial.println(cogConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
-
-  if (cogConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
-    Serial.println("FLOW SENSOR NOT AVIALABLE!");
-    Serial.println("THIS IS A CRITICAL ERROR!");
-    while(1);
-  }
 
   /*********************************************/
 }
