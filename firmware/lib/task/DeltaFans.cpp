@@ -37,11 +37,11 @@
   void tachISR0() {
     tachISR(0);
   };
-  void tachISR1() {     meta_cnt++;
+  void tachISR1() {
     tachISR(1); };
-  void tachISR2() {     meta_cnt++;
+  void tachISR2() {
     tachISR(2); };
-  void tachISR3() {     meta_cnt++;
+  void tachISR3() {
     tachISR(3); };
 
   void refresh_tach_data(uint8_t i) {
@@ -76,8 +76,6 @@ unsigned long DeltaFans::_calcRPM(uint8_t i){
 
 void DeltaFans::printRPMS() {
   Serial.println("RPMS:");
-  Serial.print("META COUNT:");
-  Serial.println(meta_cnt);
   for(uint8_t i = 0; i < 4; i++) {
     long rpm = _calcRPM(i);
     Serial.print("rpm: ");
@@ -94,15 +92,22 @@ void DeltaFans::printRPMS() {
 // is needed for some other purpose.
 void DeltaFans::motorControl(int s)
 {
-  s = map(s, SPEED_MIN, SPEED_MAX, 0, 255);
-  analogWrite(MOTOR_OUT_PIN, s);
+  int q = map(s, SPEED_MIN, SPEED_MAX, 0, 255);
+  Serial.print("Putting out speed to fan control board:");
+  Serial.println(q);
+  analogWrite(MOTOR_OUT_PIN, q);
 }
 
 // m = motor -- 0 - 3
-void DeltaFans::PWMMotorControl(int s, int m)
+void DeltaFans::PWMMotorControl(float s, int m)
 {
-  s = map(s*100, SPEED_MIN, SPEED_MAX, 0, 255);
-  analogWrite(PWM_PIN[m], s);
+  int q = map(s*100, SPEED_MIN, SPEED_MAX, 0, 255);
+
+  Serial.print("XXX s : q");
+  Serial.print(s);
+  Serial.print(" : ");
+  Serial.println(q);
+  analogWrite(PWM_PIN[m], q);
 }
 
 
@@ -118,7 +123,6 @@ void DeltaFans::_init() {
   TACH_PIN[3] = A3;
 
   pinMode(MOTOR_OUT_PIN, OUTPUT);
-  analogWrite(MOTOR_OUT_PIN, 255);
 
   for(int i = 0; i < 4; i++) {
     tach_data_ts[i] = 0;
@@ -140,6 +144,11 @@ void DeltaFans::_init() {
 // At present, we will use the same ratio for all fans;
 // this is an oversimplification
 void DeltaFans::update(float pwm_ratio) {
+
+  motorControl((pwm_ratio == 0.0) ?
+               0 :
+               100);
+
   for(int i = 0; i < 4; i++) {
     _pwm_ratio[i] = pwm_ratio;
     this->PWMMotorControl(_pwm_ratio[i],i);
@@ -151,6 +160,8 @@ void DeltaFans::update(float pwm_ratio) {
 
 #ifdef RIBBONFISH
   if (DEBUG_FAN) {
+    Serial.print("PWM ratio");
+    Serial.println(pwm_ratio);
     printRPMS();
   }
 #endif

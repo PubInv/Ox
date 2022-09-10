@@ -77,6 +77,7 @@ namespace OxApp
         //        _fans[0] = f;
         _fans[0] = DeltaFans("FIRST_FAN",0,RF_FAN,1.0);
         _fans[0]._init();
+        getConfig()->fanPWM = 0.0;
 
         //        _stacks[0] = new Stack("FIRST_STACK",0,RF_STACK,1.0);
 

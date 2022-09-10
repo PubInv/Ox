@@ -129,7 +129,7 @@ void setup()
   OxCore::TaskProperties fanPIDProperties;
   fanPIDProperties.name = "fanPID";
   fanPIDProperties.id = 23;
-  fanPIDProperties.period = 6000;
+  fanPIDProperties.period = 2000;
   fanPIDProperties.priority = OxCore::TaskPriority::High;
   fanPIDProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&fanPIDTask, &fanPIDProperties);

@@ -88,7 +88,7 @@ public:
   void printRPMS();
   void motorControl(int s);
 
-  void PWMMotorControl(int s, int m);
+  void PWMMotorControl(float s, int m);
   void update(float pwm_ratio);
 };
 
