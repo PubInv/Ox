@@ -16,3 +16,31 @@ void outputReport(MachineStatusReport msr) {
         OxCore::Debug<const char *>("Fan Speed    : ");
         OxCore::DebugLn<float>(msr.fan_speed);
 }
+
+bool MachineHAL::init() {
+  // we should probably check that we can read this effectively here
+  // and return false if not
+  _flowsensor = new SensirionFlow();
+
+  if (_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
+    Serial.println("FLOW SENSOR NOT AVIALABLE!");
+    Serial.println("THIS IS A CRITICAL ERROR!");
+    return false;
+  }
+
+  _fans[0] = DeltaFans("FIRST_FAN",0,RF_FAN,1.0);
+  _fans[0]._init();
+
+
+
+  return true;
+}
+
+// updateTheFanSpeed to a percentage of the maximum flow.
+// We may have the ability to specify flow absolutely in the future,
+// but this is genertic.
+void MachineHAL::_updateFanSpeed(float unitInterval) {
+  for (int i = 0; i < NUM_FANS; i++) {
+    _fans[i].update(unitInterval);
+  }
+}

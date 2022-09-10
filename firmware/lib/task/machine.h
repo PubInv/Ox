@@ -1,17 +1,19 @@
 #ifndef MACHINE_H
 #define MACHINE_H
 
-
+// Hardware Abstraction Layer
+#include "SensirionSFM3X00.h"
+#include "DeltaFans.h"
 
 #define HAND_TEST 1
 
 /* Connections:
-RibbonFish
-D2 - the fan
-D3 - the heater
-DAC0 - the stack
-D4 - MAX31850_DATA_PIN
- */
+   RibbonFish
+   D2 - the fan
+   D3 - the heater
+   DAC0 - the stack
+   D4 - MAX31850_DATA_PIN
+*/
 
 #ifdef ARDUINO
 #include <Arduino.h>
@@ -70,6 +72,17 @@ struct MachineStatusReport {
   boolean air_flow_sufficient;
 };
 
+const static int NUM_FANS = 1;
+
+class MachineHAL {
+public:
+  SensirionFlow *_flowsensor;
+  DeltaFans _fans[NUM_FANS];
+  bool init();
+  void _updateFanSpeed(float unitInterval);
+};
+
+
 struct MachineConfig {
   constexpr inline static char const *MachineStateNames[8] = {
     "Off",
@@ -89,10 +102,16 @@ struct MachineConfig {
     "Post Stack"
   };
   MachineState ms;
+  MachineHAL* hal;
+
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float MAXIMUM_STACK_VOLTAGE = 12.0;
 
+  // This is a range from 0.0 to 1.0!
+  // However, when used in the Arduino it has to be mapped
+  // onto a an integer (usuall 0-255) but this should be
+  // the last step.
   float fanPWM = 0.5;
 
   char const* errors[10];
@@ -127,5 +146,7 @@ struct MachineConfig {
 };
 
 void outputReport(MachineStatusReport msr);
+
+
 
 #endif

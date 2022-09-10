@@ -30,6 +30,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <fanPID_task.h>
 //#include <display_task.h>
 
+#include <DS3502_digital_pot.h>
+
 using namespace OxCore;
 static Core core;
 
@@ -47,20 +49,13 @@ OxApp::FanPIDTask fanPIDTask;
 MachineConfig cogConfig;
 /***********************************/
 
-/* HACK: Rob is testing the DS3502 POT Here. */
-#include <DS3502_digital_pot.h>
 
-/* For this example, make the following connections:
-    * DS3502 RH to 5V
-    * DS3502 RL to GND
-    * DS3502 RW to the pin specified by WIPER_VALUE_PIN
-*/
+DS3502DigitalPot* ds3502;
+
 
 #define WIPER_VALUE_PIN A0
 
 #define TEST_PWM DAC0
-
-DS3502DigitalPot* ds3502;
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer
@@ -69,8 +64,8 @@ void setup()
   OxCore::serialBegin(115200UL);
   Debug<const char *>("Starting Ox...\n");
 
-
   ds3502 = new DS3502DigitalPot();
+
 
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
@@ -78,6 +73,8 @@ void setup()
       //return EXIT_FAILURE;
       return;
   }
+
+
 
   //TODO: This needs to be placed inthe task init feature!
   //#if BUILD_ENV_NAME == due_ribbonfish
@@ -136,49 +133,31 @@ void setup()
 
   OxCore::Debug<const char *>("Added tasks\n");
 
+
+  Eventually we will migrate all hardware to the MachineHAL..
+  cogConfig.hal = new MachineHAL();
+  bool initSuccess  = cogConfig.hal->init();
+  if (!initSuccess) {
+    Serial.println("Could not init Hardware Abastraction Layer Properly!");
+    while(1);
+  }
+  Serial.print("FLOW SENSOR SERIAL NUMBER : ");
+  Serial.println(cogConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
+
+  if (cogConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
+    Serial.println("FLOW SENSOR NOT AVIALABLE!");
+    Serial.println("THIS IS A CRITICAL ERROR!");
+    while(1);
+  }
+
   /*********************************************/
 }
 
-float n_ds3502 = 0;
-
-void test_ds3502() {
-
-      OxCore::Debug<const char *>("Found Pot: ");
-      OxCore::DebugLn<int>(ds3502->foundPot);
-
-        //        if (ds3502->foundPot) {
-          OxCore::Debug<const char *>("Settting wiper\n");
-          // This is a HACK to test the DS3502..
-          //          delay(10000);
-          // Count up the Wiper value as a fraction
-
-          OxCore::DebugLn<float>((128 - n_ds3502) / 128.0);
-          //          ds3502->setWiper(127);
-          //          delay(10);
-          //          ds3502->setWiper(0);
-          //          ds3502->setWiper(0);
-          //          delay(10);
-          ds3502->setWiper((128 - n_ds3502) / 128.0);
-
-          analogWrite(TEST_PWM,0);
-          delay(10000);
-          analogWrite(TEST_PWM,127);
-          delay(10000);
-          analogWrite(TEST_PWM,255);
-          n_ds3502 = n_ds3502 + 2.0;
-          n_ds3502 = (((int) n_ds3502) % 128);
-          return;
-          //        }
-}
 #define WIPER_VALUE_PIN A0
 
-#define TEST_DS3502 0
 void loop() {
   OxCore::Debug<const char *>("Loop starting...\n");
 
-  if (TEST_DS3502) {
-    test_ds3502();
-  }
   // Blocking call
   if (core.Run() == false) {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);

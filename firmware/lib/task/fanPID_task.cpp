@@ -21,12 +21,40 @@ using namespace std;
 
 const int DEBUG_PID = 1;
 
+
+
 namespace OxApp
 {
   FanPIDTask::FanPIDTask() {
-    double FKp = 0.005;
+
+    /* Setting the initial parameters is always weird for PID controller..
+Traditionally it is done with a guess and then tuned.
+I prefer to be very clear about the type of the "process variable"
+and the "control variable". In the case of the DeltaFans, we are using
+PWM values (that is, a range from full-off to full-on, which we can
+represent at the interval [0.0...1.0] as the control variable is
+the measured flow in ml per second.
+
+By observation, the range of flow we can acheive is approximately
+500 ml/s (low side) to 2000 ml/s (high side). Sadly these fans are
+not very controllable on the low side. We may be able to get more
+control by turning on only one of our 4 fans; but that is future work.,
+
+This flow will of course be mediated by the airway resistance, and
+can even change dynamically, so a PID controller is reasonable,
+although possibly not needed.
+
+We want our "proportional step" to be the output range divided by
+our difference from our setpoint. The setPoint caculation is in ml/S.
+If we imagine taking a 10th of the total range as an initial step,
+then 200 ml/S should map on to 0.1 in the range.
+Therefore our initial FKp = 0.1 / 200 ml/S = 0.0005.
+Technically the units of this are really V/(ml/S), but
+people rarely think about that when thinking about PID controllers.
+     */
+    double FKp = 0.0005;
     double FKi = 0.0;
-    double FKd = 1.0;
+    double FKd = 0.0;
     // This is actually a slow process...it might be
     // clearer to make this 500 ms, but we will only
     // call the process so often.
@@ -36,7 +64,7 @@ namespace OxApp
     this->pidControllerFlow =
       new PID(&(this->Input_mlps), &(this->fanSpeed_Output),
               &(this->Flow_Setpoint_mlps), FKp, FKi, FKd, DIRECT);
-    this->pidControllerFlow->SetOutputLimits(-100.0, 100.0);
+    this->pidControllerFlow->SetOutputLimits(-1.0, 1.0);
     this->pidControllerFlow->SetSampleTime(SAMPLE_TIME_MS);
     this->pidControllerFlow->SetMode(AUTOMATIC);
   }
@@ -58,26 +86,26 @@ namespace OxApp
 
       MachineState ms = getConfig()->ms;
       if (ms == Off) {
-        getConfig()->fanPWM = 0;
+        getConfig()->fanPWM = 0.0;
         return true;
       } else if (ms == Cooldown) {
-        getConfig()->fanPWM = 100;
+        getConfig()->fanPWM = 1.0;
         return true;
       } else {
         float flow_mlps = getConfig()->TARGET_FLOW_ml_per_S;
 
         this->Flow_Setpoint_mlps = flow_mlps;
+        double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
+        if (DEBUG_PID > 0) {
+          Serial.print("XXXXX Measured Flow:");
+          Serial.println(flow_ml_per_s);
+        }
 
-        // This is currently not available;
-        // I suppose it is acceptable to read it from the
-        // the report...
-
-        // bool flowing = _flowsensor->isAirFlowing();
-        // if (!flowing) {
-        //   OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
-        // }
-        // getConfig()->report.air_flow_sufficient = flowing;
-
+        if (flow_ml_per_s >= 4550.0) {
+          // This is the error condition for this sensor!
+        } else {
+          getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+        }
         float f_mlps = getConfig()->report.flow_ml_per_s;
 
         this->Input_mlps = f_mlps;
@@ -94,12 +122,16 @@ namespace OxApp
 
         double s = this->fanSpeed_Output + this->final_fanSpeed;
 
-        // now we clamp the value to [0.0,1.0]
-        s = min(s, 100.0);
-        s = max(s, 1.0);
+        // now we clamp the value to [0.001,1.0]
+        // We don't let it be a hard 0.0 because that means
+        // turn the whole board off, which is useful for
+        // when in the "off" state!
+        s = min(s, 1.0);
+        s = max(s, 0.01);
         this->final_fanSpeed = s;
 
-        getConfig()->fanPWM = s/ 100.0;
+        getConfig()->fanPWM = s;
+        getConfig()->hal->_updateFanSpeed(getConfig()->fanPWM);
 
         if (DEBUG_PID > 0) {
           OxCore::Debug<const char *>("previous input ");

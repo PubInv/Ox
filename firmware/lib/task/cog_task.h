@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "../collections/array.h"
 #include "heater.h"
 #include "fan.h"
-#include "DeltaFans.h"
+// #include "DeltaFans.h"
 #include "stack.h"
 #include "abstract_ps.h"
 #include "mostplus_flow.h"
@@ -74,7 +74,7 @@ namespace OxApp
 //      Fan _fans[NUM_FANS];
       AbstractPS* _stacks[NUM_STACKS];
       //      MostPlusFlow _flowsensor;
-      SensirionFlow *_flowsensor;
+      //      SensirionFlow *_flowsensor;
     private:
       bool _init() override;
       bool _run() override;

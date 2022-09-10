@@ -21,7 +21,6 @@
 #ifndef DELTAFANS_H
 #define DELTAFANS_H
 
-#include <core.h>
 #ifdef ARDUINO
 #include <Arduino.h>
 #else

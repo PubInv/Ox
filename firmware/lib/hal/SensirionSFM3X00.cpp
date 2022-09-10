@@ -34,9 +34,9 @@ SensirionFlow::SensirionFlow() {
 
   // print various sensor values
   Serial.println();
-  Serial.print("sensor serial number: ");
+  Serial.print("flow sensor serial number: ");
   Serial.println(flowSensor->serialNumber, HEX);
-  Serial.print("sensor article number: ");
+  Serial.print("flow sensor article number: ");
   Serial.println(flowSensor->articleNumber, HEX);
   Serial.println();
   Serial.print("read scale factor: ");
