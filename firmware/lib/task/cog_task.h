@@ -25,7 +25,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "../collections/array.h"
 #include "heater.h"
 #include "fan.h"
-// #include "DeltaFans.h"
 #include "stack.h"
 #include "abstract_ps.h"
 #include "mostplus_flow.h"
@@ -70,7 +69,7 @@ namespace OxApp
 
       Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
-      DeltaFans _fans[NUM_FANS];
+      //      DeltaFans _fans[NUM_FANS];
 //      Fan _fans[NUM_FANS];
       AbstractPS* _stacks[NUM_STACKS];
       //      MostPlusFlow _flowsensor;

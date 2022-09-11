@@ -75,8 +75,6 @@ namespace OxApp
 
         _stacks[0]->init();
 
-
-
 #else
         // Create a one ohm joule heater
         Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
@@ -91,8 +89,6 @@ namespace OxApp
 
     bool CogTask::_run()
     {
-
-
       MachineConfig *cogConfig = getConfig();
       // If we are in the off state there is nothing to do!
       if (cogConfig->ms == OffUserAck) {
@@ -373,7 +369,6 @@ namespace OxApp
     postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
     getConfig()->report.post_heater_C = postHeaterTemp;
     getConfig()->report.post_stack_C = postStackTemp;
-
 
      if (postHeaterTemp < getConfig()->WARMUP_TARGET_C) {
        return Warmup;

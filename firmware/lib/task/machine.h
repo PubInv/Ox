@@ -134,7 +134,7 @@ struct MachineConfig {
   // but to activate the fans we have to make this
   // higher than 500 ml/s, because the fans seem to
   // produce that at idle!
-  float TARGET_FLOW_ml_per_S = 100.0;
+  float TARGET_FLOW_ml_per_S = 1000.0;
 #else
   float COOLDOWN_TARGET_C = 26.0;
   float WARMUP_TARGET_C = 600.0;

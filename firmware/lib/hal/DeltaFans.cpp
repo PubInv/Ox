@@ -26,8 +26,6 @@
   unsigned long volatile tach_data_duration[NUMBER_OF_FANS];
 
 
-const int DEBUG_FAN = 1;
-
 //Calculates the RPM based on the timestamps of the last 2 interrupts. Can be called at any time.
 //namespace tach_data {
 
@@ -94,8 +92,10 @@ void DeltaFans::printRPMS() {
 void DeltaFans::motorControl(int s)
 {
   int q = map(s, SPEED_MIN, SPEED_MAX, 0, 255);
-  Serial.print("Putting out speed to fan control board:");
-  Serial.println(q);
+  if (DEBUG_FAN > 0 ) {
+    Serial.print("Putting out speed to fan control board:");
+    Serial.println(q);
+  }
   analogWrite(MOTOR_OUT_PIN, q);
 }
 
@@ -177,6 +177,6 @@ void DeltaFans::update(float pwm_ratio) {
     Serial.print(num);
     Serial.print(" : ");
     Serial.println(pwm_ratio);
+    printRPMS();
   }
-  printRPMS();
 }

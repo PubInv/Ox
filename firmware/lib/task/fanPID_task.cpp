@@ -19,7 +19,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 using namespace std;
 
-const int DEBUG_PID = 1;
+const int DEBUG_PID = 0;
 
 
 

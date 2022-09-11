@@ -94,6 +94,8 @@ public:
   void getPS_SetCurrent(int addr);
   void getPS_Control(int addr);
 
+
+  void printFullStatus(int addr);
   void updateAmperage(float amperage);
   void updateVoltage(float voltage);
 };

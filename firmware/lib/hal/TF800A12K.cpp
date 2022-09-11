@@ -23,6 +23,8 @@
 #include <core.h>
 
 
+const int DEBUG_SL_PS = 1;
+
 SL_PS::SL_PS() {
 }
 SL_PS::SL_PS(const char * name, uint8_t id) {
@@ -119,13 +121,20 @@ int SL_PS::init() {
     retval = -1;
   }
 
-  if (setPS_Voltage(ADDRESS, 1000)) Serial.println("Set volts to 5.0");
+  if (setPS_Voltage(ADDRESS, 200)) Serial.println("Set volts to 2.0 volts");
   else {
     Serial.println("failed to set volts");
     retval = -1;
   }
 
   if (setPS_Current(ADDRESS, 0)) Serial.println("Set current to 5");
+  else {
+    Serial.println("failed to set current");
+    retval = -1;
+  }
+
+
+  if (setPS_Current(ADDRESS, 100)) Serial.println("Set current to 1 amps");
   else {
     Serial.println("failed to set current");
     retval = -1;
@@ -316,7 +325,17 @@ void SL_PS::getPS_SetCurrent(int addr) {
 void SL_PS::getPS_Control(int addr) {
 }
 
+void SL_PS::printFullStatus(int addr) {
 
+  getPS_OutVoltage(addr);
+  getPS_OutCurrent(addr);
+  Serial.print("SL_PS out voltage: ");
+  Serial.println(out_voltage);
+  Serial.print("SL_PS out current: ");
+  Serial.println(out_current);
+
+
+}
 // TODO: We are not handling the a bad return value well here!
 // A problem setting this value could be an critical error...
 void SL_PS::updateAmperage(float amperage) {
@@ -326,7 +345,16 @@ void SL_PS::updateAmperage(float amperage) {
 
 void SL_PS::updateVoltage(float voltage) {
   uint16_t volts = (uint16_t) voltage * 100;
+
+  if (DEBUG_SL_PS > 0) {
+    Serial.print("Setting SL_PS_Volts: ");
+    Serial.println(volts);
+  }
   int ret_val = setPS_Voltage(this->address, volts);
+  if (DEBUG_SL_PS > 0) {
+    printFullStatus(this->address);
+  }
+
 }
 
 #endif
