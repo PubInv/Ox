@@ -28,8 +28,7 @@ class AbstractPS {
 public:
   const char * name;
   uint8_t id;
-  float _voltage = 0;
-  float _amperage = 0;
+
 public:
   AbstractPS(){};
   AbstractPS(const char * name, uint8_t id){
@@ -38,8 +37,8 @@ public:
   };
   virtual int init() { return -1; };
   virtual ~AbstractPS(){};
-  virtual void updateVoltage(float voltage);
-  virtual void updateAmperage(float amperage);
+  virtual void updateVoltage(float voltage, MachineConfig *config);
+  virtual void updateAmperage(float amperage, MachineConfig *config);
 };
 
 

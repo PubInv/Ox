@@ -67,6 +67,8 @@ struct MachineStatusReport {
   float post_stack_C;
   float heater_voltage;
   float stack_voltage;
+  float stack_amps;
+  float stack_ohms;
   float fan_speed;
   float flow_ml_per_s;
   boolean air_flow_sufficient;
@@ -79,11 +81,15 @@ public:
   SensirionFlow *_flowsensor;
   DeltaFans _fans[NUM_FANS];
   bool init();
-  void _updateFanSpeed(float unitInterval);
+  //  void _updateFanSpeed(float unitInterval);
 };
 
 
-struct MachineConfig {
+class MachineConfig {
+public:
+
+  void _updateFanSpeed(float unitInterval);
+
   constexpr inline static char const *MachineStateNames[8] = {
     "Off",
     "Warmup",
@@ -106,7 +112,8 @@ struct MachineConfig {
 
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
-  float MAXIMUM_STACK_VOLTAGE = 12.0;
+  float MAXIMUM_STACK_VOLTAGE = 5.0;
+  float MAX_STACK_AMPS = 1.0;
 
   // This is a range from 0.0 to 1.0!
   // However, when used in the Arduino it has to be mapped
@@ -123,7 +130,7 @@ struct MachineConfig {
 
   // These values are useful for testing by hand
 #ifdef HAND_TEST
-  float COOLDOWN_TARGET_C = 26.0;
+  float COOLDOWN_TARGET_C = 27.0;
   float WARMUP_TARGET_C = 28.0;
   float MAX_POST_HEATER_C = 30.0;
   float TARGET_STACK_C = 30.0;

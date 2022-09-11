@@ -28,7 +28,7 @@
 #endif
 
 #include <abstract_ps.h>
-
+#include <machine.h>
 
 #define ADDRESS 0x00
 #define MYDELAY 500
@@ -38,6 +38,7 @@
 // an abstract "power supply"
 class SL_PS : public AbstractPS  {
 public:
+  int DEBUG_SL_PS = 1;
   int init(); // return -1 if it failes!
   uint8_t address = ADDRESS;
   char manuf[17]; // INFO 0
@@ -96,8 +97,10 @@ public:
 
 
   void printFullStatus(int addr);
-  void updateAmperage(float amperage);
-  void updateVoltage(float voltage);
+  //  void updateAmperage(float amperage);
+  void updateAmperage(float amperage, MachineConfig *config);
+  //  void updateVoltage(float voltage);
+  void updateVoltage(float voltage, MachineConfig *config);
 };
 
 #endif

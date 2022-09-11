@@ -7,12 +7,20 @@
 void outputReport(MachineStatusReport msr) {
         OxCore::Debug<const char *>("Post Heater C: ");
         OxCore::DebugLn<float>(msr.post_heater_C);
-        OxCore::Debug<const char *>("Post Stack  C: ");
-        OxCore::DebugLn<float>(msr.post_stack_C);
         OxCore::Debug<const char *>("Heater      V: ");
         OxCore::DebugLn<float>(msr.heater_voltage);
-        OxCore::Debug<const char *>("Stack       V: ");
+        OxCore::Debug<const char *>("Post Stack  C: ");
+        OxCore::DebugLn<float>(msr.post_stack_C);
+        OxCore::Debug<const char *>("Stack volts V: ");
         OxCore::DebugLn<float>(msr.stack_voltage);
+        OxCore::Debug<const char *>("Stack amps  A: ");
+        OxCore::DebugLn<float>(msr.stack_amps);
+        OxCore::Debug<const char *>("Stack ohms  O: ");
+        if (msr.stack_ohms < 0.0) {
+          OxCore::DebugLn<const char*>(" N/A");
+        } else {
+          OxCore::DebugLn<float>(msr.stack_ohms);
+        }
         OxCore::Debug<const char *>("Flow (ml / s): ");
         OxCore::DebugLn<float>(msr.flow_ml_per_s);
         OxCore::Debug<const char *>("Fan Speed    : ");
@@ -44,8 +52,8 @@ bool MachineHAL::init() {
 // updateTheFanSpeed to a percentage of the maximum flow.
 // We may have the ability to specify flow absolutely in the future,
 // but this is genertic.
-void MachineHAL::_updateFanSpeed(float unitInterval) {
+void MachineConfig::_updateFanSpeed(float unitInterval) {
   for (int i = 0; i < NUM_FANS; i++) {
-    _fans[i].update(unitInterval);
+    hal->_fans[i].update(unitInterval);
   }
 }

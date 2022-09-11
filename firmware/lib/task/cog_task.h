@@ -67,6 +67,8 @@ namespace OxApp
       const static int NUM_STACKS = 1;
 #endif
 
+      void updateTemperatures();
+
       Temperature::AbstractTemperature* _temperatureSensors;
       Heater _heaters[NUM_HEATERS];
       //      DeltaFans _fans[NUM_FANS];

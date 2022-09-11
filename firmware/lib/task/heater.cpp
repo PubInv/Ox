@@ -16,7 +16,7 @@
 
 #include "heater.h"
 
-#define DEBUG_LEVEL 0
+#define DEBUG_LEVEL 1
 
 namespace OxApp {
 
@@ -33,7 +33,7 @@ namespace OxApp {
           OxCore::Debug<const char *>(" Voltage: ");
         }
 
-        if (voltage > 6.0) {
+        if (_voltage > 6.0) {
           digitalWrite(this->pin,HIGH);
           if (DEBUG_LEVEL > 0) {
             OxCore::DebugLn<float>(12);

@@ -43,11 +43,10 @@
       this->name = name;
       this->id = id;
       this->pin = pin;
-      this->_voltage = voltage;
     };
     ~Stack(){};
-    void updateVoltage(float voltage) override;
-    void updateAmperage(float amperage) override;
+    void updateVoltage(float voltage, MachineConfig *config) override;
+    void updateAmperage(float amperage, MachineConfig *config) override;
   };
 
 

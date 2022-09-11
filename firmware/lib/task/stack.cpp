@@ -58,10 +58,10 @@ static int DROK_PWM_from_voltage(float o_voltage) {
   return i_digital;
 
 }
-void Stack::updateAmperage(float amperage) {
+void Stack::updateAmperage(float amperage, MachineConfig *config) {
 
 }
-void Stack::updateVoltage(float voltage) {
+void Stack::updateVoltage(float voltage, MachineConfig *config) {
   // TODO: in general this is a little complicated
   // and depends on the power supply. In this case,
   // at the moment, we are using DROK power supply

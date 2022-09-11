@@ -23,7 +23,9 @@
 #include <core.h>
 
 
-const int DEBUG_SL_PS = 1;
+
+
+
 
 SL_PS::SL_PS() {
 }
@@ -39,12 +41,13 @@ int SL_PS::init() {
 
   Serial1.begin(4800);
   // This would be better done as an error message than a hard loop...
-  delay(500);
-  if (!Serial1) {
-    Serial.print("Could not create Serial1 connection!");
-    return -1;
-  }
+  //  delay(500);
+  //  if (!Serial1) {
+  //    Serial.print("Could not create Serial1 connection!");
+  //    return -1;
+  //  }
   while (!Serial1);
+  if (setPS_OnOff(ADDRESS, "OFF")) Serial.println("Turned it OFF!");
 
   getPS_Manuf(ADDRESS);
   Serial.print("Manuf: ");
@@ -115,26 +118,20 @@ int SL_PS::init() {
 //  snprintf(packetBuffer, sizeof packetBuffer, "{ \"Manufacturer\": \"%s\", \"Model\": \"%s\", \"VoltString\": \"%s\", \"Revision\": \"%s\", \"Serial\": \"%s\", \"VoltageRating\": %d, \"CurrentRating\": %d, \"MaxVoltage\": %d, \"MaxCurrent\": %d}", manuf, model, voltage_string, revision, serial, rate_voltage, rate_current, max_voltage, max_current);
 //  sendMsg(packetBuffer);
 
+  // Note! We want to turn off the machine as quickly as possible on startup!
   if (setPS_OnOff(ADDRESS, "ON")) Serial.println("Turned it on");
   else {
     Serial.println("failed to turn it on");
     retval = -1;
   }
 
-  if (setPS_Voltage(ADDRESS, 200)) Serial.println("Set volts to 2.0 volts");
+  if (setPS_Voltage(ADDRESS, 0)) Serial.println("Set volts to 0.0 volts");
   else {
     Serial.println("failed to set volts");
     retval = -1;
   }
 
-  if (setPS_Current(ADDRESS, 0)) Serial.println("Set current to 5");
-  else {
-    Serial.println("failed to set current");
-    retval = -1;
-  }
-
-
-  if (setPS_Current(ADDRESS, 100)) Serial.println("Set current to 1 amps");
+  if (setPS_Current(ADDRESS, 0)) Serial.println("Set current to 0.0 amps");
   else {
     Serial.println("failed to set current");
     retval = -1;
@@ -327,7 +324,6 @@ void SL_PS::getPS_Control(int addr) {
 
 void SL_PS::printFullStatus(int addr) {
 
-  getPS_OutVoltage(addr);
   getPS_OutCurrent(addr);
   Serial.print("SL_PS out voltage: ");
   Serial.println(out_voltage);
@@ -338,12 +334,29 @@ void SL_PS::printFullStatus(int addr) {
 }
 // TODO: We are not handling the a bad return value well here!
 // A problem setting this value could be an critical error...
-void SL_PS::updateAmperage(float amperage) {
+void SL_PS::updateAmperage(float amperage, MachineConfig *config) {
+  MachineStatusReport *msr = &config->report;
   uint16_t amps = (uint16_t) amperage * 100;
   int ret_val = setPS_Current(this->address, amps);
+  if (!ret_val) {
+    Serial.println("FAILED TO SET VOLTAGE!");
+  }
+  // I don't like to use delay but I think some time is needed here...
+  delay(10);
+
+  getPS_OutVoltage(this->address);
+  getPS_OutCurrent(this->address);
+  msr->stack_voltage = out_voltage / 100.0;
+  msr->stack_amps = out_current / 100.0;
+  msr->stack_ohms = msr->stack_voltage/ msr->stack_amps;
+  if (DEBUG_SL_PS > 0) {
+    printFullStatus(this->address);
+  }
 }
 
-void SL_PS::updateVoltage(float voltage) {
+void SL_PS::updateVoltage(float voltage, MachineConfig *config) {
+
+  MachineStatusReport *msr = &config->report;
   uint16_t volts = (uint16_t) voltage * 100;
 
   if (DEBUG_SL_PS > 0) {
@@ -351,6 +364,23 @@ void SL_PS::updateVoltage(float voltage) {
     Serial.println(volts);
   }
   int ret_val = setPS_Voltage(this->address, volts);
+  if (!ret_val) {
+    Serial.println("FAILED TO SET VOLTAGE!");
+  }
+
+
+  // I don't like to use delay but I think some time is needed here...
+  delay(10);
+
+  getPS_OutVoltage(this->address);
+  getPS_OutCurrent(this->address);
+  msr->stack_voltage = out_voltage / 100.0;
+  msr->stack_amps = out_current / 100.0;
+  if (msr->stack_amps <= 0.0) {
+    msr->stack_ohms = -999.0;
+  } else {
+    msr->stack_ohms = msr->stack_voltage/ msr->stack_amps;
+  }
   if (DEBUG_SL_PS > 0) {
     printFullStatus(this->address);
   }
