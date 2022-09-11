@@ -142,10 +142,15 @@ either because the problem as been removed or for some other reason.
 Addtionally, the system supports "full commands", that look like this:
 
 > { "com": "W", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+
 > { "com": "C", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+
 > { "com": "E", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+
 > { "com": "A", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+
 > { "com": "I", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
+
 > { "com": "O", "par": "M", "int": "s", "mod": "U", "val" : 0.0 }
 
 In fact, each "one character" command is a short hand for these commands.
@@ -156,8 +161,11 @@ The three most important parameters are:
 2. C : Current (in milliamps) going into the stack
 3. F : Fan speed in RPM (we expect this to change to flow rate in SLM)
 > { "com": "P", "par": "T", "int": "T", "mod": "U", "val" : 35 }
+
 > { "com": "P", "par": "C", "int": "T", "mod": "U", "val" : 500 }
+
 > { "com": "P", "par": "F", "int": "T", "mod": "U", "val" : 2000 }
+
 These three commands set the:
 1. Temperature into the stack to 35C
 2. Set the Target current into the stack to 500 milliamps
