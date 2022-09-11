@@ -112,8 +112,8 @@ public:
 
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
-  float MAXIMUM_STACK_VOLTAGE = 5.0;
-  float MAX_STACK_AMPS = 1.0;
+  float MAXIMUM_STACK_VOLTAGE = 8.0;
+  float MAXIMUM_STACK_AMPS = 1.0;
 
   // This is a range from 0.0 to 1.0!
   // However, when used in the Arduino it has to be mapped
@@ -134,7 +134,7 @@ public:
   float WARMUP_TARGET_C = 28.0;
   float MAX_POST_HEATER_C = 30.0;
   float TARGET_STACK_C = 30.0;
-  float MAX_POST_STACK_C = 33.0;
+  float MAX_POST_STACK_C = 40.0;
   float TARGET_STACK_CURRENT_mA = 1.0;
 
   // I'm not sure what the real value here should be!

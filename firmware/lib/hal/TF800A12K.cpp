@@ -336,7 +336,10 @@ void SL_PS::printFullStatus(int addr) {
 // A problem setting this value could be an critical error...
 void SL_PS::updateAmperage(float amperage, MachineConfig *config) {
   MachineStatusReport *msr = &config->report;
-  uint16_t amps = (uint16_t) amperage * 100;
+  uint16_t amps = (uint16_t) (amperage * 100.0);
+
+  Serial.print("XXX UPDDATE TO amps (* 100) : ");
+  Serial.println(amps);
   int ret_val = setPS_Current(this->address, amps);
   if (!ret_val) {
     Serial.println("FAILED TO SET VOLTAGE!");
@@ -357,7 +360,7 @@ void SL_PS::updateAmperage(float amperage, MachineConfig *config) {
 void SL_PS::updateVoltage(float voltage, MachineConfig *config) {
 
   MachineStatusReport *msr = &config->report;
-  uint16_t volts = (uint16_t) voltage * 100;
+  uint16_t volts = (uint16_t) (voltage * 100.0);
 
   if (DEBUG_SL_PS > 0) {
     Serial.print("Setting SL_PS_Volts: ");

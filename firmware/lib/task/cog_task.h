@@ -96,7 +96,7 @@ namespace OxApp
 
       void _updateFanSpeed(float percentage);
       void _updateStackVoltage(float voltage);
-
+      void _updateStackAmperage(float amperage);
       // We will use a model for mocking, which may grow into
       // something...
       Model model;

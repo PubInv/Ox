@@ -85,7 +85,7 @@ namespace OxApp
         // to think of the amperage consumed by the stack because that
         // is proportional (constant unkown) to the number of O2 ions
         // produced!
-        _stacks[0]->updateAmperage(getConfig()->MAX_STACK_AMPS,getConfig());
+        _updateStackAmperage(getConfig()->TARGET_STACK_CURRENT_mA/1000.0);
 
 #else
         // Create a one ohm joule heater
@@ -244,6 +244,7 @@ namespace OxApp
     }
 
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
+    _updateStackAmperage(getConfig()->TARGET_STACK_CURRENT_mA/1000.0);
     //    getConfig()->report.stack_voltage = getConfig()->MAXIMUM_STACK_VOLTAGE;
     return new_ms;
   }
@@ -263,7 +264,6 @@ namespace OxApp
         getConfig()->report.post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
     } else {
-      Serial.println("XXX Seting Power Components Voltage to 0");
       _updatePowerComponentsVoltage(0.0);
       _updateStackVoltage(0.0);
     }
@@ -306,8 +306,6 @@ namespace OxApp
   // maximum cooldown when we don't have to compute based on temperature
    void CogTask::_updatePowerComponentsVoltage(float voltage) {
         for (int i = 0; i < NUM_HEATERS; i++) {
-          Serial.print("XXX Setting Heater Voltage to : ");
-          Serial.println(voltage);
         _heaters[i].update(voltage);
         getConfig()->report.heater_voltage = voltage;
         }
@@ -318,6 +316,12 @@ namespace OxApp
    void CogTask::_updateStackVoltage(float voltage) {
         for (int i = 0; i < NUM_STACKS; i++) {
           _stacks[i]->updateVoltage(voltage,getConfig());
+        }
+    }
+
+   void CogTask::_updateStackAmperage(float amperage) {
+        for (int i = 0; i < NUM_STACKS; i++) {
+          _stacks[i]->updateAmperage(amperage,getConfig());
         }
     }
 
@@ -356,6 +360,11 @@ namespace OxApp
        }
        _updateStackVoltage(voltage);
        getConfig()->report.stack_voltage = voltage;
+
+       Serial.print(" YYY  v : ");
+       float v = getConfig()->TARGET_STACK_CURRENT_mA/1000.0;
+       Serial.println(v);
+       _updateStackAmperage(v);
      }
 
      if (getConfig()->report.post_heater_C < getConfig()->WARMUP_TARGET_C) {
@@ -405,6 +414,7 @@ namespace OxApp
 
         }
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
+    _updateStackAmperage(getConfig()->TARGET_STACK_CURRENT_mA/1000.0);
     OxCore::Debug<const char *>("Checking Voltage Set AAA ");
         OxCore::DebugLn<float>(_heaters[0]._voltage);
         return new_ms;

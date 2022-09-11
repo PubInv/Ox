@@ -131,7 +131,7 @@ void render_set_command_raw(SetCommand* m) {
               } else {
                 int new_current_mA = sc.val;
                 // now a little sanity check... We should probably regularize these
-                if (new_current_mA < 0 || new_current_mA > 40000) {
+                if (new_current_mA < 0 || new_current_mA > getConfig()->MAXIMUM_STACK_AMPS*1000.0) {
                   Debug<const char *>("Amperage out of range!");
                 } else {
                   cogConfig->TARGET_STACK_CURRENT_mA = new_current_mA;
