@@ -20,7 +20,6 @@ The Public Invention OxyCon aims to meet or exceed the WHO specification for oxy
 1. Easy to transport.
 1. Sound level less than 40dB at 1m (WHO suggests 60dB).
 1. Battery backup power supply for 20 minutes.
-1.
 #### 1.2 Performance
 1. Flow rate shall be +- 5% of the target value.
 1. Pressure shall be +- 5% of the target value.
@@ -105,4 +104,4 @@ Libraries
 
 
 To organise:
-https://www.who.int/medical_devices/management_use/mde_tech_spec/en/
+[https://www.who.int/publications/i/item/9789241509886](https://www.who.int/publications/i/item/9789241509886)
