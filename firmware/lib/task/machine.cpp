@@ -23,7 +23,7 @@ void outputReport(MachineStatusReport msr) {
         }
         OxCore::Debug<const char *>("Flow (ml / s): ");
         OxCore::DebugLn<float>(msr.flow_ml_per_s);
-        OxCore::Debug<const char *>("Fan Speed    : ");
+        OxCore::Debug<const char *>("Fan Speed (non-lin) [0.0 .. 0.1]: ");
         OxCore::DebugLn<float>(msr.fan_speed);
 }
 

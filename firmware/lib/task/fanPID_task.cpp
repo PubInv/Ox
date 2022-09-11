@@ -132,7 +132,7 @@ people rarely think about that when thinking about PID controllers.
 
         getConfig()->fanPWM = s;
         getConfig()->_updateFanSpeed(getConfig()->fanPWM);
-        getConfig()->fan_speed = s;
+        getConfig()->report.fan_speed = s;
 
         if (DEBUG_PID > 0) {
           OxCore::Debug<const char *>("previous input ");
