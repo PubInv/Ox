@@ -5,6 +5,7 @@
 
 
 void outputReport(MachineStatusReport msr) {
+          OxCore::DebugLn<const char *>("");
         OxCore::Debug<const char *>("Post Heater C: ");
         OxCore::DebugLn<float>(msr.post_heater_C);
         OxCore::Debug<const char *>("Heater      V: ");
@@ -23,7 +24,7 @@ void outputReport(MachineStatusReport msr) {
         }
         OxCore::Debug<const char *>("Flow (ml / s): ");
         OxCore::DebugLn<float>(msr.flow_ml_per_s);
-        OxCore::Debug<const char *>("Fan Speed (non-lin) [0.0 .. 0.1]: ");
+        OxCore::Debug<const char *>("Fan Speed (non-lin) [0.0 .. 1.0]: ");
         OxCore::DebugLn<float>(msr.fan_speed);
 }
 

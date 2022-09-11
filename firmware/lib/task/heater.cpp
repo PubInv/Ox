@@ -16,7 +16,7 @@
 
 #include "heater.h"
 
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 
 namespace OxApp {
 

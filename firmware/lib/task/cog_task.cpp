@@ -21,7 +21,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 using namespace std;
 
 
-#define DEBUG_LEVEL 1
+#define DEBUG_LEVEL 0
 
 namespace OxApp
 {
@@ -131,7 +131,9 @@ namespace OxApp
         OxCore::DebugLn<const char *>("");
       }
 
-      OxCore::Debug<const char *>("FLOW SLM: ");
+      if (DEBUG_LEVEL > 0) {
+        OxCore::Debug<const char *>("FLOW SLM: ");
+      }
 
       float flow_slm = getConfig()->hal->_flowsensor->flowInSLM();
       OxCore::DebugLn<float>(flow_slm);
@@ -456,10 +458,12 @@ namespace OxApp
       _temperatureSensors[0].ReadTemperature();
       for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
         float temperature = _temperatureSensors[0].GetTemperature(i);
-        OxCore::Debug<const char *>("Temp : ");
-        OxCore::Debug<const char *>(getConfig()->TempLocationNames[i]);
-        OxCore::Debug<const char *>(": ");
-        OxCore::DebugLn<float>(temperature);
+        if (DEBUG_LEVEL > 0) {
+          OxCore::Debug<const char *>("Temp : ");
+          OxCore::Debug<const char *>(getConfig()->TempLocationNames[i]);
+          OxCore::Debug<const char *>(": ");
+          OxCore::DebugLn<float>(temperature);
+        }
       }
 #else
       OxCore::Debug<const char *>("DDD: ");

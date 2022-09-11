@@ -19,7 +19,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 using namespace std;
 
-const int DEBUG_PID = 0;
+
 
 
 
@@ -97,7 +97,7 @@ people rarely think about that when thinking about PID controllers.
         this->Flow_Setpoint_mlps = flow_mlps;
         double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
         if (DEBUG_PID > 0) {
-          Serial.print("XXXXX Measured Flow:");
+          Serial.print("Debug Measured Flow:");
           Serial.println(flow_ml_per_s);
         }
 

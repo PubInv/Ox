@@ -39,7 +39,10 @@ namespace OxApp
     public:
       FanPIDTask();
       PID *pidControllerFlow;
+      int DEBUG_PID = 0;
+
       // These are on a scale of 100
+
       double fanSpeed_Output = 0.0;
       double final_fanSpeed = 0.0;
       double Flow_Setpoint_mlps = 0.0;

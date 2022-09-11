@@ -338,8 +338,6 @@ void SL_PS::updateAmperage(float amperage, MachineConfig *config) {
   MachineStatusReport *msr = &config->report;
   uint16_t amps = (uint16_t) (amperage * 100.0);
 
-  Serial.print("XXX UPDDATE TO amps (* 100) : ");
-  Serial.println(amps);
   int ret_val = setPS_Current(this->address, amps);
   if (!ret_val) {
     Serial.println("FAILED TO SET VOLTAGE!");
