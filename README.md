@@ -15,6 +15,8 @@ a superloop architecutre, and a hardware abstraction layer.
 This particular project of NASA will improve life support technology in space,
 but may eventually greatly improve global health.
 
+An unlisted [YouTube video](https://youtu.be/1nq-Mw7jZ5A) has been uploaded that shows this work in progress as of September, 2022.
+
 ## How to run
 
 At present, this code does little (for the NASA COG project). We intend
