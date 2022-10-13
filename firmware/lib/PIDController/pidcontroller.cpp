@@ -32,7 +32,7 @@ namespace PIDController
     int maxpres = 25;
     int onT[2] = {int(valveArray[0].stop - valveArray[0].start), int(valveArray[1].stop - valveArray[1].start)};
     int offT[2] = {int(8000 - (valveArray[0].stop - valveArray[0].start)), int(8000 - (valveArray[1].stop - valveArray[1].start))};
-    float integral;
+    float integral= 0;
     float deriv;
     float prop;
     PIOC_MockSimulation::MockSim m;
@@ -197,7 +197,7 @@ namespace PIDController
             {
                 prop = -(*(err + i));                         //proportional error
                 deriv = -(*(err + i) - *(err + (i - 1))) / t; //derivative error
-                integral = -(*(err + i) * t);                 //integral error
+                integral += -(*(err + i) * t);                 //integral error
                 sum = (c.kd * deriv + c.kp * prop + c.ki * integral);
             }
 
@@ -205,7 +205,7 @@ namespace PIDController
             {
                 prop = (*(err + i));                         //proportional error
                 deriv = (*(err + i) - *(err + (i - 1))) / t; //derivative error
-                integral = (*(err + i) * t);                 //integral error
+                integral += (*(err + i) * t);                 //integral error
                 sum = (c.kd * deriv + c.kp * prop + c.ki * integral);
             }
         }
