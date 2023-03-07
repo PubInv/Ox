@@ -31,7 +31,7 @@
 
   void tachISR(uint8_t i) {
     tach_data_cnt[i]++;
-    refresh_tach_data(i);
+    //    refresh_tach_data(i);
   }
   void tachISR0() {
     tachISR(0);
@@ -60,13 +60,13 @@ unsigned long DeltaFans::_calcRPM(uint8_t i){
   refresh_tach_data(i);
   if (DEBUG_FAN > 1) {
     Serial.print("CALC: " );
-    Serial.print(i);
-    Serial.print(tach_data_ocnt[i]);
+    Serial.println(i);
+    Serial.println(tach_data_ocnt[i]);
     Serial.println(tach_data_duration[i]);
   }
   if (tach_data_duration[i] != 0) {
     // I think these are 4-pole fans
-    return (long) (60000.0 * ((float) tach_data_ocnt[i] * 4.0) / ((float) tach_data_duration[i] ));
+    return (long) (60000.0 * ((float) tach_data_ocnt[i] / 2.0) / ((float) tach_data_duration[i] ));
   } else {
     return 0;
   }
@@ -84,7 +84,8 @@ void DeltaFans::printRPMS() {
   }
 }
 
-// Note: I don't believe this should ever be used.
+// Note: I don't believe this should ever be used
+// other than to completely turn off the motors.
 // Using less than full power for these Delta fans
 // prevents the PWM signal from working properly.
 // Nevertheless I'm leaving it in place in case it
@@ -114,6 +115,7 @@ void DeltaFans::PWMMotorControl(float s, int m)
 }
 
 
+// This would be clearer in the the .h!!
 void DeltaFans::_init() {
 
   PWM_PIN[0] = 9;

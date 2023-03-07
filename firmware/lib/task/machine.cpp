@@ -43,9 +43,14 @@ bool MachineHAL::init() {
   }
 
   _fans[0] = DeltaFans("FIRST_FAN",0,RF_FAN,1.0);
+
+
   _fans[0]._init();
-
-
+#ifdef TEST_FANS_ONLY
+  _fans[0].DEBUG_FAN = 1;
+#else
+  _fans[0].DEBUG_FAN = 0;
+#endif
 
   return true;
 }

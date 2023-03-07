@@ -26,6 +26,12 @@
 // If I separated these fans (I would have to desolder them).
 // This would let us get down to 250 ml / s.
 
+// Note: These fans produce a tach signal which is a PULL DOWN
+// of about 500 Hz maximum. According to the documentation,
+// there are 2 falling edges per one rotation?
+// These are 4 pole fans.
+
+
 
 #ifndef DELTAFANS_H
 #define DELTAFANS_H

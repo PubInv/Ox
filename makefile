@@ -61,10 +61,6 @@ pio-run-due:
 	&& pio run -e due -t upload \
 	&& pio device monitor
 
-pio-run-due_ribbonfish:
-	cd firmware \
-	&& pio run -e due_ribbonfish -t upload \
-	&& pio device monitor
 
 pio-run-native:
 	cd firmware \
@@ -75,3 +71,9 @@ pio-run-native:
 pio-clear-cache:
 	cd firmware \
 	&& rm -rf .pio
+
+
+pio-run-due_ribbonfish:
+	cd firmware \
+	&& pio run -e due_ribbonfish -t upload \
+	&& pio device monitor

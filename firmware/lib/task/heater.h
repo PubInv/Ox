@@ -13,6 +13,10 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+// This code started out as a DC voltage controlled heater.
+// It now represents a 110VAC heater that is either on or off.
+// It uses an GGLabsSSR1
+
 #ifndef HEATER_H
 #define HEATER_H
 
@@ -26,6 +30,7 @@
 
 namespace OxApp {
 
+
   class Heater {
   public:
     const char * name;
@@ -36,7 +41,7 @@ namespace OxApp {
     float _resistance = 2.0;
     // The instantaneous state of an ideal Joule heater is described
     // by only voltage and resistance. Wattage = V^2/R.
-    float _voltage = 5.0;
+    float _voltage = 110.0;
     bool isOn;
   public:
     Heater(){};

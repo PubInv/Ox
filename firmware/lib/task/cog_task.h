@@ -36,12 +36,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #ifndef RIBBONFISH
 #include <mock_temperature_sensor.h>
 #else
+#include "GGLabsSSR1.h"
 #ifdef USE_MAX31850_THERMOCOUPLES
 #include <MAX31850.h>
 #else
 #include <DS18B20_temperature.h>
 #endif
 #endif
+
 
 
 #include "model.h"
@@ -70,7 +72,9 @@ namespace OxApp
       void updateTemperatures();
 
       Temperature::AbstractTemperature* _temperatureSensors;
-      Heater _heaters[NUM_HEATERS];
+      // On March 7, Rob attempts to switch from a DC heater to an AC heter
+      //      Heater _heaters[NUM_HEATERS];
+      GGLabsSSR1 _ac_heaters[NUM_HEATERS];
       //      DeltaFans _fans[NUM_FANS];
 //      Fan _fans[NUM_FANS];
       AbstractPS* _stacks[NUM_STACKS];
@@ -100,7 +104,12 @@ namespace OxApp
       // We will use a model for mocking, which may grow into
       // something...
       Model model;
+
+      // We have some mock heaters for simulation, but
+      // we don't sue them in the Ribbon Fish configuration
+#ifndef RIBBONFISH
       void RunForward(float t,Model& m);
+#endif
     };
 }
 

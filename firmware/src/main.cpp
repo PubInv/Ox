@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Robert Read, Ben Coombs.
+/* Copyright (C) 2023 Robert Read, Ben Coombs.
 
 This program includes free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -28,6 +28,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <serial_task.h>
 #include <fault_task.h>
 #include <fanPID_task.h>
+#ifdef TEST_FANS_ONLY
+#include <fanTEST_task.h>
+#endif
 
 using namespace OxCore;
 static Core core;
@@ -39,6 +42,9 @@ OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 OxApp::FaultTask faultTask;
 OxApp::FanPIDTask fanPIDTask;
+#ifdef TEST_FANS_ONLY
+OxApp::FanTESTTask fanTESTTask;
+#endif
 
 // OxApp::SensorReadTask sensorTask;
 #include <machine.h>
@@ -76,7 +82,7 @@ void setup()
   bool initSuccess  = cogConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
-    while(1);
+    //    while(1);
   }
   Serial.print("FLOW SENSOR SERIAL NUMBER : ");
   Serial.println(cogConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
@@ -84,7 +90,7 @@ void setup()
   if (cogConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
     Serial.println("FLOW SENSOR NOT AVIALABLE!");
     Serial.println("THIS IS A CRITICAL ERROR!");
-    while(1);
+    //    while(1);
   }
 
 
@@ -109,6 +115,7 @@ void setup()
 
   /***** Configure and add your tasks here *****/
 
+#ifndef TEST_FANS_ONLY
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 20;
@@ -143,10 +150,17 @@ void setup()
   fanPIDProperties.priority = OxCore::TaskPriority::High;
   fanPIDProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&fanPIDTask, &fanPIDProperties);
+#else
+  OxCore::TaskProperties fanTESTProperties;
+  fanTESTProperties.name = "fanTEST";
+  fanTESTProperties.id = 24;
+  fanTESTProperties.period = 10000;
+  fanTESTProperties.priority = OxCore::TaskPriority::High;
+  fanTESTProperties.state_and_config = (void *) &cogConfig;
+  core.AddTask(&fanTESTTask, &fanTESTProperties);
+#endif
 
   OxCore::Debug<const char *>("Added tasks\n");
-
-
 
   /*********************************************/
 }

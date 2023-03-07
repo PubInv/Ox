@@ -36,6 +36,8 @@ namespace OxApp {
 
   class Fan {
   public:
+    // By making this a member, we allow it to be configured at runtime
+    int DEBUG_FAN = 0; // TODO: change to lower case, this is no longer a pound define...
     const char * name;
     uint8_t id;
     uint8_t pin;

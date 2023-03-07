@@ -67,8 +67,8 @@ namespace OxApp
 #ifdef RIBBONFISH
         // Our pre-heater measured 5.8 ohms
         // Our main heater measured 5.6 ohms
-        Heater v1("PRIMARY_HEATER", 1, RF_HEATER, 0, 5.8);
-        _heaters[0] = v1;
+        //        Heater v1("PRIMARY_HEATER", 1, RF_HEATER, 0, 5.8);
+        //        _heaters[0] = v1;
         getConfig()->fanPWM = 0.0;
 
         _stacks[0] = new SL_PS("FIRST_STACK",0);
@@ -308,7 +308,11 @@ namespace OxApp
   // maximum cooldown when we don't have to compute based on temperature
    void CogTask::_updatePowerComponentsVoltage(float voltage) {
         for (int i = 0; i < NUM_HEATERS; i++) {
-        _heaters[i].update(voltage);
+          //        _heaters[i].update(voltage);
+          // We have a two-channel AC heater, we will use both
+          // for now
+          _ac_heaters[i].setHeater(0,(voltage > 0.0));
+          _ac_heaters[i].setHeater(1,(voltage > 0.0));
         getConfig()->report.heater_voltage = voltage;
         }
     }
@@ -423,7 +427,9 @@ namespace OxApp
     }
 #endif
 
+#ifndef RIBBONFISH
   void CogTask::RunForward(float t,Model& m) {
+
     // This math only works for 1 second, I think
     float watts = pow(_heaters[0]._voltage,2) / _heaters[0]._resistance;
     float degrees_delta = watts / m.watts_per_degree;
@@ -433,6 +439,7 @@ namespace OxApp
     // the temperature at the output
     m.locations[1].temp_C = m.locations[0].temp_C + degrees_delta;
   }
+#endif
 
     void CogTask::_configTemperatureSensors() {
         OxCore::Debug<const char *>("_configPressureSensors\n");
