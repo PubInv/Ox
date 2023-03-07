@@ -1,6 +1,11 @@
 # NASA-COG
 
+## Final Report
+
+The final report delivered to NASA for this project can be [read here](https://drive.google.com/file/d/1jfJcSLfsybuC49I7llPhfTNI8ucRUW3h/view?usp=sharing).
+
 ## Introduction
+
 
 This is a repo for a control system made for NASA to drive a Ceramic Oxygen Generation
 technology they have developed. It was forked from ["The Ox"]() project of Public Invention run by Mr. Ben Coombs, which was in turn a fork of the VentOS project of Helpful Engineering let my Ben Coombs, Dr. Erich Schulz, and Robert L. Read.
@@ -14,6 +19,8 @@ a superloop architecutre, and a hardware abstraction layer.
 
 This particular project of NASA will improve life support technology in space,
 but may eventually greatly improve global health.
+
+An unlisted [YouTube video](https://youtu.be/1nq-Mw7jZ5A) has been uploaded that shows this work in progress as of September, 2022.
 
 ## How to run
 
