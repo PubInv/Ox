@@ -65,7 +65,13 @@ namespace OxApp
 
 
 #ifdef RIBBONFISH
-        // Our pre-heater measured 5.8 ohms
+        for(int i = 0; i < NUM_HEATERS; i++) {
+          _ac_heaters[i].setHeater(0,LOW);
+          _ac_heaters[i].setHeater(1,LOW);
+        }
+
+
+          // Our pre-heater measured 5.8 ohms
         // Our main heater measured 5.6 ohms
         //        Heater v1("PRIMARY_HEATER", 1, RF_HEATER, 0, 5.8);
         //        _heaters[0] = v1;

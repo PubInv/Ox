@@ -106,8 +106,6 @@ void setup()
       pinMode(RF_FAN, OUTPUT);
       pinMode(RF_HEATER, OUTPUT);
       pinMode(RF_STACK, OUTPUT);
-      //      pinMode(RF_FAN_TACH,INPUT_PULLUP);
-      //      attachInterrupt(digitalPinToInterrupt(RF_FAN_TACH),OxApp::tachISR,FALLING);
 #endif
 
       // Now we will set the machine state to "Off"
