@@ -7,6 +7,20 @@ Developed in FreeCAD
 ## First Front Panel Fabrication Notes
 Fabrication drawing for front panel of 20230324
 ![image](https://user-images.githubusercontent.com/5836181/227780360-d3cf2ff4-516a-4927-8b98-6c12407d786e.png)
+
+## Parts List (Partial)
+
+| Quantity | Description                            | Manufacturer         | Man Part Number      | Distributor    | Distributor Part Number | Drawing                                                        |
+|----------|----------------------------------------|----------------------|----------------------|----------------|-------------------------|----------------------------------------------------------------|
+| 1        | 279.4mm x 431.8mm x 1.588mm Al Plate   | PublicInvention      | TBD                  |                |                         |                                                                |
+| 3        | Panel Plate SB1 Dual                   |                      |                      | Powerwerx      | PanelPlateSBDual        | [SB1 Drawing](Parts/Mech/PanelplateSB1-SB1DuaulDimensions.pdf) |
+| 6        | Protective Plug with Lanyard           |                      |                      | Powerwerx      | PLUG-SB50               |                                                                |
+| 3        | Circuit Breaker                        | Carling Technologies | AA1-B0-34-615 -5D1-C | Granger        | 10C591                  | [Breaker Drawing](Parts/Mech/Breaker_10C588_1.pdf)             |
+| 3        | GFI Receptical                         |                      |                      | Harbor Freight | 57958                   |                                                                |
+| 1        | Snap Strip for Thermocouple            |                      | MMS-12               | Omega          | MSS-12                  | [SnapStrip Drawing](Parts/Mech/MSS_Series.pdf)                 |
+| 1        | DB25 Panel Mount                       |                      |                      |                |                         |                                                                |
+| 1        | DB9 Panel Mount                        |                      |                      |                |                         |                                                                |
+
  
 ### Some deviations of note:
 I drilled and tapped the holes for mounting the GFI receipticals for 6-32 screw holes and screwed the GFI from the rear with shortened screws. The protuding ends of these screews are a minor hazard for scratching flesh.  
