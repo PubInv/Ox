@@ -414,6 +414,14 @@
     [
       "27e09928-2db5-4ece-9e90-f2a9a0b91b8d",
       ""
+    ],
+    [
+      "09141fd0-c295-4cc6-88a0-924ace0abc49",
+      "I2C_LevelShift"
+    ],
+    [
+      "2799eafe-5d1a-4095-9bfc-d8b3526b9754",
+      "SPI_ControllerLevel_Shifter"
     ]
   ],
   "text_variables": {}
