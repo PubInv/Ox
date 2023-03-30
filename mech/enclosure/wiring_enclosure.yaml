@@ -1,0 +1,53 @@
+cables:
+  W1:
+    gauge: 6.0 mm2
+    show_equiv: true
+    length: 0.5
+    color_code: IEC
+    wirecount: 2
+    category: bundle
+  W2:
+    gauge: 0.25 mm2
+    show_equiv: true
+    length: 0.5
+    color_code: IEC
+    wirecount: 24
+    category: bundle
+  W3:
+    gauge: 1 mm2
+    show_equiv: true
+    length: 0.5
+    color_code: IEC
+    wirecount: 3
+    category: bundle
+
+connectors:
+  ferrule_crimp:
+    style: simple
+    autogenerate: true
+    type: Crimp ferrule
+
+  CN2:
+    type: remove me
+    subtype: female
+    pinlabels: [VS+, VO+, VS-, VO-, POK, GND, PAR, VSET, EN-, GND, EN+, AUX, ACI, GND, VCI, GND, AUX, GND, SCL, SDA, AUX, GND, RX, TX]
+
+  X1:
+    type: D-Sub
+    subtype: male
+    pinlabels: []
+
+  X2:
+    type: D-Sub
+    subtype: male
+    pinlables: []
+
+connections:
+  -
+    - ferrule_crimp
+    - W1: [1-2]
+    - ferrule_crimp
+  -
+    - CN2
+    - W2: [1-24]
+    - ferrule_crimp
