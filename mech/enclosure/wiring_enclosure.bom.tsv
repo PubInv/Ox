@@ -1,0 +1,24 @@
+Id	Description	Qty	Unit	Designators
+1	Connector, Anderson Power SB50 SB, Dual, 4 pins	4		X3, X4, X5, X6
+2	Connector, Crimp ferrule, spade	40		
+3	Connector, D-Sub, male, 25 pins	1		X2
+4	Connector, D-Sub, male, 9 pins	1		X1
+5	Connector, JST PHDR-24VS, female, 24 pins	1		CN2
+6	Connector, jumpers, 38 pins	1		Arduino_Mega
+7	Wire, 0.25 mm², BK	1.0	m	W2
+8	Wire, 0.25 mm², BN	1.5	m	W2
+9	Wire, 0.25 mm², BU	1.0	m	W2
+10	Wire, 0.25 mm², GN	1.0	m	W2
+11	Wire, 0.25 mm², GY	1.0	m	W2
+12	Wire, 0.25 mm², OG	1.5	m	W2
+13	Wire, 0.25 mm², RD	1.5	m	W2
+14	Wire, 0.25 mm², VT	1.0	m	W2
+15	Wire, 0.25 mm², WH	1.0	m	W2
+16	Wire, 0.25 mm², YE	1.5	m	W2
+17	Wire, 1 mm², BN	0.5	m	W0
+18	Wire, 1 mm², OG	0.5	m	W0
+19	Wire, 1 mm², RD	0.5	m	W0
+20	Wire, 6.0 mm², BK	0.5	m	W1
+21	Wire, 6.0 mm², RD	0.5	m	W1
+22	Wire, 6.00 mm², BK	1.6	m	W3, W4, W5, W6
+23	Wire, 6.00 mm², RD	1.6	m	W3, W4, W5, W6
