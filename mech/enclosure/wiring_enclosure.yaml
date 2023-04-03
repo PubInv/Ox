@@ -9,7 +9,21 @@ templates:
     length: 0.2
     colors: [RD,BK,RD,BK]
     category: bundle
+  - &ac_hookup
+        wirecount: 3
+        length: 0.2 //15ft
+        category: bundle
+        colors: [BK,WH,GN]
+        gauge: 12 awg
 cables:   # dictionary of all used cables and wires
+  W0:
+    gauge: 1 mm2
+    show_equiv: true
+    length: 0.5
+    color_code: IEC
+    wirecount: 3
+    category: bundle
+
   W1:    # unique cable designator/name
     gauge: 6.0 mm2
     # defaults to false; can auto-convert between mm2 and AWG and display the result when set to true
@@ -32,13 +46,7 @@ cables:   # dictionary of all used cables and wires
     color_code: IEC
     wirecount: 24
     category: bundle
-  W0:
-    gauge: 1 mm2
-    show_equiv: true
-    length: 0.5
-    color_code: IEC
-    wirecount: 3
-    category: bundle
+
   W3:
     <<: *template_wire
   W4:
@@ -48,6 +56,20 @@ cables:   # dictionary of all used cables and wires
   W6:
     <<: *template_wire
 
+  W7: #DC powersupply
+    <<: *ac_hookup
+
+  W8: #DC powersupply
+    <<: *ac_hookup
+
+  W9: #DC powersupply
+    <<: *ac_hookup
+
+  power_cord:
+      wirecount: 3
+      length: 5000 //15ft
+      category: bundle
+      colors: [BK,WH,GN]
 
 connectors:  # dictionary of all used connectors
   ferrule_crimp:  # unique connector designator/name
@@ -82,9 +104,9 @@ connectors:  # dictionary of all used connectors
     <<: *template_con
   X6:
     <<: *template_con
-  Arduino_Mega:
+  Arduino_Due:
     type: jumpers
-    pinlabels: [A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, D17, D18, D19, D20, D21]
+    pinlabels: [TX,RX, TX1, RX1, SDA, SCL, VIN, GND, A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, D17, D18, D19, D20, D21]
 
 connections:  # list of all connections to be made between cables and connectors
   -
@@ -98,7 +120,7 @@ connections:  # list of all connections to be made between cables and connectors
   -
     - X1: [5,2,3]
     - W0: [1-3]
-    - Arduino_Mega: [D0,D1,D21]
+    - Arduino_Due: [D0,D1,D21]
   -
     - X3: [1-4]
     - W3: [1-4]
@@ -111,9 +133,10 @@ connections:  # list of all connections to be made between cables and connectors
     - X5: [1-4]
     - W5: [1-4]
     - ferrule_crimp
-#    - W4: [1-2]
-#    - W5: [1-2]
-#    - ferrule_crimp
+  -
+     - ferrule_crimp
+     - W7: [1-3]
+     - ferrule_crimp
 #  -
 
 #additional_bom_items:  # custom items to add to BOM
