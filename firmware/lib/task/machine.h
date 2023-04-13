@@ -131,10 +131,10 @@ public:
   // These values are useful for testing by hand
 #ifdef HAND_TEST
   float COOLDOWN_TARGET_C = 27.0;
-  float WARMUP_TARGET_C = 28.0;
-  float MAX_POST_HEATER_C = 30.0;
-  float TARGET_STACK_C = 30.0;
-  float MAX_POST_STACK_C = 40.0;
+  float WARMUP_TARGET_C = 150.0;
+  float MAX_POST_HEATER_C = 150.0;
+  float TARGET_STACK_C = 150.0;
+  float MAX_POST_STACK_C = 180.0;
   float TARGET_STACK_CURRENT_mA = 1.0;
 
   // I'm not sure what the real value here should be!
