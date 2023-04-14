@@ -4027,7 +4027,7 @@
     (property "Value" "Arduino_Due_Shield" (id 1) (at 210.82 153.67 0)
       (effects (font (size 1.524 1.524)))
     )
-    (property "Footprint" "arduino-library:Arduino_Due_Shield" (id 2) (at 194.31 166.37 0)
+    (property "Footprint" "PubInv_PCB:Arduino_Due_Shield" (id 2) (at 194.31 166.37 0)
       (effects (font (size 1.524 1.524)) hide)
     )
     (property "Datasheet" "https://docs.arduino.cc/hardware/due" (id 3) (at 194.31 162.56 0)
@@ -5135,7 +5135,7 @@
       (reference "TP305") (unit 1) (value "nCS") (footprint "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded")
     )
     (path "/53a9b8e5-86db-48fa-b451-066c5e8062db"
-      (reference "XA101") (unit 1) (value "Arduino_Due_Shield") (footprint "arduino-library:Arduino_Due_Shield")
+      (reference "XA101") (unit 1) (value "Arduino_Due_Shield") (footprint "PubInv_PCB:Arduino_Due_Shield")
     )
   )
 )
