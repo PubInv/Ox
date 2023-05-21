@@ -29,7 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <cstdint>
 #include <debug.h>
 
-using namespace OxDebug;
+using namespace OxCore;
 
 void test_serial(){
   Debug<const char*>("Test text debug\n");

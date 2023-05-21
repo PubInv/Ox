@@ -50,7 +50,7 @@ namespace Temperature {
     OneWire oneWire;
     DallasTemperature sensors;
     // Pass our oneWire reference to Dallas Temperature.
-  public:
+   public:
     DS18B20Temperature();
     DS18B20Temperature(SensorConfig &config);
     void Config(SensorConfig &config);
