@@ -103,7 +103,8 @@ void DeltaFans::motorControl(int s)
 // m = motor -- 0 - 3
 void DeltaFans::PWMMotorControl(float s, int m)
 {
-  int q = map(s*100, SPEED_MIN, SPEED_MAX, 0, 255);
+  //  int q = map(s*100, SPEED_MIN, SPEED_MAX, 0, 255);
+  int q = map(s*50, SPEED_MIN, SPEED_MAX, 0, 255);
 
   if (DEBUG_FAN > 0 ) {
     Serial.print("m : q");
@@ -111,6 +112,7 @@ void DeltaFans::PWMMotorControl(float s, int m)
     Serial.print(" : ");
     Serial.println(q);
   }
+  // analogWrite(PWM_PIN[m], q);
   analogWrite(PWM_PIN[m], q);
 }
 
