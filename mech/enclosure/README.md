@@ -28,12 +28,17 @@ An assembly drawing in FreeCAD. This drawing shows an intermediate horizontal sh
 | 1                	| 1/2" NM Clamp Type Cable Connectors                                               	|                 	|                 	| Amazon      	| https://www.amazon.com/Connectors-Metallic-Conduit-Protect-Silver-Zinc/dp/B09M3MKL74/ref=sr_1_1_sspa                                     	|                                                                                                           	| 0.91      	|
 | 3                	| DIN Rail Slotted Aluminum RoHS 12" Inches Long 35mm Wide 7.5mm High               	|                 	|                 	| Amazon      	| https://www.amazon.com/Pieces-Slotted-Aluminum-Inches-7-5mm/dp/B079TX7WDQ/ref=sr_1_1_sspa                                                	| Cut to fit.                                                                                               	| 5.00      	|
 
+Other:
+This does not include the internal wiring description.
+Does not include the COG power supply, Due controller, thermocouple amplifiers, Fan Relays, air heater Controllers, 
+This does not include systems external to the enclosure such as thermocouple wires, air flow sensors or their wiring.  
+
 ### Some deviations of note:
-Miscelanious 6-32, 8-32 and 10-24 screws may have been used.
-?April 2023? Robert relocated the ground lug terminal strip inside the cabnet. Lee believes new holes had to be drilled.
+Miscellaneous 6-32, 8-32 and 10-24 screws may have been used.  
+? April 2023? Robert relocated the ground lug terminal strip inside the cabinet. Lee believes new holes had to be drilled.
 
 
 ### Cautions
-There appears to be 
+None.
 
 
