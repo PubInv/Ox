@@ -65,10 +65,6 @@ void setup()
   OxCore::serialBegin(115200UL);
   Debug<const char *>("Starting Ox...\n");
 
-
-
-
-
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
       // TODO: Output error message

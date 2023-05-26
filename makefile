@@ -72,6 +72,15 @@ pio-clear-cache:
 	cd firmware \
 	&& rm -rf .pio
 
+# These tests are not working well right now
+ribbonfish_tests:
+	cd firmware \
+	&& pio test -vvv -e due_ribbonfish -f "test_*"
+
+test_stack_power:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_stack_*"
+	&& pio device monitor --filter direct
 
 pio-run-due_ribbonfish:
 	cd firmware \

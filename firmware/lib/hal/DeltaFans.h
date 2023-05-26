@@ -83,7 +83,7 @@ public:
 
   int SPEED_MAX = 100;// in %
   int SPEED_MIN = 0;//in %
-  int DEBUG_FAN = 0;
+  int DEBUG_FAN = 2;
 public:
   void _init();
   unsigned long _calcRPM(uint8_t i);
