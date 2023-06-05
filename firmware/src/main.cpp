@@ -23,7 +23,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <core.h>
 
-// #include <networking_task.h>
+#include <retrieve_script_UDP_task.h>
 #include <cog_task.h>
 #include <serial_task.h>
 #include <fault_task.h>
@@ -37,7 +37,7 @@ static Core core;
 
 /***** Declare your tasks here *****/
 
-// OxApp::NetworkingTask networkingTask;
+OxApp::RetrieveScriptUDPTask retrieveScriptUDPTask;
 OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 OxApp::FaultTask faultTask;
@@ -46,7 +46,6 @@ OxApp::FanPIDTask fanPIDTask;
 OxApp::FanTESTTask fanTESTTask;
 #endif
 
-// OxApp::SensorReadTask sensorTask;
 #include <machine.h>
 
 MachineConfig cogConfig;
@@ -113,7 +112,7 @@ void setup()
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 20;
-  cogProperties.period = 5000;
+  cogProperties.period = 10000;
   cogProperties.priority = OxCore::TaskPriority::High;
   // Note: The cogConfig is universal to all tasks.
   // It respresents the entire machine.
@@ -131,7 +130,7 @@ void setup()
   OxCore::TaskProperties faultProperties;
   faultProperties.name = "fault";
   faultProperties.id = 22;
-  faultProperties.period = 3000;
+  faultProperties.period = 30000;
   faultProperties.priority = OxCore::TaskPriority::High;
   faultProperties.state_and_config = (void *) &cogConfig;
   core.AddTask(&faultTask, &faultProperties);
@@ -140,14 +139,24 @@ void setup()
   OxCore::TaskProperties fanPIDProperties;
   fanPIDProperties.name = "fanPID";
   fanPIDProperties.id = 23;
-  fanPIDProperties.period = 2000;
+  fanPIDProperties.period = 40000;
   fanPIDProperties.priority = OxCore::TaskPriority::High;
   fanPIDProperties.state_and_config = (void *) &cogConfig;
-  core.AddTask(&fanPIDTask, &fanPIDProperties);
+      core.AddTask(&fanPIDTask, &fanPIDProperties);
+
+  OxCore::TaskProperties retrieveScriptUDPProperties;
+  retrieveScriptUDPProperties.name = "retrieveScriptUDP";
+  retrieveScriptUDPProperties.id = 24;
+  retrieveScriptUDPProperties.period = 5000;
+  retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
+  retrieveScriptUDPProperties.state_and_config = (void *) &cogConfig;
+
+  core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
+
 #else
   OxCore::TaskProperties fanTESTProperties;
   fanTESTProperties.name = "fanTEST";
-  fanTESTProperties.id = 24;
+  fanTESTProperties.id = 25;
   fanTESTProperties.period = 10000;
   fanTESTProperties.priority = OxCore::TaskPriority::High;
   fanTESTProperties.state_and_config = (void *) &cogConfig;
