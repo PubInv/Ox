@@ -3,6 +3,7 @@
   "TimeStamp": 1680759024,
   "DryRun": "false",
   "Nonce":357,
+  "MaxDeltaC":5,
   "States":
   [
     {
@@ -51,7 +52,7 @@
 	    "Preheat": {
 	      "Temp": 700,
               "Current": 10,
-              "Ramp": 4
+              "Ramp": 0.5
 	    },
 	    "Stack": {
 	      "Temp": 730,
@@ -93,7 +94,7 @@
 	    "Stack": {
 	      "Temp": 35,
               "Current": 0,
-              "Ramp": 1.0
+              "Ramp": 1
 	    }
           }
         ]
