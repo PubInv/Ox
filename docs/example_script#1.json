@@ -9,7 +9,7 @@
     {
       "Name": "Warmup",
       "Phases": [
-        { "Offset": 0,
+        { "Duration": 3600,
 	  "Fan": {
 	    "Speed": 20
 	  },
@@ -24,7 +24,7 @@
             "Ramp": 5
 	  }
         },
-        { "Offset": 7200,
+        { "Duration": -1,
 	  "Fan": {
 	    "Speed": 20
 	  },
@@ -45,7 +45,7 @@
       "State": {
         "Name": "Operate",
         "Phases": [
-          { "Offset": 0,
+          { "Duration": 3600,
 	    "Fan": {
 	      "Speed": 10
 	    },
@@ -60,7 +60,7 @@
               "Ramp": 0.5
 	    }
           },
-          { "Offset": 3600,
+          { "Duration": 7200,
 	    "Fan": {
 	      "Speed": 10
 	    },
@@ -82,7 +82,7 @@
       "State": {
         "Name": "Cooldown",
         "Phases": [
-          { "Offset": 0,
+          { "Duration": -1,
 	    "Fan": {
 	      "Speed": 30
 	    },
