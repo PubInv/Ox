@@ -13,7 +13,7 @@
 	  "Fan": {
 	    "Speed": 20
 	  },
-	  "Preheat": {
+	  "Heater": {
 	    "Temp": 400,
             "Current": 10,
             "Ramp": 40
@@ -28,7 +28,7 @@
 	  "Fan": {
 	    "Speed": 20
 	  },
-	  "Preheat": {
+	  "Heater": {
 	    "Temp": 700,
             "Current": 10,
             "Ramp": 3
@@ -49,7 +49,7 @@
 	    "Fan": {
 	      "Speed": 10
 	    },
-	    "Preheat": {
+	    "Heater": {
 	      "Temp": 700,
               "Current": 10,
               "Ramp": 0.5
@@ -64,7 +64,7 @@
 	    "Fan": {
 	      "Speed": 10
 	    },
-	    "Preheat": {
+	    "Heater": {
 	      "Temp": 730,
               "Current": 10,
               "Ramp": 0.5
@@ -86,7 +86,7 @@
 	    "Fan": {
 	      "Speed": 30
 	    },
-	    "Preheat": {
+	    "Heater": {
 	      "Temp": 35,
               "Current": 10,
               "Ramp": 4
