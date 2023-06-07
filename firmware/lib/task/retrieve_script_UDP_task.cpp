@@ -121,7 +121,17 @@ namespace OxApp
       getConfig()->script = ms;
       delete old;
     }
-    sendData(NULL);
+    // This is a preliminary data loggging test. There is no reason
+    // that the datalogging should be done at the frequency as checking
+    // for a new script, but for now we will keep here rather than
+    // creating a new task that we could schedule separately.
+    outputReport(getConfig()->report);
+    char buffer[1024];
+    createJSONReport(getConfig()->report,buffer);
+    OxCore::Debug<const char *>("Obi Wan Kenobi likes to say:\n");
+    OxCore::Debug<const char *>(buffer);
+
+    sendData(buffer);
   }
 
 

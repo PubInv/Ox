@@ -45,6 +45,23 @@ void outputReport(MachineStatusReport msr) {
         OxCore::DebugLn<float>(msr.fan_speed);
 }
 
+void createJSONReport(MachineStatusReport msr, char *buffer) {
+  sprintf(buffer,"{\n");
+  sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\"}\n",msr.post_heater_C);
+  sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\"}\n",msr.heater_voltage);
+  sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\"}\n",msr.post_stack_C);
+  sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\"}\n",msr.stack_voltage);
+  sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\"}\n",msr.stack_amps);
+  if (msr.stack_ohms < 0.0) {
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"N/A\"}\n",msr.stack_amps);
+  } else {
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"%.2f\"}\n",msr.stack_ohms);
+  }
+  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\"}\n",msr.flow_ml_per_s);
+  sprintf(buffer+strlen(buffer), "\"FanSpeed\": \"%.2f\"}\n",msr.fan_speed);
+  sprintf(buffer+strlen(buffer),"}\n");
+}
+
 bool MachineHAL::init() {
   // we should probably check that we can read this effectively here
   // and return false if not
