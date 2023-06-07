@@ -42,7 +42,8 @@ namespace OxApp
 // send an NTP request to the time server at the given address
     unsigned long getTime();
     void sendData(char *data);
-    void getConfig();
+    // returns true if we are reading a packet
+    bool getPacket();
 
 char cmd[1024];
 int lastnonce = 0;

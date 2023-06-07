@@ -113,7 +113,14 @@ namespace OxApp
   bool RetrieveScriptUDPTask::_run()  {
     DebugLn<const char *>("The RetrieveScriptUDPTask was run\n");
     DebugLn<const char *>("calling getConfig()!\n");
-    getConfig();
+    bool new_packet = getPacket();
+    if (new_packet) {
+      // This would be better done with a static member
+      MachineScript *old = getConfig()->script;
+      MachineScript *ms = old->parse_buffer_into_new_script((char *) packetBuffer);
+      getConfig()->script = ms;
+      delete old;
+    }
     sendData(NULL);
   }
 
@@ -174,6 +181,7 @@ namespace OxApp
     Udp.endPacket();
 
     unsigned long startMs = millis();
+    // Note: This is a hard loop --- UDP_TIMEOUT blocks the machine for that time.
     while (!Udp.available() && (millis() - startMs) < UDP_TIMEOUT) {}
 
     // if there's data available, read a packet
@@ -222,7 +230,7 @@ namespace OxApp
     while (!Udp.available() && (millis() - startMs) < UDP_TIMEOUT) {}
   }
 
-  void RetrieveScriptUDPTask::getConfig() {
+  bool RetrieveScriptUDPTask::getPacket() {
     Udp.beginPacket(mcogs, 57573);
     Udp.write("GET ", 4);
     Udp.write("/", 1);
@@ -254,6 +262,12 @@ namespace OxApp
 
       String config = String((char *)packetBuffer);
       Serial.println(config);
+      // Now, at this point, we roughly have a new script.
+      // so we will parse it and poke it into the machine script as
+      // a single pointer switch.
+      return true;
+    } else {
+      return false;
     }
   }
 

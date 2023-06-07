@@ -1,0 +1,102 @@
+{
+  "Name": "Experiment#1",
+  "TimeStamp": 1680759024,
+  "DryRun": "false",
+  "Nonce":357,
+  "States":
+  [
+    {
+      "Name": "Warmup",
+      "Phases": [
+        { "Offset": 0,
+	  "Fan": {
+	    "Speed": 20
+	  },
+	  "Preheat": {
+	    "Temp": 400,
+            "Current": 10,
+            "Ramp": 40
+	  },
+	  "Stack": {
+	    "Temp": 400,
+            "Current": 60,
+            "Ramp": 5
+	  },
+          { "Offset": 7200,
+	    "Fan": {
+	      "Speed": 20
+	    },
+	    "Preheat": {
+	      "Temp": 700,
+              "Current": 10,
+              "Ramp": 3
+	    },
+	    "Stack": {
+	      "Temp": 700,
+              "Current": 60,
+              "Ramp": 0.5
+	    }
+          }
+        ]
+      },
+      {
+        "State": {
+          "Name": "Operate",
+          "Phases": [
+            { "Offset": 0,
+	      "Fan": {
+	        "Speed": 10
+	      },
+	      "Preheat": {
+	        "Temp": 700,
+                "Current": 10,
+                "Ramp": 4
+	      },
+	      "Stack": {
+	        "Temp": 730,
+                "Current": 60,
+                "Ramp": 0.5
+	      }
+            },
+            { "Offset": 3600,
+	      "Fan": {
+	        "Speed": 10
+	      },
+	      "Preheat": {
+	        "Temp": 730,
+                "Current": 10,
+                "Ramp": 0.5
+	      },
+	      "Stack": {
+	        "Temp": 760,
+                "Current": 60,
+                "Ramp": 0.5
+	      }
+            }
+          ]
+        },
+     {
+        "State": {
+          "Name": "Cooldown",
+          "Phases": [
+            { "Offset": 0,
+	      "Fan": {
+	        "Speed": 30
+	      },
+	      "Preheat": {
+	        "Temp": 35,
+                "Current": 10,
+                "Ramp": 4
+	      },
+	      "Stack": {
+	        "Temp": 35,
+                "Current": 0,
+                "Ramp": 1.0
+	      }
+            },
+          ]
+        }
+      }
+    }
+  ]
+}

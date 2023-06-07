@@ -1,9 +1,28 @@
+/*
+Copyright (C) 2023 Robert Read.
+
+This program includes free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+See the GNU Affero General Public License for more details.
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 #ifndef MACHINE_H
 #define MACHINE_H
 
 // Hardware Abstraction Layer
 #include "SensirionSFM3X00.h"
 #include "DeltaFans.h"
+
+#include <machine_script.h>
 
 #define HAND_TEST 1
 
@@ -87,7 +106,9 @@ public:
 
 class MachineConfig {
 public:
-
+  MachineConfig() {
+      script = new MachineScript();
+  };
   void _updateFanSpeed(float unitInterval);
 
   constexpr inline static char const *MachineStateNames[8] = {
@@ -109,6 +130,7 @@ public:
   };
   MachineState ms;
   MachineHAL* hal;
+  MachineScript* script;
 
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
