@@ -128,9 +128,6 @@ namespace OxApp
     outputReport(getConfig()->report);
     char buffer[1024];
     createJSONReport(getConfig()->report,buffer);
-    OxCore::Debug<const char *>("Obi Wan Kenobi likes to say:\n");
-    OxCore::Debug<const char *>(buffer);
-
     sendData(buffer);
   }
 

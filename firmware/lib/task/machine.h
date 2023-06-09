@@ -55,43 +55,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 #endif
 
-
-
-enum MachineState {
-  // Off is the initial state. It is a zero-power state.
-  Off,
-  // Attempting to reach operational temperatures.
-  Warmup,
-  // Operating
-  NormalOperation,
-  // Attempt to cool down slowly
-  Cooldown,
-  // A critical fault has occurred or an acknowledgement has not been received
-  CriticalFault,
-  // Emergency Shutdwon: stop power consumption as quickly as possible
-  EmergencyShutdown,
-  // Remain Off util a user releases this state
-  OffUserAck
-};
-
-enum IdleOrOperateSubState {
-  // Operate means to produce maximum oxygen. It is the default substates
-  Operate,
-  // Idle means to produce minimum possible oxygen, but stay warm.
-  Idle
-};
-
-struct MachineStatusReport {
-  float post_heater_C;
-  float post_stack_C;
-  float heater_voltage;
-  float stack_voltage;
-  float stack_amps;
-  float stack_ohms;
-  float fan_speed;
-  float flow_ml_per_s;
-  boolean air_flow_sufficient;
-};
+#include <machine_core_defs.h>
 
 const static int NUM_FANS = 1;
 
@@ -110,6 +74,8 @@ public:
       script = new MachineScript();
   };
   void _updateFanSpeed(float unitInterval);
+
+  static const int NUM_MACHINE_STATES = 8;
 
   constexpr inline static char const *MachineStateNames[8] = {
     "Off",
