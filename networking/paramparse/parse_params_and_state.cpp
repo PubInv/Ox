@@ -235,7 +235,7 @@ int main(int argc, char *argv[]) {
   parse_param(packetBuffer, "Nonce", &tempnonce);
   if (tempnonce <= gNonce) exit(1);
   gNonce = tempnonce;
-  
+
   parse_param(packetBuffer, "Name", &gName);
   parse_param(packetBuffer, "TimeStamp", &gTimestamp);
   parse_param(packetBuffer, "DryRun", &gDryRun);

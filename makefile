@@ -82,6 +82,11 @@ test_stack_power:
 	&& pio test -v -e due_ribbonfish -f "test_stack_*"
 	&& pio device monitor --filter direct
 
+test_parse_script:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_parse_*"
+	&& pio device monitor --filter direct
+
 pio-run-due_ribbonfish:
 	cd firmware \
 	&& pio run -e due_ribbonfish -t upload \
