@@ -36,7 +36,7 @@ Phases.Stack.Ramp. 1\n\
 ";
 
 struct phase_t {
-  int offset;
+  int duration;
   int fan_speed;
   int fan_flow;
   int preheat_temp;
@@ -142,7 +142,7 @@ int parse_state(char *state, struct phase_t *phase_list[]) {
     if (tptr = strstr(ptr, "Phases.Duration")) {
       tptr += 15;
       while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].offset = atoi(tptr);
+      pl[pcount].duration = atoi(tptr);
     } else if (tptr = strstr(ptr, "Phases.Fan.Speed")) {
       tptr += 16;
       while (*tptr == ' ' || *tptr == '.') tptr++;
@@ -214,6 +214,6 @@ int main(int argc, char *argv[]) {
   printf("warmup has %d phases\n", c);
   for (int x = 0; x < c; x++) {
     printf("Phase %d:\n", x);
-    printf("  Offset %d\n", p[x].offset);
+    printf("  Offset %d\n", p[x].duration);
   }
 }
