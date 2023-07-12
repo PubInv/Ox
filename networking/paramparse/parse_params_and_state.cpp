@@ -2,88 +2,37 @@
 #include <string.h>
 #include <stdlib.h>
 
-char packetBuffer[2048] = "Name. Test Name \n\
+char packetBuffer[2048] = "Name. Experiment#1\n\
 TimeStamp. 1680759024\n\
-DryRun. TRUE\n\
-Nonce. 123\n\
-MaxRampUp. 10\n\
-MaxRampDown. 10\n\
-[[ StateName. WarmUp\n\
-[ Phases.Offset. 10\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
+DryRun. false\n\
+Nonce. 357\n\
+MaxDeltaC. 5\n\
+[[ Name. Warmup\n\
+[ Phases.Duration. 3600\n\
+Phases.Fan.Speed. 20\n\
+Phases.Heater.Temp. 400\n\
+Phases.Heater.Current. 10\n\
+Phases.Heater.Ramp. 40\n\
+Phases.Stack.Temp. 400\n\
+Phases.Stack.Current. 60\n\
+Phases.Stack.Ramp. 5\n\
+[ Phases.Duration. 3600\n\
+Phases.Fan.Speed. 20\n\
+Phases.Heater.Temp. 400\n\
+Phases.Heater.Current. 10\n\
+Phases.Heater.Ramp. 40\n\
+Phases.Stack.Temp. 400\n\
+Phases.Stack.Current. 60\n\
+Phases.Stack.Ramp. 5\n\
+[[ Name. Cooldown\n\
+[ Phases.Duration. -1\n\
+Phases.Fan.Speed. 30\n\
+Phases.Heater.Temp. 35\n\
+Phases.Heater.Current. 10\n\
+Phases.Heater.Ramp. 4\n\
+Phases.Stack.Temp. 35\n\
 Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
-[ Phases.Offset. 11\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
-Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
-[[ StateName. Cooldown\n\
-[ Phases.Offset. 0\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
-Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
-[ Phases.Offset. 0\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
-Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
-[[ StateName. EmergencyShutdown\n\
-[ Phases.Offset. 0\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
-Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
-[ Phases.Offset. 0\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
-Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
-[[ StateName. Operation\n\
-[ Phases.Offset. 0\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
-Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
-[ Phases.Offset. 0\n\
-Phases.Fan.Speed. 0\n\
-Phases.Fan.Flow. 0\n\
-Phases.Preheat.Temp. 0\n\
-Phases.Preheat.Current. 0\n\
-Phases.Preheat.Ramp. 0\n\
-Phases.Stack.Temp. 0\n\
-Phases.Stack.Current. 0\n\
-Phases.Stack.Ramp. 0\n\
+Phases.Stack.Ramp. 1\n\
 ";
 
 struct phase_t {
@@ -109,7 +58,8 @@ char *gCooldown = NULL;
 char *gEmShutdown = NULL;
 char *gOperation = NULL;
 
-int parse_param(char *buffer, const char *value, char **rvalue) {
+int
+parse_param(char *buffer, const char *value, char **rvalue) {
   char *item = strstr(buffer, value);
   if (!item) return 0;
 
@@ -125,7 +75,8 @@ int parse_param(char *buffer, const char *value, char **rvalue) {
   return 1;
 }
 
-int parse_param(char *buffer, const char *value, int *rvalue) {
+int
+parse_param(char *buffer, const char *value, int *rvalue) {
   char *item = strstr(buffer, value);
   if (!item) return 0;
 
@@ -145,9 +96,9 @@ int parse_param(char *buffer, const char *value, int *rvalue) {
 }
 
 int parse_param_state(char *buffer, const char *value, char **rvalue) {
-  char str[strlen(value) + 15];
-  sprintf(str, "[[ StateName. %s", value);
-  char *item = strstr(buffer, str);
+  char str[strlen(value) + 9];
+  sprintf(str, "[[ Name. %s", value);
+  char *item = strcasestr(buffer, str);
   if (!item) return 0;
 
   if (*rvalue) free(*rvalue);
@@ -161,7 +112,7 @@ int parse_param_state(char *buffer, const char *value, char **rvalue) {
     end = strrchr(item, '\n');
     *end = '\0';
   }
-  *rvalue = (char *)malloc(strlen(item) + 1);
+  *rvalue = (char *) malloc(strlen(item) + 1);
   strcpy(*rvalue, item);
   if (end) *end = '\n';
   return 1;
@@ -188,8 +139,8 @@ int parse_state(char *state, struct phase_t *phase_list[]) {
     if (strlen(ptr) == 0) continue;
 
     char *tptr = NULL;
-    if (tptr = strstr(ptr, "Phases.Offset")) {
-      tptr += 13;
+    if (tptr = strstr(ptr, "Phases.Duration")) {
+      tptr += 15;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].offset = atoi(tptr);
     } else if (tptr = strstr(ptr, "Phases.Fan.Speed")) {
