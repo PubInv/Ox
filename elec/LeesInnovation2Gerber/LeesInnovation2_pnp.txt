@@ -1,0 +1,36 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=LeesInnovation2
+*Date=16:26:47
+*CreatedBy=Fritzing 0.9.10b.2022-07-01.CD-2134-0-40d23c29
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;;29.9705;-1.8639;0;Bottom;TXT2
+2;;;61.2648;-18.6369;0;Bottom;Via5
+3;;THT;61.2893;-36.51;0;Bottom;A0-3
+4;;;83.6032;-35.8496;180;Bottom;Part1
+5;540;THT;53.6693;-40.32;0;Bottom;R1
+6;;;33.3492;-12.3801;0;Bottom;Hole3
+7;;;5.40926;-58.1;0;Bottom;Hole1
+8;540;THT;53.6693;-35.24;0;Bottom;R3
+9;540;THT;53.6693;-32.7;0;Bottom;R4
+10;;THT;49.6053;-15.047;90;Bottom;To High PWM +3.3V (EN) and GND
+11;;THT;71.4493;-30.16;0;Bottom;Unused pins
+12;;;33.3492;-58.1;0;Bottom;Hole4
+13;100nF;200 mil [THT, multilayer];61.2893;-55.56;-90;Bottom;C2
+14;;THT;71.4493;-53.02;0;Bottom; PWM + Enable
+15;;;33.9203;-4.68939;0;Bottom;TXT1
+16;;;68.58;-41.1921;0;Bottom;Via7
+17;540;THT;53.6693;-37.78;0;Bottom;R2
+18;;;65.532;-32.6577;0;Bottom;Via6
+19;;;5.40926;-12.3801;0;Bottom;Hole2
+20;;THT;71.4493;-13.65;0;Bottom;G,+3.3, LPBK0,LPBK1
+21;;THT;49.6053;-55.687;-90;Bottom;From XY-GMOS OUT-, OUT+
