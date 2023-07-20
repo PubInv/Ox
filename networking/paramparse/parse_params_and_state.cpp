@@ -143,35 +143,43 @@ int parse_state(char *state, struct phase_t *phase_list[]) {
       tptr += 15;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].duration = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Fan.Speed")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Fan.Speed")) {
       tptr += 16;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].fan_speed = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Fan.Flow")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Fan.Flow")) {
       tptr += 15;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].fan_flow = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Preheat.Temp")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Preheat.Temp")) {
       tptr += 19;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].preheat_temp = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Preheat.Current")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Preheat.Current")) {
       tptr += 22;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].preheat_current = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Preheat.Ramp")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Preheat.Ramp")) {
       tptr += 19;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].preheat_ramp = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Stack.Temp")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Stack.Temp")) {
       tptr += 17;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].stack_temp = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Stack.Current")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Stack.Current")) {
       tptr += 20;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].stack_current= atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Stack.Ramp")) {
+    }
+    if (tptr = strstr(ptr, "Phases.Stack.Ramp")) {
       tptr += 17;
       while (*tptr == ' ' || *tptr == '.') tptr++;
       pl[pcount].stack_ramp = atoi(tptr);
