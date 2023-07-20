@@ -241,54 +241,108 @@ int parse_state(char *state, struct phase_t *phase_list[]) {
 
   char *start = tempphase;
   int pcount = 0;
-  while (ptr = strtok(start, "[")) {
-    start = NULL;
-    if (strlen(ptr) == 0) continue;
 
-    char *tptr = NULL;
-    if (tptr = strstr(ptr, "Phases.Duration")) {
-      tptr += 15;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].duration = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Fan.Speed")) {
-      tptr += 16;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].fan_speed = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Fan.Flow")) {
-      tptr += 15;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].fan_flow = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Preheat.Temp")) {
-      tptr += 19;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].preheat_temp = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Preheat.Current")) {
-      tptr += 22;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].preheat_current = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Preheat.Ramp")) {
-      tptr += 19;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].preheat_ramp = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Stack.Temp")) {
-      tptr += 17;
-      DebugLn<const char *>("Phases.Stack.Temp found!");
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      Debug<const char *>("Tptr:");
-      Debug<const char *>(tptr);
-      Debug<int>(atoi(tptr));
-      pl[pcount].stack_temp = atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Stack.Current")) {
-      tptr += 20;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].stack_current= atoi(tptr);
-    } else if (tptr = strstr(ptr, "Phases.Stack.Ramp")) {
-      tptr += 17;
-      while (*tptr == ' ' || *tptr == '.') tptr++;
-      pl[pcount].stack_ramp = atoi(tptr);
-    }
-    pcount++;
-  }
+   while (ptr = strtok(start, "[")) {
+     start = NULL;
+     if (strlen(ptr) == 0) continue;
+
+     char *tptr = NULL;
+     if (tptr = strstr(ptr, "Phases.Duration")) {
+       tptr += 15;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].duration = atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Fan.Speed")) {
+       tptr += 16;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].fan_speed = atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Fan.Flow")) {
+       tptr += 15;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].fan_flow = atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Preheat.Temp")) {
+       tptr += 19;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].preheat_temp = atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Preheat.Current")) {
+       tptr += 22;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].preheat_current = atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Preheat.Ramp")) {
+       tptr += 19;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].preheat_ramp = atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Stack.Temp")) {
+       tptr += 17;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].stack_temp = atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Stack.Current")) {
+       tptr += 20;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].stack_current= atoi(tptr);
+     }
+     if (tptr = strstr(ptr, "Phases.Stack.Ramp")) {
+       tptr += 17;
+       while (*tptr == ' ' || *tptr == '.') tptr++;
+       pl[pcount].stack_ramp = atoi(tptr);
+     }
+     pcount++;
+   }
+
+  // while (ptr = strtok(start, "[")) {
+  //   start = NULL;
+  //   if (strlen(ptr) == 0) continue;
+
+  //   char *tptr = NULL;
+  //   if (tptr = strstr(ptr, "Phases.Duration")) {
+  //     tptr += 15;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].duration = atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Fan.Speed")) {
+  //     tptr += 16;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].fan_speed = atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Fan.Flow")) {
+  //     tptr += 15;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].fan_flow = atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Preheat.Temp")) {
+  //     tptr += 19;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].preheat_temp = atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Preheat.Current")) {
+  //     tptr += 22;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].preheat_current = atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Preheat.Ramp")) {
+  //     tptr += 19;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].preheat_ramp = atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Stack.Temp")) {
+  //     tptr += 17;
+  //     DebugLn<const char *>("Phases.Stack.Temp found!");
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     Debug<const char *>("Tptr:");
+  //     Debug<const char *>(tptr);
+  //     Debug<int>(atoi(tptr));
+  //     pl[pcount].stack_temp = atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Stack.Current")) {
+  //     tptr += 20;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].stack_current= atoi(tptr);
+  //   } else if (tptr = strstr(ptr, "Phases.Stack.Ramp")) {
+  //     tptr += 17;
+  //     while (*tptr == ' ' || *tptr == '.') tptr++;
+  //     pl[pcount].stack_ramp = atoi(tptr);
+  //   }
+  //   pcount++;
+  // }
   return phasecnt;
 }
 
