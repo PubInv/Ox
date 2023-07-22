@@ -20,7 +20,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // Hardware Abstraction Layer
 #include "SensirionSFM3X00.h"
-#include "DeltaFans.h"
+#include <SanyoAceB97.h>
 
 #include <machine_script.h>
 
@@ -62,7 +62,7 @@ const static int NUM_FANS = 1;
 class MachineHAL {
 public:
   SensirionFlow *_flowsensor;
-  DeltaFans _fans[NUM_FANS];
+  SanyoAceB97 _fans[NUM_FANS];
   bool init();
   //  void _updateFanSpeed(float unitInterval);
 };
@@ -107,7 +107,7 @@ public:
   // However, when used in the Arduino it has to be mapped
   // onto a an integer (usuall 0-255) but this should be
   // the last step.
-  float fanPWM = 0.5;
+  float fanPWM = 1.0;
 
   char const* errors[10];
   // Until we have a good machine model here,

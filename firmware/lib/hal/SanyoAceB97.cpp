@@ -1,4 +1,4 @@
-// Copyright (C) 2021
+// SanyoAceB97.cpp - Copyright (C) 2021
 // Robert Read, Ben Coombs.
 
 // This program includes free software: you can redistribute it and/or modify
@@ -14,10 +14,9 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-// WARNING -- This code is now stale and exists only in case we
-// have to ressurect or test the DeltaFans.
 
-#include "DeltaFans.h"
+
+#include "SanyoAceB97.h"
 #include <math.h>
 
 
@@ -39,12 +38,6 @@
   void tachISR0() {
     tachISR(0);
   };
-  void tachISR1() {
-    tachISR(1); };
-  void tachISR2() {
-    tachISR(2); };
-  void tachISR3() {
-    tachISR(3); };
 
   void refresh_tach_data(uint8_t i) {
     unsigned long m = millis();
@@ -59,7 +52,7 @@
 
 // using namespace tach_data;
 
-unsigned long DeltaFans::_calcRPM(uint8_t i){
+unsigned long SanyoAceB97::_calcRPM(uint8_t i){
   refresh_tach_data(i);
   if (DEBUG_FAN > 1) {
     Serial.print("CALC: " );
@@ -68,22 +61,23 @@ unsigned long DeltaFans::_calcRPM(uint8_t i){
     Serial.println(tach_data_duration[i]);
   }
   if (tach_data_duration[i] != 0) {
-    // I think these are 4-pole fans
-    return (long) (60000.0 * ((float) tach_data_ocnt[i] / 2.0) / ((float) tach_data_duration[i] ));
+    // According to the documentation, there will be two falling
+    // edges in one revolution..
+    float num_revolutions = (float) tach_data_ocnt[0] / 2.0;
+    float one_revolution_time_ms = (float) tach_data_duration[0];
+    return (long) (60000.0 * ( num_revolutions / one_revolution_time_ms));
   } else {
     return 0;
   }
 }
 
 
-void DeltaFans::printRPMS() {
+void SanyoAceB97::printRPMS() {
   Serial.println("RPMS:");
-  for(uint8_t i = 0; i < 4; i++) {
+  for(uint8_t i = 0; i < NUMBER_OF_FANS; i++) {
     long rpm = _calcRPM(i);
     Serial.print("rpm: ");
-     Serial.print(i);
-     Serial.print(" : ");
-     Serial.println(rpm);
+    Serial.println(rpm);
   }
 }
 
@@ -93,48 +87,23 @@ void DeltaFans::printRPMS() {
 // prevents the PWM signal from working properly.
 // Nevertheless I'm leaving it in place in case it
 // is needed for some other purpose.
-void DeltaFans::motorControl(int s)
+void SanyoAceB97::fanSpeedPerCentage(int s)
 {
-  int q = map(s, SPEED_MIN, SPEED_MAX, 0, 255);
+  int q = map(s, SPEED_MIN, SPEED_MAX, 0, OPERATING_PWM_THROTTLE);
   if (DEBUG_FAN > 0 ) {
     Serial.print("Putting out speed to fan control board:");
     Serial.println(q);
   }
-  analogWrite(MOTOR_OUT_PIN, q);
+  analogWrite(PWM_PIN[0], q);
 }
-
-// m = motor -- 0 - 3
-void DeltaFans::PWMMotorControl(float s, int m)
-{
-  //  int q = map(s*100, SPEED_MIN, SPEED_MAX, 0, 255);
-  int q = map(s*50, SPEED_MIN, SPEED_MAX, 0, 255);
-
-  if (DEBUG_FAN > 0 ) {
-    Serial.print("m : q");
-    Serial.print(m);
-    Serial.print(" : ");
-    Serial.println(q);
-  }
-  // analogWrite(PWM_PIN[m], q);
-  analogWrite(PWM_PIN[m], q);
-}
-
 
 // This would be clearer in the the .h!!
-void DeltaFans::_init() {
+void SanyoAceB97::_init() {
 
   PWM_PIN[0] = 9;
-  PWM_PIN[1] = 10;
-  PWM_PIN[2] = 11;
-  PWM_PIN[3] = 12;
   TACH_PIN[0] = A0;
-  TACH_PIN[1] = A1;
-  TACH_PIN[2] = A2;
-  TACH_PIN[3] = A3;
 
-  pinMode(MOTOR_OUT_PIN, OUTPUT);
-
-  for(int i = 0; i < 4; i++) {
+  for(int i = 0; i < NUMBER_OF_FANS; i++) {
     tach_data_ts[i] = 0;
     tach_data_cnt[i] = 0;
     tach_data_ocnt[i] = 0;
@@ -143,46 +112,22 @@ void DeltaFans::_init() {
     pinMode(TACH_PIN[i],INPUT_PULLUP);
   }
   attachInterrupt(digitalPinToInterrupt(TACH_PIN[0]),tachISR0,FALLING);
-  attachInterrupt(digitalPinToInterrupt(TACH_PIN[1]),tachISR1,FALLING);
-  attachInterrupt(digitalPinToInterrupt(TACH_PIN[2]),tachISR2,FALLING);
-  attachInterrupt(digitalPinToInterrupt(TACH_PIN[3]),tachISR3,FALLING);
-
 }
 
 
 
 // At present, we will use the same ratio for all fans;
 // this is an oversimplification
-void DeltaFans::update(float pwm_ratio) {
+void SanyoAceB97::update(float pwm_ratio) {
 
-  motorControl((pwm_ratio == 0.0) ?
+  fanSpeedPerCentage((pwm_ratio == 0.0) ?
                0 :
                100);
 
-  // this is an experiment...
-  // The 4 fans are really two powerful. We need some
-  // way to selectively turn fans on and off.
-  // Exactly how to do this is unclear.
-  // A simple approach is that if the pwm_ration is
-  // greater than 0.75, use all four, if greater than 0.5,
-  // use 3, if greater than 0.25, use 2, if less than 0.25,
-  // use 1.
-
-  int num = ceil(pwm_ratio * 4.0);
-
-  for(int i = 0; i < num; i++) {
-    _pwm_ratio[i] = pwm_ratio;
-    this->PWMMotorControl(_pwm_ratio[i],i);
-  }
-  for(int i = num; i < 4; i++) {
-    _pwm_ratio[i] = 0.0;
-    this->PWMMotorControl(_pwm_ratio[i],i);
-  }
+  _pwm_ratio[0] = pwm_ratio;
 
   if (DEBUG_FAN > 0 ) {
     Serial.print("PWM ratio:  num / ratio : ");
-    Serial.print(num);
-    Serial.print(" : ");
     Serial.println(pwm_ratio);
     printRPMS();
   }

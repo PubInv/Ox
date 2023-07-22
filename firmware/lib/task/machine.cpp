@@ -76,7 +76,7 @@ bool MachineHAL::init() {
     return false;
   }
 
-  _fans[0] = DeltaFans("FIRST_FAN",0,RF_FAN,1.0);
+  _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
 
 
 
