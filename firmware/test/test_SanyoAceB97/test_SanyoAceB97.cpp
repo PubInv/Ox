@@ -64,8 +64,11 @@ void test_fan_speed(){
 
   SanyoAceB97 *fan = new SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
   fan->_init();
+  fan->DEBUG_FAN = 0;
 
   pinMode(fan->PWM_PIN[0], OUTPUT);
+  // It is safer to be completely off until we are ready to start!
+  analogWrite(fan->PWM_PIN[0],0);
 
   char myBuff[64];
   int len = sizeof(myBuff)-1;
@@ -94,6 +97,7 @@ void test_fan_speed(){
     if ((now_ms - time_of_last_report) > REPORT_PERIOD_MS) {
       report(machineConfig);
       time_of_last_report = now_ms;
+      fan->printRPMS();
     }
   };
 
