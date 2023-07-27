@@ -14,6 +14,9 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+// WARNING -- This code is now stale and exists only in case we
+// have to ressurect or test the DeltaFans.
+
 #include "DeltaFans.h"
 #include <math.h>
 

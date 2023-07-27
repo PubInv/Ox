@@ -4,7 +4,7 @@
  #define PWM_PIN 3
 void setup() {
     // initialize
-    Serial.begin(9600);
+    Serial.begin(115200);
     pinMode(PWM_PIN, OUTPUT);
 
     pinMode(PWM_PIN,155);
@@ -12,7 +12,7 @@ void setup() {
 
  //   TCCR0B = TCCR0B & B11111000 | B00000001; // PWM 31372.55 Hz pins 5 and 6 
 //    TCCR1B = TCCR1B & B11111000 | B00000001; // PWM 62745.10 Hz pins 9 and 10 
-    TCCR2B = TCCR2B & B11111000 | B00000001; // PWM 31372.55 Hz pins 3 and 11 
+//    TCCR2B = TCCR2B & B11111000 | B00000001; // PWM 31372.55 Hz pins 3 and 11 
     delay(1000);
 }
 const int d = 2000;
