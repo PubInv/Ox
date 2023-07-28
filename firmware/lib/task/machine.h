@@ -1,9 +1,28 @@
+/*
+Copyright (C) 2023 Robert Read.
+
+This program includes free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+See the GNU Affero General Public License for more details.
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 #ifndef MACHINE_H
 #define MACHINE_H
 
 // Hardware Abstraction Layer
 #include "SensirionSFM3X00.h"
-#include "DeltaFans.h"
+#include <SanyoAceB97.h>
+
+#include <machine_script.h>
 
 #define HAND_TEST 1
 
@@ -36,50 +55,14 @@
 #endif
 #endif
 
-
-
-enum MachineState {
-  // Off is the initial state. It is a zero-power state.
-  Off,
-  // Attempting to reach operational temperatures.
-  Warmup,
-  // Operating
-  NormalOperation,
-  // Attempt to cool down slowly
-  Cooldown,
-  // A critical fault has occurred or an acknowledgement has not been received
-  CriticalFault,
-  // Emergency Shutdwon: stop power consumption as quickly as possible
-  EmergencyShutdown,
-  // Remain Off util a user releases this state
-  OffUserAck
-};
-
-enum IdleOrOperateSubState {
-  // Operate means to produce maximum oxygen. It is the default substates
-  Operate,
-  // Idle means to produce minimum possible oxygen, but stay warm.
-  Idle
-};
-
-struct MachineStatusReport {
-  float post_heater_C;
-  float post_stack_C;
-  float heater_voltage;
-  float stack_voltage;
-  float stack_amps;
-  float stack_ohms;
-  float fan_speed;
-  float flow_ml_per_s;
-  boolean air_flow_sufficient;
-};
+#include <machine_core_defs.h>
 
 const static int NUM_FANS = 1;
 
 class MachineHAL {
 public:
   SensirionFlow *_flowsensor;
-  DeltaFans _fans[NUM_FANS];
+  SanyoAceB97 _fans[NUM_FANS];
   bool init();
   //  void _updateFanSpeed(float unitInterval);
 };
@@ -87,8 +70,12 @@ public:
 
 class MachineConfig {
 public:
-
+  MachineConfig() {
+      script = new MachineScript();
+  };
   void _updateFanSpeed(float unitInterval);
+
+  static const int NUM_MACHINE_STATES = 8;
 
   constexpr inline static char const *MachineStateNames[8] = {
     "Off",
@@ -109,6 +96,7 @@ public:
   };
   MachineState ms;
   MachineHAL* hal;
+  MachineScript* script;
 
   IdleOrOperateSubState idleOrOperate = Operate;
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
@@ -119,7 +107,7 @@ public:
   // However, when used in the Arduino it has to be mapped
   // onto a an integer (usuall 0-255) but this should be
   // the last step.
-  float fanPWM = 0.5;
+  float fanPWM = 1.0;
 
   char const* errors[10];
   // Until we have a good machine model here,
@@ -153,7 +141,7 @@ public:
 };
 
 void outputReport(MachineStatusReport msr);
-
+void createJSONReport(MachineStatusReport msr, char *buffer);
 
 
 #endif

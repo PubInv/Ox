@@ -17,6 +17,9 @@
 // two counterrotating fans:
 // https://www.delta-fan.com/Download/Spec/GFC0412DS-TP01.pdf
 
+// WARNING -- This code is now stale and exists only in case we
+// have to ressurect or test the DeltaFans.
+
 
 // NOTE: The current configuration does not allow less than
 // 500 ml / s flow. These fans are very hard to control at
