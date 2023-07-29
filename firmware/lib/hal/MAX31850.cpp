@@ -33,6 +33,7 @@ namespace Temperature {
   // arrays to hold device addresses
 DeviceAddress insideThermometer, outsideThermometer;
 
+
   MAX31850Temperature::MAX31850Temperature() {
     oneWire.begin(MAX31850_DATA_PIN);
     // Pass our oneWire reference to Dallas Temperature.

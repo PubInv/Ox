@@ -109,8 +109,10 @@ namespace OxApp
     _readTemperatureSensors();
     double postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
     double postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
+    double postGetterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_getter_indices[0]);
     getConfig()->report.post_heater_C = postHeaterTemp;
     getConfig()->report.post_stack_C = postStackTemp;
+    getConfig()->report.post_getter_C = postGetterTemp;
 
   }
     bool CogTask::_run()

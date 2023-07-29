@@ -47,6 +47,7 @@ enum IdleOrOperateSubState {
 struct MachineStatusReport {
   float post_heater_C;
   float post_stack_C;
+  float post_getter_C;
   float heater_voltage;
   float stack_voltage;
   float stack_amps;

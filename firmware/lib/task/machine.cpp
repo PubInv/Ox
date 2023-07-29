@@ -27,6 +27,8 @@ void outputReport(MachineStatusReport msr) {
         OxCore::DebugLn<float>(msr.post_heater_C);
         OxCore::Debug<const char *>("Heater      V: ");
         OxCore::DebugLn<float>(msr.heater_voltage);
+        OxCore::Debug<const char *>("Post Getter  C: ");
+        OxCore::DebugLn<float>(msr.post_getter_C);
         OxCore::Debug<const char *>("Post Stack  C: ");
         OxCore::DebugLn<float>(msr.post_stack_C);
         OxCore::Debug<const char *>("Stack volts V: ");
@@ -50,6 +52,7 @@ void createJSONReport(MachineStatusReport msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr.post_heater_C);
   sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\",\n",msr.heater_voltage);
   sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\",\n",msr.post_stack_C);
+  sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr.post_getter_C);
   sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\",\n",msr.stack_voltage);
   sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\",\n",msr.stack_amps);
   if (msr.stack_ohms < 0.0) {

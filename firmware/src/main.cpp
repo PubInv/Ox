@@ -51,7 +51,7 @@ OxApp::FanTESTTask fanTESTTask;
 MachineConfig cogConfig;
 /***********************************/
 
-
+#define ETHERNET_BOARD_PRESENT 0
 
 #define WIPER_VALUE_PIN A0
 
@@ -144,6 +144,7 @@ void setup()
   fanPIDProperties.state_and_config = (void *) &cogConfig;
       core.AddTask(&fanPIDTask, &fanPIDProperties);
 
+      if (ETHERNET_BOARD_PRESENT) {
   OxCore::TaskProperties retrieveScriptUDPProperties;
   retrieveScriptUDPProperties.name = "retrieveScriptUDP";
   retrieveScriptUDPProperties.id = 24;
@@ -152,7 +153,7 @@ void setup()
   retrieveScriptUDPProperties.state_and_config = (void *) &cogConfig;
 
   core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
-
+      }
 #else
   OxCore::TaskProperties fanTESTProperties;
   fanTESTProperties.name = "fanTEST";
