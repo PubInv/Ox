@@ -87,7 +87,19 @@ test_parse_script:
 	&& pio test -v -e due_ribbonfish -f "test_parse_*"
 	&& pio device monitor --filter direct
 
+# DANGER! THE INPUT DOESN'T WORK FROM THIS
+# MAKEFILE. BUT, if you make this target,
+# and, then break it, and then "make run_monitor"
+# that makes sense
+test_SanyoAceB97:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_Sanyo*"
+
+run_monitor:
+	cd firmware \
+	&& pio device monitor --filter=direct --baud=115200
+
 pio-run-due_ribbonfish:
 	cd firmware \
 	&& pio run -e due_ribbonfish -t upload \
-	&& pio device monitor
+	&& pio device monitor --filter=direct --baud=115200
