@@ -115,6 +115,7 @@ public:
   // element temperature sensor indices
   int post_heater_indices[1] = {0};
   int post_stack_indices[1] = {1};
+  int post_getter_indices[1] = {2};
 
   // These values are useful for testing by hand
 #ifdef HAND_TEST
