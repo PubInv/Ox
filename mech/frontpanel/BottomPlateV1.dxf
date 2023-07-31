@@ -219,7 +219,7 @@ TABLE
   2
 LAYER
   5
-A08
+A50
 330
 0
 100
@@ -229,9 +229,9 @@ AcDbSymbolTable
   0
 LAYER
   5
-A09
+A51
 330
-A08
+A50
 100
 AcDbSymbolTableRecord
 100
@@ -247,15 +247,15 @@ CONTINUOUS
   0
 LAYER
   5
-A0A
+A52
 330
-A08
+A50
 100
 AcDbSymbolTableRecord
 100
 AcDbLayerTableRecord
   2
-none
+ProjItem002
  70
     0
  62
@@ -672,6 +672,1380 @@ ENDSEC
 SECTION
   2
 ENTITIES
+  0
+LINE
+  5
+A08
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+237.2
+ 20
+317.142
+ 30
+0
+ 11
+237.2
+ 21
+98.3
+ 31
+0
+  0
+LINE
+  5
+A09
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+237.2
+ 20
+511.3
+ 30
+0
+ 11
+237.2
+ 21
+317.142
+ 31
+0
+  0
+LINE
+  5
+A0A
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+237.2
+ 20
+98.3
+ 30
+0
+ 11
+262.2
+ 21
+98.3
+ 31
+0
+  0
+LINE
+  5
+A0B
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+262.2
+ 20
+511.3
+ 30
+0
+ 11
+237.2
+ 21
+511.3
+ 31
+0
+  0
+LINE
+  5
+A0C
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+262.2
+ 20
+98.3
+ 30
+0
+ 11
+262.2
+ 21
+73.3
+ 31
+0
+  0
+LINE
+  5
+A0D
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+262.2
+ 20
+536.3
+ 30
+0
+ 11
+262.2
+ 21
+511.3
+ 31
+0
+  0
+LINE
+  5
+A0E
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+262.2
+ 20
+73.3
+ 30
+0
+ 11
+652.2
+ 21
+73.3
+ 31
+0
+  0
+LINE
+  5
+A0F
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+652.2
+ 20
+536.3
+ 30
+0
+ 11
+262.2
+ 21
+536.3
+ 31
+0
+  0
+LINE
+  5
+A10
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+652.2
+ 20
+73.3
+ 30
+0
+ 11
+652.2
+ 21
+98.3
+ 31
+0
+  0
+LINE
+  5
+A11
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+652.2
+ 20
+511.3
+ 30
+0
+ 11
+652.2
+ 21
+536.3
+ 31
+0
+  0
+LINE
+  5
+A12
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+652.2
+ 20
+98.3
+ 30
+0
+ 11
+677.2
+ 21
+98.3
+ 31
+0
+  0
+LINE
+  5
+A13
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+677.2
+ 20
+511.3
+ 30
+0
+ 11
+652.2
+ 21
+511.3
+ 31
+0
+  0
+LINE
+  5
+A14
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbLine
+ 10
+677.2
+ 20
+98.3
+ 30
+0
+ 11
+677.2
+ 21
+511.3
+ 31
+0
+  0
+CIRCLE
+  5
+A15
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+133.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A16
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+284.7
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A17
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+307.2
+ 20
+83.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A18
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+309.7
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A19
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+338.033
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A1A
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+183.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A1B
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+357.2
+ 20
+83.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A1C
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+363.033
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A1D
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+391.367
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A1E
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+407.2
+ 20
+83.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A1F
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+416.367
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A20
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+444.7
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A21
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+233.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A22
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+283.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A23
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+83.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A24
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+507.2
+ 20
+83.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A25
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+469.7
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A26
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+133.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A27
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+498.033
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A28
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+557.2
+ 20
+83.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A29
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+523.033
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A2A
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+551.367
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A2B
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+183.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A2C
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+607.2
+ 20
+83.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A2D
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+576.367
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A2E
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+604.7
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A2F
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+629.7
+ 20
+127.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A30
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+133.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A31
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+183.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A32
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+233.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A33
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+283.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A34
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+233.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A35
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+283.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A36
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+333.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A37
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+297.2
+ 20
+348.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A38
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+350.533
+ 20
+348.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A39
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+383.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A3A
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+403.867
+ 20
+348.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A3B
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+433.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A3C
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+247.2
+ 20
+483.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A3D
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+307.2
+ 20
+526.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A3E
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+357.2
+ 20
+526.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A3F
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+407.2
+ 20
+526.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A40
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+333.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A41
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+348.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A42
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+510.533
+ 20
+348.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A43
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+383.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A44
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+563.867
+ 20
+348.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A45
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+617.2
+ 20
+348.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A46
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+333.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A47
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+383.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A48
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+433.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A49
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+483.3
+ 40
+2.0193
+  0
+CIRCLE
+  5
+A4A
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+457.2
+ 20
+526.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A4B
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+507.2
+ 20
+526.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A4C
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+557.2
+ 20
+526.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A4D
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+433.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A4E
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+607.2
+ 20
+526.3
+ 40
+2.61
+  0
+CIRCLE
+  5
+A4F
+330
+A02
+100
+AcDbEntity
+  8
+ProjItem002
+100
+AcDbCircle
+ 10
+667.2
+ 20
+483.3
+ 40
+2.61
   0
 ENDSEC
   0
