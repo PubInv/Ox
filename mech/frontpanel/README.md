@@ -1,9 +1,27 @@
-# frontpanel
+# Frontpanel
 An aluminum plate on which the NASA-COG control system electrical intefaces are mounted from, and presented to the controlled elements.
-This front panel was mounted to an enclosure defined in the enclosure folder.
+This front panel was later mounted to an enclosure defined in the enclosure folder.
 
 ## Details
 Developed in FreeCAD
+One FreeCAD drawing defins the **Frontpanel**, **Rearpanel** and **Bottompanel**. There is a drawing representing two DIN rails that may be mounted on the bottom panel.
+Images of many parts to be mounted on the front panel are scaled and place in a group. This group can be displayed on the front panel to check the design and convey the resulting device.
+
+## Second Front Panel Fabrication Notes
+Fabrication of a Second controler beginning late July 2023.
+Version 2 front panel.
+FreeCAD view
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/7522e47c-4c33-4b8d-baaa-24e2e520af05)
+
+Fabrication drawing for front panel Version 2.0 of 20230731
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/cd941df2-c7e7-4148-91a4-fc3577e9da8c)
+
+## Parts List Second Controller (Partial)
+| Quantity 	| Description                                 	| Manufacturer         	| Man Part Number      	| Distributor    	| Distributor Part Number 	| Drawing                                                                           	| Cost Each 	|
+|----------	|---------------------------------------------	|----------------------	|----------------------	|----------------	|-------------------------	|-----------------------------------------------------------------------------------	|-----------	|
+| 1        	| frontpanel-PartFrontPanel2frontpanel2.dxf                      	| PublicInvention      	| TBD                  	| NA             	| NA                      	| [frontpanel-PartFrontPanel2frontpanel2.dxf](frontpanel-PartFrontPanel2frontpanel2.dxf)                                    	|           	|
+
+<hr> 
 
 ## First Front Panel Fabrication Notes
 Fabrication drawing for front panel of 20230324
