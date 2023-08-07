@@ -28,7 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "stack.h"
 #include "abstract_ps.h"
 #include "mostplus_flow.h"
-#include "SensirionSFM3X00.h"
+// #include "SensirionSFM3X00.h"
 #include <machine.h>
 
 #include <abstract_temperature.h>

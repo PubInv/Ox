@@ -71,13 +71,13 @@ bool MachineHAL::init() {
 
   Wire.begin();
 
-  _flowsensor = new SensirionFlow();
+  // _flowsensor = new SensirionFlow();
 
-  if (_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
-    Serial.println("FLOW SENSOR NOT AVIALABLE!");
-    Serial.println("THIS IS A CRITICAL ERROR!");
-    return false;
-  }
+  // if (_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
+  //   Serial.println("FLOW SENSOR NOT AVIALABLE!");
+  //   Serial.println("THIS IS A CRITICAL ERROR!");
+  //   return false;
+  // }
 
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
 

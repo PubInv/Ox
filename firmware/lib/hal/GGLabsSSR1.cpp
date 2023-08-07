@@ -14,6 +14,9 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+// WARNING! This file is has been repurposed to use an ADAFRUIT SSR
+// without being properly renamed!! This needs to be cleaned up.
+
 #ifdef ARDUINO
 #include <Arduino.h>
 #include <SPI.h>

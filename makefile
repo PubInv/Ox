@@ -95,6 +95,10 @@ test_SanyoAceB97:
 	cd firmware \
 	&& pio test -v -e due_ribbonfish -f "test_Sanyo*"
 
+test_heater_ramp:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_heater_ramp"
+
 run_monitor:
 	cd firmware \
 	&& pio device monitor --filter=direct --baud=115200
