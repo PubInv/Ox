@@ -198,20 +198,34 @@ namespace OxApp
   float ReadTempsTask::tempFromTime(int t_ms) {
     float temp = 0.0;
     const int num_periods_back = (t_ms / TEMPERATURE_READ_PERIOD_MS);
+    int num_valid = 0;
     for(int i = 0; i < NUMBER_OF_PERIODS_TO_AVERAGE; i++) {
-      temp += temps[ringCompuation(next_temp_idx - (num_periods_back + i))];
+      float t = temps[ringCompuation(next_temp_idx - (num_periods_back + i))];
+      if (t != 0) {
+        temp += t;
+        num_valid++;
+      }
     }
-    return (temp / (float) NUMBER_OF_PERIODS_TO_AVERAGE);
+    if (num_valid > 0)
+      return (temp / (float) num_valid);
+    else
+      return 0.0;
   }
 
   // this function is based on parameters
   void ReadTempsTask::calculateDdelta() {
-    float DdeltaRaw = tempFromTime(0) - tempFromTime(TEMPERATRUE_TIME_DELTA_MS);
+    float t0 = tempFromTime(0);
+    float t1 = tempFromTime(TEMPERATRUE_TIME_DELTA_MS);
+    // If our data is not complete yet, we will wait.
+    if ((t0 == 0) || (t1 == 0))
+      return;
     Serial.println("computing delta");
-    Serial.println(tempFromTime(0),5);
-    Serial.println(tempFromTime(TEMPERATRUE_TIME_DELTA_MS),5);
+    Serial.println(t0,5);
+
+    Serial.println(t1,5);
+    float DdeltaRaw = t0 - t1;
     // now compute Ddelta_C_per_min...
-    float Ddelta_C_per_min_computed = (DdeltaRaw / 60.0*1000.0);
+    float Ddelta_C_per_min_computed = (DdeltaRaw * TEMPERATRUE_TIME_DELTA_MS) / (60.0*1000.0);
     // now we will set the global so that it is available to the other tasks
     Ddelta_C_per_min = Ddelta_C_per_min_computed;
   }
@@ -259,6 +273,9 @@ namespace OxApp
     OxCore::Debug<const char *>("ReadTempsTask init\n");
     _configTemperatureSensors();
     OxCore::Debug<const char *>("Config of temperature sensors done\n");
+        for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
+          temps[i] = 0.0;
+        }
     return true;
   }
 
