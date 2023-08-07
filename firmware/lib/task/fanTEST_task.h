@@ -30,7 +30,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxApp
 {
-    // Runs the Pressure Swing Adsorption cycle
     class FanTESTTask : public OxCore::Task
     {
     public:

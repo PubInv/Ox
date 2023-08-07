@@ -19,7 +19,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define MACHINE_H
 
 // Hardware Abstraction Layer
-#include "SensirionSFM3X00.h"
+// #include "SensirionSFM3X00.h"
 #include <SanyoAceB97.h>
 
 #include <machine_script.h>
@@ -61,7 +61,7 @@ const static int NUM_FANS = 1;
 
 class MachineHAL {
 public:
-  SensirionFlow *_flowsensor;
+  //  SensirionFlow *_flowsensor;
   SanyoAceB97 _fans[NUM_FANS];
   bool init();
   //  void _updateFanSpeed(float unitInterval);

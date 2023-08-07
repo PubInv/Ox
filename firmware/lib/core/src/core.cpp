@@ -94,7 +94,7 @@ bool Core::Run() {
         _elapsed = _primaryTimer.Update();
 #endif
         Tick();
-        bool reset = ResetWatchdog();
+         bool reset = ResetWatchdog();
         if (reset == false) {
             return false;
         }
@@ -109,7 +109,6 @@ bool Core::Run() {
         }
     }
 #endif
-    OxCore::Debug<const char *>("Exiting Core::Run!\n");
     return false;
 }
 
@@ -132,7 +131,7 @@ void Core::CreateWatchdog(uint32_t timeoutMs) {
 bool Core::ResetWatchdog() {
     uint32_t elapsed = _watchdogTimer.Update();
     if (elapsed > WATCHDOG_TIMEOUT_MS) {
-        ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeded);
+          ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeded);
         return false;
     } else {
 #ifndef ARDUINO

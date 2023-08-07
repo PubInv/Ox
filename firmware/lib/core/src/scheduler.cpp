@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "scheduler.h"
 #include "util.h"
 #include "debug.h"
-#include "error_handler.h"
+#include <error_handler.h>
 
 namespace OxCore {
 
@@ -39,7 +39,7 @@ void Scheduler::setupIdleTask() {
 
 Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     // Record how long the previous task took to run
-    
+
     if (_lastTaskRan != nullptr) {
         _lastTaskRan->_lastRunDuration = currentTime - _lastTaskRan->_lastRun;
     }

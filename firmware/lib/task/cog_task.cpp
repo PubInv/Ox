@@ -14,7 +14,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "cog_task.h"
-#include<cmath>
+#include <cmath>
 #include <abstract_temperature.h>
 #include <TF800A12K.h>
 
@@ -143,8 +143,8 @@ namespace OxApp
         OxCore::Debug<const char *>("FLOW SLM: ");
       }
 
-      float flow_slm = getConfig()->hal->_flowsensor->flowInSLM();
-      OxCore::DebugLn<float>(flow_slm);
+      //      float flow_slm = getConfig()->hal->_flowsensor->flowInSLM();
+      //      OxCore::DebugLn<float>(flow_slm);
 
 
       // Somewhere we have a true clock value, I would have thought
@@ -218,20 +218,20 @@ namespace OxApp
 
     _updateStackVoltage(0.0);
 
-    bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
-    if (flowing) {
-      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR IS STILL FLOWING ");
-    }
-    getConfig()->report.air_flow_sufficient = flowing;
+    //    bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
+    //    if (flowing) {
+    //      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR IS STILL FLOWING ");
+    //    }
+    //    getConfig()->report.air_flow_sufficient = flowing;
 
-    delay(10);
-    double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
+    //    delay(10);
+    //    double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
 
-    if (flow_ml_per_s >= 4550.0) {
+    //    if (flow_ml_per_s >= 4550.0) {
       // This is the error condition for this sensor!
-    } else {
-      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
-    }
+    //    } else {
+    //      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    //    }
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsWarmup() {
@@ -279,20 +279,20 @@ namespace OxApp
     }
 
 
-    bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
-    if (!flowing) {
-      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
-    }
-    getConfig()->report.air_flow_sufficient = flowing;
+    // bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
+    // if (!flowing) {
+    //   OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
+    // }
+    // getConfig()->report.air_flow_sufficient = flowing;
 
-    delay(10);
-    double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
+    // delay(10);
+    // double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
 
-    if (flow_ml_per_s >= 4550.0) {
-      // This is the error condition for this sensor!
-    } else {
-      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
-    }
+    // if (flow_ml_per_s >= 4550.0) {
+    //   // This is the error condition for this sensor!
+    // } else {
+    //   getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    // }
 
     return new_ms;
   }
@@ -385,19 +385,19 @@ namespace OxApp
        return Warmup;
      }
 
-     bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
-    if (!flowing) {
-      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
-    }
-    getConfig()->report.air_flow_sufficient = flowing;
-    delay(10);
-    double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
+    //  bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
+    // if (!flowing) {
+    //   OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
+    // }
+    // getConfig()->report.air_flow_sufficient = flowing;
+    // delay(10);
+    // double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
 
-    if (flow_ml_per_s >= 4550.0) {
-      // This is the error condition for this sensor!
-    } else {
-      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
-    }
+    // if (flow_ml_per_s >= 4550.0) {
+    //   // This is the error condition for this sensor!
+    // } else {
+    //   getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    // }
      return new_ms;
     }
 #else
@@ -450,7 +450,6 @@ namespace OxApp
 #endif
 
     void CogTask::_configTemperatureSensors() {
-        OxCore::Debug<const char *>("_configPressureSensors\n");
 
 #ifdef RIBBONFISH
 #ifdef USE_MAX31850_THERMOCOUPLES
