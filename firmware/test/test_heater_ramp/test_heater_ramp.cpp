@@ -63,7 +63,8 @@ const int FAN_PWM = (int) (255.0*60.0/100.0);
 
 const float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
 const float RAMP_DN_TARGET_D_MIN = 0.5; // degrees C per minute
-const int HOLD_TEMPERATURE = 30;
+const float HOLD_TEMPERATURE = 30.0;
+const float STOP_TEMPERATURE = 27.0;
 const unsigned long HOLD_TIME_MINUTES = 1;
 const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
 const float STARTING_DUTY_CYCLE_FRACTION = 0.0;
@@ -219,10 +220,6 @@ namespace OxApp
     // If our data is not complete yet, we will wait.
     if ((t0 == 0) || (t1 == 0))
       return;
-    Serial.println("computing delta");
-    Serial.println(t0,5);
-
-    Serial.println(t1,5);
     float DdeltaRaw = t0 - t1;
     // now compute Ddelta_C_per_min...
     float Ddelta_C_per_min_computed = (DdeltaRaw * TEMPERATRUE_TIME_DELTA_MS) / (60.0*1000.0);
@@ -235,9 +232,15 @@ namespace OxApp
     double postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
     double postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
     double postGetterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_getter_indices[0]);
-    getConfig()->report.post_heater_C = postHeaterTemp;
-    getConfig()->report.post_stack_C = postStackTemp;
-    getConfig()->report.post_getter_C = postGetterTemp;
+    // Sometimes we get a data read error, that comes across
+    // as -127.00. In that case, we will leave the
+    // value unchanged from the last read.
+    if (postHeaterTemp > -100.0)
+      getConfig()->report.post_heater_C = postHeaterTemp;
+    if (postStackTemp > -100.0)
+      getConfig()->report.post_stack_C = postStackTemp;
+    if (postGetterTemp > -100.0)
+      getConfig()->report.post_getter_C = postGetterTemp;
      addTempToQueue(getConfig()->report.post_heater_C);
      calculateDdelta();
   }
@@ -297,8 +300,6 @@ namespace OxApp
     SupervisorTask();
     const int PERIOD_MS = 1000;
     State state = RampingUp;
-
-
     unsigned long begin_hold_time;
   private:
     bool _init() override;
@@ -315,14 +316,32 @@ namespace OxApp
 
   bool SupervisorTask::_run()
   {
+
     switch (state) {
     case RampingUp: {
+      OxCore::Debug<const char *>("State: RAMPING UP\n");
+      float postHeaterTemp = getConfig()->report.post_stack_C;
+      if (postHeaterTemp > HOLD_TEMPERATURE)
+        this->state = Holding;
+        begin_hold_time = millis();
       break;
     };
     case Holding: {
+      OxCore::Debug<const char *>("State: HOLDING\n");
+      unsigned long ms = millis();
+      if (((ms - begin_hold_time) / 1000) > HOLD_TIME_SECONDS) {
+        this->state = RampingDn;
+      }
       break;
     };
     case RampingDn: {
+      OxCore::Debug<const char *>("State: RAMPING DN\n");
+      float postHeaterTemp = getConfig()->report.post_stack_C;
+      if (postHeaterTemp < STOP_TEMPERATURE) {
+        OxCore::Debug<const char *>("Stop temperature reached!\n");
+        OxCore::Debug<const char *>("=======================\n");
+        abort();
+      }
       break;
     };
     }
@@ -477,29 +496,22 @@ void setup() {
   Serial.println("Fan Set up");
   delay(100);
   OxCore::TaskProperties readTempsProperties;
-  Serial.println("A");
   readTempsProperties.name = "readTemps";
-  Serial.println("B");
   readTempsProperties.id = 25;
-  Serial.println("C");
   readTempsProperties.period = readTempsTask.PERIOD_MS;
-  Serial.println("D");
   readTempsProperties.priority = OxCore::TaskPriority::High;
-  Serial.println("E");
   readTempsProperties.state_and_config = (void *) &machineConfig;
-  Serial.println("About to add readTemps task");
   delay(300);
   core.AddTask(&readTempsTask, &readTempsProperties);
-  Serial.println("Task Added");
   delay(100);
 
-  // OxCore::TaskProperties supervisorProperties;
-  // supervisorProperties.name = "supervisor";
-  // supervisorProperties.id = 26;
-  // supervisorProperties.period = supervisorTask.PERIOD_MS;
-  // supervisorProperties.priority = OxCore::TaskPriority::High;
-  // supervisorProperties.state_and_config = (void *) &machineConfig;
-  // core.AddTask(&supervisorTask, &supervisorProperties);
+  OxCore::TaskProperties supervisorProperties;
+  supervisorProperties.name = "supervisor";
+  supervisorProperties.id = 26;
+  supervisorProperties.period = supervisorTask.PERIOD_MS;
+  supervisorProperties.priority = OxCore::TaskPriority::High;
+  supervisorProperties.state_and_config = (void *) &machineConfig;
+  core.AddTask(&supervisorTask, &supervisorProperties);
 
 
   OxCore::TaskProperties controllerProperties;
