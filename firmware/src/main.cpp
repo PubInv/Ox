@@ -27,7 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <cog_task.h>
 #include <serial_task.h>
 #include <fault_task.h>
-#include <fanPID_task.h>
+// #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
 #include <fanTEST_task.h>
 #endif
@@ -41,7 +41,7 @@ OxApp::RetrieveScriptUDPTask retrieveScriptUDPTask;
 OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 OxApp::FaultTask faultTask;
-OxApp::FanPIDTask fanPIDTask;
+// OxApp::FanPIDTask fanPIDTask;
 #ifdef TEST_FANS_ONLY
 OxApp::FanTESTTask fanTESTTask;
 #endif
@@ -79,14 +79,14 @@ void setup()
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
     //    while(1);
   }
-  Serial.print("FLOW SENSOR SERIAL NUMBER : ");
-  Serial.println(cogConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
+  // Serial.print("FLOW SENSOR SERIAL NUMBER : ");
+  // Serial.println(cogConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
 
-  if (cogConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
-    Serial.println("FLOW SENSOR NOT AVIALABLE!");
-    Serial.println("THIS IS A CRITICAL ERROR!");
-    //    while(1);
-  }
+  // if (cogConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
+  //   Serial.println("FLOW SENSOR NOT AVIALABLE!");
+  //   Serial.println("THIS IS A CRITICAL ERROR!");
+  //   //    while(1);
+  // }
 
 
 
@@ -136,13 +136,13 @@ void setup()
   core.AddTask(&faultTask, &faultProperties);
 
 
-  OxCore::TaskProperties fanPIDProperties;
-  fanPIDProperties.name = "fanPID";
-  fanPIDProperties.id = 23;
-  fanPIDProperties.period = 40000;
-  fanPIDProperties.priority = OxCore::TaskPriority::High;
-  fanPIDProperties.state_and_config = (void *) &cogConfig;
-      core.AddTask(&fanPIDTask, &fanPIDProperties);
+  // OxCore::TaskProperties fanPIDProperties;
+  // fanPIDProperties.name = "fanPID";
+  // fanPIDProperties.id = 23;
+  // fanPIDProperties.period = 40000;
+  // fanPIDProperties.priority = OxCore::TaskPriority::High;
+  // fanPIDProperties.state_and_config = (void *) &cogConfig;
+  //     core.AddTask(&fanPIDTask, &fanPIDProperties);
 
       if (ETHERNET_BOARD_PRESENT) {
   OxCore::TaskProperties retrieveScriptUDPProperties;
