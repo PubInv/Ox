@@ -21,6 +21,9 @@ Prepairing to center punch the front DIN rail holes
 ![20230406_145949.jpg](20230406_145949.jpg)  
 After punching DIN rail holes.  Red outlines the proposed approximat location of the DIN rails.
 
+![ThermoCouplesUnit1.JPG](ThermoCouplesUnit1.JPG)
+Detail of the thermocouple jack panel.
+
 ### Videos made during assembly
 
 [20230405_164525.mp4](20230405_164525.mp4)
