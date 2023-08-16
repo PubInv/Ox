@@ -29,6 +29,7 @@ Fabrication drawing for front panel of 20230324
 
 ## Parts List (Partial)
 
+
 | Quantity | Description                                  | Manufacturer         | Man Part Number      | Distributor    | Distributor Part Number | Drawing                                                                                              | Cost Each |
 |----------|----------------------------------------------|----------------------|----------------------|----------------|-------------------------|------------------------------------------------------------------------------------------------------|-----------|
 | 1        | frontpanel_Rev1_3.dxf                        | PublicInvention      | TBD                  | NA             | NA                      | [frontpanel_Rev1_3.dxf](frontpanel_Rev1_3.dxf)                                                       |           |
@@ -44,6 +45,7 @@ Fabrication drawing for front panel of 20230324
 | 3        | Miniature Thermocouple Panel Jack Connectors | Omega                | MPJ-K-F              | Omega          | MPJ-K-F                 | [SnapStrip Drawing](Parts/Mech/MSS_Series.pdf)                                                       | $4.26     |
 | 24       | M5-8mm pan head screw                        |                      |                      | Amazon         |                         | https://www.amazon.com/M5-0-8-Button-Socket-Stainless-Quantity/dp/B084MMND2L/ref=asc_df_B084MMND2L   | $.0899    |
 | 24       | 5mm T Nut Sliding 10mmx6mm                   |                      |                      | Amazon         |                         | https://www.amazon.com/Fastener-Nickel-Plated-Sliding-Aluminum-Profile/dp/B086MKNYDS/ref=sr_1_1_sspa | $0.053    |
+
 
 
  
