@@ -7,7 +7,14 @@ An assembly drawing in FreeCAD. This drawing shows an intermediate horizontal sh
 
 ## First Enclosure Fabrication Notes and Photos
 
-![image](???.png)
+Open SCAD View of Enclosure
+Drawings used during parts order for Unit 1
+![image](https://github.com/ForrestErickson/NASA-COG/assets/5836181/3e737e1a-d652-4505-8af9-1a45d5577721)  
+
+Drawings used during parts order for Unit 2
+FreeCAD view of Assembly (including one power supply)  
+![image](https://github.com/ForrestErickson/NASA-COG/assets/5836181/fb5cbe7d-795f-4848-a33e-268128b46011)
+
 
 ## Parts List (Partial)
 | Quantity         	| Description                                                                       	| Manufacturer    	| Man Part Number 	| Distributor 	| Distributor Part Number                                                                                                                  	| Drawing                                                                                                   	| Cost Each 	|
