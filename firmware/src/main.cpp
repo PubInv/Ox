@@ -72,6 +72,7 @@ void setup()
   }
 
 
+
   //  Eventually we will migrate all hardware to the MachineHAL..
   cogConfig.hal = new MachineHAL();
   bool initSuccess  = cogConfig.hal->init();
@@ -88,6 +89,7 @@ void setup()
   //   //    while(1);
   // }
 
+  machineConfig->report = new MachineStatusReport();
 
 
   //TODO: This needs to be placed inthe task init feature!

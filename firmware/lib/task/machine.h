@@ -107,7 +107,7 @@ public:
   // However, when used in the Arduino it has to be mapped
   // onto a an integer (usuall 0-255) but this should be
   // the last step.
-  float fanPWM = 1.0;
+  float dutyCycle = 0.0;
 
   char const* errors[10];
   // Until we have a good machine model here,
@@ -137,12 +137,12 @@ public:
   float DESIRED_STACK_C = 700.0;
 #endif
 
-  MachineStatusReport report;
+  MachineStatusReport *report;
 
 };
 
-void outputReport(MachineStatusReport msr);
-void createJSONReport(MachineStatusReport msr, char *buffer);
+void outputReport(MachineStatusReport *msr);
+void createJSONReport(MachineStatusReport *msr, char *buffer);
 
 
 #endif

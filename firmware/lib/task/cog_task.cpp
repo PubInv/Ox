@@ -61,6 +61,8 @@ namespace OxApp
     {
         OxCore::Debug<const char *>("CogTask init\n");
 
+        getConfig()->report = new MachineStatusReport();
+
         _configTemperatureSensors();
 
 
@@ -75,7 +77,7 @@ namespace OxApp
         // Our main heater measured 5.6 ohms
         //        Heater v1("PRIMARY_HEATER", 1, RF_HEATER, 0, 5.8);
         //        _heaters[0] = v1;
-        getConfig()->fanPWM = 0.0;
+        getConfig()->dutyCycle = 0.0;
 
         _stacks[0] = new SL_PS("FIRST_STACK",0);
 
@@ -110,9 +112,9 @@ namespace OxApp
     double postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
     double postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
     double postGetterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_getter_indices[0]);
-    getConfig()->report.post_heater_C = postHeaterTemp;
-    getConfig()->report.post_stack_C = postStackTemp;
-    getConfig()->report.post_getter_C = postGetterTemp;
+    getConfig()->report->post_heater_C = postHeaterTemp;
+    getConfig()->report->post_stack_C = postStackTemp;
+    getConfig()->report->post_getter_C = postGetterTemp;
 
   }
     bool CogTask::_run()
@@ -212,9 +214,9 @@ namespace OxApp
     MachineState new_ms = Off;
     _updatePowerComponentsVoltage(0);
 
-    getConfig()->fanPWM = 0.0;
-    getConfig()->_updateFanSpeed(getConfig()->fanPWM);
-    getConfig()->report.fan_speed = getConfig()->fanPWM;
+    getConfig()->dutyCycle = 0.0;
+    getConfig()->_updateFanSpeed(getConfig()->dutyCycle);
+    getConfig()->report->fan_speed = getConfig()->dutyCycle;
 
     _updateStackVoltage(0.0);
 
@@ -222,7 +224,7 @@ namespace OxApp
     //    if (flowing) {
     //      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR IS STILL FLOWING ");
     //    }
-    //    getConfig()->report.air_flow_sufficient = flowing;
+    //    getConfig()->report->air_flow_sufficient = flowing;
 
     //    delay(10);
     //    double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
@@ -230,7 +232,7 @@ namespace OxApp
     //    if (flow_ml_per_s >= 4550.0) {
       // This is the error condition for this sensor!
     //    } else {
-    //      getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    //      getConfig()->report->flow_ml_per_s = flow_ml_per_s;
     //    }
     return new_ms;
   }
@@ -244,8 +246,8 @@ namespace OxApp
     float postHeaterTemp;
     float postStackTemp;
 
-    if ((getConfig()->report.post_heater_C >= getConfig()->WARMUP_TARGET_C) ||
-        (getConfig()->report.post_stack_C >= getConfig()->WARMUP_TARGET_C)) {
+    if ((getConfig()->report->post_heater_C >= getConfig()->WARMUP_TARGET_C) ||
+        (getConfig()->report->post_stack_C >= getConfig()->WARMUP_TARGET_C)) {
       new_ms = NormalOperation;
       getConfig()->idleOrOperate = Operate;
       _updatePowerComponentsOperation(getConfig()->idleOrOperate);
@@ -255,7 +257,7 @@ namespace OxApp
 
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
     _updateStackAmperage(getConfig()->TARGET_STACK_CURRENT_mA/1000.0);
-    //    getConfig()->report.stack_voltage = getConfig()->MAXIMUM_STACK_VOLTAGE;
+    //    getConfig()->report->stack_voltage = getConfig()->MAXIMUM_STACK_VOLTAGE;
     return new_ms;
   }
 
@@ -269,9 +271,9 @@ namespace OxApp
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
 
-    if (getConfig()->report.post_heater_C <= getConfig()->COOLDOWN_TARGET_C
+    if (getConfig()->report->post_heater_C <= getConfig()->COOLDOWN_TARGET_C
         &&
-        getConfig()->report.post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
+        getConfig()->report->post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
     } else {
       _updatePowerComponentsVoltage(0.0);
@@ -283,7 +285,7 @@ namespace OxApp
     // if (!flowing) {
     //   OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
     // }
-    // getConfig()->report.air_flow_sufficient = flowing;
+    // getConfig()->report->air_flow_sufficient = flowing;
 
     // delay(10);
     // double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
@@ -291,7 +293,7 @@ namespace OxApp
     // if (flow_ml_per_s >= 4550.0) {
     //   // This is the error condition for this sensor!
     // } else {
-    //   getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    //   getConfig()->report->flow_ml_per_s = flow_ml_per_s;
     // }
 
     return new_ms;
@@ -321,7 +323,7 @@ namespace OxApp
           // for now
           _ac_heaters[i].setHeater(0,(voltage > 0.0));
           _ac_heaters[i].setHeater(1,(voltage > 0.0));
-        getConfig()->report.heater_voltage = voltage;
+        getConfig()->report->heater_voltage = voltage;
         }
     }
 
@@ -361,7 +363,7 @@ namespace OxApp
      for (int i = 0; i < NUM_STACKS; i++) {
        float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[i]);
        float current_C = temperature;
-       getConfig()->report.post_stack_C = current_C;
+       getConfig()->report->post_stack_C = current_C;
        float max_post_stack_C = getConfig()->MAX_POST_STACK_C;
        // TODO: In actuality, we need something more controllable
        // than MAX on and zero off!
@@ -373,7 +375,7 @@ namespace OxApp
          voltage = 0.0;
        }
        _updateStackVoltage(voltage);
-       getConfig()->report.stack_voltage = voltage;
+       getConfig()->report->stack_voltage = voltage;
 
        Serial.print(" YYY  v : ");
        float v = getConfig()->TARGET_STACK_CURRENT_mA/1000.0;
@@ -381,7 +383,7 @@ namespace OxApp
        _updateStackAmperage(v);
      }
 
-     if (getConfig()->report.post_heater_C < getConfig()->WARMUP_TARGET_C) {
+     if (getConfig()->report->post_heater_C < getConfig()->WARMUP_TARGET_C) {
        return Warmup;
      }
 
@@ -389,14 +391,14 @@ namespace OxApp
     // if (!flowing) {
     //   OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
     // }
-    // getConfig()->report.air_flow_sufficient = flowing;
+    // getConfig()->report->air_flow_sufficient = flowing;
     // delay(10);
     // double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
 
     // if (flow_ml_per_s >= 4550.0) {
     //   // This is the error condition for this sensor!
     // } else {
-    //   getConfig()->report.flow_ml_per_s = flow_ml_per_s;
+    //   getConfig()->report->flow_ml_per_s = flow_ml_per_s;
     // }
      return new_ms;
     }

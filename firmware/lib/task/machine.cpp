@@ -21,47 +21,48 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Wire.h>
 
 
-void outputReport(MachineStatusReport msr) {
-          OxCore::DebugLn<const char *>("");
+void outputReport(MachineStatusReport *msr) {
+        OxCore::DebugLn<const char *>("");
         OxCore::Debug<const char *>("Post Heater C: ");
-        OxCore::DebugLn<float>(msr.post_heater_C);
-        OxCore::Debug<const char *>("Heater      V: ");
-        OxCore::DebugLn<float>(msr.heater_voltage);
-        OxCore::Debug<const char *>("Post Getter  C: ");
-        OxCore::DebugLn<float>(msr.post_getter_C);
+        OxCore::DebugLn<float>(msr->post_heater_C);
+        OxCore::Debug<const char *>("Duty Cycle (fraction): ");
+        OxCore::DebugLn<float>(msr->heater_duty_cycle);
+        OxCore::Debug<const char *>("Post Getter C: ");
+        OxCore::DebugLn<float>(msr->post_getter_C);
         OxCore::Debug<const char *>("Post Stack  C: ");
-        OxCore::DebugLn<float>(msr.post_stack_C);
+        OxCore::DebugLn<float>(msr->post_stack_C);
         OxCore::Debug<const char *>("Stack volts V: ");
-        OxCore::DebugLn<float>(msr.stack_voltage);
+        OxCore::DebugLn<float>(msr->stack_voltage);
         OxCore::Debug<const char *>("Stack amps  A: ");
-        OxCore::DebugLn<float>(msr.stack_amps);
+        OxCore::DebugLn<float>(msr->stack_amps);
         OxCore::Debug<const char *>("Stack ohms  O: ");
-        if (msr.stack_ohms < 0.0) {
+        if (msr->stack_ohms < 0.0) {
           OxCore::DebugLn<const char*>(" N/A");
         } else {
-          OxCore::DebugLn<float>(msr.stack_ohms);
+          OxCore::DebugLn<float>(msr->stack_ohms);
         }
         OxCore::Debug<const char *>("Flow (ml / s): ");
-        OxCore::DebugLn<float>(msr.flow_ml_per_s);
+        OxCore::DebugLn<float>(msr->flow_ml_per_s);
         OxCore::Debug<const char *>("Fan Speed (non-lin) [0.0 .. 1.0]: ");
-        OxCore::DebugLn<float>(msr.fan_speed);
+        OxCore::DebugLn<float>(msr->fan_speed);
 }
 
-void createJSONReport(MachineStatusReport msr, char *buffer) {
+void createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer,"{\n");
-  sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr.post_heater_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\",\n",msr.heater_voltage);
-  sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\",\n",msr.post_stack_C);
-  sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr.post_getter_C);
-  sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\",\n",msr.stack_voltage);
-  sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\",\n",msr.stack_amps);
-  if (msr.stack_ohms < 0.0) {
-    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"N/A\",\n",msr.stack_amps);
+  sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr->post_heater_C);
+  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
+  sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\",\n",msr->heater_voltage);
+  sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\",\n",msr->post_stack_C);
+  sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr->post_getter_C);
+  sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\",\n",msr->stack_voltage);
+  sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\",\n",msr->stack_amps);
+  if (msr->stack_ohms < 0.0) {
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"N/A\",\n",msr->stack_amps);
   } else {
-    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"%.2f\",\n",msr.stack_ohms);
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"%.2f\",\n",msr->stack_ohms);
   }
-  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr.flow_ml_per_s);
-  sprintf(buffer+strlen(buffer), "\"FanSpeed\": \"%.2f\"\n",msr.fan_speed);
+  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr->flow_ml_per_s);
+  sprintf(buffer+strlen(buffer), "\"FanSpeed\": \"%.2f\"\n",msr->fan_speed);
   sprintf(buffer+strlen(buffer),"}\n");
 }
 
@@ -80,8 +81,6 @@ bool MachineHAL::init() {
   // }
 
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
-
-
 
   _fans[0]._init();
 #ifdef TEST_FANS_ONLY
