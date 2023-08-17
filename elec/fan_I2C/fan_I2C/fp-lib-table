@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name "PubInv_PCB")(type "KiCad")(uri "${KIPRJMOD}/PubInv_PCB.pretty")(options "")(descr ""))
+  (lib (name "arduino-library")(type "KiCad")(uri "C:/Users/Public/Downloads/KiCad/Libraries/arduino-kicad-library/footprints/arduino-library.pretty")(options "")(descr ""))
+)
