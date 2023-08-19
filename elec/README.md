@@ -7,6 +7,10 @@ Wiring of ODECOS Unit 1 Notes
 1. Due Pin-Out Mape for OEDCS1 : https://docs.google.com/spreadsheets/d/18wP1Cyg5-j3FP92x7no_JsCCFNvo9y2avyn5nvmAj6I/edit#gid=0
 2. Fan Controller and Fan Wiring for OEDCS1: https://docs.google.com/document/d/1n3v-AxqNKEzcKqmHicGKnFmG8sKbNEL_pGaUlU9CZ8U/edit
 
+Wiring of thermocouple amplifires
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/81112c45-1a9b-4129-8997-f63fd8dc1c07)
+
+
 
 ## Unit 2
 Wiring of ODECOS Unit 2. Notes for creation of a new PCB 
