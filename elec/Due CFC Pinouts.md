@@ -6,7 +6,7 @@ This document describes the pinouts for the OEDCS designed for the CFC of approx
 | Due Pin Number  | 	Signal Name  | Set as I/O  | Connection  |  Notes |
 |---|---|---|---|---|
 | A0 |	FAN1_FG | Input | Blower 1 Tachometer
-| D4 |	TEMP1	| ?BIDirect? |	Dallas One-Wire connection to Thermocouple Breakouts |	Daisy chain connection to temprature probes. Address of ???
+| D4 |	TEMP1	| BIDirect |	Dallas One-Wire connection to Thermocouple Breakouts |	Daisy chain connection to temprature probes. Address of ???
 | D9 | nFAN1_PWM | Output | Blower PWM | This output will be inverted
 | D18 |	TX1 | Output |	Digital Power Supply TF800 Pin 23 | This is Serial1 TX for (power supply)[https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf]
 | D19 | RX1 |Input | Digital Power Supply TF800 Pin 24 | This is Serial1 RX for (power supply) [https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf]
