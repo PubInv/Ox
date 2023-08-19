@@ -5,11 +5,6 @@ This document describes the pinouts for the OEDCS designed for the CFC of approx
 
 | Due Pin Number  | 	Signal Name  | Set as I/O  | Connection  |  Notes |
 |---|---|---|---|---|
-|   |   |   |   |   |
-|   |   |   |   |   |
-|   |   |   |   |   |
-
-
 | A0 |	FAN1_FG | Input | Blower 1 Tachometer
 | D4 |	TEMP1	| ?BIDirect? |	Dallas One-Wire connection to Thermocouple Breakouts |	Daisy chain connection to temprature probes. Address of ???
 | D9 | nFAN1_PWM | Output | Blower PWM | This output will be inverted
