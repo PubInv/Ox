@@ -34,7 +34,7 @@ These are connected to Pins on the TF800:
 | TF800 Signal Name | TF800 PIN | Due PIN | Due Signal Name |
 |---|---|---|---|
 | Due Pin Number  | 	Signal Name  | Set as I/O  | Connection  |  Notes |
-|---|---|---|---|---|
+|---|---|---|---|
 | TX|	24|	19|	RX|	
 |RX |	23|	18|	TX|	
 |GND|	22|	GND|	GND|	
