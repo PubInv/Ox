@@ -30,7 +30,7 @@ The numbering of this power supply is a little tricky. Please see the datasheet:
 In additon to the GND wire, the DUE's Serial1 interface is used. This is pins 19(RX) and 18(TX). 				
 These are connected to Pins on the TF800:				
 
-| Due Pin Number  | 	Signal Name  | Set as I/O  | Connection  |  Notes |
+| TF800 Signal Name  | 	TF800 PIN  | Due PIN  | Due Signal Name  |
 |---|---|---|---|
 | TX|	24|	19|	RX|	
 |RX |	23|	18|	TX|	
