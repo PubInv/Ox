@@ -16,3 +16,22 @@ This document describes the pinouts for the OEDCS designed for the CFC of approx
 | GND | | Sink | |			Digital Power Supply TF800 Pin 22
 | GND |
 
+Notes: 			
+Most components require a GND rail. There are three of them on the DUE. I have tied the all of these to GND.			
+The GND rail is tied to the GND of the 12V (fixed) power supply, which is also tied to the GND bus bar.			
+Pin Signal Names are constant, all upper case. 			
+Leading "n" indicated active low naming convention			
+
+
+## Digitaly controled Power Supply				
+Note: The DPS connections are particularly delicate in the OEDCS SN#1.				
+Two signal wires and one GND wire are used. Jumper wires are plugged into a female connector which is plugged into the power supply. 				
+The numbering of this power supply is a little tricky. Please see the datasheet: [https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf](https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf)			
+In additon to the GND wire, the DUE's Serial1 interface is used. This is pins 19(RX) and 18(TX). 				
+These are connected to Pins on the TF800:				
+				
+| TF800 Signal Name	| TF800 PIN |	Due PIN	| Due Signal Name	|
+|--|--|--|--|--|--|
+| TX|	24|	19|	RX|	
+|RX |	23|	18|	TX|	
+|GND|	22|	GND|	GND|	
