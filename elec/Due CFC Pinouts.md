@@ -29,9 +29,12 @@ Two signal wires and one GND wire are used. Jumper wires are plugged into a fema
 The numbering of this power supply is a little tricky. Please see the datasheet: [https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf](https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf)			
 In additon to the GND wire, the DUE's Serial1 interface is used. This is pins 19(RX) and 18(TX). 				
 These are connected to Pins on the TF800:				
-				
+
+    
 | TF800 Signal Name | TF800 PIN | Due PIN | Due Signal Name |
 |---|---|---|---|
+| Due Pin Number  | 	Signal Name  | Set as I/O  | Connection  |  Notes |
+|---|---|---|---|---|
 | TX|	24|	19|	RX|	
 |RX |	23|	18|	TX|	
 |GND|	22|	GND|	GND|	
