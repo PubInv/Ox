@@ -27,6 +27,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <cog_task.h>
 #include <serial_task.h>
 #include <fault_task.h>
+#include <duty_cycle_task.h>
+
 // #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
 #include <fanTEST_task.h>
@@ -41,6 +43,9 @@ OxApp::RetrieveScriptUDPTask retrieveScriptUDPTask;
 OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 OxApp::FaultTask faultTask;
+
+DutyCycleTask dutyCycleTask;
+
 // OxApp::FanPIDTask fanPIDTask;
 #ifdef TEST_FANS_ONLY
 OxApp::FanTESTTask fanTESTTask;
@@ -48,7 +53,7 @@ OxApp::FanTESTTask fanTESTTask;
 
 #include <machine.h>
 
-MachineConfig cogConfig;
+MachineConfig machineConfig;
 /***********************************/
 
 #define ETHERNET_BOARD_PRESENT 0
@@ -74,22 +79,22 @@ void setup()
 
 
   //  Eventually we will migrate all hardware to the MachineHAL..
-  cogConfig.hal = new MachineHAL();
-  bool initSuccess  = cogConfig.hal->init();
+  machineConfig.hal = new MachineHAL();
+  bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
     //    while(1);
   }
   // Serial.print("FLOW SENSOR SERIAL NUMBER : ");
-  // Serial.println(cogConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
+  // Serial.println(machineConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
 
-  // if (cogConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
+  // if (machineConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
   //   Serial.println("FLOW SENSOR NOT AVIALABLE!");
   //   Serial.println("THIS IS A CRITICAL ERROR!");
   //   //    while(1);
   // }
 
-  machineConfig->report = new MachineStatusReport();
+  machineConfig.report = new MachineStatusReport();
 
 
   //TODO: This needs to be placed inthe task init feature!
@@ -106,7 +111,7 @@ void setup()
 #endif
 
       // Now we will set the machine state to "Off"
-      cogConfig.ms = Off;
+      machineConfig.ms = Off;
 
   /***** Configure and add your tasks here *****/
 
@@ -116,9 +121,9 @@ void setup()
   cogProperties.id = 20;
   cogProperties.period = 10000;
   cogProperties.priority = OxCore::TaskPriority::High;
-  // Note: The cogConfig is universal to all tasks.
+  // Note: The machineConfig is universal to all tasks.
   // It respresents the entire machine.
-  cogProperties.state_and_config = (void *) &cogConfig;
+  cogProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&cogTask, &cogProperties);
 
   OxCore::TaskProperties serialProperties;
@@ -126,7 +131,7 @@ void setup()
   serialProperties.id = 21;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
-  serialProperties.state_and_config = (void *) &cogConfig;
+  serialProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&serialTask, &serialProperties);
 
   OxCore::TaskProperties faultProperties;
@@ -134,7 +139,7 @@ void setup()
   faultProperties.id = 22;
   faultProperties.period = 30000;
   faultProperties.priority = OxCore::TaskPriority::High;
-  faultProperties.state_and_config = (void *) &cogConfig;
+  faultProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&faultTask, &faultProperties);
 
 
@@ -143,7 +148,7 @@ void setup()
   // fanPIDProperties.id = 23;
   // fanPIDProperties.period = 40000;
   // fanPIDProperties.priority = OxCore::TaskPriority::High;
-  // fanPIDProperties.state_and_config = (void *) &cogConfig;
+  // fanPIDProperties.state_and_config = (void *) &machineConfig;
   //     core.AddTask(&fanPIDTask, &fanPIDProperties);
 
       if (ETHERNET_BOARD_PRESENT) {
@@ -152,17 +157,33 @@ void setup()
   retrieveScriptUDPProperties.id = 24;
   retrieveScriptUDPProperties.period = 5000;
   retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
-  retrieveScriptUDPProperties.state_and_config = (void *) &cogConfig;
+  retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
 
   core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
       }
+
+
+      dutyCycleTask.NUM_HEATERS = cogTask.NUM_HEATERS;
+      dutyCycleTask._ac_heaters = new GGLabsSSR1*[dutyCycleTask.NUM_HEATERS];
+      for(int i = 0; i < dutyCycleTask.NUM_HEATERS; i++) {
+        dutyCycleTask._ac_heaters[i] = cogTask._ac_heaters[i];
+      }
+
+  OxCore::TaskProperties dutyCycleProperties;
+  dutyCycleProperties.name = "dutyCycle";
+  dutyCycleProperties.id = 28;
+  dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
+  dutyCycleProperties.priority = OxCore::TaskPriority::Low;
+  dutyCycleProperties.state_and_config = (void *) &machineConfig;
+  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+
 #else
   OxCore::TaskProperties fanTESTProperties;
   fanTESTProperties.name = "fanTEST";
   fanTESTProperties.id = 25;
   fanTESTProperties.period = 10000;
   fanTESTProperties.priority = OxCore::TaskPriority::High;
-  fanTESTProperties.state_and_config = (void *) &cogConfig;
+  fanTESTProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&fanTESTTask, &fanTESTProperties);
 #endif
 

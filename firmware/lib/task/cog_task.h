@@ -68,13 +68,13 @@ namespace OxApp
       const static int NUM_FANS = 1;
       const static int NUM_STACKS = 1;
 #endif
-
+      float test_var = 4.0;
       void updateTemperatures();
 
       Temperature::AbstractTemperature* _temperatureSensors;
       // On March 7, Rob attempts to switch from a DC heater to an AC heter
       //      Heater _heaters[NUM_HEATERS];
-      GGLabsSSR1 _ac_heaters[NUM_HEATERS];
+      GGLabsSSR1 **_ac_heaters;
       //      DeltaFans _fans[NUM_FANS];
 //      Fan _fans[NUM_FANS];
       AbstractPS* _stacks[NUM_STACKS];

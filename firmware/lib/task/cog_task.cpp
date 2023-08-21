@@ -67,9 +67,11 @@ namespace OxApp
 
 
 #ifdef RIBBONFISH
+        _ac_heaters = new GGLabsSSR1*[NUM_HEATERS];
         for(int i = 0; i < NUM_HEATERS; i++) {
-          _ac_heaters[i].setHeater(0,LOW);
-          _ac_heaters[i].setHeater(1,LOW);
+          _ac_heaters[i] = new GGLabsSSR1();
+          _ac_heaters[i]->setHeater(0,LOW);
+          _ac_heaters[i]->setHeater(1,LOW);
         }
 
 
@@ -321,8 +323,8 @@ namespace OxApp
           //        _heaters[i].update(voltage);
           // We have a two-channel AC heater, we will use both
           // for now
-          _ac_heaters[i].setHeater(0,(voltage > 0.0));
-          _ac_heaters[i].setHeater(1,(voltage > 0.0));
+          _ac_heaters[i]->setHeater(0,(voltage > 0.0));
+          _ac_heaters[i]->setHeater(1,(voltage > 0.0));
         getConfig()->report->heater_voltage = voltage;
         }
     }

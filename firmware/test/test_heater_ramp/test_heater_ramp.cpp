@@ -34,6 +34,7 @@ using namespace OxCore;
 #include <core_defines.h>
 #include <core.h>
 #include <machine.h>
+
 #include <SanyoAceB97.h>
 #include <Arduino.h>
 
@@ -43,9 +44,13 @@ using namespace OxCore;
 #include <DS18B20_temperature.h>
 #endif
 
-
 // We aren't using this, but it brings in declarations we need!
 #include <cog_task.h>
+
+#include <duty_cycle_task.h>
+// #include <spud_task.h>
+
+
 
 using namespace OxCore;
 static Core core;
@@ -78,9 +83,9 @@ const float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
 
 // This is the overall target_temp, which changes over time.
 
-const float HOLD_TEMPERATURE = 50.0;
+const float HOLD_TEMPERATURE = 600.0;
 const float STOP_TEMPERATURE = 27.0;
-const float START_TEMPERATURE = 27.0;
+const float START_TEMPERATURE = 600.0;
 
 float TARGET_TEMP = 27.0;
 
@@ -88,6 +93,7 @@ const unsigned long HOLD_TIME_MINUTES = 1;
 const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
 const float STARTING_DUTY_CYCLE_FRACTION = 0.0;
 const float STACK_VOLTAGE = 12.0;
+const float STACK_AMPERAGE = 3.0;
 
 // These parameters are related to our control procedure.
 // This is similar to a PID loop, but I don't think any integration
@@ -97,7 +103,7 @@ const float STACK_VOLTAGE = 12.0;
 
 // Let DutyCycle be changing Duty cycle, a fraction of 1.0.
 // In PID termonology, this is the "PLANT VARIABLE"--what we can control.
-float DutyCycle = STARTING_DUTY_CYCLE_FRACTION;
+float GlobalDutyCycle = STARTING_DUTY_CYCLE_FRACTION;
 // Temperature Read Period is how often we will update the
 // Temperature sensor.
 const int TEMPERATURE_READ_PERIOD_MS = 5000;
@@ -140,7 +146,14 @@ void _updateStackVoltage(float voltage,MachineConfig *machineConfig) {
     _stacks[i]->updateVoltage(voltage,machineConfig);
   }
 }
+void _updateStackAmperage(float amperage,MachineConfig *machineConfig) {
+  for (int i = 0; i < NUM_STACKS; i++) {
+    _stacks[i]->updateAmperage(amperage,machineConfig);
+  }
+}
 
+
+// SpudTask *spudTask;
 
 const int DEBUG_LEVEL = 1;
 using namespace std;
@@ -177,28 +190,30 @@ namespace OxApp
     }
   };
 
-    // Runs the Pressure Swing Adsorption cycle
-    class HeaterPIDTask : public OxCore::Task
-    {
-    public:
-      HeaterPIDTask();
-      PID *pidControllerHeater;
-      int DEBUG_PID = 1;
-      const int PERIOD_MS = 60*1000;
+  // Runs the Pressure Swing Adsorption cycle
+  class HeaterPIDTask : public OxCore::Task
+  {
+  public:
+    HeaterPIDTask();
+    PID *pidControllerHeater;
+    int DEBUG_PID = 1;
+    const int PERIOD_MS = 60*1000;
 
-      // These are on a scale of 1.0;
-      double dutyCycle_Output = 0.0;
-      double final_dutyCycle = 0.0;
-      double HeaterSetPoint_C = 0.0;
-      double Input_temperature_C = 0.0;
+    // These are on a scale of 1.0;
+    double dutyCycle_Output = 0.0;
+    double final_dutyCycle = 0.0;
+    double HeaterSetPoint_C = 0.0;
+    double Input_temperature_C = 0.0;
+    DutyCycleTask *dutyCycleTask;
+  private:
+    bool _init() override;
+    bool _run() override;
+    // This would go into the abstract class.
+  };
 
-    private:
-      bool _init() override;
-      bool _run() override;
-      // This would go into the abstract class.
-    };
 
   HeaterPIDTask::HeaterPIDTask() {
+
 
     /* Setting the initial parameters is always weird for PID controller..
      */
@@ -231,47 +246,51 @@ namespace OxApp
     this->pidControllerHeater->SetMode(AUTOMATIC);
   }
 
-    bool HeaterPIDTask::_init()
-    {
-        OxCore::Debug<const char *>("HeaterPIDTask init\n");
-        return true;
+  bool HeaterPIDTask::_init()
+  {
+
+    OxCore::Debug<const char *>("HeaterPIDTask init\n");
+    return true;
+  }
+
+  bool HeaterPIDTask::_run()
+  {
+    OxCore::Debug<const char *>("HeaterPIDTask run\n");
+    this->HeaterSetPoint_C = TARGET_TEMP;
+
+    double previousInput = this->Input_temperature_C;
+    this->Input_temperature_C = localGetConfig()->report->post_heater_C;
+
+    pidControllerHeater->Compute();
+
+    double s = this->dutyCycle_Output + this->final_dutyCycle;
+
+    s = min(s, 1.0);
+    s = max(s, 0.0);
+    this->final_dutyCycle = s;
+
+    dutyCycleTask->dutyCycle = s;
+
+    // This resets our duty_cycle computation
+    dutyCycleTask->reset_duty_cycle();
+
+    localGetConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
+
+    // The heater DutyCycle should go into the config, but
+    // does not currently exist there!
+    //        localGetConfig()->fanPWM = s;
+
+    if (DEBUG_PID > 0) {
+      OxCore::Debug<const char *>("previous input ");
+      OxCore::DebugLn<double>(previousInput);
+      OxCore::Debug<const char *>("Final dutyCycle_Output ");
+      OxCore::DebugLn<double>(this->dutyCycle_Output);
+      OxCore::Debug<const char *>("Final dutyCycle ");
+      OxCore::DebugLn<double>(this->final_dutyCycle);
     }
 
-    bool HeaterPIDTask::_run()
-    {
-      OxCore::Debug<const char *>("HeaterPIDTask run\n");
-      this->HeaterSetPoint_C = TARGET_TEMP;
-
-      double previousInput = this->Input_temperature_C;
-      this->Input_temperature_C = localGetConfig()->report->post_heater_C;
-
-      pidControllerHeater->Compute();
-
-      double s = this->dutyCycle_Output + this->final_dutyCycle;
-
-      s = min(s, 1.0);
-      s = max(s, 0.0);
-      this->final_dutyCycle = s;
-
-      DutyCycle = s;
-
-      localGetConfig()->report->heater_duty_cycle = DutyCycle;
-
-      // The heater DutyCycle should go into the config, but
-      // does not currently exist there!
-      //        localGetConfig()->fanPWM = s;
-
-      if (DEBUG_PID > 0) {
-        OxCore::Debug<const char *>("previous input ");
-        OxCore::DebugLn<double>(previousInput);
-        OxCore::Debug<const char *>("Final dutyCycle_Output ");
-        OxCore::DebugLn<double>(this->dutyCycle_Output);
-        OxCore::Debug<const char *>("Final dutyCycle ");
-        OxCore::DebugLn<double>(this->final_dutyCycle);
-      }
-
-      return true;
-    }
+    return true;
+  }
 
   // Once a second we will read the temperature and keep
   // a running record here (back in time) so that we can
@@ -382,8 +401,8 @@ namespace OxApp
       OxCore::Debug<const char *>("Target Temp : ");
       OxCore::DebugLn<float>(TARGET_TEMP);
     }
-     addTempToQueue(localGetConfig()->report->post_heater_C);
-     calculateDdelta();
+    addTempToQueue(localGetConfig()->report->post_heater_C);
+    calculateDdelta();
   }
   // I don't fully understand this!
   void ReadTempsTask::_configTemperatureSensors() {
@@ -416,9 +435,9 @@ namespace OxApp
     OxCore::Debug<const char *>("ReadTempsTask init\n");
     _configTemperatureSensors();
     OxCore::Debug<const char *>("Config of temperature sensors done\n");
-        for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
-          temps[i] = 0.0;
-        }
+    for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
+      temps[i] = 0.0;
+    }
     return true;
   }
 
@@ -443,6 +462,7 @@ namespace OxApp
     const int PERIOD_MS = 10000;
     //    Global_State global_state = RampingUp;
     unsigned long begin_hold_time;
+    unsigned long begin_down_time;
   private:
     bool _init() override;
     bool _run() override;
@@ -458,8 +478,9 @@ namespace OxApp
 
   bool SupervisorTask::_run()
   {
-     // This should not be necessary here, it should be required only once...
+    // This should not be necessary here, it should be required only once...
     _updateStackVoltage(STACK_VOLTAGE,machineConfig);
+    _updateStackAmperage(STACK_AMPERAGE,machineConfig);
 
     const unsigned long ms = millis();
     switch (global_state) {
@@ -487,6 +508,7 @@ namespace OxApp
       unsigned long ms = millis();
       if (((ms - begin_hold_time) / 1000) > HOLD_TIME_SECONDS) {
         global_state = RampingDn;
+        begin_down_time = ms;
         OxCore::Debug<const char *>("State: Changing to RAMPING DN\n");
       } else {
         const unsigned long MINUTES_HOLDING = ms / (60 * 1000);
@@ -505,7 +527,7 @@ namespace OxApp
         delay(1000);
         while(1);
       } else {
-        const unsigned long MINUTES_RAMPING_DN = ms / (60 * 1000);
+        const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
         TARGET_TEMP = HOLD_TEMPERATURE + MINUTES_RAMPING_DN * RAMP_DN_TARGET_D_MIN;
         TARGET_TEMP = max(TARGET_TEMP,STOP_TEMPERATURE);
       }
@@ -514,105 +536,9 @@ namespace OxApp
     }
     return true;
   }
-
-
-  // This task controls the ramp up, hold, and ramp down.
-  // class ControllerTask : public OxCore::Task
-  // {
-  // public:
-  //   ControllerTask();
-  //   const int DEBUG_CONTROLLER = 1;
-  //   const int PERIOD_MS = DUTY_CYCLE_ADJUSTMENT_PERIOD_MS;
-  // private:
-  //   bool _init() override;
-  //   bool _run() override;
-  // };
-  // ControllerTask::ControllerTask() {
-  // }
-
-  // bool ControllerTask::_init()
-  // {
-  //   OxCore::Debug<const char *>("ControllerTask init\n");
-  //   return true;
-  // }
-
-  // // Here is where we do what would be thought of as the PID calculation
-  // bool ControllerTask::_run()
-  // {
-
-  //   // This code and math directly controls the DELTA.
-  //   // At the time of writing this, we are changing this
-  //   // to set the set point directly. However, computing
-  //   // the Delta rate (and possibly using it as a separate limit to
-  //   // conform to, may be very valuable.)
-  //   float deltaRate = ((global_state == RampingUp) ? RAMP_UP_TARGET_D_MIN : RAMP_DN_TARGET_D_MIN) - Ddelta_C_per_min;
-  //   float clamped_deltaRate = constrain(deltaRate,
-  //                                    -MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN,
-  //                                    MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN);
-
-  //   // DutyCycle will now be set by the HeaterPIDTask
-  //   // DutyCycle = DutyCycle + clamped_deltaRate;
-  //   // DutyCycle = constrain(DutyCycle,0,1.0);
-
-  //   if (DEBUG_CONTROLLER > 0) {
-  //     OxCore::Debug<const char *>("Duty Cycle:");
-  //     OxCore::DebugLn<float>(DutyCycle);
-  //     OxCore::DebugLn<const char *>("");
-  //   }
-  //   return true;
-  // }
-
-
-  class DutyCycleTask : public OxCore::Task
-  {
-  public:
-    DutyCycleTask();
-    const int PERIOD_MS = 50;
-    boolean isOn = false;
-    float recorded_duty_cycle = 0;
-    unsigned long recorded_dc_ms = 0;
-    unsigned long time_of_last_check = 0;
-    int DEBUG_ID = 0;
-  private:
-    bool _init() override;
-    bool _run() override;
-  };
-  DutyCycleTask::DutyCycleTask() {
-  }
-
-  bool DutyCycleTask::_init()
-  {
-    OxCore::Debug<const char *>("DutyCycleTask init\n");
-    return true;
-  }
-
-  // The fundamental purpose of this task is just to
-  // drive the dynamic from DutyCycle of the heater.
-  bool DutyCycleTask::_run()
-  {
-    // WARNING: This will fail when 2^32 ms are reached, about 28 days I think.
-    unsigned long ms = millis();
-    unsigned long delta_t = ms - time_of_last_check;
-    // now we update the recorded duty_cycle weight
-    float old_dc = recorded_duty_cycle;
-    float old_ms = recorded_dc_ms;
-    recorded_dc_ms += delta_t;
-    recorded_duty_cycle = (old_dc * old_ms + ((isOn ? delta_t : 0))) / recorded_dc_ms;
-    // now we decided to turn on or off!
-    isOn = (recorded_duty_cycle < DutyCycle);
-    // now we actually turn the heater on or off!
-    if (DEBUG_ID > 0) {
-      OxCore::Debug<const char *>("Heater On: ");
-      OxCore::DebugLn<int>(isOn);
-    }
-    for(int i = 0; i < NUM_HEATERS; i++) {
-      _ac_heaters[i].setHeater(i,isOn);
-    }
-  }
 }
 
 using namespace OxApp;
-DutyCycleTask dutyCycleTask;
 ReadTempsTask readTempsTask;
 SupervisorTask supervisorTask;
 // ControllerTask controllerTask;
@@ -620,7 +546,8 @@ HeaterPIDTask heaterPIDTask;
 
 
 void setup() {
-  OxCore::serialBegin(115200UL);
+
+ OxCore::serialBegin(115200UL);
   delay(500);
 
   if (core.Boot() == false) {
@@ -661,6 +588,14 @@ void setup() {
   pinMode(RF_HEATER, OUTPUT);
   pinMode(RF_STACK, OUTPUT);
 #endif
+
+  DutyCycleTask *dutyCycleTask;
+  dutyCycleTask = new DutyCycleTask();
+  heaterPIDTask.dutyCycleTask = dutyCycleTask;
+
+
+  //  dutyCycleTask->NUM_HEATERS = 2;
+  //  dutyCycleTask->dutyCycle = STARTING_DUTY_CYCLE_FRACTION;
 
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
@@ -714,10 +649,10 @@ void setup() {
   OxCore::TaskProperties dutyCycleProperties;
   dutyCycleProperties.name = "dutyCycle";
   dutyCycleProperties.id = 28;
-  dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
-  dutyCycleProperties.priority = OxCore::TaskPriority::High;
+  dutyCycleProperties.period = dutyCycleTask->PERIOD_MS;
+  dutyCycleProperties.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+  core.AddTask(dutyCycleTask, &dutyCycleProperties);
 
 
   OxCore::TaskProperties HeaterPIDProperties;
@@ -730,7 +665,8 @@ void setup() {
 
   OxCore::Debug<const char *>("Added tasks\n");
 
-  _updateStackVoltage(1.0,machineConfig);
+  _updateStackVoltage(STACK_VOLTAGE,machineConfig);
+  _updateStackAmperage(STACK_AMPERAGE,machineConfig);
   analogWrite(fan->PWM_PIN[0],153);
 
   Serial.println("Setup Done!");
