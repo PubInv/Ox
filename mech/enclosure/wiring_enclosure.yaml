@@ -1,4 +1,5 @@
 #templates for generalized connectors
+#utilizes https://github.com/wireviz/WireViz
 templates:
   - &template_con
     type: Anderson Power SB50 SB
@@ -15,6 +16,11 @@ templates:
         category: bundle
         colors: [BK,WH,GN]
         gauge: 12 awg
+  - &tc_hookup
+        wirecount: 2
+        length: 0.02
+        category: bundle
+        colrs: [YL,RD]
 cables:   # dictionary of all used cables and wires
   W0:
     gauge: 1 mm2
@@ -47,22 +53,28 @@ cables:   # dictionary of all used cables and wires
     wirecount: 24
     category: bundle
 
-  W3:
-    <<: *template_wire
-  W4:
-    <<: *template_wire
-  W5:
-    <<: *template_wire
-  W6:
+  W3: #TC 1
+    <<: *tc_hookup
+    length: 0.2
+    show_equiv: true
+  W4: #TC 2
+    <<: *tc_hookup
+    length: 0.2
+    show_equiv: true
+  W5: #TC 3
+    <<: *tc_hookup
+    length: 0.2
+    show_equiv: true
+  W6: 
     <<: *template_wire
 
-  W7: #DC powersupply
+  W7: #DC powersupply_12v
     <<: *ac_hookup
 
-  W8: #DC powersupply
+  W8: #DC powersupply_24v
     <<: *ac_hookup
 
-  W9: #DC powersupply
+  W9: #DC powersupply_programmable
     <<: *ac_hookup
 
   power_cord:
@@ -72,11 +84,17 @@ cables:   # dictionary of all used cables and wires
       colors: [BK,WH,GN]
 
 connectors:  # dictionary of all used connectors
-  ferrule_crimp:  # unique connector designator/name
+  ferrule_spade:  # unique connector designator/name
+    style: simple
+    autogenerate: true
+    type: Spade ferrule
+    subtype: spade
+  ferrule_crimp:
     style: simple
     autogenerate: true
     type: Crimp ferrule
-    subtype: spade
+    subtype: 0.25 mm²
+    color: YE
 
   CN2:
     type: JST PHDR-24VS
@@ -106,7 +124,10 @@ connectors:  # dictionary of all used connectors
     <<: *template_con
   Arduino_Due:
     type: jumpers
-    pinlabels: [TX,RX, TX1, RX1, SDA, SCL, VIN, GND, A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, D17, D18, D19, D20, D21]
+    pinlabels: [TX,RX, TX1, RX1, SDA, SCL, VIN, GND, A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, D0, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, D17, D18, D19, D20, D21, 3.3V, GND]
+  Fan_Interface:
+    type: jumpers
+    pinlabels: [ nFAN1_PWM, FAN1_FG, nFAN2_PWM, FAN2_FG, FAN3_FG, nFAN3_PWM, FAN4_FG, nFAN4_PWM]
 
 connections:  # list of all connections to be made between cables and connectors
   -
@@ -136,8 +157,20 @@ connections:  # list of all connections to be made between cables and connectors
   -
      - ferrule_crimp
      - W7: [1-3]
+  -  
      - ferrule_crimp
+     - Arduino_Due: [A0, D4, D9, D18, D19, D51, 3.3V, GND]
+     - nFAN1_PWM
+     - FAN1_FG
+     - nFAN2_PWM
+     - FAN2_FG
+     - FAN3_FG
+     - nFAN3_PWM
+     - FAN4_FG
+     - nFAN4_PWM
+     
 #  -
 
 #additional_bom_items:  # custom items to add to BOM
 #  - zip ties           # BOM item (see below)
+
