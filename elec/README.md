@@ -13,16 +13,18 @@ Wiring of thermocouple amplifires
 
 
 ## Unit 2
-Wiring of ODECOS Unit 2. Notes for creation of a new PCB 
+Wiring of ODECOS Unit 2. Notes for creation of a new PCB  
+This table pulls from information in the references 1 and 2.   
 References:
-1. Due Pin-Out Mape for OEDCS1 : https://docs.google.com/spreadsheets/d/18wP1Cyg5-j3FP92x7no_JsCCFNvo9y2avyn5nvmAj6I/edit#gid=0
+1. Due Pin-Out Map for OEDCS1 : https://docs.google.com/spreadsheets/d/18wP1Cyg5-j3FP92x7no_JsCCFNvo9y2avyn5nvmAj6I/edit#gid=0
 2. Fan Controller and Fan Wiring for OEDCS1: https://docs.google.com/document/d/1n3v-AxqNKEzcKqmHicGKnFmG8sKbNEL_pGaUlU9CZ8U/edit
 
-This table pulls from information in the references 1 and 2.
+Revisions:
+* 20230821, Update DB25 Male 2-5 from +12V to "+24V Switched (fans)"
 
 | Fan Breakout 	| Signal-Function   	| DB25 MALE Pin # 	| DB25 FEMALE Pin # 	| Other 	| Due Pin 	| Due Signal 	|
 |--------------	|-------------------	|-----------------	|-------------------	|-------	|---------	|------------	|
-| 1            	| +12V for all fans 	| 2-5             	| 9-12              	|       	| NA      	| NA         	|
+| 1            	| +24V Switched (fans) 	| 2-5             	| 9-12              	|       	| ???      	| NA         	|
 | 2            	| GND for all fans  	| 22-25           	| 14-17             	|       	| GND     	| NA         	|
 | 3            	| #1 PWM            	| 13              	| 1                 	| J10-1 	| D9      	| nFAN1_PWM  	|
 | 4            	| #1 Tach           	| 9               	| 5                 	| J9-1  	| A0      	| FAN1_FG    	|
