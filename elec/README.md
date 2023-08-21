@@ -24,7 +24,7 @@ Revisions:
 
 | Fan Breakout 	| Signal-Function   	| DB25 MALE Pin # 	| DB25 FEMALE Pin # 	| Other 	| Due Pin 	| Due Signal 	|
 |--------------	|-------------------	|-----------------	|-------------------	|-------	|---------	|------------	|
-| 1            	| +24V Switched (fans) 	| 2-5             	| 9-12              	|       	| ???      	| NA         	|
+| 1            	| +24V Switched (fans) 	| 2-5             	| 9-12              	|       	| ???      	| FAN_POWER         	|
 | 2            	| GND for all fans  	| 22-25           	| 14-17             	|       	| GND     	| NA         	|
 | 3            	| #1 PWM            	| 13              	| 1                 	| J10-1 	| D9      	| nFAN1_PWM  	|
 | 4            	| #1 Tach           	| 9               	| 5                 	| J9-1  	| A0      	| FAN1_FG    	|
