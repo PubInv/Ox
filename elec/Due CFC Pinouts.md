@@ -11,6 +11,7 @@ This document describes the pinouts for the OEDCS designed for the CFC of approx
 | D18 |	TX1 | Output |	Digital Power Supply TF800 Pin 23 | This is Serial1 TX for (power supply)[https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf]
 | D19 | RX1 |Input | Digital Power Supply TF800 Pin 24 | This is Serial1 RX for (power supply) [https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf]
 | D22 | BLOWER_ENABLE |Output |	Blower Enable 
+| D32 | GPAD_nCS | Output |	 External SPI inverted select (for the GPAD)
 | D44 |LPBK0 |Output |	Varying loopback signal
 | D45 |LPBK1 |Input |	Read of digital loopback signal
 | D51 |HEAT1 |Output |	Positive SSR signal
