@@ -330,15 +330,15 @@
     ],
     [
       "3ff32a52-b1ed-4756-8661-90a95f721605",
-      "Adafruit-MAX31850-thermocouple"
+      "Thermocouple Amplifier with 1-Wire Breakout Board - MAX31850K"
     ],
     [
       "9d641288-e168-4964-816e-23e1814d1b66",
-      "Adafruit-MAX31855-thermocouple"
+      "Thermocouple Amplifier 3wire Interface breakout board - MAX31855 "
     ],
     [
       "3daed20d-8623-449a-af6f-871db7628ab2",
-      "Adafruit-MAX31856"
+      "Thermocouple Amplifier SPI breakout board - MAX31865"
     ],
     [
       "0cb2f0dc-fe38-451d-b752-5d12a98f8d03",
