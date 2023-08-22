@@ -30,10 +30,10 @@ Revisions:
 | 4            	| #1 Tach           	| 9               	| 5                 	| J9-1  	| A0      	| FAN1_FG    	|
 | 5            	| #2 PWM            	| 12              	| 2                 	| J10-2 	|         	| nFAN2_PWM  	|
 | 6            	| #2 Tach           	| 8               	| 6                 	| J9-2  	|         	| FAN2_FG    	|
-| 7            	| #3 Tach           	| 11              	| 3                 	| J10-3 	|         	| FAN3_FG    	|
-| 8            	| #3 PWM            	| 7               	| 7                 	| J9-3  	|         	| nFAN3_PWM  	|
-| 9            	| #4 Tach           	| 10              	| 4                 	| J10-4 	|         	| FAN4_FG    	|
-| 10           	| #4 PWM            	| 6               	| 8                 	| J9-4  	|         	| nFAN4_PWM  	|
+| 7            	| #3 Tach           	| 11              	| 3                 	| J10-3 	|         	| nFAN3_PWM  	|
+| 8            	| #3 PWM            	| 7               	| 7                 	| J9-3  	|         	| FAN3_FG   	|
+| 9            	| #4 Tach           	| 10              	| 4                 	| J10-4 	|         	| nFAN4_PWM  	|
+| 10           	| #4 PWM            	| 6               	| 8                 	| J9-4  	|         	| FAN4_FG   	|
 |              	|                   	|                 	| 25                	| J11-3 	|         	|            	|
 |              	|                   	|                 	| 13                	| J11-4 	|         	|            	|
 |              	|                   	|                 	| 18                	| J12-1 	|         	|            	|
