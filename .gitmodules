@@ -1,0 +1,3 @@
+[submodule "elec/Control Board/Control v1/PublicInvention_KiCad_Library"]
+	path = elec/Control Board/Control v1/PublicInvention_KiCad_Library
+	url = https://github.com/ForrestErickson/PublicInvention_KiCad_Library.git
