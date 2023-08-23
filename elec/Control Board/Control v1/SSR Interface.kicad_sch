@@ -268,7 +268,7 @@
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 58903036-c9c3-4302-b8f2-c3d9b7eca24d)
   )
-  (hierarchical_label "+5V_SSR" (shape input) (at 83.82 41.91 180) (fields_autoplaced)
+  (hierarchical_label "+24V_SSR" (shape input) (at 83.82 41.91 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 60a38213-48db-4069-855e-869656aafa8c)
   )
@@ -331,7 +331,7 @@
           (reference "Q2") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
-          (reference "Q3") (unit 1)
+          (reference "Q4") (unit 1)
         )
       )
     )
@@ -359,7 +359,7 @@
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
-          (reference "#PWR01") (unit 1)
+          (reference "#PWR045") (unit 1)
         )
       )
     )
@@ -414,7 +414,7 @@
           (reference "R50") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
-          (reference "R1") (unit 1)
+          (reference "R23") (unit 1)
         )
       )
     )
@@ -469,7 +469,7 @@
           (reference "R4") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
-          (reference "R16") (unit 1)
+          (reference "R22") (unit 1)
         )
       )
     )
