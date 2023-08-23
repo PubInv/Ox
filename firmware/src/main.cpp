@@ -28,6 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <serial_task.h>
 #include <fault_task.h>
 #include <duty_cycle_task.h>
+#include <heater_pid_task.h>
 
 // #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
@@ -44,6 +45,7 @@ OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 OxApp::FaultTask faultTask;
 
+HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
 
 // OxApp::FanPIDTask fanPIDTask;
@@ -56,7 +58,7 @@ OxApp::FanTESTTask fanTESTTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 0
+#define ETHERNET_BOARD_PRESENT 1
 
 #define WIPER_VALUE_PIN A0
 
@@ -151,24 +153,27 @@ void setup()
   // fanPIDProperties.state_and_config = (void *) &machineConfig;
   //     core.AddTask(&fanPIDTask, &fanPIDProperties);
 
-      if (ETHERNET_BOARD_PRESENT) {
-  OxCore::TaskProperties retrieveScriptUDPProperties;
-  retrieveScriptUDPProperties.name = "retrieveScriptUDP";
-  retrieveScriptUDPProperties.id = 24;
-  retrieveScriptUDPProperties.period = 5000;
-  retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
-  retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
+  if (ETHERNET_BOARD_PRESENT) {
+    OxCore::TaskProperties retrieveScriptUDPProperties;
+    retrieveScriptUDPProperties.name = "retrieveScriptUDP";
+    retrieveScriptUDPProperties.id = 24;
+    retrieveScriptUDPProperties.period = 5000;
+    retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
+    retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
 
-  core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
-      }
+    core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
+  }
 
 
-      dutyCycleTask.NUM_HEATERS = cogTask.NUM_HEATERS;
-      dutyCycleTask._ac_heaters = new GGLabsSSR1*[dutyCycleTask.NUM_HEATERS];
-      for(int i = 0; i < dutyCycleTask.NUM_HEATERS; i++) {
-        dutyCycleTask._ac_heaters[i] = cogTask._ac_heaters[i];
-      }
+  heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
+  dutyCycleTask.NUM_HEATERS = cogTask.NUM_HEATERS;
+  dutyCycleTask._ac_heaters = new GGLabsSSR1*[dutyCycleTask.NUM_HEATERS];
+  for(int i = 0; i < dutyCycleTask.NUM_HEATERS; i++) {
+    dutyCycleTask._ac_heaters[i] = cogTask._ac_heaters[i];
+  }
+
+  OxCore::Debug<const char *>("Duty Cycle Setup\n");
   OxCore::TaskProperties dutyCycleProperties;
   dutyCycleProperties.name = "dutyCycle";
   dutyCycleProperties.id = 28;
@@ -176,6 +181,14 @@ void setup()
   dutyCycleProperties.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+
+  OxCore::TaskProperties HeaterPIDProperties;
+  HeaterPIDProperties.name = "HeaterPID";
+  HeaterPIDProperties.id = 27;
+  HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
+  HeaterPIDProperties.priority = OxCore::TaskPriority::High;
+  HeaterPIDProperties.state_and_config = (void *) &machineConfig;
+  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
 
 #else
   OxCore::TaskProperties fanTESTProperties;

@@ -112,8 +112,9 @@ namespace OxApp
   }
 
   bool RetrieveScriptUDPTask::_run()  {
-    DebugLn<const char *>("The RetrieveScriptUDPTask was run\n");
-    DebugLn<const char *>("calling getConfig()!\n");
+    if (DEBUG_UDP > 1) {
+      DebugLn<const char *>("The RetrieveScriptUDPTask was run\n");
+    }
     bool new_packet = getPacket();
     if (new_packet) {
       // This would be better done with a static member
@@ -128,19 +129,29 @@ namespace OxApp
     // creating a new task that we could schedule separately.
     outputReport(getConfig()->report);
     char buffer[1024];
+    // we need to make sure we start with a null string...
+    buffer[0] = 0;
     createJSONReport(getConfig()->report,buffer);
+    if (DEBUG_UDP > 0) {
+      Debug<const char *>("Sending buffer:");
+      DebugLn<const char *>(buffer);
+    }
     sendData(buffer);
   }
 
 
   void RetrieveScriptUDPTask::printPacketInfo(int packetsize) {
-    Serial.print(F("UDP Packet received, size "));
-    Serial.println(packetsize);
-    Serial.print(F("From "));
+    if (DEBUG_UDP > 1) {
+      Serial.print(F("UDP Packet received, size "));
+      Serial.println(packetsize);
+      Serial.print(F("From "));
+    }
     IPAddress remoteIp = Udp.remoteIP();
-    Serial.print(remoteIp);
-    Serial.print(F(", port "));
-    Serial.println(Udp.remotePort());
+    if (DEBUG_UDP > 1) {
+      Serial.print(remoteIp);
+      Serial.print(F(", port "));
+      Serial.println(Udp.remotePort());
+    }
   }
 
   void RetrieveScriptUDPTask::printTime(unsigned long time) {
@@ -230,6 +241,7 @@ namespace OxApp
     char ts[15];
     sprintf(ts, "%ld", epoch);
     Udp.write(ts, strlen(ts));
+    Udp.write(",", 1);
     if (data && strlen(data)) Udp.write(data, strlen(data));
     Udp.write("}", 1);
     Udp.endPacket();
@@ -249,19 +261,25 @@ namespace OxApp
 
     unsigned long startMs = millis();
     while (!Udp.available() && (millis() - startMs) < UDP_TIMEOUT) {}
-    Serial.print("Udp.available() = ");
-    Serial.println(Udp.available());
+    if (DEBUG_UDP > 0) {
+      Serial.print("Udp.available() = ");
+      Serial.println(Udp.available());
+    }
     // if there's data available, read a packet
     int packetSize = Udp.parsePacket();
 
     if (packetSize) {
-      Serial.print(F("UDP Packet received, size "));
-      Serial.println(packetSize);
-      Serial.print(F("From "));
+      if (DEBUG_UDP > 1) {
+        Serial.print(F("UDP Packet received, size "));
+        Serial.println(packetSize);
+        Serial.print(F("From "));
+      }
       IPAddress remoteIp = Udp.remoteIP();
-      Serial.print(remoteIp);
-      Serial.print(F(", port "));
-      Serial.println(Udp.remotePort());
+      if (DEBUG_UDP > 1) {
+        Serial.print(remoteIp);
+        Serial.print(F(", port "));
+        Serial.println(Udp.remotePort());
+      }
 
       // We've received a packet, read the data from it into the buffer
       //    byte b[1024];
@@ -269,7 +287,9 @@ namespace OxApp
       packetBuffer[packetSize] = '\0';
 
       String config = String((char *)packetBuffer);
-      Serial.println(config);
+      if (DEBUG_UDP > 1) {
+        Serial.println(config);
+      }
       // Now, at this point, we roughly have a new script.
       // so we will parse it and poke it into the machine script as
       // a single pointer switch.
@@ -301,20 +321,24 @@ namespace OxApp
     Ethernet.MACAddress(mac);
     Serial.print(F("The MAC address is: "));
     for (byte octet = 0; octet < 6; octet++) {
-      Serial.print(mac[octet], HEX);
+      if (DEBUG_UDP > 1) {
+        Serial.print(mac[octet], HEX);
+      }
       if (octet < 5) {
         Serial.print(F(':'));
       }
     }
-    Serial.println();
-    Serial.print(F("IP address: "));
-    Serial.println(Ethernet.localIP());
-    Serial.print(F("Subnet Mask: "));
-    Serial.println(Ethernet.subnetMask());
-    Serial.print(F("Gateway: "));
-    Serial.println(Ethernet.gatewayIP());
-    Serial.print(F("DNS Server: "));
-    Serial.println(Ethernet.dnsServerIP());
+    if (DEBUG_UDP > 1) {
+      Serial.println();
+      Serial.print(F("IP address: "));
+      Serial.println(Ethernet.localIP());
+      Serial.print(F("Subnet Mask: "));
+      Serial.println(Ethernet.subnetMask());
+      Serial.print(F("Gateway: "));
+      Serial.println(Ethernet.gatewayIP());
+      Serial.print(F("DNS Server: "));
+      Serial.println(Ethernet.dnsServerIP());
+    }
   }
 
 

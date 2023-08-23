@@ -41,14 +41,14 @@ void outputReport(MachineStatusReport *msr) {
         } else {
           OxCore::DebugLn<float>(msr->stack_ohms);
         }
-        OxCore::Debug<const char *>("Flow (ml / s): ");
-        OxCore::DebugLn<float>(msr->flow_ml_per_s);
+        // As of the summer of 2023, we are not planning to use a flow sensor
+        //        OxCore::Debug<const char *>("Flow (ml / s): ");
+        //        OxCore::DebugLn<float>(msr->flow_ml_per_s);
         OxCore::Debug<const char *>("Fan Speed (non-lin) [0.0 .. 1.0]: ");
         OxCore::DebugLn<float>(msr->fan_speed);
 }
 
 void createJSONReport(MachineStatusReport* msr, char *buffer) {
-  sprintf(buffer,"{\n");
   sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr->post_heater_C);
   sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
   sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\",\n",msr->heater_voltage);
@@ -61,9 +61,9 @@ void createJSONReport(MachineStatusReport* msr, char *buffer) {
   } else {
     sprintf(buffer+strlen(buffer), "\"StackOhms\": \"%.2f\",\n",msr->stack_ohms);
   }
-  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr->flow_ml_per_s);
+        // As of the summer of 2023, we are not planning to use a flow sensor
+  //  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr->flow_ml_per_s);
   sprintf(buffer+strlen(buffer), "\"FanSpeed\": \"%.2f\"\n",msr->fan_speed);
-  sprintf(buffer+strlen(buffer),"}\n");
 }
 
 bool MachineHAL::init() {

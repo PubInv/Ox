@@ -34,6 +34,9 @@ namespace OxApp
   class RetrieveScriptUDPTask : public OxCore::Task {
   private:
   public:
+    // DEBUG_DUP == 1 means debug logging,
+    // DEBUG_DUP == 2 means debug script retreival
+    int DEBUG_UDP = 1;
     bool _init() override;
     bool _run() override;
     void printPacketInfo(int packetsize);

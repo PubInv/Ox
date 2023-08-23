@@ -48,7 +48,6 @@ bool DutyCycleTask::_run()
   recorded_dc_ms += delta_t;
   recorded_duty_cycle = (old_dc * old_ms + ((isOn ? delta_t : 0))) / recorded_dc_ms;
 
-
   // now we decided to turn on or off!
   isOn = (recorded_duty_cycle < dutyCycle);
   // now we actually turn the heater on or off!
@@ -65,4 +64,5 @@ bool DutyCycleTask::_run()
   for(int i = 0; i < NUM_HEATERS; i++) {
     _ac_heaters[i]->setHeater(i,isOn);
   }
+  return true;
 }

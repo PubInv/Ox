@@ -313,9 +313,11 @@ bool MachineScript::AppendPhase(MachinePhase p) {
 // Beginning hacking of this...
 MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer) {
   MachineScript *ms = new MachineScript();
-  DebugLn<const char *>("BUFFER BEGIN");
-  DebugLn<const char *>(packetBuffer);
-  DebugLn<const char *>("BUFFER END");
+  if (DEBUG_MS > 1) {
+    DebugLn<const char *>("BUFFER BEGIN");
+    DebugLn<const char *>(packetBuffer);
+    DebugLn<const char *>("BUFFER END");
+  }
   char *gName = NULL;
   char *gTimestamp = NULL;
   int gDryRun = 1;
@@ -328,7 +330,9 @@ MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer) {
   char *gOperation = NULL;
   int tempnonce;
 
-  Debug<const char *>("PARSING SCRIPT \n");
+  if (DEBUG_MS > 1) {
+    Debug<const char *>("PARSING SCRIPT \n");
+  }
 
   parse_param(packetBuffer, "Nonce", &tempnonce);
   if (tempnonce <= gNonce) exit(1);
@@ -345,36 +349,40 @@ MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer) {
   parse_param_state(packetBuffer, "EmergencyShutdown", &gEmShutdown);
   parse_param_state(packetBuffer, "Operation", &gOperation);
 
-  DebugLn<const char *>("Name is \n");
-  DebugLn<const char *>(gName);
-  DebugLn<const char *>("Timestamp is \n");
-  DebugLn<const char *>(gTimestamp);
-  DebugLn<const char *>("Dryrun is \n");
-  DebugLn<const char *>( gDryRun ? "True" : "False");
-  DebugLn<const char *>("Nonce is n");
-  DebugLn<int>(gNonce);
-  DebugLn<const char *>("Max UP is %d\n");
-  DebugLn<int>(gMaxRampUp);
-  DebugLn<const char *>("Max DOWN is n");
-  DebugLn<int>(gMaxRampDown);
-  DebugLn<const char *>("Warmup Script:\n");
-  DebugLn<const char *>(gWarmUp);
-  DebugLn<const char *>("\n----\n");
-  DebugLn<const char *>("Cooldown Script:\n");
-  DebugLn<const char *>("\n----\n");
-  DebugLn<const char *>(gCooldown);
-  DebugLn<const char *>("Emergency Script:\n");
-  DebugLn<const char *>("\n----\n");
-  DebugLn<const char *>(gEmShutdown);
-  DebugLn<const char *>("Operation Script:\n");
-  DebugLn<const char *>("\n----\n");
-  DebugLn<const char *>(gOperation);
-  DebugLn<const char *>("\n----\n");
+  if (DEBUG_MS > 1) {
+    DebugLn<const char *>("Name is \n");
+    DebugLn<const char *>(gName);
+    DebugLn<const char *>("Timestamp is \n");
+    DebugLn<const char *>(gTimestamp);
+    DebugLn<const char *>("Dryrun is \n");
+    DebugLn<const char *>( gDryRun ? "True" : "False");
+    DebugLn<const char *>("Nonce is n");
+    DebugLn<int>(gNonce);
+    DebugLn<const char *>("Max UP is %d\n");
+    DebugLn<int>(gMaxRampUp);
+    DebugLn<const char *>("Max DOWN is n");
+    DebugLn<int>(gMaxRampDown);
+    DebugLn<const char *>("Warmup Script:\n");
+    DebugLn<const char *>(gWarmUp);
+    DebugLn<const char *>("\n----\n");
+    DebugLn<const char *>("Cooldown Script:\n");
+    DebugLn<const char *>("\n----\n");
+    DebugLn<const char *>(gCooldown);
+    DebugLn<const char *>("Emergency Script:\n");
+    DebugLn<const char *>("\n----\n");
+    DebugLn<const char *>(gEmShutdown);
+    DebugLn<const char *>("Operation Script:\n");
+    DebugLn<const char *>("\n----\n");
+    DebugLn<const char *>(gOperation);
+    DebugLn<const char *>("\n----\n");
+  }
 
-  parse_phases_from_state_script(MachineState::Warmup,gWarmUp,ms);
-  parse_phases_from_state_script(MachineState::Cooldown,gCooldown,ms);
-  parse_phases_from_state_script(MachineState::EmergencyShutdown,gEmShutdown,ms);
-  parse_phases_from_state_script(MachineState::NormalOperation,gOperation,ms);
+  if (DEBUG_MS > 0) {
+    parse_phases_from_state_script(MachineState::Warmup,gWarmUp,ms);
+    parse_phases_from_state_script(MachineState::Cooldown,gCooldown,ms);
+    parse_phases_from_state_script(MachineState::EmergencyShutdown,gEmShutdown,ms);
+    parse_phases_from_state_script(MachineState::NormalOperation,gOperation,ms);
+  }
   return ms;
 }
 

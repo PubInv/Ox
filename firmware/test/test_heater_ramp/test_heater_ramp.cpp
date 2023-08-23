@@ -48,7 +48,8 @@ using namespace OxCore;
 #include <cog_task.h>
 
 #include <duty_cycle_task.h>
-// #include <spud_task.h>
+
+#include <heater_pid_task.h>
 
 
 
@@ -155,7 +156,7 @@ void _updateStackAmperage(float amperage,MachineConfig *machineConfig) {
 
 // SpudTask *spudTask;
 
-const int DEBUG_LEVEL = 1;
+const int DEBUG_LEVEL = 2;
 using namespace std;
 
 namespace OxApp
@@ -190,115 +191,13 @@ namespace OxApp
     }
   };
 
-  // Runs the Pressure Swing Adsorption cycle
-  class HeaterPIDTask : public OxCore::Task
-  {
-  public:
-    HeaterPIDTask();
-    PID *pidControllerHeater;
-    int DEBUG_PID = 1;
-    const int PERIOD_MS = 60*1000;
-
-    // These are on a scale of 1.0;
-    double dutyCycle_Output = 0.0;
-    double final_dutyCycle = 0.0;
-    double HeaterSetPoint_C = 0.0;
-    double Input_temperature_C = 0.0;
-    DutyCycleTask *dutyCycleTask;
-  private:
-    bool _init() override;
-    bool _run() override;
-    // This would go into the abstract class.
-  };
-
-
-  HeaterPIDTask::HeaterPIDTask() {
-
-
-    /* Setting the initial parameters is always weird for PID controller..
-     */
-
-    // These initial values are from Tom Taylor, scaled by the fact
-    // that I am using a plant variable of duty cycle on a [0.0..1.0] scale.
-    // double FKp = 0.03;
-    // double FKi = 0.003;
-    // double FKd = 0.0;
-
-    // This "AJUSTMEMNT" was found by experiment
-    double ADJUSTMENT = 15.0;
-    double FKp = 0.03/ADJUSTMENT;
-    // I want zero overshoot, so I am setting this to zero!
-    //    double FKi = 0.003/ADJUSTMENT;
-    double FKi = 0.0;
-    double FKd = 0.0/ADJUSTMENT;
-
-    // Upon after testing, the parameters above, operating at a 60 second
-    // sample time, is entirely too high, and allowed an overshoot of 8 degree C
-    // in only one second!
-    const int SAMPLE_TIME_MS = PERIOD_MS;
-    // dutyCycle is measured betwen 0.0 and 1.0 (and ends
-    // up being a PWM duty cycle)
-    this->pidControllerHeater =
-      new PID(&(this->Input_temperature_C), &(this->dutyCycle_Output),
-              &(this->HeaterSetPoint_C), FKp, FKi, FKd, DIRECT);
-    this->pidControllerHeater->SetOutputLimits(-1.0, 1.0);
-    this->pidControllerHeater->SetSampleTime(PERIOD_MS);
-    this->pidControllerHeater->SetMode(AUTOMATIC);
-  }
-
-  bool HeaterPIDTask::_init()
-  {
-
-    OxCore::Debug<const char *>("HeaterPIDTask init\n");
-    return true;
-  }
-
-  bool HeaterPIDTask::_run()
-  {
-    OxCore::Debug<const char *>("HeaterPIDTask run\n");
-    this->HeaterSetPoint_C = TARGET_TEMP;
-
-    double previousInput = this->Input_temperature_C;
-    this->Input_temperature_C = localGetConfig()->report->post_heater_C;
-
-    pidControllerHeater->Compute();
-
-    double s = this->dutyCycle_Output + this->final_dutyCycle;
-
-    s = min(s, 1.0);
-    s = max(s, 0.0);
-    this->final_dutyCycle = s;
-
-    dutyCycleTask->dutyCycle = s;
-
-    // This resets our duty_cycle computation
-    dutyCycleTask->reset_duty_cycle();
-
-    localGetConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
-
-    // The heater DutyCycle should go into the config, but
-    // does not currently exist there!
-    //        localGetConfig()->fanPWM = s;
-
-    if (DEBUG_PID > 0) {
-      OxCore::Debug<const char *>("previous input ");
-      OxCore::DebugLn<double>(previousInput);
-      OxCore::Debug<const char *>("Final dutyCycle_Output ");
-      OxCore::DebugLn<double>(this->dutyCycle_Output);
-      OxCore::Debug<const char *>("Final dutyCycle ");
-      OxCore::DebugLn<double>(this->final_dutyCycle);
-    }
-
-    return true;
-  }
-
   // Once a second we will read the temperature and keep
   // a running record here (back in time) so that we can
   // set the duty cycle based on change.
   class ReadTempsTask : public OxCore::Task
   {
   public:
-    const int DEBUG_READ_TEMPS = 1;
+    const int DEBUG_READ_TEMPS = 0;
     const int PERIOD_MS = TEMPERATURE_READ_PERIOD_MS;
     const int NUM_TEMPS = NUMBER_OF_PERIODS_TO_AVERAGE;
     // This is a ring buffer...
@@ -556,16 +455,22 @@ void setup() {
     //return EXIT_FAILURE;
     return;
   }
-
+  Serial.println("AAA!");
   machineConfig = new MachineConfig();
 
   machineConfig->report = new MachineStatusReport();
   machineConfig->hal = new MachineHAL();
+  Serial.println("BBB!");
+
+  heaterPIDTask.HeaterSetPoint_C = TARGET_TEMP;
+
 
   for(int i = 0; i < NUM_HEATERS; i++) {
     _ac_heaters[i].setHeater(0,LOW);
     _ac_heaters[i].setHeater(1,LOW);
   }
+
+   Serial.println("CCC!");
 
   bool initSuccess  = localGetConfig()->hal->init();
   Serial.println("about to start!");
@@ -589,9 +494,6 @@ void setup() {
   pinMode(RF_STACK, OUTPUT);
 #endif
 
-  DutyCycleTask *dutyCycleTask;
-  dutyCycleTask = new DutyCycleTask();
-  heaterPIDTask.dutyCycleTask = dutyCycleTask;
 
 
   //  dutyCycleTask->NUM_HEATERS = 2;
@@ -628,36 +530,54 @@ void setup() {
   core.AddTask(&readTempsTask, &readTempsProperties);
   delay(100);
 
-  OxCore::TaskProperties supervisorProperties;
-  supervisorProperties.name = "supervisor";
-  supervisorProperties.id = 26;
-  supervisorProperties.period = supervisorTask.PERIOD_MS;
-  supervisorProperties.priority = OxCore::TaskPriority::High;
-  supervisorProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(&supervisorTask, &supervisorProperties);
+  // OxCore::TaskProperties supervisorProperties;
+  // supervisorProperties.name = "supervisor";
+  // supervisorProperties.id = 26;
+  // supervisorProperties.period = supervisorTask.PERIOD_MS;
+  // supervisorProperties.priority = OxCore::TaskPriority::High;
+  // supervisorProperties.state_and_config = (void *) localGetConfig();
+  // core.AddTask(&supervisorTask, &supervisorProperties);
 
 
-  // OxCore::TaskProperties controllerProperties;
-  // controllerProperties.name = "controller";
-  // controllerProperties.id = 27;
-  // controllerProperties.period = controllerTask.PERIOD_MS;
-  // controllerProperties.priority = OxCore::TaskPriority::High;
-  // controllerProperties.state_and_config = (void *) localGetConfig();
-  // core.AddTask(&controllerTask, &controllerProperties);
+  Serial.println("About to create dutyCycleTask!");
 
+  // DutyCycleTask *dutyCycleTask;
+  // dutyCycleTask = new DutyCycleTask();
+  // heaterPIDTask.dutyCycleTask = dutyCycleTask;
+
+  // dutyCycleTask->NUM_HEATERS = NUM_HEATERS;
+  // dutyCycleTask->_ac_heaters = new GGLabsSSR1*[dutyCycleTask->NUM_HEATERS];
+  // for(int i = 0; i < NUM_HEATERS; i++) {
+  //   dutyCycleTask->_ac_heaters[i] = &_ac_heaters[i];
+  // }
+
+
+  DutyCycleTask dutyCycleTask;
+  //  dutyCycleTask = new DutyCycleTask();
+  heaterPIDTask.dutyCycleTask = &dutyCycleTask;
+
+  dutyCycleTask.NUM_HEATERS = NUM_HEATERS;
+  dutyCycleTask._ac_heaters = new GGLabsSSR1*[dutyCycleTask.NUM_HEATERS];
+  for(int i = 0; i < NUM_HEATERS; i++) {
+    dutyCycleTask._ac_heaters[i] = &_ac_heaters[i];
+  }
+
+  OxCore::Debug<const char *>("DDD\n");
 
   OxCore::TaskProperties dutyCycleProperties;
   dutyCycleProperties.name = "dutyCycle";
-  dutyCycleProperties.id = 28;
-  dutyCycleProperties.period = dutyCycleTask->PERIOD_MS;
+  dutyCycleProperties.id = 21;
+  OxCore::Debug<const char *>("period:");
+  OxCore::Debug<int>(dutyCycleTask.PERIOD_MS);
+  OxCore::Debug<const char *>("\n");
+  dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
   dutyCycleProperties.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(dutyCycleTask, &dutyCycleProperties);
-
+  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
-  HeaterPIDProperties.id = 29;
+  HeaterPIDProperties.id = 22;
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) localGetConfig();
@@ -667,7 +587,7 @@ void setup() {
 
   _updateStackVoltage(STACK_VOLTAGE,machineConfig);
   _updateStackAmperage(STACK_AMPERAGE,machineConfig);
-  analogWrite(fan->PWM_PIN[0],153);
+  analogWrite(fan->PWM_PIN[0],0);
 
   Serial.println("Setup Done!");
 }
