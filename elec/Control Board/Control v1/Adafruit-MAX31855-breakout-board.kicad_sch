@@ -3731,7 +3731,7 @@
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR036") (unit 1)
+          (reference "#PWR028") (unit 1)
         )
       )
     )
@@ -3777,7 +3777,7 @@
           (reference "H7") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "H9") (unit 1)
+          (reference "H13") (unit 1)
         )
       )
     )
@@ -3808,7 +3808,7 @@
           (reference "#PWR033") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR034") (unit 1)
+          (reference "#PWR029") (unit 1)
         )
       )
     )
@@ -3854,7 +3854,7 @@
           (reference "H6") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "H8") (unit 1)
+          (reference "H12") (unit 1)
         )
       )
     )
@@ -3889,7 +3889,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "JP1") (unit 1)
+          (reference "JP4") (unit 1)
         )
       )
     )
