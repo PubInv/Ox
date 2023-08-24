@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include "../collections/array.h"
 #include "heater.h"
-#include "fan.h"
+// #include "fan.h"
 #include "stack.h"
 #include "abstract_ps.h"
 #include "mostplus_flow.h"
@@ -58,24 +58,18 @@ namespace OxApp
       // TODO: This should probably be done dynamically, not here...
 
 #if BUILD_ENV_NAME != due_ribbonfish
-      const static int NUM_HEATERS = 2;
       const static int NUM_TEMPERATURE_SENSORS = 3;
 #else // RIBBONFISH
       // There are really several senosrs, but they are indexed!
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
-      const static int NUM_HEATERS = 1;
       const static int NUM_FANS = 1;
       const static int NUM_STACKS = 1;
 #endif
       void updateTemperatures();
 
       Temperature::AbstractTemperature* _temperatureSensors;
-      // On March 7, Rob attempts to switch from a DC heater to an AC heter
-      //      Heater _heaters[NUM_HEATERS];
-      GGLabsSSR1 **_ac_heaters;
-      //      DeltaFans _fans[NUM_FANS];
-//      Fan _fans[NUM_FANS];
+
       AbstractPS* _stacks[NUM_STACKS];
       //      MostPlusFlow _flowsensor;
       //      SensirionFlow *_flowsensor;

@@ -67,19 +67,13 @@ namespace OxApp
 
 
 #ifdef RIBBONFISH
-        _ac_heaters = new GGLabsSSR1*[NUM_HEATERS];
-        for(int i = 0; i < NUM_HEATERS; i++) {
-          _ac_heaters[i] = new GGLabsSSR1();
-          _ac_heaters[i]->setHeater(0,LOW);
-          _ac_heaters[i]->setHeater(1,LOW);
-        }
 
 
           // Our pre-heater measured 5.8 ohms
         // Our main heater measured 5.6 ohms
         //        Heater v1("PRIMARY_HEATER", 1, RF_HEATER, 0, 5.8);
         //        _heaters[0] = v1;
-        getConfig()->dutyCycle = 0.0;
+        getConfig()->fanDutyCycle = 0.0;
 
         _stacks[0] = new SL_PS("FIRST_STACK",0);
 
@@ -133,6 +127,7 @@ namespace OxApp
       }
 
       updateTemperatures();
+      getConfig()->_reportFanSpeed();
 
       MachineState new_state = _executeBasedOnState(cogConfig->ms);
       // if the state really changes, we want to log that and take some action!
@@ -146,24 +141,8 @@ namespace OxApp
       if (DEBUG_LEVEL > 0) {
         OxCore::Debug<const char *>("FLOW SLM: ");
       }
-
-      //      float flow_slm = getConfig()->hal->_flowsensor->flowInSLM();
-      //      OxCore::DebugLn<float>(flow_slm);
-
-
-      // Somewhere we have a true clock value, I would have thought
-      // it would be an input to this routine....
-#ifndef RIBBONFISH
-      RunForward(1.0,model);
-
-      OxCore::Debug<const char *>("Exhaust Temperature (C): ");
-      OxCore::DebugLn<float>(model.locations[1].temp_C);
-#endif
-
-#ifdef RIBBONFISH
       outputReport(getConfig()->report);
-#endif
-        return true;
+      return true;
     }
 
   static float compute_change_in_voltage(float current_C,float current_V,float desired_C) {
@@ -212,32 +191,20 @@ namespace OxApp
     }
     return new_ms;
   }
+
   MachineState CogTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
     _updatePowerComponentsVoltage(0);
 
-    getConfig()->dutyCycle = 0.0;
-    getConfig()->_updateFanSpeed(getConfig()->dutyCycle);
-    getConfig()->report->fan_speed = getConfig()->dutyCycle;
+    getConfig()->fanDutyCycle = 0.0;
+
+    getConfig()->_updateFanPWM(getConfig()->fanDutyCycle);
 
     _updateStackVoltage(0.0);
 
-    //    bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
-    //    if (flowing) {
-    //      OxCore::Debug<const char *>("POTENTIAL ERROR, AIR IS STILL FLOWING ");
-    //    }
-    //    getConfig()->report->air_flow_sufficient = flowing;
-
-    //    delay(10);
-    //    double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
-
-    //    if (flow_ml_per_s >= 4550.0) {
-      // This is the error condition for this sensor!
-    //    } else {
-    //      getConfig()->report->flow_ml_per_s = flow_ml_per_s;
-    //    }
     return new_ms;
   }
+
   MachineState CogTask::_updatePowerComponentsWarmup() {
     MachineState new_ms = Warmup;
     OxCore::Debug<const char *>("Warmup Mode! ");
@@ -253,13 +220,14 @@ namespace OxApp
       new_ms = NormalOperation;
       getConfig()->idleOrOperate = Operate;
       _updatePowerComponentsOperation(getConfig()->idleOrOperate);
+      return new_ms;
     } else {
       _updatePowerComponentsVoltage(getConfig()->MAXIMUM_HEATER_VOLTAGE);
     }
-
+    getConfig()->_updateFanPWM(1.0);
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
     _updateStackAmperage(getConfig()->TARGET_STACK_CURRENT_mA/1000.0);
-    //    getConfig()->report->stack_voltage = getConfig()->MAXIMUM_STACK_VOLTAGE;
+
     return new_ms;
   }
 
@@ -277,26 +245,12 @@ namespace OxApp
         &&
         getConfig()->report->post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
+      return new_ms;
     } else {
+      getConfig()->_updateFanPWM(1.0);
       _updatePowerComponentsVoltage(0.0);
       _updateStackVoltage(0.0);
     }
-
-
-    // bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
-    // if (!flowing) {
-    //   OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
-    // }
-    // getConfig()->report->air_flow_sufficient = flowing;
-
-    // delay(10);
-    // double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
-
-    // if (flow_ml_per_s >= 4550.0) {
-    //   // This is the error condition for this sensor!
-    // } else {
-    //   getConfig()->report->flow_ml_per_s = flow_ml_per_s;
-    // }
 
     return new_ms;
   }
@@ -309,6 +263,8 @@ namespace OxApp
     _updatePowerComponentsVoltage(0);
     MachineState new_ms = OffUserAck;
     _updateStackVoltage(0.0);
+    // In an emergency shutdown, we do NOT run the fan!
+    getConfig()->_updateFanPWM(0.0);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsOffUserAck() {
@@ -319,13 +275,13 @@ namespace OxApp
   // This is use primarily for maximum power at warmup or
   // maximum cooldown when we don't have to compute based on temperature
    void CogTask::_updatePowerComponentsVoltage(float voltage) {
-        for (int i = 0; i < NUM_HEATERS; i++) {
+        for (int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
           //        _heaters[i].update(voltage);
           // We have a two-channel AC heater, we will use both
           // for now
-          _ac_heaters[i]->setHeater(0,(voltage > 0.0));
-          _ac_heaters[i]->setHeater(1,(voltage > 0.0));
-        getConfig()->report->heater_voltage = voltage;
+          getConfig()->hal->_ac_heaters[i]->setHeater(0,(voltage > 0.0));
+          getConfig()->hal->_ac_heaters[i]->setHeater(1,(voltage > 0.0));
+          //        getConfig()->report->heater_voltage = voltage;
         }
     }
 
@@ -353,7 +309,7 @@ namespace OxApp
      MachineState new_ms = NormalOperation;
      float desired_C = getConfig()->MAX_POST_HEATER_C;
      // For now, i want to do only the first heater to simplify
-     for (int i = 0; i < NUM_HEATERS; i++) {
+     for (int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
        float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[i]);
        float current_C = temperature;
        float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_HEATER_VOLTAGE;
@@ -388,20 +344,6 @@ namespace OxApp
      if (getConfig()->report->post_heater_C < getConfig()->WARMUP_TARGET_C) {
        return Warmup;
      }
-
-    //  bool flowing = getConfig()->hal->_flowsensor->isAirFlowing();
-    // if (!flowing) {
-    //   OxCore::Debug<const char *>("POTENTIAL ERROR, AIR FLOW MAY BE INSUFFICIENT ");
-    // }
-    // getConfig()->report->air_flow_sufficient = flowing;
-    // delay(10);
-    // double flow_ml_per_s = getConfig()->hal->_flowsensor->flowIn_ml_per_s();
-
-    // if (flow_ml_per_s >= 4550.0) {
-    //   // This is the error condition for this sensor!
-    // } else {
-    //   getConfig()->report->flow_ml_per_s = flow_ml_per_s;
-    // }
      return new_ms;
     }
 #else
@@ -410,7 +352,7 @@ namespace OxApp
       MachineState new_ms = NormalOperation;
         OxCore::Debug<const char *>("_updateHeaterPrims\n");
         // For now, i want to do only the first heater to simplify
-        for (int i = 0; i < NUM_HEATERS && i < 1; i++) {
+        for (int i = 0; i < MachineConfig::NUM_HEATERS && i < 1; i++) {
             OxCore::Debug<const char *>("Checking resistance ");
             OxCore::DebugLn<float>(_heaters[i]._resistance);
             OxCore::DebugLn<float>(_heaters[i]._voltage);

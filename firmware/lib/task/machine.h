@@ -21,6 +21,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // Hardware Abstraction Layer
 // #include "SensirionSFM3X00.h"
 #include <SanyoAceB97.h>
+#include <GGLabsSSR1.h>
 
 #include <machine_script.h>
 
@@ -63,6 +64,7 @@ class MachineHAL {
 public:
   //  SensirionFlow *_flowsensor;
   SanyoAceB97 _fans[NUM_FANS];
+  GGLabsSSR1 **_ac_heaters;
   int DEBUG_HAL = 0;
   bool init();
   //  void _updateFanSpeed(float unitInterval);
@@ -76,6 +78,9 @@ public:
     report = new MachineStatusReport();
   };
 
+  // Our AC heater...confusingly named!
+  static const int NUM_HEATERS = 1;
+  static const int NUM_STACKS = 1;
 
   const float FAN_PER_CENT = 60.0;
   const int FAN_PWM = (int) (255.0*60.0/100.0);
@@ -135,9 +140,6 @@ public:
   const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
 
 
-  // Our AC heater...confusingly named!
-  const int NUM_HEATERS = 1;
-  const int NUM_STACKS = 1;
 
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float MAXIMUM_STACK_VOLTAGE = 8.0;
@@ -162,7 +164,8 @@ public:
   float DESIRED_STACK_C = 700.0;
 #endif
 
-  void _updateFanSpeed(float unitInterval);
+  void _updateFanPWM(float unitInterval);
+  void _reportFanSpeed();
 
   static const int NUM_MACHINE_STATES = 8;
 
@@ -184,7 +187,6 @@ public:
     "Post Stack"
   };
   MachineState ms;
-  MachineHAL* hal;
   MachineScript* script;
 
   IdleOrOperateSubState idleOrOperate = Operate;
@@ -193,7 +195,7 @@ public:
   // However, when used in the Arduino it has to be mapped
   // onto a an integer (usuall 0-255) but this should be
   // the last step.
-  float dutyCycle = 0.0;
+  float fanDutyCycle = 0.0;
 
   char const* errors[10];
   // Until we have a good machine model here,
@@ -203,7 +205,7 @@ public:
   int post_stack_indices[1] = {1};
   int post_getter_indices[1] = {2};
 
-
+  MachineHAL* hal;
   MachineStatusReport *report;
 
 };

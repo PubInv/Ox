@@ -32,8 +32,6 @@ class DutyCycleTask : public OxCore::Task
   public:
     DutyCycleTask();
     float dutyCycle;
-    int NUM_HEATERS;
-    GGLabsSSR1 **_ac_heaters;
     const int PERIOD_MS = 50;
     boolean isOn = false;
     float recorded_duty_cycle = 0;
