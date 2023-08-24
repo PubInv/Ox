@@ -25,8 +25,6 @@ void outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
         OxCore::Debug<const char *>("Post Heater C: ");
         OxCore::DebugLn<float>(msr->post_heater_C);
-        OxCore::Debug<const char *>("Duty Cycle (fraction): ");
-        OxCore::DebugLn<float>(msr->heater_duty_cycle);
         OxCore::Debug<const char *>("Post Getter C: ");
         OxCore::DebugLn<float>(msr->post_getter_C);
         OxCore::Debug<const char *>("Post Stack  C: ");
@@ -44,16 +42,17 @@ void outputReport(MachineStatusReport *msr) {
         // As of the summer of 2023, we are not planning to use a flow sensor
         //        OxCore::Debug<const char *>("Flow (ml / s): ");
         //        OxCore::DebugLn<float>(msr->flow_ml_per_s);
+        OxCore::Debug<const char *>("Duty Cycle (fraction): ");
+        OxCore::DebugLn<float>(msr->heater_duty_cycle);
         OxCore::Debug<const char *>("Fan Speed (non-lin) [0.0 .. 1.0]: ");
         OxCore::DebugLn<float>(msr->fan_speed);
 }
 
 void createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr->post_heater_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
-  sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\",\n",msr->heater_voltage);
   sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\",\n",msr->post_stack_C);
   sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr->post_getter_C);
+  sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\",\n",msr->heater_voltage);
   sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\",\n",msr->stack_voltage);
   sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\",\n",msr->stack_amps);
   if (msr->stack_ohms < 0.0) {
@@ -63,22 +62,21 @@ void createJSONReport(MachineStatusReport* msr, char *buffer) {
   }
         // As of the summer of 2023, we are not planning to use a flow sensor
   //  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr->flow_ml_per_s);
+  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
   sprintf(buffer+strlen(buffer), "\"FanSpeed\": \"%.2f\"\n",msr->fan_speed);
 }
 
 bool MachineHAL::init() {
   // we should probably check that we can read this effectively here
   // and return false if not
-
+  if (DEBUG_HAL > 0) {
+    Serial.println("HAL: About to run Wire!");
+  }
   Wire.begin();
 
-  // _flowsensor = new SensirionFlow();
-
-  // if (_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
-  //   Serial.println("FLOW SENSOR NOT AVIALABLE!");
-  //   Serial.println("THIS IS A CRITICAL ERROR!");
-  //   return false;
-  // }
+  if (DEBUG_HAL > 0) {
+      Serial.println("HAL: About to init Fan!");
+  }
 
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
 
@@ -88,7 +86,9 @@ bool MachineHAL::init() {
 #else
   _fans[0].DEBUG_FAN = 0;
 #endif
-
+  if (DEBUG_HAL > 0) {
+      Serial.println("HAL:About to return!");
+  }
   return true;
 }
 
