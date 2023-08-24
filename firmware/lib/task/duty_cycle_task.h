@@ -39,7 +39,7 @@ class DutyCycleTask : public OxCore::Task
     float recorded_duty_cycle = 0;
     unsigned long recorded_dc_ms = 0;
     unsigned long time_of_last_check = 0;
-    int DEBUG_ID = 0;
+    int DEBUG_DUTY_CYCLE = 0;
     void reset_duty_cycle();
   private:
     bool _init() override;

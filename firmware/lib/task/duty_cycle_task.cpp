@@ -39,6 +39,10 @@ void DutyCycleTask::reset_duty_cycle() {
 // drive the dynamic from DutyCycle of the heater.
 bool DutyCycleTask::_run()
 {
+  if (DEBUG_DUTY_CYCLE > 1) {
+    Serial.println("DUTY CYCLE RUN!");
+    delay(100);
+  }
   // WARNING: This will fail when 2^32 ms are reached, about 28 days I think.
   unsigned long ms = millis();
   unsigned long delta_t = ms - time_of_last_check;
@@ -46,14 +50,23 @@ bool DutyCycleTask::_run()
   float old_dc = recorded_duty_cycle;
   float old_ms = recorded_dc_ms;
   recorded_dc_ms += delta_t;
+  if (DEBUG_DUTY_CYCLE > 1) {
+    Serial.println("DUTY CYCLE MID!");
+    delay(100);
+  }
+  if (recorded_dc_ms != 0) {
   recorded_duty_cycle = (old_dc * old_ms + ((isOn ? delta_t : 0))) / recorded_dc_ms;
+  } else {
+    recorded_duty_cycle = 1.0;
+  }
 
   // now we decided to turn on or off!
   isOn = (recorded_duty_cycle < dutyCycle);
   // now we actually turn the heater on or off!
-  if (DEBUG_ID > 0) {
+  if (DEBUG_DUTY_CYCLE > 1) {
     OxCore::Debug<const char *>("Heater On: ");
     OxCore::DebugLn<int>(isOn);
+    delay(100);
   }
 
   time_of_last_check = ms;
@@ -62,7 +75,12 @@ bool DutyCycleTask::_run()
   // to this into the task...
   // maybe we just initialize it?
   for(int i = 0; i < NUM_HEATERS; i++) {
-    _ac_heaters[i]->setHeater(i,isOn);
+    _ac_heaters[i]->setHeater(0,isOn);
   }
+  if (DEBUG_DUTY_CYCLE > 1) {
+    OxCore::DebugLn<const char *>("HEATERS SET! ");
+    delay(100);
+  }
+
   return true;
 }

@@ -134,7 +134,8 @@ unsigned long time_of_last_report = 0;
 const int NUM_HEATERS = 1;
 const int NUM_STACKS = 1;
 
-GGLabsSSR1 _ac_heaters[NUM_HEATERS];
+GGLabsSSR1* _ac_heaters[NUM_HEATERS];
+
 
 AbstractPS* _stacks[NUM_STACKS];
 
@@ -275,10 +276,6 @@ void setup() {
   heaterPIDTask.HeaterSetPoint_C = localGetConfig()->TARGET_TEMP;
 
 
-  for(int i = 0; i < NUM_HEATERS; i++) {
-    _ac_heaters[i].setHeater(0,LOW);
-    _ac_heaters[i].setHeater(1,LOW);
-  }
 
    Serial.println("CCC!");
 
@@ -332,7 +329,7 @@ void setup() {
   delay(100);
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
-  readTempsProperties.id = 25;
+  readTempsProperties.id = 21;
   readTempsProperties.period = readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
   readTempsProperties.state_and_config = (void *) localGetConfig();
@@ -342,24 +339,12 @@ void setup() {
 
   OxCore::TaskProperties supervisorProperties;
   supervisorProperties.name = "supervisor";
-  supervisorProperties.id = 26;
+  supervisorProperties.id = 22;
   supervisorProperties.period = supervisorTask.PERIOD_MS;
   supervisorProperties.priority = OxCore::TaskPriority::High;
   supervisorProperties.state_and_config = (void *) localGetConfig();
   core.AddTask(&supervisorTask, &supervisorProperties);
 
-
-  Serial.println("About to create dutyCycleTask!");
-
-  // DutyCycleTask *dutyCycleTask;
-  // dutyCycleTask = new DutyCycleTask();
-  // heaterPIDTask.dutyCycleTask = dutyCycleTask;
-
-  // dutyCycleTask->NUM_HEATERS = NUM_HEATERS;
-  // dutyCycleTask->_ac_heaters = new GGLabsSSR1*[dutyCycleTask->NUM_HEATERS];
-  // for(int i = 0; i < NUM_HEATERS; i++) {
-  //   dutyCycleTask->_ac_heaters[i] = &_ac_heaters[i];
-  // }
 
 
   DutyCycleTask dutyCycleTask;
@@ -368,15 +353,24 @@ void setup() {
 
   dutyCycleTask.NUM_HEATERS = NUM_HEATERS;
   dutyCycleTask._ac_heaters = new GGLabsSSR1*[dutyCycleTask.NUM_HEATERS];
+
+  OxCore::Debug<const char *>("NUM_HEATERS: ");
+  OxCore::Debug<int>(dutyCycleTask.NUM_HEATERS);
+
   for(int i = 0; i < NUM_HEATERS; i++) {
-    dutyCycleTask._ac_heaters[i] = &_ac_heaters[i];
+    _ac_heaters[i] = new GGLabsSSR1();
+    _ac_heaters[i]->setHeater(0,LOW);
+    _ac_heaters[i]->setHeater(1,LOW);
+  }
+  for(int i = 0; i < NUM_HEATERS; i++) {
+    dutyCycleTask._ac_heaters[i] = _ac_heaters[i];
   }
 
   OxCore::Debug<const char *>("DDD\n");
 
   OxCore::TaskProperties dutyCycleProperties;
   dutyCycleProperties.name = "dutyCycle";
-  dutyCycleProperties.id = 27;
+  dutyCycleProperties.id = 23;
   OxCore::Debug<const char *>("period:");
   OxCore::Debug<int>(dutyCycleTask.PERIOD_MS);
   OxCore::Debug<const char *>("\n");
@@ -387,7 +381,7 @@ void setup() {
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
-  HeaterPIDProperties.id = 28;
+  HeaterPIDProperties.id = 24;
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) localGetConfig();
