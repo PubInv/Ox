@@ -479,11 +479,11 @@
     ],
     [
       "9d641288-e168-4964-816e-23e1814d1b66",
-      "Thermocouple Amplifier 3wire Interface breakout board - MAX31855 "
+      "Thermocouple Amplifier SPI Interface breakout board - MAX31855 "
     ],
     [
       "3daed20d-8623-449a-af6f-871db7628ab2",
-      "Thermocouple Amplifier SPI breakout board - MAX31865"
+      "Thermocouple Amplifier I2C breakout board - MCP9600"
     ],
     [
       "0cb2f0dc-fe38-451d-b752-5d12a98f8d03",
