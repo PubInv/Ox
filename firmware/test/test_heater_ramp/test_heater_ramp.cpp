@@ -269,8 +269,6 @@ void setup() {
   }
   Serial.println("AAA!");
   machineConfig = new MachineConfig();
-
-  machineConfig->report = new MachineStatusReport();
   machineConfig->hal = new MachineHAL();
   Serial.println("BBB!");
 

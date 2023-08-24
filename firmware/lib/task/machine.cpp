@@ -69,16 +69,14 @@ void createJSONReport(MachineStatusReport* msr, char *buffer) {
 bool MachineHAL::init() {
   // we should probably check that we can read this effectively here
   // and return false if not
-
+  if (DEBUG_HAL > 0) {
+    Serial.println("HAL: About to run Wire!");
+  }
   Wire.begin();
 
-  // _flowsensor = new SensirionFlow();
-
-  // if (_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
-  //   Serial.println("FLOW SENSOR NOT AVIALABLE!");
-  //   Serial.println("THIS IS A CRITICAL ERROR!");
-  //   return false;
-  // }
+  if (DEBUG_HAL > 0) {
+      Serial.println("HAL: About to init Fan!");
+  }
 
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
 
@@ -88,7 +86,9 @@ bool MachineHAL::init() {
 #else
   _fans[0].DEBUG_FAN = 0;
 #endif
-
+  if (DEBUG_HAL > 0) {
+      Serial.println("HAL:About to return!");
+  }
   return true;
 }
 

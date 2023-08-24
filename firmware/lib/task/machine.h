@@ -63,6 +63,7 @@ class MachineHAL {
 public:
   //  SensirionFlow *_flowsensor;
   SanyoAceB97 _fans[NUM_FANS];
+  int DEBUG_HAL = 0;
   bool init();
   //  void _updateFanSpeed(float unitInterval);
 };
@@ -72,6 +73,7 @@ class MachineConfig {
 public:
   MachineConfig() {
     script = new MachineScript();
+    report = new MachineStatusReport();
   };
 
 
