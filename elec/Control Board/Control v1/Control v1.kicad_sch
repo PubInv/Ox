@@ -5294,7 +5294,7 @@
   (symbol (lib_id "power:+3.3V") (at 16.51 233.68 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ae9814fd-0838-4ebf-a65e-a9a3702f3f3b)
-    (property "Reference" "#PWR028" (at 16.51 237.49 0)
+    (property "Reference" "#PWR03" (at 16.51 237.49 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3V" (at 16.51 228.6 0)
@@ -5310,7 +5310,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
-          (reference "#PWR028") (unit 1)
+          (reference "#PWR03") (unit 1)
         )
       )
     )
