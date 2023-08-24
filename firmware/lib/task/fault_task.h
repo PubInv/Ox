@@ -24,7 +24,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include "../collections/array.h"
 #include "heater.h"
-#include "fan.h"
 #include <machine.h>
 
 #include <abstract_temperature.h>

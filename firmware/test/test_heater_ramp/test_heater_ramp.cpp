@@ -130,23 +130,19 @@ unsigned long time_of_last_report = 0;
 // const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
 
 
-// Our AC heater...confusingly named!
-const int NUM_HEATERS = 1;
-const int NUM_STACKS = 1;
-
-GGLabsSSR1* _ac_heaters[NUM_HEATERS];
+// GGLabsSSR1* _ac_heaters[NUM_HEATERS];
 
 
-AbstractPS* _stacks[NUM_STACKS];
+AbstractPS* _stacks[MachineConfig::NUM_STACKS];
 
 // This is copied directly from cog_task.cpp...
 void _updateStackVoltage(float voltage,MachineConfig *machineConfig) {
-  for (int i = 0; i < NUM_STACKS; i++) {
+  for (int i = 0; i < MachineConfig::NUM_STACKS; i++) {
     _stacks[i]->updateVoltage(voltage,machineConfig);
   }
 }
 void _updateStackAmperage(float amperage,MachineConfig *machineConfig) {
-  for (int i = 0; i < NUM_STACKS; i++) {
+  for (int i = 0; i < MachineConfig::NUM_STACKS; i++) {
     _stacks[i]->updateAmperage(amperage,machineConfig);
   }
 }
@@ -163,7 +159,32 @@ namespace OxApp
   enum State {RampingUp, Holding, RampingDn};
   State global_state = RampingUp;
 
+  class FanReportTask : public OxCore::Task
+  {
+  public:
+    FanReportTask();
+    const int PERIOD_MS = 3000;
+    const int DEBUG_FAN_TASK = 1;
+    SanyoAceB97 *fan;
+  private:
+    bool _init() override;
+    bool _run() override;
+  };
+  FanReportTask::FanReportTask() {
+  }
 
+  bool FanReportTask::_init()
+  {
+    OxCore::Debug<const char *>("FanReportTask init\n");
+    return true;
+  }
+
+  bool FanReportTask::_run()
+  {
+    if (DEBUG_FAN_TASK > 0) {
+      fan->update(0.5);
+    }
+  }
   // This task controls the ramp up, hold, and ramp down.
   class SupervisorTask : public OxCore::Task
   {
@@ -251,6 +272,7 @@ namespace OxApp
 }
 
 using namespace OxApp;
+FanReportTask fanReportTask;
 ReadTempsTask readTempsTask;
 SupervisorTask supervisorTask;
 // ControllerTask controllerTask;
@@ -279,11 +301,11 @@ void setup() {
 
    Serial.println("CCC!");
 
-  bool initSuccess  = localGetConfig()->hal->init();
-  Serial.println("about to start!");
-  if (!initSuccess) {
-    Serial.println("Could not init Hardware Abastraction Layer Properly!");
-  }
+  // bool initSuccess  = localGetConfig()->hal->init();
+  // Serial.println("about to start!");
+  // if (!initSuccess) {
+  //   Serial.println("Could not init Hardware Abastraction Layer Properly!");
+  // }
 
   _stacks[0] = new SL_PS("FIRST_STACK",0);
 
@@ -317,16 +339,28 @@ void setup() {
   Serial.println("Fan Set up");
   fan->_init();
   Serial.println("fan init done!");
-  fan->DEBUG_FAN = 0;
+  fan->DEBUG_FAN = 1;
 
 
   pinMode(fan->PWM_PIN[0], OUTPUT);
   // It is safer to be completely off until we are ready to start!
-  analogWrite(fan->PWM_PIN[0],0);
-
+  analogWrite(fan->PWM_PIN[0],153);
 
   Serial.println("Fan Set up");
   delay(100);
+
+  fanReportTask.fan = fan;
+  OxCore::TaskProperties fanReportProperties;
+  fanReportProperties.name = "fanReport";
+  fanReportProperties.id = 19;
+  fanReportProperties.period = fanReportTask.PERIOD_MS;
+  fanReportProperties.priority = OxCore::TaskPriority::High;
+  fanReportProperties.state_and_config = (void *) localGetConfig();
+  delay(300);
+  core.AddTask(&fanReportTask, &fanReportProperties);
+  delay(100);
+
+
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
   readTempsProperties.id = 21;
@@ -351,19 +385,18 @@ void setup() {
   //  dutyCycleTask = new DutyCycleTask();
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
-  dutyCycleTask.NUM_HEATERS = NUM_HEATERS;
-  dutyCycleTask._ac_heaters = new GGLabsSSR1*[dutyCycleTask.NUM_HEATERS];
+
+  dutyCycleTask._ac_heaters = new GGLabsSSR1*[MachineConfig::NUM_HEATERS];
 
   OxCore::Debug<const char *>("NUM_HEATERS: ");
-  OxCore::Debug<int>(dutyCycleTask.NUM_HEATERS);
+  OxCore::DebugLn<int>(MachineConfig::NUM_HEATERS);
 
-  for(int i = 0; i < NUM_HEATERS; i++) {
-    _ac_heaters[i] = new GGLabsSSR1();
-    _ac_heaters[i]->setHeater(0,LOW);
-    _ac_heaters[i]->setHeater(1,LOW);
+  for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
+    dutyCycleTask._ac_heaters[i] = new GGLabsSSR1();;
   }
-  for(int i = 0; i < NUM_HEATERS; i++) {
-    dutyCycleTask._ac_heaters[i] = _ac_heaters[i];
+  for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
+    dutyCycleTask._ac_heaters[i]->setHeater(0,LOW);
+    dutyCycleTask._ac_heaters[i]->setHeater(1,LOW);
   }
 
   OxCore::Debug<const char *>("DDD\n");
@@ -385,15 +418,19 @@ void setup() {
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
+  //  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
 
   _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
   _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
-  analogWrite(fan->PWM_PIN[0],0);
+  analogWrite(fan->PWM_PIN[0],153);
 
   Serial.println("Setup Done!");
+
+  OxCore::Debug<const char *>("AAA NUM_HEATERS: ");
+  OxCore::DebugLn<int>(MachineConfig::NUM_HEATERS);
+
 }
 
 

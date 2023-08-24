@@ -53,7 +53,7 @@ TaskProperties _properties;
 
 void report(MachineConfig *machineConfig) {
   Serial.print("F : ");
-  Serial.println(machineConfig->report->fan_speed);
+  Serial.println(machineConfig->report->fan_rpm);
 }
 unsigned long time_of_last_report = 0;
 void test_fan_speed(){
@@ -84,12 +84,12 @@ void test_fan_speed(){
         speed = atoi(myBuff);
         Serial.print("read speeed: ");
         Serial.println(speed);
-         fan->fanSpeedPerCentage(speed);
+        fan->fanSpeedPerCentage(speed);
 
         // Possibly I should push the config into the HAL
         // so that this kind of reporting can be automatic,
         // but that makes teh HAL less clean
-        machineConfig->report->fan_speed = speed;
+        machineConfig->report->fan_pwm = speed;
 
     } else {
       Serial.println("No input.");
