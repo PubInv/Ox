@@ -411,110 +411,6 @@
         )
       )
     )
-    (symbol "power:+12V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "+12V" (at 0 3.556 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_keywords" "power-flag" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_description" "Power symbol creates a global label with name \"+12V\"" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "+12V_0_1"
-        (polyline
-          (pts
-            (xy -0.762 1.27)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 2.54)
-            (xy 0.762 1.27)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "+12V_1_1"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "+12V" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
-    (symbol "power:+5V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "+5V" (at 0 3.556 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_keywords" "power-flag" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_description" "Power symbol creates a global label with name \"+5V\"" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "+5V_0_1"
-        (polyline
-          (pts
-            (xy -0.762 1.27)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 2.54)
-            (xy 0.762 1.27)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "+5V_1_1"
-        (pin power_in line (at 0 0 90) (length 0) hide
-          (name "+5V" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
     (symbol "power:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -6.35 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1405,7 +1301,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R44") (unit 1)
+          (reference "R45") (unit 1)
         )
       )
     )
@@ -1480,7 +1376,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "#PWR055") (unit 1)
+          (reference "#PWR058") (unit 1)
         )
       )
     )
@@ -1536,7 +1432,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "Q11") (unit 1)
+          (reference "Q10") (unit 1)
         )
       )
     )
@@ -1585,7 +1481,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R40") (unit 1)
+          (reference "R41") (unit 1)
         )
       )
     )
@@ -1634,7 +1530,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R48") (unit 1)
+          (reference "R49") (unit 1)
         )
       )
     )
@@ -1689,7 +1585,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R41") (unit 1)
+          (reference "R42") (unit 1)
         )
       )
     )
@@ -1783,7 +1679,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R47") (unit 1)
+          (reference "R48") (unit 1)
         )
       )
     )
@@ -1838,7 +1734,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R46") (unit 1)
+          (reference "R47") (unit 1)
         )
       )
     )
@@ -1871,7 +1767,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "J26") (unit 1)
+          (reference "J25") (unit 1)
         )
       )
     )
@@ -1927,7 +1823,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "Q10") (unit 1)
+          (reference "Q9") (unit 1)
         )
       )
     )
@@ -1982,7 +1878,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R45") (unit 1)
+          (reference "R46") (unit 1)
         )
       )
     )
@@ -2082,7 +1978,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "C7") (unit 1)
+          (reference "C16") (unit 1)
         )
       )
     )
@@ -2137,7 +2033,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R43") (unit 1)
+          (reference "R44") (unit 1)
         )
       )
     )
@@ -2167,7 +2063,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "#PWR053") (unit 1)
+          (reference "#PWR056") (unit 1)
         )
       )
     )
@@ -2197,7 +2093,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "#PWR052") (unit 1)
+          (reference "#PWR055") (unit 1)
         )
       )
     )
@@ -2246,7 +2142,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R49") (unit 1)
+          (reference "R50") (unit 1)
         )
       )
     )
@@ -2301,7 +2197,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "C10") (unit 1)
+          (reference "C19") (unit 1)
         )
       )
     )
@@ -2327,36 +2223,6 @@
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/09141fd0-c295-4cc6-88a0-924ace0abc49"
           (reference "#PWR0204") (unit 1)
-        )
-      )
-      (project "Control v1"
-        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "#PWR054") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:+12V") (at 238.252 41.529 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid d87b34bb-a0bd-4e26-ac5e-e0720495e6e8)
-    (property "Reference" "#PWR0207" (at 238.252 45.339 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "+12V" (at 238.252 36.449 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 238.252 41.529 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 238.252 41.529 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid b03ff566-c8fe-4213-9c3e-ef018dbc265f))
-    (instances
-      (project "fan_I2C"
-        (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/09141fd0-c295-4cc6-88a0-924ace0abc49"
-          (reference "#PWR0207") (unit 1)
         )
       )
       (project "Control v1"
@@ -2416,7 +2282,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "C9") (unit 1)
+          (reference "C18") (unit 1)
         )
       )
     )
@@ -2489,7 +2355,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "J25") (unit 1)
+          (reference "J24") (unit 1)
         )
       )
     )
@@ -2544,7 +2410,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "R42") (unit 1)
+          (reference "R43") (unit 1)
         )
       )
     )
@@ -2574,37 +2440,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "#PWR051") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "power:+5V") (at 238.252 33.909 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
-    (uuid f97de5b2-1962-4418-917b-46d4f9b2a649)
-    (property "Reference" "#PWR0206" (at 238.252 37.719 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Value" "+5V" (at 238.252 28.829 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 238.252 33.909 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 238.252 33.909 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid c9e6fba0-f5f8-4fd3-8c96-94f0f8dc6cf6))
-    (instances
-      (project "fan_I2C"
-        (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/09141fd0-c295-4cc6-88a0-924ace0abc49"
-          (reference "#PWR0206") (unit 1)
-        )
-      )
-      (project "Control v1"
-        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "#PWR056") (unit 1)
+          (reference "#PWR054") (unit 1)
         )
       )
     )
@@ -2659,7 +2495,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/905a527a-e45b-4998-adf0-069f9c917f28"
-          (reference "C8") (unit 1)
+          (reference "C17") (unit 1)
         )
       )
     )
