@@ -51,6 +51,7 @@ using namespace OxCore;
 
 #include <heater_pid_task.h>
 
+#include <read_temps_task.h>
 
 
 using namespace OxCore;
@@ -70,8 +71,8 @@ MachineConfig *localGetConfig() {
 
 unsigned long time_of_last_report = 0;
 
-const float FAN_PER_CENT = 60.0;
-const int FAN_PWM = (int) (255.0*60.0/100.0);
+//const float FAN_PER_CENT = 60.0;
+// const int FAN_PWM = (int) (255.0*60.0/100.0);
 
 // TEST CONFIGURATION PARAMETERS
 // ALL OF THESE COULD BE CONFIGURABLE, BUT FOR THIS TEST
@@ -79,22 +80,22 @@ const int FAN_PWM = (int) (255.0*60.0/100.0);
 // Edit these directly and re-upload to run a different test.
 // This test is designed to abort the processeor when done.
 
-const float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
-const float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
+// const float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
+// const float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
 
-// This is the overall target_temp, which changes over time.
+// // This is the overall target_temp, which changes over time.
 
-const float HOLD_TEMPERATURE = 600.0;
-const float STOP_TEMPERATURE = 27.0;
-const float START_TEMPERATURE = 600.0;
+// const float HOLD_TEMPERATURE = 600.0;
+// const float STOP_TEMPERATURE = 27.0;
+// const float START_TEMPERATURE = 600.0;
 
-float TARGET_TEMP = 27.0;
+// float TARGET_TEMP = 27.0;
 
-const unsigned long HOLD_TIME_MINUTES = 1;
-const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
-const float STARTING_DUTY_CYCLE_FRACTION = 0.0;
-const float STACK_VOLTAGE = 12.0;
-const float STACK_AMPERAGE = 3.0;
+// const unsigned long HOLD_TIME_MINUTES = 1;
+// const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
+// const float STARTING_DUTY_CYCLE_FRACTION = 0.0;
+// const float STACK_VOLTAGE = 12.0;
+// const float STACK_AMPERAGE = 3.0;
 
 // These parameters are related to our control procedure.
 // This is similar to a PID loop, but I don't think any integration
@@ -104,33 +105,29 @@ const float STACK_AMPERAGE = 3.0;
 
 // Let DutyCycle be changing Duty cycle, a fraction of 1.0.
 // In PID termonology, this is the "PLANT VARIABLE"--what we can control.
-float GlobalDutyCycle = STARTING_DUTY_CYCLE_FRACTION;
+//float GlobalDutyCycle = MachineConfig::STARTING_DUTY_CYCLE_FRACTION;
 // Temperature Read Period is how often we will update the
 // Temperature sensor.
-const int TEMPERATURE_READ_PERIOD_MS = 5000;
+//const int TEMPERATURE_READ_PERIOD_MS = 5000;
 // Duty Cycle Adjustment Period is how often we will adject
-const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
+//const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
 // This is the number of periods around a point in time we will
 // average to produce a smooth temperature. (Our thermocouples have
 // only 0.25 C resolution, which is low for a 0.5C/minute control
 // situation!) These are always taken to be BACKWARD in time.
-const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
-// Ddelta is the change in temperature in C per min
-float Ddelta_C_per_min = 0.0;
-// This is period of time we will use to compute the Ddela_C_per_min.
-// Note this does not have to be related to the DUTY_CYCLE_ADJUSTMENT_PERIOD_MS
-const int TEMPERATRUE_TIME_DELTA_MS = 60000;
+// const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
+// const int TEMPERATRUE_TIME_DELTA_MS = 60000;
 //
-const float MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN = 1.0 / 100.0;
+// const float MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN = 1.0 / 100.0;
 
-const int NUM_TEMPS_TO_RECORD = ceil((((float) TEMPERATRUE_TIME_DELTA_MS / (float) TEMPERATURE_READ_PERIOD_MS) + NUMBER_OF_PERIODS_TO_AVERAGE));
+// const int NUM_TEMPS_TO_RECORD = ceil((((float) MachineConfig::TEMPERATRUE_TIME_DELTA_MS / (float) TEMPERATURE_READ_PERIOD_MS) +MachineConfig::NUMBER_OF_PERIODS_TO_AVERAGE));
 
 
-const long FAKE_NUMBER_OF_DUTY_CYCLES_TO_RUN = 100000;
+//const long FAKE_NUMBER_OF_DUTY_CYCLES_TO_RUN = 100000;
 
-int num_duty_cycles = 0;
+// int num_duty_cycles = 0;
 
-const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
+// const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
 
 
 // Our AC heater...confusingly named!
@@ -161,192 +158,6 @@ using namespace std;
 
 namespace OxApp
 {
-  Temperature::SensorConfig config[3] = {
-    {
-      0,
-      Temperature::SensorMode::SPI,
-      Temperature::TemperatureUnits::C,
-      45,
-      1,
-      0,
-      30
-    },
-    {
-      1,
-      Temperature::SensorMode::SPI,
-      Temperature::TemperatureUnits::C,
-      47,
-      1,
-      0,
-      30
-    },
-    {
-      2,
-      Temperature::SensorMode::SPI,
-      Temperature::TemperatureUnits::C,
-      49,
-      1,
-      0,
-      30
-    }
-  };
-
-  // Once a second we will read the temperature and keep
-  // a running record here (back in time) so that we can
-  // set the duty cycle based on change.
-  class ReadTempsTask : public OxCore::Task
-  {
-  public:
-    const int DEBUG_READ_TEMPS = 0;
-    const int PERIOD_MS = TEMPERATURE_READ_PERIOD_MS;
-    const int NUM_TEMPS = NUMBER_OF_PERIODS_TO_AVERAGE;
-    // This is a ring buffer...
-    float temps[NUM_TEMPS_TO_RECORD];
-    // we will add one to this
-    int next_temp_idx = 0;
-    const static int NUM_TEMPERATURE_SENSORS = 3;
-    const static int NUM_TEMPERATURE_INDICES = 1;
-    Temperature::AbstractTemperature* _temperatureSensors;
-
-    void _readTemperatureSensors();
-    void _configTemperatureSensors();
-    void updateTemperatures();
-    void addTempToQueue(float c);
-    float tempFromTime(int t_ms);
-    void calculateDdelta();
-    void dumpQueue();
-    int ringCompuation(int n);
-  private:
-    bool _init() override;
-    bool _run() override;
-  };
-
-  void ReadTempsTask::addTempToQueue(float c) {
-    this->temps[next_temp_idx] = c;
-    this->next_temp_idx = (next_temp_idx + 1) % NUM_TEMPS_TO_RECORD;
-  }
-  int ReadTempsTask::ringCompuation(int n) {
-    if (n >0)
-      return n % NUM_TEMPS_TO_RECORD;
-    else
-      return (n+NUM_TEMPS_TO_RECORD) % NUM_TEMPS_TO_RECORD;
-  }
-  void ReadTempsTask::dumpQueue() {
-    OxCore::DebugLn<const char *>("All Temps, going backward in ms:");
-    for(int i = 0; i < NUM_TEMPS_TO_RECORD; i++) {
-      OxCore::Debug<int>(i*1000);
-      OxCore::Debug<const char *>(" : ");
-      OxCore::DebugLn<float>(this->temps[ringCompuation(this->next_temp_idx - i)]);
-    }
-  }
-
-  // compute an average temperature backward in time t
-  float ReadTempsTask::tempFromTime(int t_ms) {
-    float temp = 0.0;
-    const int num_periods_back = (t_ms / TEMPERATURE_READ_PERIOD_MS);
-    int num_valid = 0;
-    for(int i = 0; i < NUMBER_OF_PERIODS_TO_AVERAGE; i++) {
-      float t = temps[ringCompuation(next_temp_idx - (num_periods_back + i))];
-      if (t != 0) {
-        temp += t;
-        num_valid++;
-      }
-    }
-    if (num_valid > 0)
-      return (temp / (float) num_valid);
-    else
-      return 0.0;
-  }
-
-  // this function is based on parameters
-  void ReadTempsTask::calculateDdelta() {
-    float t0 = tempFromTime(0);
-    float t1 = tempFromTime(TEMPERATRUE_TIME_DELTA_MS);
-    // If our data is not complete yet, we will wait.
-    if ((t0 == 0) || (t1 == 0))
-      return;
-    float DdeltaRaw = t0 - t1;
-    // now compute Ddelta_C_per_min...
-    float Ddelta_C_per_min_computed = (DdeltaRaw * TEMPERATRUE_TIME_DELTA_MS) / (60.0*1000.0);
-    // now we will set the global so that it is available to the other tasks
-    Ddelta_C_per_min = Ddelta_C_per_min_computed;
-  }
-
-  void ReadTempsTask::updateTemperatures() {
-    _readTemperatureSensors();
-    float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
-    float postStackTemp = _temperatureSensors[0].GetTemperature(1);
-    float postGetterTemp = _temperatureSensors[0].GetTemperature(2);
-    // Sometimes we get a data read error, that comes across
-    // as -127.00. In that case, we will leave the
-    // value unchanged from the last read.
-    if (postHeaterTemp > -100.0) {
-      localGetConfig()->report->post_heater_C = postHeaterTemp;
-    } else {
-      OxCore::Debug<const char *>("Bad post_heater_C\n");
-    }
-    if (postGetterTemp > -100.0) {
-      localGetConfig()->report->post_getter_C = postGetterTemp;
-    } else {
-      OxCore::Debug<const char *>("Bad post_getter_C\n");
-    }
-    if (postStackTemp > -100.0) {
-      localGetConfig()->report->post_stack_C = postStackTemp;
-    } else {
-      OxCore::Debug<const char *>("Bad post_stack_C\n");
-    }
-    if (DEBUG_READ_TEMPS > 0) {
-      outputReport(localGetConfig()->report);
-      OxCore::Debug<const char *>("Target Temp : ");
-      OxCore::DebugLn<float>(TARGET_TEMP);
-    }
-    addTempToQueue(localGetConfig()->report->post_heater_C);
-    calculateDdelta();
-  }
-  // I don't fully understand this!
-  void ReadTempsTask::_configTemperatureSensors() {
-    _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31850Temperature[1];
-    _temperatureSensors[0]._config = config[0];
-  }
-
-  void ReadTempsTask::_readTemperatureSensors() {
-    for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
-      _temperatureSensors[i].ReadTemperature();
-      float temperature = _temperatureSensors[0].GetTemperature(i);
-      if (DEBUG_READ_TEMPS > 0) {
-        OxCore::Debug<const char *>("Temp : ");
-        OxCore::Debug<const char *>(localGetConfig()->TempLocationNames[i]);
-        OxCore::Debug<const char *>(": ");
-        OxCore::DebugLn<float>(temperature);
-      }
-    }
-    if (DEBUG_READ_TEMPS > 1) {
-      OxCore::Debug<const char *>("Ddelta_C_per_min :");
-      Serial.println(Ddelta_C_per_min,5);
-    }
-    if (DEBUG_READ_TEMPS > 1) {
-      dumpQueue();
-    }
-  }
-
-  bool ReadTempsTask::_init()
-  {
-    OxCore::Debug<const char *>("ReadTempsTask init\n");
-    _configTemperatureSensors();
-    OxCore::Debug<const char *>("Config of temperature sensors done\n");
-    for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
-      temps[i] = 0.0;
-    }
-    return true;
-  }
-
-  bool ReadTempsTask::_run()
-  {
-    if (DEBUG_READ_TEMPS > 1) {
-      OxCore::Debug<const char *>("Running ReadTemps\n");
-    }
-    updateTemperatures();
-  }
 
   enum State {RampingUp, Holding, RampingDn};
   State global_state = RampingUp;
@@ -378,8 +189,8 @@ namespace OxApp
   bool SupervisorTask::_run()
   {
     // This should not be necessary here, it should be required only once...
-    _updateStackVoltage(STACK_VOLTAGE,machineConfig);
-    _updateStackAmperage(STACK_AMPERAGE,machineConfig);
+    _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
+    _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
 
     const unsigned long ms = millis();
     switch (global_state) {
@@ -389,14 +200,14 @@ namespace OxApp
         OxCore::Debug<const char *>("State: RAMPING UP\n");
       }
       float postHeaterTemp = localGetConfig()->report->post_heater_C;
-      if (postHeaterTemp > HOLD_TEMPERATURE) {
+      if (postHeaterTemp > MachineConfig::HOLD_TEMPERATURE) {
         global_state = Holding;
         OxCore::Debug<const char *>("State Changing to HOLDING\n");
         begin_hold_time = millis();
       } else {
         const unsigned long MINUTES_RAMPING_UP = ms / (60 * 1000);
-        TARGET_TEMP = START_TEMPERATURE + MINUTES_RAMPING_UP * RAMP_UP_TARGET_D_MIN;
-        TARGET_TEMP = min(TARGET_TEMP, HOLD_TEMPERATURE);
+        localGetConfig()->TARGET_TEMP = MachineConfig::START_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
+        localGetConfig()->TARGET_TEMP = min(localGetConfig()->TARGET_TEMP, MachineConfig::HOLD_TEMPERATURE);
       }
       break;
     };
@@ -405,7 +216,7 @@ namespace OxApp
         OxCore::Debug<const char *>("State: HOLDING\n");
       }
       unsigned long ms = millis();
-      if (((ms - begin_hold_time) / 1000) > HOLD_TIME_SECONDS) {
+      if (((ms - begin_hold_time) / 1000) > MachineConfig::HOLD_TIME_SECONDS) {
         global_state = RampingDn;
         begin_down_time = ms;
         OxCore::Debug<const char *>("State: Changing to RAMPING DN\n");
@@ -419,7 +230,7 @@ namespace OxApp
         OxCore::Debug<const char *>("State: RAMPING DN\n");
       }
       float postHeaterTemp = localGetConfig()->report->post_heater_C;
-      if (postHeaterTemp < STOP_TEMPERATURE) {
+      if (postHeaterTemp < MachineConfig::STOP_TEMPERATURE) {
         analogWrite(fan->PWM_PIN[0],5);
         OxCore::Debug<const char *>("Stop temperature reached!\n");
         OxCore::Debug<const char *>("=======================\n");
@@ -427,8 +238,9 @@ namespace OxApp
         while(1);
       } else {
         const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
-        TARGET_TEMP = HOLD_TEMPERATURE + MINUTES_RAMPING_DN * RAMP_DN_TARGET_D_MIN;
-        TARGET_TEMP = max(TARGET_TEMP,STOP_TEMPERATURE);
+        localGetConfig()->TARGET_TEMP =
+          MachineConfig::HOLD_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
+        localGetConfig()->TARGET_TEMP = max(localGetConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
       }
       break;
     };
@@ -462,7 +274,7 @@ void setup() {
   machineConfig->hal = new MachineHAL();
   Serial.println("BBB!");
 
-  heaterPIDTask.HeaterSetPoint_C = TARGET_TEMP;
+  heaterPIDTask.HeaterSetPoint_C = localGetConfig()->TARGET_TEMP;
 
 
   for(int i = 0; i < NUM_HEATERS; i++) {
@@ -530,13 +342,13 @@ void setup() {
   core.AddTask(&readTempsTask, &readTempsProperties);
   delay(100);
 
-  // OxCore::TaskProperties supervisorProperties;
-  // supervisorProperties.name = "supervisor";
-  // supervisorProperties.id = 26;
-  // supervisorProperties.period = supervisorTask.PERIOD_MS;
-  // supervisorProperties.priority = OxCore::TaskPriority::High;
-  // supervisorProperties.state_and_config = (void *) localGetConfig();
-  // core.AddTask(&supervisorTask, &supervisorProperties);
+  OxCore::TaskProperties supervisorProperties;
+  supervisorProperties.name = "supervisor";
+  supervisorProperties.id = 26;
+  supervisorProperties.period = supervisorTask.PERIOD_MS;
+  supervisorProperties.priority = OxCore::TaskPriority::High;
+  supervisorProperties.state_and_config = (void *) localGetConfig();
+  core.AddTask(&supervisorTask, &supervisorProperties);
 
 
   Serial.println("About to create dutyCycleTask!");
@@ -566,7 +378,7 @@ void setup() {
 
   OxCore::TaskProperties dutyCycleProperties;
   dutyCycleProperties.name = "dutyCycle";
-  dutyCycleProperties.id = 21;
+  dutyCycleProperties.id = 27;
   OxCore::Debug<const char *>("period:");
   OxCore::Debug<int>(dutyCycleTask.PERIOD_MS);
   OxCore::Debug<const char *>("\n");
@@ -577,7 +389,7 @@ void setup() {
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
-  HeaterPIDProperties.id = 22;
+  HeaterPIDProperties.id = 28;
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) localGetConfig();
@@ -585,8 +397,8 @@ void setup() {
 
   OxCore::Debug<const char *>("Added tasks\n");
 
-  _updateStackVoltage(STACK_VOLTAGE,machineConfig);
-  _updateStackAmperage(STACK_AMPERAGE,machineConfig);
+  _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
+  _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
   analogWrite(fan->PWM_PIN[0],0);
 
   Serial.println("Setup Done!");

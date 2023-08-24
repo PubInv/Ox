@@ -62,13 +62,12 @@ namespace OxApp
       const static int NUM_TEMPERATURE_SENSORS = 3;
 #else // RIBBONFISH
       // There are really several senosrs, but they are indexed!
-      const static int NUM_TEMPERATURE_SENSORS = 1;
+      const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
       const static int NUM_HEATERS = 1;
       const static int NUM_FANS = 1;
       const static int NUM_STACKS = 1;
 #endif
-      float test_var = 4.0;
       void updateTemperatures();
 
       Temperature::AbstractTemperature* _temperatureSensors;
