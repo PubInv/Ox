@@ -8060,7 +8060,7 @@
   (symbol (lib_id "Device:R") (at 236.22 44.45 90) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 00570c6e-d8a9-44a2-9103-daa6261166b9)
-    (property "Reference" "R28" (at 236.22 38.1 90)
+    (property "Reference" "R39" (at 236.22 38.1 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "10k" (at 236.22 40.64 90)
@@ -8077,7 +8077,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R28") (unit 1)
+          (reference "R39") (unit 1)
         )
       )
     )
@@ -8129,7 +8129,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R22") (unit 1)
+          (reference "R33") (unit 1)
         )
       )
     )
@@ -8138,7 +8138,7 @@
   (symbol (lib_id "power:GND") (at 176.53 76.2 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 089c6d16-80ea-4083-9428-e1da796f79dc)
-    (property "Reference" "#PWR038" (at 176.53 82.55 0)
+    (property "Reference" "#PWR050" (at 176.53 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 176.53 81.28 0)
@@ -8154,7 +8154,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR038") (unit 1)
+          (reference "#PWR050") (unit 1)
         )
       )
     )
@@ -8206,7 +8206,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R27") (unit 1)
+          (reference "R38") (unit 1)
         )
       )
     )
@@ -8215,7 +8215,7 @@
   (symbol (lib_id "power:GND") (at 200.66 137.16 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 15e9af50-30af-41fa-ac0b-ee715fa30297)
-    (property "Reference" "#PWR041" (at 200.66 143.51 0)
+    (property "Reference" "#PWR053" (at 200.66 143.51 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 200.66 142.24 0)
@@ -8231,7 +8231,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR041") (unit 1)
+          (reference "#PWR053") (unit 1)
         )
       )
     )
@@ -8283,7 +8283,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R25") (unit 1)
+          (reference "R36") (unit 1)
         )
       )
     )
@@ -8330,7 +8330,7 @@
           (reference "R7") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R21") (unit 1)
+          (reference "R32") (unit 1)
         )
       )
     )
@@ -8339,7 +8339,7 @@
   (symbol (lib_id "power:GND") (at 275.59 76.2 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2469e628-838b-430f-ad1f-6df0b7ae5f9a)
-    (property "Reference" "#PWR044" (at 275.59 82.55 0)
+    (property "Reference" "#PWR056" (at 275.59 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 275.59 81.28 0)
@@ -8355,7 +8355,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR044") (unit 1)
+          (reference "#PWR056") (unit 1)
         )
       )
     )
@@ -8407,7 +8407,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R30") (unit 1)
+          (reference "R41") (unit 1)
         )
       )
     )
@@ -8459,7 +8459,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R35") (unit 1)
+          (reference "R46") (unit 1)
         )
       )
     )
@@ -8490,7 +8490,7 @@
           (reference "J9") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "J14") (unit 1)
+          (reference "J16") (unit 1)
         )
       )
     )
@@ -8539,7 +8539,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C8") (unit 1)
+          (reference "C10") (unit 1)
         )
       )
     )
@@ -8588,7 +8588,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C6") (unit 1)
+          (reference "C8") (unit 1)
         )
       )
     )
@@ -8669,7 +8669,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R31") (unit 1)
+          (reference "R42") (unit 1)
         )
       )
     )
@@ -8726,7 +8726,7 @@
           (reference "#PWR014") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR034") (unit 1)
+          (reference "#PWR046") (unit 1)
         )
       )
     )
@@ -8754,7 +8754,7 @@
           (reference "#PWR016") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR036") (unit 1)
+          (reference "#PWR048") (unit 1)
         )
       )
     )
@@ -8803,7 +8803,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C7") (unit 1)
+          (reference "C9") (unit 1)
         )
       )
     )
@@ -8852,7 +8852,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C4") (unit 1)
+          (reference "C6") (unit 1)
         )
       )
     )
@@ -8880,7 +8880,7 @@
           (reference "#PWR019") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR037") (unit 1)
+          (reference "#PWR049") (unit 1)
         )
       )
     )
@@ -8929,7 +8929,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C1") (unit 1)
+          (reference "C3") (unit 1)
         )
       )
     )
@@ -8957,7 +8957,7 @@
           (reference "#PWR014") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR032") (unit 1)
+          (reference "#PWR044") (unit 1)
         )
       )
     )
@@ -8966,7 +8966,7 @@
   (symbol (lib_id "Connector:Conn_01x04_Pin") (at 156.21 66.04 0) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 93a604ff-d474-4c4e-b9b0-f5eec0e99634)
-    (property "Reference" "J18" (at 154.94 72.39 0)
+    (property "Reference" "J20" (at 154.94 72.39 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "Conn_01x04_Pin" (at 167.64 74.93 0)
@@ -8985,7 +8985,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "J18") (unit 1)
+          (reference "J20") (unit 1)
         )
       )
     )
@@ -9037,7 +9037,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R26") (unit 1)
+          (reference "R37") (unit 1)
         )
       )
     )
@@ -9086,7 +9086,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C5") (unit 1)
+          (reference "C7") (unit 1)
         )
       )
     )
@@ -9138,7 +9138,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R33") (unit 1)
+          (reference "R44") (unit 1)
         )
       )
     )
@@ -9166,7 +9166,7 @@
           (reference "#PWR014") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR035") (unit 1)
+          (reference "#PWR047") (unit 1)
         )
       )
     )
@@ -9215,7 +9215,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C3") (unit 1)
+          (reference "C5") (unit 1)
         )
       )
     )
@@ -9246,7 +9246,7 @@
           (reference "J11") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "J16") (unit 1)
+          (reference "J18") (unit 1)
         )
       )
     )
@@ -9274,7 +9274,7 @@
           (reference "#PWR014") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR033") (unit 1)
+          (reference "#PWR045") (unit 1)
         )
       )
     )
@@ -9283,13 +9283,13 @@
   (symbol (lib_id "Device:R") (at 243.84 142.24 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b270eb14-5378-498d-9875-e2322257ee6f)
-    (property "Reference" "R32" (at 241.3 141.605 0)
+    (property "Reference" "R43" (at 241.3 141.605 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "DNI" (at 241.3 144.145 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 245.618 142.24 90)
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 245.618 142.24 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 243.84 142.24 0)
@@ -9300,7 +9300,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R32") (unit 1)
+          (reference "R43") (unit 1)
         )
       )
     )
@@ -9309,7 +9309,7 @@
   (symbol (lib_id "Device:R") (at 167.64 50.8 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b6f2813f-4fcf-4634-8f93-bd0cbc7b7676)
-    (property "Reference" "R23" (at 165.1 50.165 0)
+    (property "Reference" "R34" (at 165.1 50.165 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "DNI" (at 165.1 52.705 0)
@@ -9326,7 +9326,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R23") (unit 1)
+          (reference "R34") (unit 1)
         )
       )
     )
@@ -9358,7 +9358,7 @@
           (reference "J10") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "J15") (unit 1)
+          (reference "J17") (unit 1)
         )
       )
     )
@@ -9367,7 +9367,7 @@
   (symbol (lib_id "power:GND") (at 243.84 148.59 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c9021585-d105-40f9-a399-b05a5820ee15)
-    (property "Reference" "#PWR042" (at 243.84 154.94 0)
+    (property "Reference" "#PWR054" (at 243.84 154.94 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 243.84 153.67 0)
@@ -9383,7 +9383,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR042") (unit 1)
+          (reference "#PWR054") (unit 1)
         )
       )
     )
@@ -9445,7 +9445,7 @@
   (symbol (lib_id "power:GND") (at 185.42 83.82 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cbc6a611-e52c-4100-8f15-4d451be97178)
-    (property "Reference" "#PWR039" (at 185.42 90.17 0)
+    (property "Reference" "#PWR051" (at 185.42 90.17 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 185.42 88.9 0)
@@ -9461,7 +9461,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR039") (unit 1)
+          (reference "#PWR051") (unit 1)
         )
       )
     )
@@ -9510,7 +9510,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C2") (unit 1)
+          (reference "C4") (unit 1)
         )
       )
     )
@@ -9567,7 +9567,7 @@
   (symbol (lib_id "power:GND") (at 255.27 71.12 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cec366fe-7f4c-441f-9f3a-65ee05323812)
-    (property "Reference" "#PWR043" (at 255.27 77.47 0)
+    (property "Reference" "#PWR055" (at 255.27 77.47 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 255.27 76.2 0)
@@ -9583,7 +9583,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR043") (unit 1)
+          (reference "#PWR055") (unit 1)
         )
       )
     )
@@ -9592,7 +9592,7 @@
   (symbol (lib_id "power:GND") (at 199.39 111.76 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid ceeb59c6-f145-4775-940c-86b63653a23b)
-    (property "Reference" "#PWR040" (at 199.39 118.11 0)
+    (property "Reference" "#PWR052" (at 199.39 118.11 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 199.39 116.84 0)
@@ -9608,7 +9608,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "#PWR040") (unit 1)
+          (reference "#PWR052") (unit 1)
         )
       )
     )
@@ -9617,13 +9617,13 @@
   (symbol (lib_id "Device:R") (at 187.96 118.11 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid d5fa6aa9-d223-4072-a25b-3bd2dc85f1b6)
-    (property "Reference" "R24" (at 185.42 117.475 0)
+    (property "Reference" "R35" (at 185.42 117.475 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "DNI" (at 185.42 120.015 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "" (at 189.738 118.11 90)
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 189.738 118.11 90)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 187.96 118.11 0)
@@ -9634,7 +9634,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R24") (unit 1)
+          (reference "R35") (unit 1)
         )
       )
     )
@@ -9687,7 +9687,7 @@
           (reference "J6") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "J13") (unit 1)
+          (reference "J15") (unit 1)
         )
       )
     )
@@ -9736,7 +9736,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "C9") (unit 1)
+          (reference "C11") (unit 1)
         )
       )
     )
@@ -9770,7 +9770,7 @@
           (reference "J12") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "J17") (unit 1)
+          (reference "J19") (unit 1)
         )
       )
     )
@@ -9779,7 +9779,7 @@
   (symbol (lib_id "Device:R") (at 242.57 54.61 90) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid fb727b58-a7d2-4a40-b848-3b83bb9641a7)
-    (property "Reference" "R29" (at 242.57 48.26 90)
+    (property "Reference" "R40" (at 242.57 48.26 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "10k" (at 242.57 50.8 90)
@@ -9796,7 +9796,7 @@
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R29") (unit 1)
+          (reference "R40") (unit 1)
         )
       )
     )
@@ -9848,7 +9848,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
-          (reference "R34") (unit 1)
+          (reference "R45") (unit 1)
         )
       )
     )
