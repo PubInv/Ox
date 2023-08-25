@@ -29,6 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <fault_task.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
+#include <read_temps_task.h>
 
 // #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
@@ -47,6 +48,7 @@ OxApp::FaultTask faultTask;
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
+ReadTempsTask readTempsTask;
 
 #include <machine.h>
 
@@ -112,9 +114,18 @@ void setup()
 
   /***** Configure and add your tasks here *****/
 
+  OxCore::TaskProperties readTempsProperties;
+  readTempsProperties.name = "readTemps";
+  readTempsProperties.id = 20;
+  readTempsProperties.period = readTempsTask.PERIOD_MS;
+  readTempsProperties.priority = OxCore::TaskPriority::High;
+  readTempsProperties.state_and_config = (void *) &machineConfig;
+  core.AddTask(&readTempsTask, &readTempsProperties);
+
+
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
-  cogProperties.id = 20;
+  cogProperties.id = 21;
   cogProperties.period = 10000;
   cogProperties.priority = OxCore::TaskPriority::High;
   // Note: The machineConfig is universal to all tasks.
@@ -124,39 +135,38 @@ void setup()
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";
-  serialProperties.id = 21;
+  serialProperties.id = 22;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&serialTask, &serialProperties);
 
-  OxCore::TaskProperties faultProperties;
-  faultProperties.name = "fault";
-  faultProperties.id = 22;
-  faultProperties.period = 30000;
-  faultProperties.priority = OxCore::TaskPriority::High;
-  faultProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&faultTask, &faultProperties);
+  // OxCore::TaskProperties faultProperties;
+  // faultProperties.name = "fault";
+  // faultProperties.id = 23;
+  // faultProperties.period = 30000;
+  // faultProperties.priority = OxCore::TaskPriority::High;
+  // faultProperties.state_and_config = (void *) &machineConfig;
+  // core.AddTask(&faultTask, &faultProperties);
 
 
-  if (ETHERNET_BOARD_PRESENT) {
-    OxCore::TaskProperties retrieveScriptUDPProperties;
-    retrieveScriptUDPProperties.name = "retrieveScriptUDP";
-    retrieveScriptUDPProperties.id = 24;
-    retrieveScriptUDPProperties.period = 5000;
-    retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
-    retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
+  // if (ETHERNET_BOARD_PRESENT) {
+  //   OxCore::TaskProperties retrieveScriptUDPProperties;
+  //   retrieveScriptUDPProperties.name = "retrieveScriptUDP";
+  //   retrieveScriptUDPProperties.id = 24;
+  //   retrieveScriptUDPProperties.period = 5000;
+  //   retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
+  //   retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
 
-    core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
-  }
-
+  //   core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
+  // }
 
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
   OxCore::Debug<const char *>("Duty Cycle Setup\n");
   OxCore::TaskProperties dutyCycleProperties;
   dutyCycleProperties.name = "dutyCycle";
-  dutyCycleProperties.id = 28;
+  dutyCycleProperties.id = 25;
   dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
   dutyCycleProperties.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties.state_and_config = (void *) &machineConfig;
@@ -164,8 +174,9 @@ void setup()
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
-  HeaterPIDProperties.id = 27;
+  HeaterPIDProperties.id = 26;
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
+  //  HeaterPIDProperties.period = 10000;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&heaterPIDTask, &HeaterPIDProperties);

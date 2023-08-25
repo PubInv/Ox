@@ -96,9 +96,14 @@ public:
 
   // This is the overall target_temp, which changes over time.
 
-  static constexpr float HOLD_TEMPERATURE = 600.0;
+  static constexpr float HOLD_TEMPERATURE = 90.0;
   static constexpr float STOP_TEMPERATURE = 27.0;
-  static constexpr float START_TEMPERATURE = 600.0;
+  static constexpr float START_TEMPERATURE = 60.0;
+
+
+  static constexpr float HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT = 500.0;
+  static constexpr float HIGH_TEMPERATURE_FAN_PWM = 0.4;
+  float COOL_DOWN_BEGIN_TEMPERATURE;
 
   float TARGET_TEMP = 27.0;
 
@@ -139,13 +144,11 @@ public:
 
   const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
 
-
-
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float MAXIMUM_STACK_VOLTAGE = 8.0;
   float MAXIMUM_STACK_AMPS = 1.0;
   // These values are useful for testing by hand
-#ifdef HAND_TEST
+
   float COOLDOWN_TARGET_C = 27.0;
   float WARMUP_TARGET_C = 150.0;
   float MAX_POST_HEATER_C = 150.0;
@@ -153,16 +156,6 @@ public:
   float MAX_POST_STACK_C = 180.0;
   float TARGET_STACK_CURRENT_mA = 1.0;
 
-  // I'm not sure what the real value here should be!
-  // but to activate the fans we have to make this
-  // higher than 500 ml/s, because the fans seem to
-  // produce that at idle!
-  // float TARGET_FLOW_ml_per_S = 1000.0;
-#else
-  float COOLDOWN_TARGET_C = 26.0;
-  float WARMUP_TARGET_C = 600.0;
-  float DESIRED_STACK_C = 700.0;
-#endif
 
   void _updateFanPWM(float unitInterval);
   void _reportFanSpeed();
@@ -187,6 +180,8 @@ public:
     "Post Stack"
   };
   MachineState ms;
+  // This is used to make decisions that happen at transition time.
+  MachineState previous_ms;
   MachineScript* script;
 
   IdleOrOperateSubState idleOrOperate = Operate;
