@@ -23,6 +23,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 void outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
+        OxCore::Debug<const char *>("Machine State: ");
+        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
+        OxCore::Debug<const char *>("Target      C: ");
+        OxCore::DebugLn<float>(msr->target_temp_C);
         OxCore::Debug<const char *>("Post Heater C: ");
         OxCore::DebugLn<float>(msr->post_heater_C);
         OxCore::Debug<const char *>("Post Getter C: ");
@@ -39,18 +43,18 @@ void outputReport(MachineStatusReport *msr) {
         } else {
           OxCore::DebugLn<float>(msr->stack_ohms);
         }
-        // As of the summer of 2023, we are not planning to use a flow sensor
-        //        OxCore::Debug<const char *>("Flow (ml / s): ");
-        //        OxCore::DebugLn<float>(msr->flow_ml_per_s);
-        OxCore::Debug<const char *>("Heater Duty Cycle (fraction): ");
-        OxCore::DebugLn<float>(msr->heater_duty_cycle);
-        OxCore::Debug<const char *>("Fan PWM [0.0 .. 1.0]: ");
+        OxCore::Debug<const char *>("Heater DC    : ");
+        Serial.println(msr->heater_duty_cycle,4);
+        //        OxCore::DebugLn<float>(msr->heater_duty_cycle);
+        OxCore::Debug<const char *>("Fan PWM      : ");
         OxCore::DebugLn<float>(msr->fan_pwm);
-        OxCore::Debug<const char *>("Fan RPM: ");
+        OxCore::Debug<const char *>("Fan RPM      : ");
         OxCore::DebugLn<float>(msr->fan_rpm);
 }
 
 void createJSONReport(MachineStatusReport* msr, char *buffer) {
+  sprintf(buffer+strlen(buffer), "\"MachineState\": \"%s\",\n",MachineConfig::MachineStateNames[msr->ms]);
+  sprintf(buffer+strlen(buffer), "\"TargetC\": \"%.2f\",\n",msr->target_temp_C);
   sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr->post_heater_C);
   sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\",\n",msr->post_stack_C);
   sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr->post_getter_C);
