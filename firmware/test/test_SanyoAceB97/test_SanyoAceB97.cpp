@@ -53,7 +53,7 @@ TaskProperties _properties;
 
 void report(MachineConfig *machineConfig) {
   Serial.print("F : ");
-  Serial.println(machineConfig->report.fan_speed);
+  Serial.println(machineConfig->report->fan_rpm);
 }
 unsigned long time_of_last_report = 0;
 void test_fan_speed(){
@@ -85,14 +85,16 @@ void test_fan_speed(){
         Serial.print("read speeed: ");
         Serial.println(speed);
         fan->fanSpeedPerCentage(speed);
+
         // Possibly I should push the config into the HAL
         // so that this kind of reporting can be automatic,
         // but that makes teh HAL less clean
-        machineConfig->report.fan_speed = speed;
+        machineConfig->report->fan_pwm = speed;
 
-  } else {
-      //      Serial.println("loop");
-      }
+    } else {
+      Serial.println("No input.");
+
+    }
     unsigned long now_ms = millis();
     if ((now_ms - time_of_last_report) > REPORT_PERIOD_MS) {
       report(machineConfig);
@@ -117,14 +119,14 @@ void process() {
 
 void setup() {
   OxCore::serialBegin(115200UL);
+  delay(1000); // delay to make sure it's ready
 
   machineConfig = new MachineConfig();
   machineConfig->hal = new MachineHAL();
 
-  bool initSuccess  = machineConfig->hal->init();
-  if (!initSuccess) {
-    Serial.println("Could not init Hardware Abastraction Layer Properly!");
-
+  // bool initSuccess  = machineConfig->hal->init();
+  bool initSuccess = true;
+  if (initSuccess) {
     OxCore::TaskProperties cogProperties;
     cogProperties.name = "cog";
     cogProperties.id = 20;
@@ -133,6 +135,9 @@ void setup() {
     Serial.println("About to run test!");
     delay(100);
     process();
+  } else {
+    Serial.println("HAL failed to init!");
+    delay(1000);
   }
 }
 

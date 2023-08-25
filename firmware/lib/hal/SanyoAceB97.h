@@ -80,7 +80,7 @@ public:
   int SPEED_MIN = 0;//in %
   // This is 60% of full power (255) as recommended for this configuration
   int OPERATING_PWM_THROTTLE = 153;
-  int DEBUG_FAN = 2;
+  int DEBUG_FAN = 0;
 public:
   void _init();
   unsigned long _calcRPM(uint8_t i);

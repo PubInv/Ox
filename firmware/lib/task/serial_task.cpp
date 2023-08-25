@@ -140,23 +140,25 @@ void render_set_command_raw(SetCommand* m) {
                   DebugLn<const char *>(" milliamps");
                 }
               }
-            } else if (sc.parameter == 'F') {
-              DebugLn<const char *>("Changing Flow!");
-              if (sc.interpretation != 'T') {
-                Debug<const char *>("Can only recognize \"Target\" interpretation at present!");
-              } else {
-                float new_flow_ml_per_S = sc.val;
-                // now a little sanity check... We should probably regularize these
-                if (new_flow_ml_per_S < 0.0 || new_flow_ml_per_S > 4000.0) {
-                  Debug<const char *>("Flow out of range!");
-                } else {
-                  cogConfig->TARGET_FLOW_ml_per_S = new_flow_ml_per_S;
-                  Debug<const char *>("Post Stack Temp changed to: ");
-                  Debug<float>(cogConfig->TARGET_FLOW_ml_per_S);
-                  DebugLn<const char *>("ml per second");
-                }
-              }
-            } else {
+            }
+            // else if (sc.parameter == 'F') {
+            //   DebugLn<const char *>("Changing Flow!");
+            //   if (sc.interpretation != 'T') {
+            //     Debug<const char *>("Can only recognize \"Target\" interpretation at present!");
+            //   } else {
+            //     float new_flow_ml_per_S = sc.val;
+            //     // now a little sanity check... We should probably regularize these
+            //     if (new_flow_ml_per_S < 0.0 || new_flow_ml_per_S > 4000.0) {
+            //       Debug<const char *>("Flow out of range!");
+            //     } else {
+            //       cogConfig->TARGET_FLOW_ml_per_S = new_flow_ml_per_S;
+            //       Debug<const char *>("Post Stack Temp changed to: ");
+            //       Debug<float>(cogConfig->TARGET_FLOW_ml_per_S);
+            //       DebugLn<const char *>("ml per second");
+            //     }
+            //   }
+            // }
+            else {
               Debug<const char *>("Unrecognized parameter type!");
             }
           }

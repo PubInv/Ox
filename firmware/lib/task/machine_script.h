@@ -103,6 +103,7 @@ struct phase_t {
 class MachineScript {
  public:
   static const int MAX_NUM_PHASES = 100;
+  int DEBUG_MS = 0;
   char *name;
   long timeStamp;
   bool dryRun;

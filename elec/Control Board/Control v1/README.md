@@ -1,7 +1,23 @@
-![KiCad Library for Arduino banner logo](/resources/banner.png)
+# Control V1
+Version 1 control board for NASA COG
+On line schematic viewing from **Kicanvas** See: https://kicanvas.org  
 
-# KiCad Symbol & Footprint Library for Arduino Modules
-*Version 4.1.0*
+## Schematics
+* [Control v1.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FControl%2520v1.kicad_sch)
+* [Adafruit-MAX31850-thermocouple-breakout-board.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FAdafruit-MAX31850-thermocouple-breakout-board.kicad_sch)
+* [Adafruit-MAX31855-breakout-board.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FAdafruit-MAX31855-breakout-board.kicad_sch)
+* [Adafruit-MAX31856-PCB-master.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FAdafruit-MAX31856-PCB-master.kicad_sch)
+* [Fan controller.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FFan%2520controller.kicad_sch)
+* [I2C_Level_Shifter.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FI2C_Level_Shifter.kicad_sch)
+
+
+* [SPI_ControllerLevel_Shifter.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FSSR%2520Interface.kicad_sch)
+
+* [SSR Interface.kicad_sch](https://kicanvas.org/?https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl+Board%2FControl+v1%2FSSR+Interface.kicad_sch=&github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FSSR%2520Interface.kicad_sch)
+
+## KiCad Symbol & Footprint Library for Arduino Modules
+<a href="./PICS/Rev2/PWA_FrontView.png"><img src="./resources/banner.png" alt="./resources/banner.png" width="200">  
+*Version 4.1.0*  
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) ![Required KiCad Version](https://img.shields.io/badge/kicad-%3E%3D6.0-critical) ![License](https://img.shields.io/github/license/alarm-siren/arduino-kicad-library) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/alarm-siren/arduino-kicad-library) ![Symbols](https://img.shields.io/badge/symbols-59-informational) ![Downloads](https://img.shields.io/github/downloads/alarm-siren/arduino-kicad-library/total)
 

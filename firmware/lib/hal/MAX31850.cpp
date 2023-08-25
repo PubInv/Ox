@@ -31,7 +31,10 @@ namespace Temperature {
   // TODO: Turn this into a Loop to support any number of thermocouples.
   // Print out an ordering so we can match ID against index
   // arrays to hold device addresses
-DeviceAddress insideThermometer, outsideThermometer;
+  DeviceAddress postHeaterThermometer;
+  DeviceAddress postGetterThermometer;
+  DeviceAddress postStackThermometer;
+
 
 
   MAX31850Temperature::MAX31850Temperature() {
@@ -58,8 +61,8 @@ DeviceAddress insideThermometer, outsideThermometer;
   // to valid device addresses on your bus.  device address can be retrieved
   // by using either oneWire.search(deviceAddress) or individually via
   // sensors.getAddress(deviceAddress, index)
-  //insideThermometer = { 0x28, 0x1D, 0x39, 0x31, 0x2, 0x0, 0x0, 0xF0 };
-  //outsideThermometer   = { 0x28, 0x3F, 0x1C, 0x31, 0x2, 0x0, 0x0, 0x2 };
+  //postHeaterThermometer = { 0x28, 0x1D, 0x39, 0x31, 0x2, 0x0, 0x0, 0xF0 };
+  //postGetterThermometer   = { 0x28, 0x3F, 0x1C, 0x31, 0x2, 0x0, 0x0, 0x2 };
 
   // search for devices on the bus and assign based on an index.  ideally,
   // you would do this to initially discover addresses on the bus and then
@@ -67,8 +70,9 @@ DeviceAddress insideThermometer, outsideThermometer;
   // the devices on your bus (and assuming they don't change).
   //
   // method 1: by index
-  if (!sensors.getAddress(insideThermometer, 0)) Serial.println("Unable to find address for Device 0");
-  if (!sensors.getAddress(outsideThermometer, 1)) Serial.println("Unable to find address for Device 1");
+  if (!sensors.getAddress(postHeaterThermometer, 0)) Serial.println("Unable to find address for Device 0");
+  if (!sensors.getAddress(postGetterThermometer, 1)) Serial.println("Unable to find address for Device 1");
+    if (!sensors.getAddress(postStackThermometer, 2)) Serial.println("Unable to find address for Device 2");
 
   // method 2: search()
   // search() looks for the next device. Returns 1 if a new address has been
@@ -79,30 +83,39 @@ DeviceAddress insideThermometer, outsideThermometer;
   //
   // Must be called before search()
   //oneWire.reset_search();
-  // assigns the first address found to insideThermometer
-  //if (!oneWire.search(insideThermometer)) Serial.println("Unable to find address for insideThermometer");
-  // assigns the seconds address found to outsideThermometer
-  //if (!oneWire.search(outsideThermometer)) Serial.println("Unable to find address for outsideThermometer");
+  // assigns the first address found to postHeaterThermometer
+  //if (!oneWire.search(postHeaterThermometer)) Serial.println("Unable to find address for postHeaterThermometer");
+  // assigns the seconds address found to postGetterThermometer
+  //if (!oneWire.search(postGetterThermometer)) Serial.println("Unable to find address for postGetterThermometer");
 
   // show the addresses we found on the bus
   Serial.print("Device 0 Address: ");
-  printAddress(insideThermometer);
+  printAddress(postHeaterThermometer);
   Serial.println();
 
   Serial.print("Device 1 Address: ");
-  printAddress(outsideThermometer);
+  printAddress(postGetterThermometer);
+  Serial.println();
+
+  Serial.print("Device 2 Address: ");
+  printAddress(postStackThermometer);
   Serial.println();
 
   // set the resolution to 9 bit
-  sensors.setResolution(insideThermometer, TEMPERATURE_PRECISION);
-  sensors.setResolution(outsideThermometer, TEMPERATURE_PRECISION);
+  sensors.setResolution(postHeaterThermometer, TEMPERATURE_PRECISION);
+  sensors.setResolution(postGetterThermometer, TEMPERATURE_PRECISION);
+  sensors.setResolution(postStackThermometer, TEMPERATURE_PRECISION);
 
   Serial.print("Device 0 Resolution: ");
-  Serial.print(sensors.getResolution(insideThermometer), DEC);
+  Serial.print(sensors.getResolution(postHeaterThermometer), DEC);
   Serial.println();
 
   Serial.print("Device 1 Resolution: ");
-  Serial.print(sensors.getResolution(outsideThermometer), DEC);
+  Serial.print(sensors.getResolution(postGetterThermometer), DEC);
+  Serial.println();
+
+  Serial.print("Device 2 Resolution: ");
+  Serial.print(sensors.getResolution(postStackThermometer), DEC);
   Serial.println();
   }
 
