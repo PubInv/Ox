@@ -210,6 +210,7 @@ namespace OxApp
 
   bool SupervisorTask::_run()
   {
+    outputReport(getConfig()->report);
     // This should not be necessary here, it should be required only once...
     _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
     _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
@@ -324,10 +325,6 @@ void setup() {
 #endif
 
 
-
-  //  dutyCycleTask->NUM_HEATERS = 2;
-  //  dutyCycleTask->dutyCycle = STARTING_DUTY_CYCLE_FRACTION;
-
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 20;
@@ -339,7 +336,7 @@ void setup() {
   Serial.println("Fan Set up");
   fan->_init();
   Serial.println("fan init done!");
-  fan->DEBUG_FAN = 1;
+  fan->DEBUG_FAN = 0;
 
 
   pinMode(fan->PWM_PIN[0], OUTPUT);
@@ -385,20 +382,6 @@ void setup() {
   //  dutyCycleTask = new DutyCycleTask();
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
-
-  dutyCycleTask._ac_heaters = new GGLabsSSR1*[MachineConfig::NUM_HEATERS];
-
-  OxCore::Debug<const char *>("NUM_HEATERS: ");
-  OxCore::DebugLn<int>(MachineConfig::NUM_HEATERS);
-
-  for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
-    dutyCycleTask._ac_heaters[i] = new GGLabsSSR1();;
-  }
-  for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
-    dutyCycleTask._ac_heaters[i]->setHeater(0,LOW);
-    dutyCycleTask._ac_heaters[i]->setHeater(1,LOW);
-  }
-
   OxCore::Debug<const char *>("DDD\n");
 
   OxCore::TaskProperties dutyCycleProperties;
@@ -418,7 +401,7 @@ void setup() {
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) localGetConfig();
-  //  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
+  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
 
   OxCore::Debug<const char *>("Added tasks\n");
 

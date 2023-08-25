@@ -64,7 +64,14 @@ HeaterPIDTask::HeaterPIDTask() {
 
   bool HeaterPIDTask::_run()
   {
-    OxCore::Debug<const char *>("HeaterPIDTask run\n");
+    if (DEBUG_PID > 0) {
+      OxCore::Debug<const char *>("HeaterPIDTask run\n");
+      OxCore::Debug<const char *>("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+      OxCore::DebugLn<float>(this->Input_temperature_C);
+    }
+
+    HeaterSetPoint_C = getConfig()->TARGET_TEMP;
+
 
     double previousInput = this->Input_temperature_C;
     this->Input_temperature_C = getConfig()->report->post_heater_C;
@@ -84,17 +91,13 @@ HeaterPIDTask::HeaterPIDTask() {
 
     getConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
 
-    // The heater DutyCycle should go into the config, but
-    // does not currently exist there!
-    //        localGetConfig()->fanPWM = s;
-
     if (DEBUG_PID > 0) {
       OxCore::Debug<const char *>("previous input ");
-      OxCore::DebugLn<double>(previousInput);
+      Serial.println(previousInput,5);
       OxCore::Debug<const char *>("Final dutyCycle_Output ");
-      OxCore::DebugLn<double>(this->dutyCycle_Output);
+      Serial.println(this->dutyCycle_Output,5);
       OxCore::Debug<const char *>("Final dutyCycle ");
-      OxCore::DebugLn<double>(this->final_dutyCycle);
+      Serial.println(this->final_dutyCycle,5);
     }
 
     return true;

@@ -57,16 +57,16 @@ namespace OxApp
     public:
       // TODO: This should probably be done dynamically, not here...
 
-#if BUILD_ENV_NAME != due_ribbonfish
-      const static int NUM_TEMPERATURE_SENSORS = 3;
-#else // RIBBONFISH
       // There are really several senosrs, but they are indexed!
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
       const static int NUM_FANS = 1;
       const static int NUM_STACKS = 1;
-#endif
-      void updateTemperatures();
+
+      // WARNING! This is a fragile; I believe a rate based algorithm is better.
+      unsigned long begin_down_time = 0;
+
+      //      void updateTemperatures();
 
       Temperature::AbstractTemperature* _temperatureSensors;
 
@@ -89,7 +89,7 @@ namespace OxApp
       MachineState _updatePowerComponentsOffUserAck();
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
-      void _readTemperatureSensors();
+      //      void _readTemperatureSensors();
 
       void _updateFanSpeed(float percentage);
       void _updateStackVoltage(float voltage);

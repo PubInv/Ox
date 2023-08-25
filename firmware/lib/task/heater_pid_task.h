@@ -32,14 +32,14 @@
   public:
     HeaterPIDTask();
     PID *pidControllerHeater;
-    int DEBUG_PID = 1;
+    int DEBUG_PID = 2;
     const int PERIOD_MS = 60*1000;
 
     // These are on a scale of 1.0;
     double dutyCycle_Output = 0.0;
     double final_dutyCycle = 0.0;
-    double HeaterSetPoint_C = 0.0;
-    double Input_temperature_C = 0.0;
+    double HeaterSetPoint_C = 25.0;
+    double Input_temperature_C = 25.0;
     DutyCycleTask *dutyCycleTask;
   private:
     bool _init() override;

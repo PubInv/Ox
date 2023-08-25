@@ -63,7 +63,7 @@ bool DutyCycleTask::_run()
     delay(100);
   }
   if (recorded_dc_ms != 0) {
-  recorded_duty_cycle = (old_dc * old_ms + ((isOn ? delta_t : 0))) / recorded_dc_ms;
+    recorded_duty_cycle = (old_dc * old_ms + ((isOn ? delta_t : 0))) / recorded_dc_ms;
   } else {
     recorded_duty_cycle = 1.0;
   }

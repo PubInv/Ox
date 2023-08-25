@@ -45,6 +45,8 @@ enum IdleOrOperateSubState {
 };
 
 struct MachineStatusReport {
+  MachineState ms;
+  float target_temp_C;
   float post_heater_C;
   float post_stack_C;
   float post_getter_C;

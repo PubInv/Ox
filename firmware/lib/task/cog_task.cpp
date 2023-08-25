@@ -63,7 +63,7 @@ namespace OxApp
 
         getConfig()->report = new MachineStatusReport();
 
-        _configTemperatureSensors();
+        //        _configTemperatureSensors();
 
 
 #ifdef RIBBONFISH
@@ -103,16 +103,17 @@ namespace OxApp
         return true;
     }
 
-  void CogTask::updateTemperatures() {
-    _readTemperatureSensors();
-    double postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
-    double postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
-    double postGetterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_getter_indices[0]);
-    getConfig()->report->post_heater_C = postHeaterTemp;
-    getConfig()->report->post_stack_C = postStackTemp;
-    getConfig()->report->post_getter_C = postGetterTemp;
+  // this is now handled by a separate task!
+  // void CogTask::updateTemperatures() {
+  //   _readTemperatureSensors();
+  //   double postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
+  //   double postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
+  //   double postGetterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_getter_indices[0]);
+  //   getConfig()->report->post_heater_C = postHeaterTemp;
+  //   getConfig()->report->post_stack_C = postStackTemp;
+  //   getConfig()->report->post_getter_C = postGetterTemp;
 
-  }
+  // }
     bool CogTask::_run()
     {
       MachineConfig *cogConfig = getConfig();
@@ -126,7 +127,7 @@ namespace OxApp
           OxCore::DebugLn<const char *>("Currrently Off. Enter a single 'w' to warmup: ");
       }
 
-      updateTemperatures();
+      //      updateTemperatures();
       getConfig()->_reportFanSpeed();
 
       MachineState new_state = _executeBasedOnState(cogConfig->ms);
@@ -189,6 +190,7 @@ namespace OxApp
       // record what the fault is, but it will do for now.
       new_ms = CriticalFault;
     }
+    getConfig()->previous_ms = ms;
     return new_ms;
   }
 
@@ -213,18 +215,32 @@ namespace OxApp
     // full-blast until we reach the warmup-target
     // This will be based on the post-heater temperature
     float postHeaterTemp;
-    float postStackTemp;
 
-    if ((getConfig()->report->post_heater_C >= getConfig()->WARMUP_TARGET_C) ||
-        (getConfig()->report->post_stack_C >= getConfig()->WARMUP_TARGET_C)) {
-      new_ms = NormalOperation;
-      getConfig()->idleOrOperate = Operate;
-      _updatePowerComponentsOperation(getConfig()->idleOrOperate);
-      return new_ms;
+    // Here we get the temperature and decide if the TARGE_TEMP should be changed!
+    // This is highly sensitive to the START_TEMPERATURE being correct;
+    // I believe a rate-based algorithm will be more robust. We have the
+    // machinery for that, but I am doing this simpler algorithm for now.
+    if (getConfig()->report->post_heater_C > MachineConfig::HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT) {
+      getConfig()->_updateFanPWM(MachineConfig::HIGH_TEMPERATURE_FAN_PWM);
     } else {
-      _updatePowerComponentsVoltage(getConfig()->MAXIMUM_HEATER_VOLTAGE);
+      getConfig()->_updateFanPWM(1.0);
     }
-    getConfig()->_updateFanPWM(1.0);
+
+
+      if (postHeaterTemp > MachineConfig::HOLD_TEMPERATURE) {
+        OxCore::Debug<const char *>("State Changing to HOLDING\n");
+        new_ms = NormalOperation;
+        return new_ms;
+      } else {
+        const unsigned long ms = millis();
+        const unsigned long MINUTES_RAMPING_UP = ms / (60 * 1000);
+        getConfig()->TARGET_TEMP = MachineConfig::START_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = min(getConfig()->TARGET_TEMP,
+                                       MachineConfig::HOLD_TEMPERATURE);
+      }
+
+
+
     _updateStackVoltage(getConfig()->MAXIMUM_STACK_VOLTAGE);
     _updateStackAmperage(getConfig()->TARGET_STACK_CURRENT_mA/1000.0);
 
@@ -241,15 +257,43 @@ namespace OxApp
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
 
+    if (getConfig()->previous_ms != Cooldown) {
+      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = getConfig()->report->post_heater_C;
+    }
+
     if (getConfig()->report->post_heater_C <= getConfig()->COOLDOWN_TARGET_C
         &&
         getConfig()->report->post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
       return new_ms;
     } else {
-      getConfig()->_updateFanPWM(1.0);
-      _updatePowerComponentsVoltage(0.0);
-      _updateStackVoltage(0.0);
+      if (DEBUG_LEVEL > 0) {
+        OxCore::Debug<const char *>("State: RAMPING DN\n");
+      }
+      float postHeaterTemp = getConfig()->report->post_heater_C;
+      if (postHeaterTemp < MachineConfig::STOP_TEMPERATURE) {
+        OxCore::Debug<const char *>("Stop temperature reached!\n");
+        OxCore::Debug<const char *>("=======================\n");
+        getConfig()->_updateFanPWM(0.0);
+        new_ms = Off;
+        return new_ms;
+      } else {
+        unsigned long ms = millis();
+        const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
+        // WARNING! FIX THIS
+        // This is dangerous. If you cooldown before acheiving
+        // the HOLD_TEMPERATURE, this can actually cause you
+        // to rapidly warm up!
+        getConfig()->TARGET_TEMP =
+          getConfig()->COOL_DOWN_BEGIN_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = max(getConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
+        // We use full power fan for normal cooldown at present, since
+        // we are actively using the heaters to come down slowly
+        getConfig()->_updateFanPWM(1.0);
+        _updatePowerComponentsVoltage(0.0);
+        _updateStackVoltage(0.0);
+      }
+
     }
 
     return new_ms;
@@ -279,8 +323,8 @@ namespace OxApp
           //        _heaters[i].update(voltage);
           // We have a two-channel AC heater, we will use both
           // for now
-          getConfig()->hal->_ac_heaters[i]->setHeater(0,(voltage > 0.0));
-          getConfig()->hal->_ac_heaters[i]->setHeater(1,(voltage > 0.0));
+          //          getConfig()->hal->_ac_heaters[i]->setHeater(0,(voltage > 0.0));
+          //          getConfig()->hal->_ac_heaters[i]->setHeater(1,(voltage > 0.0));
           //        getConfig()->report->heater_voltage = voltage;
         }
     }
@@ -300,24 +344,17 @@ namespace OxApp
     }
 
 #ifdef RIBBONFISH
-
-  // The RibbonFish has two heaters. We just want to turn them on and off as a simple
-  // thermostate problem, using the PWMs of our dues to power transistors.
-  // However, the process should be slow enough, we can just use "full on" and "full off"
-  // as a first cut.
    MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
      MachineState new_ms = NormalOperation;
+
+    if (getConfig()->report->post_heater_C > MachineConfig::HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT) {
+      getConfig()->_updateFanPWM(MachineConfig::HIGH_TEMPERATURE_FAN_PWM);
+    } else {
+      getConfig()->_updateFanPWM(1.0);
+    }
+
      float desired_C = getConfig()->MAX_POST_HEATER_C;
-     // For now, i want to do only the first heater to simplify
-     for (int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
-       float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[i]);
-       float current_C = temperature;
-       float voltage = (current_C >= desired_C) ? 0.0 : getConfig()->MAXIMUM_HEATER_VOLTAGE;
 
-       // These two statements are really atomic, but I don't what the devices to become dependent on the machine!!
-       _updatePowerComponentsVoltage(voltage);
-
-     }
      for (int i = 0; i < NUM_STACKS; i++) {
        float temperature = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[i]);
        float current_C = temperature;
@@ -330,7 +367,7 @@ namespace OxApp
        // want a tricle charge---cut for now, if we are in Idle
        // mode, we just set the stack voltage to zero
        if (i_or_o == Idle) {
-         voltage = 0.0;
+         voltage = 1.0;
        }
        _updateStackVoltage(voltage);
        getConfig()->report->stack_voltage = voltage;
@@ -341,9 +378,6 @@ namespace OxApp
        _updateStackAmperage(v);
      }
 
-     if (getConfig()->report->post_heater_C < getConfig()->WARMUP_TARGET_C) {
-       return Warmup;
-     }
      return new_ms;
     }
 #else
@@ -380,62 +414,4 @@ namespace OxApp
         return new_ms;
     }
 #endif
-
-#ifndef RIBBONFISH
-  void CogTask::RunForward(float t,Model& m) {
-
-    // This math only works for 1 second, I think
-    float watts = pow(_heaters[0]._voltage,2) / _heaters[0]._resistance;
-    float degrees_delta = watts / m.watts_per_degree;
-    // now really need to know the airflow
-
-    // We'll assume that the watts added directly increase the
-    // the temperature at the output
-    m.locations[1].temp_C = m.locations[0].temp_C + degrees_delta;
-  }
-#endif
-
-    void CogTask::_configTemperatureSensors() {
-
-#ifdef RIBBONFISH
-#ifdef USE_MAX31850_THERMOCOUPLES
-        _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31850Temperature[1];
-#else
-        _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::DS18B20Temperature[1];
-#endif
-        _temperatureSensors[0]._config = config[0];
-
-#else
-        _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MockTemperatureSensor[NUM_TEMPERATURE_SENSORS];
-        for(int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
-          _temperatureSensors[i]._config = config[i];
-        }
-#endif
-    }
-
-    void CogTask::_readTemperatureSensors() {
-#ifdef RIBBONFISH
-      _temperatureSensors[0].ReadTemperature();
-      for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
-        float temperature = _temperatureSensors[0].GetTemperature(i);
-        if (DEBUG_LEVEL > 0) {
-          OxCore::Debug<const char *>("Temp : ");
-          OxCore::Debug<const char *>(getConfig()->TempLocationNames[i]);
-          OxCore::Debug<const char *>(": ");
-          OxCore::DebugLn<float>(temperature);
-        }
-      }
-#else
-      OxCore::Debug<const char *>("DDD: ");
-      for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
-         _temperatureSensors[i].ReadTemperature();
-        float temperature = _temperatureSensors[i].GetTemperature();
-        OxCore::Debug<const char *>("Temp: ");
-        OxCore::Debug<const char *>(getConfig()->TempLocationNames[i]);
-        OxCore::Debug<const char *>(": ");
-        OxCore::DebugLn<float>(temperature);
-      }
-#endif
-
-    }
 }
