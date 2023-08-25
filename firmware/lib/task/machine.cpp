@@ -42,10 +42,12 @@ void outputReport(MachineStatusReport *msr) {
         // As of the summer of 2023, we are not planning to use a flow sensor
         //        OxCore::Debug<const char *>("Flow (ml / s): ");
         //        OxCore::DebugLn<float>(msr->flow_ml_per_s);
-        OxCore::Debug<const char *>("Duty Cycle (fraction): ");
+        OxCore::Debug<const char *>("Heater Duty Cycle (fraction): ");
         OxCore::DebugLn<float>(msr->heater_duty_cycle);
-        OxCore::Debug<const char *>("Fan Speed (non-lin) [0.0 .. 1.0]: ");
-        OxCore::DebugLn<float>(msr->fan_speed);
+        OxCore::Debug<const char *>("Fan PWM [0.0 .. 1.0]: ");
+        OxCore::DebugLn<float>(msr->fan_pwm);
+        OxCore::Debug<const char *>("Fan RPM: ");
+        OxCore::DebugLn<float>(msr->fan_rpm);
 }
 
 void createJSONReport(MachineStatusReport* msr, char *buffer) {
@@ -63,7 +65,8 @@ void createJSONReport(MachineStatusReport* msr, char *buffer) {
         // As of the summer of 2023, we are not planning to use a flow sensor
   //  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr->flow_ml_per_s);
   sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
-  sprintf(buffer+strlen(buffer), "\"FanSpeed\": \"%.2f\"\n",msr->fan_speed);
+  sprintf(buffer+strlen(buffer), "\"FanPWM\": \"%.2f\"\n",msr->fan_pwm);
+  sprintf(buffer+strlen(buffer), "\"FanRPM\": \"%.2f\"\n",msr->fan_rpm);
 }
 
 bool MachineHAL::init() {
@@ -72,7 +75,8 @@ bool MachineHAL::init() {
   if (DEBUG_HAL > 0) {
     Serial.println("HAL: About to run Wire!");
   }
-  Wire.begin();
+  // We are currently not using I2C
+  //   Wire.begin();
 
   if (DEBUG_HAL > 0) {
       Serial.println("HAL: About to init Fan!");
@@ -81,11 +85,15 @@ bool MachineHAL::init() {
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
 
   _fans[0]._init();
-#ifdef TEST_FANS_ONLY
-  _fans[0].DEBUG_FAN = 1;
-#else
-  _fans[0].DEBUG_FAN = 0;
-#endif
+
+
+  _ac_heaters = new GGLabsSSR1*[MachineConfig::NUM_HEATERS];
+  for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
+    _ac_heaters[i] = new GGLabsSSR1();
+    _ac_heaters[i]->setHeater(0,LOW);
+    _ac_heaters[i]->setHeater(1,LOW);
+  }
+
   if (DEBUG_HAL > 0) {
       Serial.println("HAL:About to return!");
   }
@@ -95,8 +103,16 @@ bool MachineHAL::init() {
 // updateTheFanSpeed to a percentage of the maximum flow.
 // We may have the ability to specify flow absolutely in the future,
 // but this is genertic.
-void MachineConfig::_updateFanSpeed(float unitInterval) {
+void MachineConfig::_updateFanPWM(float unitInterval) {
   for (int i = 0; i < NUM_FANS; i++) {
     hal->_fans[i].update(unitInterval);
   }
+  this->report->fan_pwm = unitInterval;
+}
+
+// updateTheFanSpeed to a percentage of the maximum flow.
+// We may have the ability to specify flow absolutely in the future,
+// but this is genertic.
+void MachineConfig::_reportFanSpeed() {
+  this->report->fan_rpm = hal->_fans[0]._calcRPM(0);
 }
