@@ -23,9 +23,10 @@ References:
 | D3                 	| J6-4         	| NA              	| Input pullup.  	| None                      	| Not used            	|
 | D4                 	| J6-5         	| TEMP1           	| ?BiDirect?     	| Dallas 1 Wire / MAX31850K 	| Three daisy chained 	|
 | D5                 	| J6-6         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
+| D6                 	| J6-7         	| NA              	| Input pullup.  	| None                      	| Not used            	|
+| D7                 	| J6-8         	| NA              	| Input pullup.  	| None                      	| Not used            	|
+| D8                 	| J7-10        	| NA              	| Input pullup.  	| None                      	| Not used            	|
+| D9                 	| J7-9         	| nFAN1_PWM       	| Output         	| Controlles transistor Q1  	| Was BLOWER_PWM      	|
 |                    	|              	|                 	|                	|                           	|                     	|
 |                    	|              	|                 	|                	|                           	|                     	|
 |                    	|              	|                 	|                	|                           	|                     	|
