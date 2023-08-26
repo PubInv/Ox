@@ -1,5 +1,75 @@
 # Electrical Information on ODECOS Controler(s) and Plant(s)
-Chassis wiring and related information
+PCB Connector Pin signal names, Due Signal Names, Chassis wiring and related information
+Inverse cronological order
+
+## Unit 3-???
+A place holder for future work
+See: TBD
+
+
+## Unit 2
+### Notes for creation of a new PCB  
+This table pulls from information in the references 1 and 2.   
+References:
+1. Due Pin-Out Map for OEDCS1 : https://docs.google.com/spreadsheets/d/18wP1Cyg5-j3FP92x7no_JsCCFNvo9y2avyn5nvmAj6I/edit#gid=0
+2. Fan Controller and Fan Wiring for OEDCS1: https://docs.google.com/document/d/1n3v-AxqNKEzcKqmHicGKnFmG8sKbNEL_pGaUlU9CZ8U/edit
+
+#### Due Pin Wiring
+| **Due Pin Number** 	| **Breakout** 	| **Signal Name** 	| **Set as I/O** 	| **Connection**            	| **Notes**           	|
+|--------------------	|--------------	|-----------------	|----------------	|---------------------------	|---------------------	|
+| D0                 	| J6-2         	| NA              	| Input pullup.  	| None                      	| Not used            	|
+| D1                 	| J6-1         	| NA              	| Input pullup.  	| None                      	| Not used            	|
+| D2                 	| J6-3         	| NA              	| Input pullup.  	| None                      	| Not used            	|
+| D3                 	| J6-4         	| NA              	| Input pullup.  	| None                      	| Not used            	|
+| D4                 	| J6-5         	| TEMP1           	| ?BiDirect?     	| Dallas 1 Wire / MAX31850K 	| Three daisy chained 	|
+| D5                 	| J6-6         	| NA              	| Input pullup.  	| None                      	| Not used            	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+|                    	|              	|                 	|                	|                           	|                     	|
+
+
+### Chassis Wiring of ODECOS Unit 2.
+
 
 
 ## Unit 1
@@ -9,15 +79,6 @@ Wiring of ODECOS Unit 1 Notes
 
 Wiring of thermocouple amplifires
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/81112c45-1a9b-4129-8997-f63fd8dc1c07)
-
-
-
-## Unit 2
-Wiring of ODECOS Unit 2. Notes for creation of a new PCB  
-This table pulls from information in the references 1 and 2.   
-References:
-1. Due Pin-Out Map for OEDCS1 : https://docs.google.com/spreadsheets/d/18wP1Cyg5-j3FP92x7no_JsCCFNvo9y2avyn5nvmAj6I/edit#gid=0
-2. Fan Controller and Fan Wiring for OEDCS1: https://docs.google.com/document/d/1n3v-AxqNKEzcKqmHicGKnFmG8sKbNEL_pGaUlU9CZ8U/edit
 
 Revisions:
 * 20230821, Update DB25 Male 2-5 from +12V to "+24V Switched (fans)"
@@ -44,7 +105,3 @@ Revisions:
 |              	|                   	|                 	| 23                	| J12-6 	|         	|            	|
 |              	|                   	|                 	| 24                	| J12-7 	|         	|            	|
 
-
-## Unit 3-???
-Wiring of ODECOS Unit 3-?? Notes
-See: TBD
