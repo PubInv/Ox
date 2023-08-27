@@ -15,57 +15,57 @@ References:
 2. Fan Controller and Fan Wiring for OEDCS1: https://docs.google.com/document/d/1n3v-AxqNKEzcKqmHicGKnFmG8sKbNEL_pGaUlU9CZ8U/edit
 
 #### Due Pin Wiring
-| **Due Pin Number** 	| **Breakout** 	| **Signal Name** 	| **Set as I/O** 	| **Connection**                 	| **Notes**           	|
-|--------------------	|--------------	|-----------------	|----------------	|--------------------------------	|---------------------	|
-| D0                 	| J6-2         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D1                 	| J6-1         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D2                 	| J6-3         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D3                 	| J6-4         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D4                 	| J6-5         	| TEMP1           	| ?BiDirect?     	| Dallas 1 Wire / MAX31850K      	| Three daisy chained 	|
-| D5                 	| J6-6         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D6                 	| J6-7         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D7                 	| J6-8         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D8                 	| J7-1         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D9                 	| J7-2         	| nFAN1_PWM       	| Output         	| Controlles transistor Q1       	| Was BLOWER_PWM      	|
-| D10                	| J7-3         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D11                	| J7-4         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D12                	| J7-5         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D13                	| J7-6         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D13                	| J7-6         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D14                	| J2-1         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D15                	| J2-2         	| NA              	| Input pullup.  	| None                           	| Not used            	|
-| D16                	| J2-3         	| NA              	| Input pullup.  	| None                           	| Can be TX2          	|
-| D17                	| J2-4         	| NA              	| Input pullup.  	| None                           	| Can be RX2          	|
-| D18                	| J2-5         	| D_PSU_TX        	| UART TX        	| TP2, R15 (then to Power Supply 	| TX1                 	|
-| D19                	| J2-6         	| D_PSU_RX        	| UART RX        	| TP3, R14 (then to Power Supply 	| RX1                 	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
-|                    	|              	|                 	|                	|                                	|                     	|
+| **Due Pin Number** 	| **Breakout** 	| **Signal Name** 	| **Set as I/O** 	| **Connection**                      	| **Notes**                             	|
+|--------------------	|--------------	|-----------------	|----------------	|-------------------------------------	|---------------------------------------	|
+| D0                 	| J6-2         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D1                 	| J6-1         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D2                 	| J6-3         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D3                 	| J6-4         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D4                 	| J6-5         	| TEMP1           	| ?BiDirect?     	| Dallas 1 Wire / MAX31850K           	| Three daisy chained                   	|
+| D5                 	| J6-6         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D6                 	| J6-7         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D7                 	| J6-8         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D8                 	| J7-1         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D9                 	| J7-2         	| nFAN1_PWM       	| Output         	| Controlles transistor Q1            	| Was BLOWER_PWM                        	|
+| D10                	| J7-3         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D11                	| J7-4         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D12                	| J7-5         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D13                	| J7-6         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D13                	| J7-6         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D14                	| J2-1         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D15                	| J2-2         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D16                	| J2-3         	| NA              	| Input pullup.  	| None                                	| Can be TX2                            	|
+| D17                	| J2-4         	| NA              	| Input pullup.  	| None                                	| Can be RX2                            	|
+| D18                	| J2-5         	| D_PSU_TX        	| UART1 TX       	| D_PSU_TX, R15 (then to Power Supply 	| TX1                                   	|
+| D19                	| J2-6         	| D_PSU_RX        	| UART1 RX       	| D_PSU_RX, R14 (then to Power Supply 	| RX1                                   	|
+| D20                	| J2-7         	| SDA             	| SDA            	| test point SDA1, R4, R13            	| SDA                                   	|
+| D21                	| J2-8         	| SCL             	| SCL            	| test point SCL1, R2, R16            	| SCL                                   	|
+| D22                	| J8-4         	| BLOWER_ENABLE   	| OUTPUT         	| R10                                 	| Enable Switched_Fan_Power at J15 9-12 	|
+| D23                	| J8-3         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D24                	| J8-6         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D25                	| J8-5         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D26                	| J8-8         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D27                	| J8-7         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D28                	| J8-10        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D29                	| J8-9         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D30                	| J8-12        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D31                	| J8-11        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D32                	| J8-14        	| nCS_GPAD        	| Output for nCS 	| R55, R61, Q5                        	| on 3.3 Volt                           	|
+| D33                	| J8-13        	| TC_nCS1         	| Output for nCS 	| Thermocouple 1, R7                  	| on 3.3 Volt                           	|
+| D34                	| J8-16        	| TC_nCS2         	| Output for nCS 	| Thermocouple 2, R3                  	| on 3.3 Volt                           	|
+| D35                	| J8-15        	| TC_nCS3         	| Output for nCS 	| Thermocouple 3, R1                  	| on 3.3 Volt                           	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
+|                    	|              	|                 	|                	|                                     	|                                       	|
 
 
 ### Chassis Wiring of ODECOS Unit 2.
