@@ -73,17 +73,12 @@ public:
 
 class MachineConfig {
 public:
-  MachineConfig() {
-    script = new MachineScript();
-    report = new MachineStatusReport();
-  };
+  MachineConfig();
 
   // Our AC heater...confusingly named!
   static const int NUM_HEATERS = 1;
   static const int NUM_STACKS = 1;
 
-  const float FAN_PER_CENT = 60.0;
-  const int FAN_PWM = (int) (255.0*60.0/100.0);
 
   // TEST CONFIGURATION PARAMETERS
   // ALL OF THESE COULD BE CONFIGURABLE, BUT FOR THIS TEST
@@ -93,25 +88,43 @@ public:
 
   static constexpr float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
   static constexpr float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
+  float BEGIN_DN_TIME_MS;
+  float BEGIN_UP_TIME_MS;
 
   // This is the overall target_temp, which changes over time.
 
-  static constexpr float HOLD_TEMPERATURE = 90.0;
+  static constexpr float YELLOW_TEMPERATURE = 50.0;
+  static constexpr float RED_TEMPERATURE = 60.0;
+  static constexpr float OPERATING_TEMPERATURE = 40.0;
   static constexpr float STOP_TEMPERATURE = 27.0;
-  static constexpr float START_TEMPERATURE = 60.0;
+  static constexpr float MAX_CROSS_STACK_TEMP = 4.0;
 
+  float RECENT_TEMPERATURE = 27.0;
 
   static constexpr float HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT = 500.0;
   static constexpr float HIGH_TEMPERATURE_FAN_PWM = 0.4;
-  float COOL_DOWN_BEGIN_TEMPERATURE;
 
+  float COOL_DOWN_BEGIN_TEMPERATURE;
   float TARGET_TEMP = 27.0;
 
   static const unsigned long HOLD_TIME_MINUTES = 1;
   static const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
   static constexpr float STARTING_DUTY_CYCLE_FRACTION = 0.0;
+
+  // AMPERAGE CONTROL
+  static constexpr float MAX_AMPERAGE = 60.0;
   float STACK_VOLTAGE = 12.0;
   float STACK_AMPERAGE = 3.0;
+  static constexpr float IDLE_STACK_VOLTAGE = 1.0;
+  static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
+
+  // FAN CONTROL
+  //  const float FAN_PER_CENT = 60.0;
+  //  const int FAN_PWM = (int) (255.0*60.0/100.0);
+  static constexpr float FULL_POWER_FOR_FAN = 0.6;
+  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
+  static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = OPERATING_TEMPERATURE - 50.0;
+  static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMPERATURE + 25.0;
 
   // These parameters are related to our control procedure.
   // This is similar to a PID loop, but I don't think any integration
@@ -155,6 +168,8 @@ public:
   float TARGET_STACK_C = 150.0;
   float MAX_POST_STACK_C = 180.0;
   float TARGET_STACK_CURRENT_mA = 1.0;
+
+
 
 
   void _updateFanPWM(float unitInterval);

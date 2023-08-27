@@ -18,7 +18,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <machine.h>
 // there is not yet anything for this to do
 #include <core.h>
-#include <Wire.h>
+// #include <Wire.h>
+#include <assert.h>
 
 
 void outputReport(MachineStatusReport *msr) {
@@ -102,6 +103,23 @@ bool MachineHAL::init() {
       Serial.println("HAL:About to return!");
   }
   return true;
+}
+
+MachineConfig::MachineConfig() {
+  script = new MachineScript();
+  report = new MachineStatusReport();
+  // How we make certain assertions to make sure we are well configured
+  assert(RAMP_UP_TARGET_D_MIN >= 0.0);
+  assert(RAMP_DN_TARGET_D_MIN <= 0.0);
+
+  assert(YELLOW_TEMPERATURE < RED_TEMPERATURE);
+  assert(OPERATING_TEMPERATURE < YELLOW_TEMPERATURE);
+  assert(STOP_TEMPERATURE < OPERATING_TEMPERATURE);
+
+  assert(FAN_SPEED_AT_OPERATING_TEMP < FULL_POWER_FOR_FAN);
+  assert(TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN < OPERATING_TEMPERATURE);
+  assert(OPERATING_TEMPERATURE < END_FAN_SLOW_DOWN);
+
 }
 
 // updateTheFanSpeed to a percentage of the maximum flow.
