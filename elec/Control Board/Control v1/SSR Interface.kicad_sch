@@ -296,7 +296,7 @@
     (property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF" (at 88.9 62.23 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
-    (property "Description" "N-Channel Enhancement Mode Field Effect Transistor" (at 88.9 62.23 0)
+    (property "Description" "50V 220mA 3.5Ω@10V,220mA 360mW 1.5V@1mA N Channel SOT-23 MOSFETs ROHS" (at 88.9 62.23 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Distributor 1" "JLCPCB" (at 88.9 62.23 0)
