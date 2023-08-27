@@ -21,16 +21,16 @@ References:
 | D1                 	| J6-1         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D2                 	| J6-3         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D3                 	| J6-4         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
-| D4                 	| J6-5         	| TEMP1           	| BiDirection      	| Dallas 1 Wire / MAX31850K           	| Three daisy chained                   	|
-| D5                 	| J6-6         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
+| D4                 	| J6-5         	| D4: SD card chip select | Output     	| via Shield           	|  https://wiki.seeedstudio.com/Ethernet_Shield_V2.0/#interface	|
+| D5                 	| J6-6         	| TEMP1            	| BiDirection     	| Dallas 1 Wire / MAX31850K            	| Three daisy chained                    	|
 | D6                 	| J6-7         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D7                 	| J6-8         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D8                 	| J7-1         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D9                 	| J7-2         	| nFAN1_PWM       	| Output           	| Controlles transistor Q1            	| Was BLOWER_PWM                        	|
-| D10                	| J7-3         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
-| D11                	| J7-4         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
-| D12                	| J7-5         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
-| D13                	| J7-6         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
+| D10                	| J7-3         	|  W5200 Chip Select| Input pullup.    	| via Shield           	                | SEEED Studio Eternet Shield            	|
+| D11                	| J7-4         	| SPI MOSI          | Output.    	      | via Shield                            | SEEED Studio Eternet Shield            	|
+| D12                	| J7-5         	| SPI MISO          | Input.    	      | via Shield                            | SEEED Studio Eternet Shield            	|
+| D13                	| J7-6         	| SPI SCK           | Output.    	      | via Shield                            | SEEED Studio Eternet Shield            	|
 | D13                	| J7-6         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D14                	| J2-1         	| NA              	|                  	| None                                	| Not used                              	|
 | D15                	| J2-2         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
