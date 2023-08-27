@@ -85,7 +85,7 @@ unsigned long time_of_last_report = 0;
 
 // // This is the overall target_temp, which changes over time.
 
-// const float HOLD_TEMPERATURE = 600.0;
+// const float OPERATING_TEMPERATURE = 600.0;
 // const float STOP_TEMPERATURE = 27.0;
 // const float START_TEMPERATURE = 600.0;
 
@@ -223,14 +223,14 @@ namespace OxApp
         OxCore::Debug<const char *>("State: RAMPING UP\n");
       }
       float postHeaterTemp = localGetConfig()->report->post_heater_C;
-      if (postHeaterTemp > MachineConfig::HOLD_TEMPERATURE) {
+      if (postHeaterTemp > MachineConfig::OPERATING_TEMPERATURE) {
         global_state = Holding;
         OxCore::Debug<const char *>("State Changing to HOLDING\n");
         begin_hold_time = millis();
       } else {
         const unsigned long MINUTES_RAMPING_UP = ms / (60 * 1000);
-        localGetConfig()->TARGET_TEMP = MachineConfig::START_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
-        localGetConfig()->TARGET_TEMP = min(localGetConfig()->TARGET_TEMP, MachineConfig::HOLD_TEMPERATURE);
+        localGetConfig()->TARGET_TEMP = localGetConfig()->RECENT_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
+        localGetConfig()->TARGET_TEMP = min(localGetConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMPERATURE);
       }
       break;
     };
@@ -262,7 +262,7 @@ namespace OxApp
       } else {
         const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
         localGetConfig()->TARGET_TEMP =
-          MachineConfig::HOLD_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
+          MachineConfig::OPERATING_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
         localGetConfig()->TARGET_TEMP = max(localGetConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
       }
       break;
@@ -276,7 +276,6 @@ using namespace OxApp;
 FanReportTask fanReportTask;
 ReadTempsTask readTempsTask;
 SupervisorTask supervisorTask;
-// ControllerTask controllerTask;
 HeaterPIDTask heaterPIDTask;
 
 
