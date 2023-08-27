@@ -3894,14 +3894,14 @@
     (property "Datasheet" "" (at 143.51 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fe772105-6f5f-400c-9008-9218713bb22d))
+    (pin "1" (uuid 24ad92c1-4663-4551-80f3-e772016b1954))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR040") (unit 1)
+          (reference "#PWR039") (unit 1)
         )
       )
     )
@@ -3922,14 +3922,14 @@
     (property "Datasheet" "" (at 77.47 109.22 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9777a771-f744-4671-9a97-deeae474d836))
+    (pin "1" (uuid 996261bb-5b04-497f-82f3-34dbcaefdc1b))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR038") (unit 1)
+          (reference "#PWR037") (unit 1)
         )
       )
     )
@@ -3985,14 +3985,14 @@
     (property "Datasheet" "" (at 110.49 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fb8a957a-7cc1-42b4-9d3a-b9a81f710d95))
+    (pin "1" (uuid 63329571-573e-4924-b300-57d4d0ed3b57))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR039") (unit 1)
+          (reference "#PWR038") (unit 1)
         )
       )
     )
@@ -4069,8 +4069,8 @@
     (property "Cost" "0.0015" (at 66.04 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f911a2de-20e6-463b-a4ce-cd0ed57a2375))
-    (pin "2" (uuid 1fc89f4b-858d-4cad-a439-6b89cf084021))
+    (pin "1" (uuid 9be1e35a-9568-4452-90aa-d5bae9f770d9))
+    (pin "2" (uuid f36a44fc-e283-4533-a50f-fb1bc9ea8b14))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -4112,7 +4112,7 @@
     (property "AssemblyType" "HAND" (at 80.01 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9e64fe02-e5a9-4e9d-84bf-c2f08d1f8ca9))
+    (pin "1" (uuid 7cc639ed-da12-472c-afcd-1abb076f7cfc))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -4124,7 +4124,7 @@
           (reference "TP1") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "TP8") (unit 1)
+          (reference "TP9") (unit 1)
         )
       )
     )
