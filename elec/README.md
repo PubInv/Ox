@@ -94,7 +94,15 @@ References:
 | A11                	| J4-4         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
 | AREF               	| J7-8         	| NA              	| ???            	| None                                	| Not used                              	|
 | nRST1              	| J3-6         	| NA              	| ???            	| None                                	| Not used                              	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
+| IOREF              	| J3-7         	| NA              	| NA             	| None                                	| Not used                              	|
+| VIN                	| J3-1         	| VIN             	| NA             	| +12V into this pin through R76      	|                                       	|
+| +5V                	| J3-4         	| VIN+5V          	| NA             	| Power from Due voltage regulator    	| Three pins.                           	|
+| 3.3V               	| J3-5         	| 3.3V            	| NA             	| Power from Due voltage regulator    	| One pin.                              	|
+| MISO               	| tp CPIO1     	| CIPO            	| Input          	| SPI bus                             	|                                       	|
+| MOSI               	| tp COPI      	| COPI            	| Output         	| SPI bus                             	|                                       	|
+| SCK                	| tp SPI_SCK   	| SPI_SCK         	| Output         	| SPI bus                             	|                                       	|
+| nRST2              	| NA           	| SPI_nRST        	| Input          	| S1 reset switch                     	|                                       	|
+| end                	|              	|                 	|                	|                                     	|                                       	|
 
 ### Chassis Wiring of ODECOS Unit 2.
 
