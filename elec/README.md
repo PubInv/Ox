@@ -15,58 +15,57 @@ References:
 2. Fan Controller and Fan Wiring for OEDCS1: https://docs.google.com/document/d/1n3v-AxqNKEzcKqmHicGKnFmG8sKbNEL_pGaUlU9CZ8U/edit
 
 #### Due Pin Wiring
-| **Due Pin Number** 	| **Breakout** 	| **Signal Name** 	| **Set as I/O** 	| **Connection**            	| **Notes**           	|
-|--------------------	|--------------	|-----------------	|----------------	|---------------------------	|---------------------	|
-| D0                 	| J6-2         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D1                 	| J6-1         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D2                 	| J6-3         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D3                 	| J6-4         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D4                 	| J6-5         	| TEMP1           	| ?BiDirect?     	| Dallas 1 Wire / MAX31850K 	| Three daisy chained 	|
-| D5                 	| J6-6         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D6                 	| J6-7         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D7                 	| J6-8         	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D8                 	| J7-10        	| NA              	| Input pullup.  	| None                      	| Not used            	|
-| D9                 	| J7-9         	| nFAN1_PWM       	| Output         	| Controlles transistor Q1  	| Was BLOWER_PWM      	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
-|                    	|              	|                 	|                	|                           	|                     	|
+| **Due Pin Number** 	| **Breakout** 	| **Signal Name** 	| **Set as I/O** 	| **Connection**                 	| **Notes**           	|
+|--------------------	|--------------	|-----------------	|----------------	|--------------------------------	|---------------------	|
+| D0                 	| J6-2         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D1                 	| J6-1         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D2                 	| J6-3         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D3                 	| J6-4         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D4                 	| J6-5         	| TEMP1           	| ?BiDirect?     	| Dallas 1 Wire / MAX31850K      	| Three daisy chained 	|
+| D5                 	| J6-6         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D6                 	| J6-7         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D7                 	| J6-8         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D8                 	| J7-1         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D9                 	| J7-2         	| nFAN1_PWM       	| Output         	| Controlles transistor Q1       	| Was BLOWER_PWM      	|
+| D10                	| J7-3         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D11                	| J7-4         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D12                	| J7-5         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D13                	| J7-6         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D13                	| J7-6         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D14                	| J2-1         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D15                	| J2-2         	| NA              	| Input pullup.  	| None                           	| Not used            	|
+| D16                	| J2-3         	| NA              	| Input pullup.  	| None                           	| Can be TX2          	|
+| D17                	| J2-4         	| NA              	| Input pullup.  	| None                           	| Can be RX2          	|
+| D18                	| J2-5         	| D_PSU_TX        	| UART TX        	| TP2, R15 (then to Power Supply 	| TX1                 	|
+| D19                	| J2-6         	| D_PSU_RX        	| UART RX        	| TP3, R14 (then to Power Supply 	| RX1                 	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
+|                    	|              	|                 	|                	|                                	|                     	|
 
 
 ### Chassis Wiring of ODECOS Unit 2.
