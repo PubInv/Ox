@@ -55,6 +55,7 @@ namespace OxApp
     class CogTask : public OxCore::Task
     {
     public:
+      int DEBUG_LEVEL = 1;
       // TODO: This should probably be done dynamically, not here...
 
       // There are really several senosrs, but they are indexed!
