@@ -6479,7 +6479,7 @@
     (property "Datasheet" "" (at 130.81 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b1476723-37fb-4c8f-933c-c7d2d2ee8c8c))
+    (pin "1" (uuid 0aad04ce-974d-41c0-b49e-47e38951f2c8))
     (instances
       (project "MAX31850"
         (path "/28819f26-b4ae-405e-83cd-f562dfe74125"
@@ -6494,7 +6494,7 @@
           (reference "#PWR033") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3daed20d-8623-449a-af6f-871db7628ab2"
-          (reference "#PWR043") (unit 1)
+          (reference "#PWR042") (unit 1)
         )
       )
     )
@@ -6544,7 +6544,7 @@
     (property "Datasheet" "" (at 109.22 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 93ba0e67-f6d6-47ac-841e-8dd3bcae0a04))
+    (pin "1" (uuid a69fa10b-7091-4b50-b3a3-80ab8151a33f))
     (instances
       (project "MAX31850"
         (path "/28819f26-b4ae-405e-83cd-f562dfe74125"
@@ -6559,7 +6559,7 @@
           (reference "#PWR033") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3daed20d-8623-449a-af6f-871db7628ab2"
-          (reference "#PWR042") (unit 1)
+          (reference "#PWR041") (unit 1)
         )
       )
     )
@@ -6601,8 +6601,8 @@
     (property "Cost" "0.0015" (at 59.69 43.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 39dc3865-d10e-4868-9fa7-80f09b93ccf3))
-    (pin "2" (uuid 847d7ee3-9bd8-4c4e-9765-afd68f05ef53))
+    (pin "1" (uuid 6e326f78-70b2-4590-95f6-394968f5df7c))
+    (pin "2" (uuid 5b48a6bb-f2b9-48ac-834f-e16ddf434e40))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -6644,7 +6644,7 @@
     (property "AssemblyType" "HAND" (at 88.9 34.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f01c9017-051f-49f3-9a93-9073c4c051b3))
+    (pin "1" (uuid aabc07cf-f88f-4cf4-a546-e939658b2a07))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -6656,7 +6656,7 @@
           (reference "TP1") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3daed20d-8623-449a-af6f-871db7628ab2"
-          (reference "TP9") (unit 1)
+          (reference "TP12") (unit 1)
         )
       )
     )
@@ -6763,7 +6763,7 @@
     (property "Datasheet" "" (at 74.93 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1995b9ff-3aa4-43b3-a610-6e01ac777a4e))
+    (pin "1" (uuid afc4bf2b-3ac0-40fe-87e7-01891f285ddc))
     (instances
       (project "MAX31850"
         (path "/28819f26-b4ae-405e-83cd-f562dfe74125"
@@ -6778,7 +6778,7 @@
           (reference "#PWR033") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3daed20d-8623-449a-af6f-871db7628ab2"
-          (reference "#PWR041") (unit 1)
+          (reference "#PWR040") (unit 1)
         )
       )
     )

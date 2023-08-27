@@ -7498,9 +7498,9 @@
     (property "Datasheet" "~" (at 208.28 95.25 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid c25ddada-67e9-4969-8d2a-409a547cd4a1))
-    (pin "2" (uuid 5d8210f9-2020-4e3b-9964-7d6bb82f88da))
-    (pin "3" (uuid 76f15561-9cb0-456b-a5a0-bfdcc11765ff))
+    (pin "1" (uuid b2ac73a3-f2a1-44f0-8e01-c85bc11ac570))
+    (pin "2" (uuid 088337f6-de80-49c8-ac55-bc3c94f40f99))
+    (pin "3" (uuid ca3865d7-e24b-4f8e-a152-9f0072662820))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -7528,14 +7528,14 @@
     (property "Datasheet" "" (at 200.66 121.92 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1afbd039-9492-497c-8846-36a07a6f2150))
+    (pin "1" (uuid 4e8d025d-c9cd-476f-8588-ee36698018cb))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR027") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "#PWR036") (unit 1)
+          (reference "#PWR035") (unit 1)
         )
       )
     )
@@ -7577,8 +7577,8 @@
     (property "Cost" "0.0015" (at 245.11 100.33 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid cb6bd726-e294-4f3f-9903-0a273c064603))
-    (pin "2" (uuid 01cc5d72-ce56-4ad2-a6e6-84db518f4225))
+    (pin "1" (uuid 05a8d6f8-4810-43c9-8372-9c60b0c4afaf))
+    (pin "2" (uuid bafb9d9d-a9fc-4ee8-8ad9-a2c7696a82be))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -7611,9 +7611,9 @@
     (property "Datasheet" "~" (at 36.83 99.06 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b18a5092-5090-4691-a914-5ef99cfee57c))
-    (pin "2" (uuid 0785b417-fd70-4581-8c0c-76e754056047))
-    (pin "3" (uuid 0fd69e6e-baed-4fee-a465-f7538a76f13f))
+    (pin "1" (uuid 48a87eb7-d5cc-4b8a-8cdb-00a2b8b1455a))
+    (pin "2" (uuid 2da312a9-574d-467b-956e-5dcf853d1104))
+    (pin "3" (uuid b704173d-77aa-4815-8632-ce008a80657b))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -7662,8 +7662,8 @@
     (property "Cost" "0.0015" (at 236.22 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1934f4a1-eabc-4b4d-aaa1-bb908f9404cc))
-    (pin "2" (uuid a86f016c-f25b-458f-a1d0-97aac7e83681))
+    (pin "1" (uuid f4b6ba6c-2e28-4e0a-91e0-8bd2184e8ca6))
+    (pin "2" (uuid d8042acb-4652-4dad-be22-5588cd0bc90f))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -7717,8 +7717,8 @@
     (property "Cost" "0.0015" (at 217.17 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 745bcb49-6500-4fd4-aa87-1efee5d74b4b))
-    (pin "2" (uuid f6998f25-dade-40c6-8790-8ec76aaac45d))
+    (pin "1" (uuid 9d373913-d44e-461b-a841-79a91ac68206))
+    (pin "2" (uuid b6f59348-2fea-4cb5-aa1d-ec12000aea48))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -7754,7 +7754,7 @@
     (property "AssemblyType" "HAND" (at 43.18 24.13 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid a9ce5207-5f3d-4101-9ad9-6b22ff11a292))
+    (pin "1" (uuid 727f36de-7a84-45a3-95f9-c9004b209a5e))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -7763,7 +7763,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "TP4") (unit 1)
+          (reference "TP7") (unit 1)
         )
       )
     )
@@ -7784,9 +7784,9 @@
     (property "Datasheet" "~" (at 36.83 73.66 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 26e2ae10-bb5d-4246-987d-e989c41b92a9))
-    (pin "2" (uuid eb1d97ab-1567-412a-b389-072c8a591360))
-    (pin "3" (uuid d032d008-ffc9-4ba9-bd38-17e053d02ef4))
+    (pin "1" (uuid 3405e8f2-82cf-4509-8d83-5376ec2b02f9))
+    (pin "2" (uuid 5bb7d6ae-2dff-4d2c-a6a8-36d65286d9c0))
+    (pin "3" (uuid d959eda2-ad75-4687-ac19-495732289802))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -7835,8 +7835,8 @@
     (property "Cost" "0.0015" (at 73.66 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid aaedf55e-bb5f-46d0-8731-86f461b94f9f))
-    (pin "2" (uuid 1d94d47e-bfb3-406a-81cf-ce8a585fa9a5))
+    (pin "1" (uuid b2f8bedc-977f-41a1-a0ad-19a8dbda9b97))
+    (pin "2" (uuid 59d5e702-c5e7-485d-a5f2-66c9d04027ac))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -7869,9 +7869,9 @@
     (property "Datasheet" "~" (at 58.42 124.46 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 066bc3a0-68f2-4684-958c-cbb51558f301))
-    (pin "2" (uuid 0b768e6d-def2-42d1-a210-d8075af34c63))
-    (pin "3" (uuid bbde227c-1111-490d-8952-83690b12eaf1))
+    (pin "1" (uuid 59b9c1b0-66ad-4e4a-b3ed-e61af8d6a988))
+    (pin "2" (uuid 3493734f-f340-486b-bb61-6bb8d724d1a0))
+    (pin "3" (uuid 05d21616-f33e-4fb2-89b3-56a65af0dd56))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -7899,9 +7899,9 @@
     (property "Datasheet" "~" (at 208.28 82.55 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f7bd4fee-87ad-455a-ab18-bd5baaaf6abf))
-    (pin "2" (uuid 002b7bf7-ca50-48aa-bdbf-cc80105c461f))
-    (pin "3" (uuid 7e9da1d2-3e05-46d7-9535-6924612a66eb))
+    (pin "1" (uuid b59734ff-0be2-4b63-bac3-b13a6e3f573b))
+    (pin "2" (uuid a83ac0ad-d637-4879-b5f1-7b36a3a5385f))
+    (pin "3" (uuid fc800bb0-7a9b-42e0-9572-9d9f05b31079))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -7929,9 +7929,9 @@
     (property "Datasheet" "~" (at 36.83 62.23 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 828cec4d-065c-4611-a668-dcd6c847dbea))
-    (pin "2" (uuid 61079457-aa58-4208-bd5b-8fd8b2e8d7bd))
-    (pin "3" (uuid e6e2a383-4be0-4b23-965a-cfff16380a67))
+    (pin "1" (uuid 44bd1304-cb0b-4bea-bcd2-7f667f280a91))
+    (pin "2" (uuid f0309418-a241-4d1f-a3c1-2a288e212308))
+    (pin "3" (uuid e43fe870-cd48-4f64-9a60-510be6187dae))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -7962,7 +7962,7 @@
     (property "AssemblyType" "HAND" (at 111.76 171.45 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 94e10859-5bee-4351-bcc7-6e8ad8024fe5))
+    (pin "1" (uuid a2316162-e6ae-4d89-8764-886315064de5))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -7971,7 +7971,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "TP6") (unit 1)
+          (reference "TP9") (unit 1)
         )
       )
     )
@@ -8013,8 +8013,8 @@
     (property "Cost" "0.0015" (at 95.25 153.67 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fce1b977-fd75-4658-8854-b6717157fc96))
-    (pin "2" (uuid 2d20f014-aadb-4e29-832b-4982768e359f))
+    (pin "1" (uuid 0a0892bc-b161-4b32-a781-d9eb4e8a3226))
+    (pin "2" (uuid 9c5cefcc-154a-4d85-95d1-3d08c4544c80))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8047,14 +8047,14 @@
     (property "Datasheet" "~" (at 113.03 93.98 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid bc0bd1e5-09da-419c-9bf1-d04606bd018d))
-    (pin "2" (uuid 4bd90a9e-e12b-4d19-8fe1-4b6d93a0b16a))
-    (pin "3" (uuid e32be029-4eef-4b22-918b-4bc5aadde641))
-    (pin "4" (uuid 2946dc6e-b086-4395-a3cd-0a871be41821))
-    (pin "5" (uuid 34e7318e-f9b7-49b5-8591-9f6631b75976))
-    (pin "6" (uuid 7400f2cd-c79a-4996-84d8-b3a7ce771edd))
-    (pin "7" (uuid 61ae9605-3c7d-4e5e-9d7a-1fec9f42d29f))
-    (pin "8" (uuid b4718101-3ce1-4421-b8e7-14386674aadf))
+    (pin "1" (uuid f474cec0-58e7-4d8a-be3f-235f4235ebc9))
+    (pin "2" (uuid 146eb1ed-191b-491c-bd80-7f6758a49856))
+    (pin "3" (uuid 4226cf26-e97f-4701-ad5d-e33023426e53))
+    (pin "4" (uuid e65306a5-ebf7-4f41-a0d7-5b73bee868b1))
+    (pin "5" (uuid a7ba37af-f31b-4894-bad0-e5216bbc6639))
+    (pin "6" (uuid 25bbf81f-64a7-4b7a-b413-09c7504fc86b))
+    (pin "7" (uuid 0635f9e9-438a-436d-be83-86851e7634ac))
+    (pin "8" (uuid 8ce74032-b69b-4915-8642-43145f9a1b99))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
@@ -8103,8 +8103,8 @@
     (property "Cost" "0.0015" (at 35.56 40.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid ac865017-e852-4c9c-9160-3ba3e208bc77))
-    (pin "2" (uuid 19097e19-fca7-4126-8018-30720faf35b5))
+    (pin "1" (uuid f2ab77c6-4e54-4238-b242-7af7d3617754))
+    (pin "2" (uuid dea01784-eac2-4bdd-94e2-5d3c0fc1967b))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8143,7 +8143,7 @@
     (property "AssemblyType" "HAND" (at 255.27 118.11 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 285298f5-14b3-45ae-b637-6ffd4a6ef6ff))
+    (pin "1" (uuid c1ca0786-975f-4888-b038-bebce468b3bb))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8152,7 +8152,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "TP7") (unit 1)
+          (reference "TP10") (unit 1)
         )
       )
     )
@@ -8194,8 +8194,8 @@
     (property "Cost" "0.0015" (at 64.77 93.98 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 41d84a46-b7dc-44a3-b359-20120cb7ba9e))
-    (pin "2" (uuid 0a2b5298-8fb2-4e4c-bb31-6854f28d69ed))
+    (pin "1" (uuid 66a5a299-6d0f-4e00-9924-8127f6176191))
+    (pin "2" (uuid 3f026104-55a1-47fc-9ae6-7716436d92e1))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8228,9 +8228,9 @@
     (property "Datasheet" "~" (at 208.28 71.12 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1ee1de32-f870-4b24-a9fd-d580b9b62095))
-    (pin "2" (uuid ead2dd76-75cf-4613-8a36-e44f299f10ee))
-    (pin "3" (uuid e43a30d1-f938-4a0b-80f0-993f75662adc))
+    (pin "1" (uuid edd242e8-9fb0-4b8c-af8a-c88fdc3c6a31))
+    (pin "2" (uuid ae7e213f-0294-4ea7-993d-c18ca5675419))
+    (pin "3" (uuid 80706f72-00d8-41bb-a393-5af3568ff582))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -8279,8 +8279,8 @@
     (property "Cost" "0.0015" (at 226.06 105.41 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 3040c5f3-f438-4da7-98e2-1b5ab1859195))
-    (pin "2" (uuid e31867bb-48b9-4f58-8873-1103091d9e81))
+    (pin "1" (uuid 1b971067-352e-4fcf-978b-2a7af1fe59d2))
+    (pin "2" (uuid 5ec815ba-6e5a-409a-b1b7-e69bc9270a5d))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8334,8 +8334,8 @@
     (property "Cost" "0.0015" (at 86.36 156.21 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 72b1f045-8191-4e69-88ad-f186a9567c76))
-    (pin "2" (uuid 95162012-4d68-4b3d-ae8d-160d3919a4b2))
+    (pin "1" (uuid b68a8086-905a-4670-99f7-ba435497b733))
+    (pin "2" (uuid 8d4be310-9fc9-42bf-b6c7-9e3bda29b057))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8368,9 +8368,9 @@
     (property "Datasheet" "~" (at 36.83 86.36 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f185be39-a241-4263-b7e1-81512d6a6ecc))
-    (pin "2" (uuid 5ebd2a9b-e9b6-46e4-9721-d7be3e2d857a))
-    (pin "3" (uuid 46dbfadb-0a58-461b-880a-308eda5782a1))
+    (pin "1" (uuid 485743e8-2b06-4a86-85cd-c765407f052c))
+    (pin "2" (uuid 8088729a-2cdd-4e56-aba6-6f54944681a4))
+    (pin "3" (uuid 423b712a-c108-4973-8bea-010527f648e1))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -8398,14 +8398,14 @@
     (property "Datasheet" "" (at 261.62 92.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fc830052-c01d-4023-9b6b-c3a84c3c5cbb))
+    (pin "1" (uuid 8aac8330-dadb-41c9-82d4-05c084539aa0))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR010") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "#PWR037") (unit 1)
+          (reference "#PWR036") (unit 1)
         )
       )
     )
@@ -8500,14 +8500,14 @@
     (property "Datasheet" "" (at 29.21 113.03 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid e6c2a689-4686-4f7a-943e-0c60498af415))
+    (pin "1" (uuid 1514f049-cab8-4eed-b5f1-3ec8a9a773c4))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR027") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "#PWR032") (unit 1)
+          (reference "#PWR031") (unit 1)
         )
       )
     )
@@ -8531,7 +8531,7 @@
     (property "AssemblyType" "HAND" (at 85.09 85.09 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 4813001d-ca19-4e6a-9d68-6955d5575857))
+    (pin "1" (uuid 708f34e7-0827-4dce-b88e-66cc0f6923f4))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8540,7 +8540,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "TP5") (unit 1)
+          (reference "TP8") (unit 1)
         )
       )
     )
@@ -8561,14 +8561,14 @@
     (property "Datasheet" "" (at 113.03 142.24 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 0f16e19f-fc43-44cb-bf70-db57f83614d5))
+    (pin "1" (uuid fc6b8e02-798a-47cf-a188-68d84a16c59d))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR010") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "#PWR035") (unit 1)
+          (reference "#PWR034") (unit 1)
         )
       )
     )
@@ -8589,9 +8589,9 @@
     (property "Datasheet" "~" (at 58.42 148.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f9cd4441-b8d1-4b4e-98e6-6c77090c7e08))
-    (pin "2" (uuid b216b6ec-705c-4394-a5ac-3e6610db7d37))
-    (pin "3" (uuid cec91b15-9fb1-48ac-b164-bc932f1af2e8))
+    (pin "1" (uuid 1013b494-06e3-4c46-b4b4-8f333c0c64b2))
+    (pin "2" (uuid 31f90c74-ed13-49a1-9bdd-8208ae88234c))
+    (pin "3" (uuid d84d78a7-f53b-4fc9-ab2a-9f636a3b6164))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -8619,9 +8619,9 @@
     (property "Datasheet" "~" (at 208.28 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d824458c-36ac-44e3-84ad-7c295e1bc046))
-    (pin "2" (uuid 0fbaaba6-d9b9-4454-b73e-7c53e04fa03d))
-    (pin "3" (uuid 5c90ed1e-70df-4434-bb8c-af3810136f00))
+    (pin "1" (uuid 7f6d77a0-15fb-455a-9768-5237b35e3d03))
+    (pin "2" (uuid 438f86e3-872c-49c3-9caf-e52f9c3e7b85))
+    (pin "3" (uuid 6db61ba2-1e80-4d52-b7be-2fa3b8b4e8fc))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -8649,9 +8649,9 @@
     (property "Datasheet" "~" (at 58.42 135.89 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d61dc81c-434a-4883-8bdd-d9461d6a8a42))
-    (pin "2" (uuid 8312ecc6-72a0-41ed-84be-3bdad8596bd3))
-    (pin "3" (uuid 4401737b-63d2-4330-b991-8fd6ef6f6538))
+    (pin "1" (uuid 7c3d17b8-d561-486e-af5a-d9da9119dd18))
+    (pin "2" (uuid 3527ee68-f2cc-46d0-91b5-0cdcdde029bf))
+    (pin "3" (uuid 5a4cc4e2-c59b-4dc4-be24-9d525d116500))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -8679,14 +8679,14 @@
     (property "Datasheet" "" (at 50.8 175.26 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 0d4aaabc-3e56-4a05-abc0-ff75d1fb008b))
+    (pin "1" (uuid 6fc1389d-c861-4209-a388-5d4d82d6980a))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR027") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "#PWR033") (unit 1)
+          (reference "#PWR032") (unit 1)
         )
       )
     )
@@ -8728,8 +8728,8 @@
     (property "Cost" "0.0015" (at 54.61 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 79602d2c-6a7a-413f-b06e-b4f5fa461828))
-    (pin "2" (uuid b4ae5335-9c33-4aa9-a963-04a0ab4a1bca))
+    (pin "1" (uuid 011c1f8e-241f-4c1d-94fe-5003ee4d483b))
+    (pin "2" (uuid 1f76af15-a6c6-4c64-8b68-75d29c896abb))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8783,8 +8783,8 @@
     (property "Cost" "0.0015" (at 76.2 158.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 65ed2aa1-5991-4dcd-9518-a94bad1e24bb))
-    (pin "2" (uuid ffb640d6-59dd-4cdd-93d0-b3535c87d114))
+    (pin "1" (uuid 25b505db-7879-4464-b997-977fe2df30e9))
+    (pin "2" (uuid 7b2a9d05-f4e7-41f8-832c-3302eee3083e))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8817,9 +8817,9 @@
     (property "Datasheet" "~" (at 58.42 161.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 45a240a3-8927-4d31-9feb-1a751f16ec7d))
-    (pin "2" (uuid ed989239-3ada-4f79-96ab-d4e015773b51))
-    (pin "3" (uuid 0a9ceed6-acab-4bc1-a136-59fcd5c29453))
+    (pin "1" (uuid 8bc1a4a6-0144-47ea-874d-de90afc16f19))
+    (pin "2" (uuid 9956c4f1-f7d5-439e-8fd0-74508f40ea06))
+    (pin "3" (uuid f54108be-add3-4480-8d2a-874768a1dcc1))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
@@ -8868,8 +8868,8 @@
     (property "Cost" "0.0015" (at 67.31 161.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 32f53707-ffeb-4127-93dc-659823d52ba4))
-    (pin "2" (uuid 6637aab4-f2e1-40b2-b82b-fd53818160b4))
+    (pin "1" (uuid b511d47e-2344-4a85-95a2-8e47fd250bf5))
+    (pin "2" (uuid 09b697a2-88c3-4089-b7b1-ce428f7fa70f))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8923,8 +8923,8 @@
     (property "Cost" "0.0015" (at 45.72 99.06 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5fe70fa7-d317-4e49-8c33-944bfb412061))
-    (pin "2" (uuid fe51bdb7-e92c-4a2e-af1f-2147b92ddfe0))
+    (pin "1" (uuid 94bdd9e4-9720-4a2e-8a23-60c796d31f3e))
+    (pin "2" (uuid 895455b8-ca88-412a-b0d9-953038e1be94))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -8957,14 +8957,14 @@
     (property "Datasheet" "" (at 97.79 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid ada95c5f-1544-406d-b7bb-db985e261e6e))
+    (pin "1" (uuid d42d2f2d-8811-477b-b774-613178e10988))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR010") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
-          (reference "#PWR034") (unit 1)
+          (reference "#PWR033") (unit 1)
         )
       )
     )

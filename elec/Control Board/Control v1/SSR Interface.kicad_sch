@@ -317,9 +317,9 @@
     (property "Cost" "0.0196" (at 88.9 62.23 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 55cda822-5538-4519-99aa-f5a6dc3c4e9a))
-    (pin "2" (uuid fbc5eb0e-5447-47f1-a18a-19da7a22a59b))
-    (pin "3" (uuid 53f3e43d-f199-46de-94ab-736f68369aae))
+    (pin "1" (uuid f79efe21-1f25-4255-a4d9-b85060dbbe0e))
+    (pin "2" (uuid be3dd7aa-0c9e-4559-9a61-579efedf6dad))
+    (pin "3" (uuid c9de7e51-40ba-48e9-9d87-2370c8fee0d9))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf/00000000-0000-0000-0000-000062dd8e5f"
@@ -352,14 +352,14 @@
     (property "Datasheet" "" (at 91.44 71.12 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 957af90c-f1c1-48bf-90a2-b1751fe04d8f))
+    (pin "1" (uuid d14961a9-7aed-4785-909f-5b050451a912))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
-          (reference "#PWR057") (unit 1)
+          (reference "#PWR056") (unit 1)
         )
       )
     )
@@ -401,8 +401,8 @@
     (property "Cost" "0.0015" (at 99.06 49.53 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 48bb9b4e-8d42-4b84-8449-525f6a35c23a))
-    (pin "2" (uuid ac28c2f1-8f7f-40d4-a6b0-caa32e464ef7))
+    (pin "1" (uuid 2fa273bb-7d6a-4c12-9f5d-afb3f5b9e732))
+    (pin "2" (uuid 1035998f-14f0-41e2-be71-e22570df4871))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -456,8 +456,8 @@
     (property "Cost" "0.0015" (at 72.39 62.23 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid bd7e6f7c-1d0d-4ccf-a379-f25914cd9dd6))
-    (pin "2" (uuid 5f8383bb-deeb-41a8-aa23-9c97c7919b22))
+    (pin "1" (uuid b694da40-e439-4131-be93-e0e8e8643493))
+    (pin "2" (uuid bb987470-b7a4-49e1-8357-d6cce9da0f84))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
