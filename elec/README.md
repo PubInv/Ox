@@ -54,19 +54,47 @@ References:
 | D33                	| J8-13        	| TC_nCS1         	| Output for nCS 	| Thermocouple 1, R7                  	| on 3.3 Volt                           	|
 | D34                	| J8-16        	| TC_nCS2         	| Output for nCS 	| Thermocouple 2, R3                  	| on 3.3 Volt                           	|
 | D35                	| J8-15        	| TC_nCS3         	| Output for nCS 	| Thermocouple 3, R1                  	| on 3.3 Volt                           	|
+| D36                	| J8-18        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D37                	| J8-17        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D38                	| J8-20        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D39                	| J8-19        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D39                	| J8-19        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D40                	| J8-22        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D41                	| J8-21        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D42                	| J8-24        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D43                	| J8-23        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D44                	| J8-26        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D45                	| J8-25        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D46                	| J8-28        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D47                	| J8-27        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D48                	| J8-30        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D49                	| J8-29        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D50                	| J8-32        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D51                	| J8-31        	| SSR_PWM         	| OUTPUT         	| R9                                  	| Active High.                          	|
+| D52                	| J8-34        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| D53                	| J8-33        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| SDA1               	| J7-9         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| SCL1               	| J7-10        	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| CANR               	| J4-7         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| CANT               	| J4-8         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| DAC0               	| J4-5         	| NA              	| ???            	| None                                	| Not used                              	|
+| DAC0               	| J4-6         	| NA              	| ???            	| None                                	| Not used                              	|
+| A0                 	| J5-1         	| BLOWER_TACH     	| Input          	| R11                                 	| Measure RPM                           	|
+| A1                 	| J5-2         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A2                 	| J5-3         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A3                 	| J5-4         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A4                 	| J5-5         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A5                 	| J5-6         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A6                 	| J5-7         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A7                 	| J5-8         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A8                 	| J4-1         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A9                 	| J4-2         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A9                 	| J4-2         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A10                	| J4-3         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| A11                	| J4-4         	| NA              	| Input pullup.  	| None                                	| Not used                              	|
+| AREF               	| J7-8         	| NA              	| ???            	| None                                	| Not used                              	|
+| nRST1              	| J3-6         	| NA              	| ???            	| None                                	| Not used                              	|
 |                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-|                    	|              	|                 	|                	|                                     	|                                       	|
-
 
 ### Chassis Wiring of ODECOS Unit 2.
 
