@@ -39,14 +39,13 @@ void outputReport(MachineStatusReport *msr) {
         OxCore::Debug<const char *>("Stack amps  A: ");
         OxCore::DebugLn<float>(msr->stack_amps);
         OxCore::Debug<const char *>("Stack ohms  O: ");
-        if (msr->stack_ohms < 0.0) {
+        if (isnan(msr->stack_ohms) || msr->stack_ohms < 0.0) {
           OxCore::DebugLn<const char*>(" N/A");
         } else {
           OxCore::DebugLn<float>(msr->stack_ohms);
         }
         OxCore::Debug<const char *>("Heater DC    : ");
         Serial.println(msr->heater_duty_cycle,4);
-        //        OxCore::DebugLn<float>(msr->heater_duty_cycle);
         OxCore::Debug<const char *>("Fan PWM      : ");
         OxCore::DebugLn<float>(msr->fan_pwm);
         OxCore::Debug<const char *>("Fan RPM      : ");
@@ -61,13 +60,11 @@ void createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr->post_getter_C);
   sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\",\n",msr->stack_voltage);
   sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\",\n",msr->stack_amps);
-  if (msr->stack_ohms < 0.0) {
-    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"N/A\",\n",msr->stack_amps);
+  if (isnan(msr->stack_ohms) || msr->stack_ohms < 0.0) {
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"-1.0\",\n");
   } else {
     sprintf(buffer+strlen(buffer), "\"StackOhms\": \"%.2f\",\n",msr->stack_ohms);
   }
-        // As of the summer of 2023, we are not planning to use a flow sensor
-  //  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr->flow_ml_per_s);
   sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
   sprintf(buffer+strlen(buffer), "\"FanPWM\": \"%.2f\",\n",msr->fan_pwm);
   sprintf(buffer+strlen(buffer), "\"FanRPM\": \"%.2f\"\n",msr->fan_rpm);
