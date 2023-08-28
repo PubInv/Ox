@@ -278,6 +278,286 @@
         )
       )
     )
+    (symbol "GND_1" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND_1" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_1_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_1_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "GND_2" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND_2" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_2_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_2_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "GND_3" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND_3" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_3_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_3_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "GND_4" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND_4" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_4_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_4_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "GND_5" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND_5" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_5_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_5_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "GND_6" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND_6" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_6_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_6_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "GND_7" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND_7" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_7_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_7_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
     (symbol "GPAD_SCH_LIB:22-23-2021" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at -2.54 1.27 0)
         (effects (font (size 1.27 1.27)) (justify right))
@@ -500,6 +780,46 @@
         (pin passive line (at 10.16 7.62 180) (length 2.54)
           (name "~" (effects (font (size 1.27 1.27))))
           (number "6" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "PWR_FLAG_1" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+      (property "Reference" "#FLG" (at 0 1.905 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "PWR_FLAG_1" (at 0 3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "~" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "power-flag" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Special symbol for telling ERC where power comes from" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "PWR_FLAG_1_0_0"
+        (pin power_out line (at 0 0 90) (length 0)
+          (name "pwr" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+      (symbol "PWR_FLAG_1_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 1.27)
+            (xy -1.016 1.905)
+            (xy 0 2.54)
+            (xy 1.016 1.905)
+            (xy 0 1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
         )
       )
     )
@@ -1670,7 +1990,7 @@
     (property "Datasheet" "" (at 92.71 123.19 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f03b6fb8-9d1a-4217-a6c0-47760c6cc4ea))
+    (pin "1" (uuid 830e9e45-4408-4920-99d1-9c65a37bfab5))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -1679,7 +1999,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR062") (unit 1)
+          (reference "#PWR061") (unit 1)
         )
       )
     )
@@ -1724,8 +2044,8 @@
     (property "Manufacturer" "TyoHM" (at 119.38 180.34 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid c9c34ba7-bfa0-4fe8-ba7b-9ab2ec1aec69))
-    (pin "2" (uuid 0c108608-8ead-4d10-a709-f20b0bc1dbd5))
+    (pin "1" (uuid aba02cf7-c081-42f2-89ee-120e9e04c4d7))
+    (pin "2" (uuid 72e30d1f-c6b0-4cb3-810b-6abe7735fd65))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -1779,8 +2099,8 @@
     (property "Description" "50V 1uF ±5% 0603 Multilayer Ceramic Ca" (at 161.29 40.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 57a4423b-0d80-49ec-8e4a-59a87763b07b))
-    (pin "2" (uuid 0ba3e830-b5d0-4a59-8165-c9f7db44e15c))
+    (pin "1" (uuid 3e51863f-f946-4b78-b59b-3481e1d5ea34))
+    (pin "2" (uuid 86da4484-b019-40c2-ad2c-7a9f4f1567ea))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -1834,8 +2154,8 @@
     (property "Manufacturer" "TyoHM" (at 120.65 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 86d00bef-e60f-43db-8ce6-6f8735ee084b))
-    (pin "2" (uuid d0663f0a-f551-4253-be01-543c9839bb1c))
+    (pin "1" (uuid 49237c3f-b72c-4d5f-b7cd-687a88d95b59))
+    (pin "2" (uuid e00ff615-4ed3-4ace-8c33-b318e5457200))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -1889,8 +2209,8 @@
     (property "Description" "50V 1uF ±5% 0603 Multilayer Ceramic Ca" (at 147.32 40.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b7fc2c40-d912-4606-a54f-e9619e3778e9))
-    (pin "2" (uuid b0131dab-73b6-4b1f-8f0e-44cab846df5c))
+    (pin "1" (uuid d4f99d7b-ee95-4150-b6ca-5fa13d82c2b7))
+    (pin "2" (uuid 4ec073af-f9e0-445d-aff4-24ba13a3f6f9))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -1944,8 +2264,8 @@
     (property "Manufacturer" "TyoHM" (at 143.51 78.74 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid ba06d622-7d05-4cf7-9aa2-936c04455e0b))
-    (pin "2" (uuid 5f96346d-fec0-4f75-8db5-714400f7c4f4))
+    (pin "1" (uuid 29882d5b-0501-4316-8662-fefb9cd32de3))
+    (pin "2" (uuid 0ced7751-6648-4bae-b8f3-8421495a0386))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -1990,7 +2310,7 @@
     (property "LongLead" "NO" (at 109.22 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 170fc8b5-35fe-49af-b1d0-8dd1324cb9c3))
+    (pin "1" (uuid 8cd2da29-bfcf-48d1-95e2-628251ec6584))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -1999,13 +2319,13 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "TP11") (unit 1)
+          (reference "TP13") (unit 1)
         )
       )
     )
   )
 
-  (symbol (lib_id "power:GND") (at 74.93 132.08 0) (unit 1)
+  (symbol (lib_name "GND_6") (lib_id "power:GND") (at 74.93 132.08 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2aaa6bb0-fe3e-4166-a502-b185746d5a9d)
     (property "Reference" "#PWR0304" (at 74.93 138.43 0)
@@ -2020,7 +2340,7 @@
     (property "Datasheet" "" (at 74.93 132.08 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 2da886cc-5851-41fd-a1f9-9fc8ec21dac7))
+    (pin "1" (uuid 4dd8eccb-f79b-41e7-a325-22302b1bc9a1))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2029,7 +2349,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR061") (unit 1)
+          (reference "#PWR060") (unit 1)
         )
       )
     )
@@ -2074,8 +2394,8 @@
     (property "Description" "50V 39pF NP0 ±5% 0603 Multilayer Ceramic Ca" (at 74.93 125.73 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid adfedfd9-ff79-49dd-a101-c10ea257feda))
-    (pin "2" (uuid 9596e383-c54f-4e26-98d1-ea1c64c3f062))
+    (pin "1" (uuid 2ed85149-ed48-498e-b6ab-cee4b318bd84))
+    (pin "2" (uuid d6a06ac6-c247-4436-b282-e22ec8e8a98b))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2129,8 +2449,8 @@
     (property "Manufacturer" "TyoHM" (at 119.38 105.41 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid a57e7b76-e32b-4267-aca8-f63870c5fa91))
-    (pin "2" (uuid 9bc25928-41db-4379-b280-a53ec1c2f3df))
+    (pin "1" (uuid e2977b5c-8263-4b67-a985-f1f86bb1235b))
+    (pin "2" (uuid ae328f08-4781-41e4-87e6-59a0652ec921))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2184,8 +2504,8 @@
     (property "Description" "50V 39pF NP0 ±5% 0603 Multilayer Ceramic Ca" (at 69.85 142.24 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b3f79e88-8c31-414a-91c5-0c8bc8061ba2))
-    (pin "2" (uuid fed6ce98-05ae-4241-9999-a1550df43c6d))
+    (pin "1" (uuid 139df6e0-e6d3-4524-9c7f-c21bd999329a))
+    (pin "2" (uuid 9f982108-d222-40e5-bb35-c8ff4093b45a))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2239,8 +2559,8 @@
     (property "Manufacturer" "TyoHM" (at 132.08 78.74 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid cf14ed4d-c006-4fd1-8057-de9d2ad71148))
-    (pin "2" (uuid 9ce6a984-0f1a-4beb-9666-8268e8e2439d))
+    (pin "1" (uuid 919838ce-f984-44e9-ab1b-ab59a7a45b11))
+    (pin "2" (uuid b4f6530b-d909-4ff6-a098-ae8ae7cd86bd))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2294,8 +2614,8 @@
     (property "Description" "50V 39pF NP0 ±5% 0603 Multilayer Ceramic Ca" (at 52.07 144.78 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5c910575-c749-4c15-8a64-0b9ce9270ee2))
-    (pin "2" (uuid 5e425a99-634a-4dca-9604-bc6a4ea743da))
+    (pin "1" (uuid 976cdce7-b9bc-4d7a-942f-45291bf1fb7b))
+    (pin "2" (uuid 1a1d9037-7cf5-48e4-9fa7-ee5649a088fb))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2349,9 +2669,9 @@
     (property "Manufacturer" "Yangzhou Yangjie Elec Tech" (at 130.81 170.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid ac876bfb-e0f7-43a5-b217-5fd16a45b28b))
-    (pin "2" (uuid 691c694e-ab95-4e6f-93cd-414769074386))
-    (pin "3" (uuid b15de99b-823b-4e41-ac28-b2d014f57c4d))
+    (pin "1" (uuid dd3c54cd-94bf-4ce5-96db-be731f0fd916))
+    (pin "2" (uuid d4821f2c-cd57-4991-9605-612d93ba1a86))
+    (pin "3" (uuid 069959d0-f633-429a-912b-efb5027e4609))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2405,8 +2725,8 @@
     (property "Manufacturer" "TyoHM" (at 143.51 138.43 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fd677c42-70f4-4c03-80cf-849bfb7b5bad))
-    (pin "2" (uuid a227a7c0-2476-45b7-bba3-4ae633388073))
+    (pin "1" (uuid a1dab747-4225-426b-a7a3-f5c0bdc45b4d))
+    (pin "2" (uuid be9f5ca3-7516-4d64-a113-9323da6aba8d))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2460,8 +2780,8 @@
     (property "Manufacturer" "TyoHM" (at 119.38 142.24 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 7dadb23b-29c7-4993-b579-abe2a3aae776))
-    (pin "2" (uuid f56d4390-13c1-4a50-bbd7-0746d845e21c))
+    (pin "1" (uuid 9861cf67-4378-4704-b93c-952833c5a69b))
+    (pin "2" (uuid 098b290e-5a03-4336-9dff-7574cd1ab87b))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2515,9 +2835,9 @@
     (property "Manufacturer" "Yangzhou Yangjie Elec Tech" (at 132.08 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid dae2928b-9538-4fb3-890d-d2fe15eaba85))
-    (pin "2" (uuid ce01115f-396b-4e9a-810c-9592a3880105))
-    (pin "3" (uuid ecb51d4f-6bce-4363-aa48-730fba7e4415))
+    (pin "1" (uuid b2be61b8-75eb-4294-985b-a2dbac4a7da2))
+    (pin "2" (uuid f91c30cb-8e44-4af8-b4d8-4ad8c95abce7))
+    (pin "3" (uuid ca20e37b-a967-45c6-9eb4-0201d95c7808))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2571,8 +2891,8 @@
     (property "Manufacturer" "TyoHM" (at 142.24 176.53 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 7b880a49-1db0-4755-8d00-2e7e653aaac9))
-    (pin "2" (uuid 06684333-e37d-4d5d-9ed1-d059ce0356b1))
+    (pin "1" (uuid fa470f2a-21d7-48e8-adce-4b495ed59918))
+    (pin "2" (uuid d09b9c3c-ad6b-457f-b040-dc43904d07a9))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2626,8 +2946,8 @@
     (property "Manufacturer" "TyoHM" (at 143.51 101.6 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d00f3370-95ce-439f-b37d-571c21a2d3ff))
-    (pin "2" (uuid 6a5b2a98-de34-4078-bece-ba2e72e4edb2))
+    (pin "1" (uuid 80ef6431-3919-43e8-880e-46633d937e90))
+    (pin "2" (uuid fd57670e-66ff-4228-bdcf-bf1185e10fd2))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2642,7 +2962,7 @@
     )
   )
 
-  (symbol (lib_id "power:GND") (at 147.32 46.99 0) (unit 1)
+  (symbol (lib_name "GND_5") (lib_id "power:GND") (at 147.32 46.99 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 701b21d1-c45d-4aa6-a946-0eb41a74cb6f)
     (property "Reference" "#PWR0307" (at 147.32 53.34 0)
@@ -2657,7 +2977,7 @@
     (property "Datasheet" "" (at 147.32 46.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5cc623b3-d709-4141-88dd-d8d692e6e7ef))
+    (pin "1" (uuid a6a54bb6-95f9-4f43-bb98-13a34c9aa09f))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2666,7 +2986,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR064") (unit 1)
+          (reference "#PWR063") (unit 1)
         )
       )
     )
@@ -2705,8 +3025,8 @@
     (property "Description" "Do Not Insert" (at 58.42 43.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid a6c65f0b-afce-48f1-b9b2-3e66622c57b3))
-    (pin "2" (uuid e4a7ce09-5383-44f8-85ee-8b8c18cad37a))
+    (pin "1" (uuid c372dd94-e157-42b8-8f97-c94ac52dc8b9))
+    (pin "2" (uuid 5390e124-39e5-4bab-8e01-7b8ad52fe822))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2751,7 +3071,7 @@
     (property "LongLead" "NO" (at 86.36 95.25 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5bf2b531-7925-4b61-a23d-821a6a0f8c05))
+    (pin "1" (uuid 6f3b1e61-fcfa-4ab6-9c33-4339302b43ec))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2760,7 +3080,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "TP10") (unit 1)
+          (reference "TP12") (unit 1)
         )
       )
     )
@@ -2796,7 +3116,7 @@
     (property "LongLead" "NO" (at 109.22 127 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d956bdae-396f-4997-87df-391a35cb2555))
+    (pin "1" (uuid 4e005616-a8c0-41e6-ab4a-f85493c89a89))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2805,13 +3125,13 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "TP13") (unit 1)
+          (reference "TP15") (unit 1)
         )
       )
     )
   )
 
-  (symbol (lib_id "power:GND") (at 52.07 151.13 0) (unit 1)
+  (symbol (lib_name "GND_4") (lib_id "power:GND") (at 52.07 151.13 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 825d4813-8476-4ab3-8a2a-62c0d1178ca7)
     (property "Reference" "#PWR0301" (at 52.07 157.48 0)
@@ -2826,7 +3146,7 @@
     (property "Datasheet" "" (at 52.07 151.13 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 2261779c-df99-4b1d-b60a-7e4038648acf))
+    (pin "1" (uuid b0015317-9fcd-4970-9c3b-23e87263b1e1))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2835,7 +3155,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR058") (unit 1)
+          (reference "#PWR057") (unit 1)
         )
       )
     )
@@ -2874,8 +3194,8 @@
     (property "Description" "Do Not Insert" (at 118.11 25.4 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9744bd23-a87e-4217-96b2-593f8fc28e75))
-    (pin "2" (uuid d76779c6-a367-410d-ab00-dc35287915b5))
+    (pin "1" (uuid d8709ed3-6ad5-430d-9ce1-b43311a34c1f))
+    (pin "2" (uuid f0066c0f-bd55-41b3-bad9-d18b0adc3a66))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2890,7 +3210,7 @@
     )
   )
 
-  (symbol (lib_id "power:GND") (at 161.29 46.99 0) (unit 1)
+  (symbol (lib_name "GND_3") (lib_id "power:GND") (at 161.29 46.99 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8c7b13a2-2551-4cb2-b219-13a316ebf785)
     (property "Reference" "#PWR0308" (at 161.29 53.34 0)
@@ -2905,7 +3225,7 @@
     (property "Datasheet" "" (at 161.29 46.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid e9d93aea-7f7b-4945-9d74-5aedfbcac392))
+    (pin "1" (uuid f6db45f3-0083-49bd-86b3-ef29248f5829))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2914,13 +3234,13 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR065") (unit 1)
+          (reference "#PWR064") (unit 1)
         )
       )
     )
   )
 
-  (symbol (lib_id "power:GND") (at 143.51 83.82 0) (unit 1)
+  (symbol (lib_name "GND_2") (lib_id "power:GND") (at 143.51 83.82 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 9787ca8d-cae9-40ca-8034-bdf0a109ec04)
     (property "Reference" "#PWR0306" (at 143.51 90.17 0)
@@ -2935,7 +3255,7 @@
     (property "Datasheet" "" (at 143.51 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid d7cb955d-d569-43bd-902d-a70e11c561c0))
+    (pin "1" (uuid 18882b1a-9b11-4a7a-97fb-9076773feac4))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -2944,7 +3264,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR063") (unit 1)
+          (reference "#PWR062") (unit 1)
         )
       )
     )
@@ -3053,7 +3373,7 @@
     (property "LongLead" "NO" (at 110.49 165.1 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5804acf1-abe4-4344-9f2f-fdc45b567f3d))
+    (pin "1" (uuid d7e96e83-66fe-475a-a20d-a5bb8d547e0a))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3062,13 +3382,13 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "TP14") (unit 1)
+          (reference "TP16") (unit 1)
         )
       )
     )
   )
 
-  (symbol (lib_id "power:GND") (at 58.42 132.08 0) (unit 1)
+  (symbol (lib_name "GND_1") (lib_id "power:GND") (at 58.42 132.08 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b098cdd9-6a87-4775-acba-5653a314515e)
     (property "Reference" "#PWR0302" (at 58.42 138.43 0)
@@ -3083,7 +3403,7 @@
     (property "Datasheet" "" (at 58.42 132.08 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid adfe829b-9909-4682-894f-d6e5cd0088cc))
+    (pin "1" (uuid b127b2a8-fe71-4aef-9f6e-156d2f82368c))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3092,7 +3412,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR059") (unit 1)
+          (reference "#PWR058") (unit 1)
         )
       )
     )
@@ -3137,8 +3457,8 @@
     (property "Manufacturer" "TyoHM" (at 118.11 69.85 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid b2f62beb-31ea-49a3-b911-41b79d5bfbf8))
-    (pin "2" (uuid f1e6b911-f4ba-43a1-8c5a-f5cc4fb7c8fe))
+    (pin "1" (uuid 8c93eb2e-6ec4-4b79-b79d-d213d2126c3d))
+    (pin "2" (uuid 388cb405-db17-4ad1-891f-e1b29faedfa5))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3183,7 +3503,7 @@
     (property "LongLead" "NO" (at 109.22 90.17 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 1e57addf-032b-47ed-8eba-f594f564b300))
+    (pin "1" (uuid cd49a232-8fc9-48e9-93bc-490e88ca4909))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3192,13 +3512,13 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "TP12") (unit 1)
+          (reference "TP14") (unit 1)
         )
       )
     )
   )
 
-  (symbol (lib_id "power:GND") (at 69.85 148.59 0) (unit 1)
+  (symbol (lib_name "GND_7") (lib_id "power:GND") (at 69.85 148.59 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid cf7ffd0b-9935-4455-8b1c-9c7e75eaff9f)
     (property "Reference" "#PWR0303" (at 69.85 154.94 0)
@@ -3213,7 +3533,7 @@
     (property "Datasheet" "" (at 69.85 148.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 6bd170ad-1696-4276-887b-1ff22d1d9ade))
+    (pin "1" (uuid d4a7820f-9c07-451a-b530-651b7eae7eb0))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3222,7 +3542,7 @@
       )
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/1f0b18fc-1fda-489e-a08b-a0ece1be6922"
-          (reference "#PWR060") (unit 1)
+          (reference "#PWR059") (unit 1)
         )
       )
     )
@@ -3267,8 +3587,8 @@
     (property "Manufacturer" "TyoHM" (at 119.38 158.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9378e52f-3a33-4bbc-8e23-a2bd31379bb4))
-    (pin "2" (uuid 1ee227a2-b8a9-4661-baa4-47541acfc19e))
+    (pin "1" (uuid adfd7779-5801-42a3-9280-ba0b56b3e01d))
+    (pin "2" (uuid 73fddea0-2bb4-4691-af1b-89eb9947034e))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3316,8 +3636,8 @@
     (property "Description" "Do Not Insert" (at 124.46 31.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid df63af74-e1f5-456e-bef9-fa1f42a9c620))
-    (pin "2" (uuid a408a999-4138-41a1-8b7a-6fabea70a8d7))
+    (pin "1" (uuid ec0b0ed9-b316-4c33-843f-261a0bd73c1a))
+    (pin "2" (uuid 245502a6-a04d-4d7f-87c9-ac24afbb0cbe))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3371,8 +3691,8 @@
     (property "Manufacturer" "TyoHM" (at 120.65 49.53 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 8a7d4382-263f-4db7-9649-ce57a9323600))
-    (pin "2" (uuid 098d12c7-e472-4259-a691-d7a2fa88e2e4))
+    (pin "1" (uuid 51f20367-e3da-4d5a-aaa2-78514331ddfb))
+    (pin "2" (uuid 17e7e659-0dfe-4347-a7f6-b0e67e37180c))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3426,9 +3746,9 @@
     (property "Manufacturer" "Yangzhou Yangjie Elec Tech" (at 132.08 132.08 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 6d47bcca-f95f-45ab-87c0-1157d9ccf401))
-    (pin "2" (uuid 646f8ceb-916c-41cb-bc00-3913d518ebcf))
-    (pin "3" (uuid a0171405-defb-4f14-b60b-7785bd71d558))
+    (pin "1" (uuid 002ce9eb-f687-428c-8859-71a2b61bfa4f))
+    (pin "2" (uuid 94b9fb43-efa3-4dc2-aa1b-a9092ac66cbb))
+    (pin "3" (uuid eadb7e26-2569-48b6-b042-730ef83f20bc))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3443,7 +3763,7 @@
     )
   )
 
-  (symbol (lib_id "power:PWR_FLAG") (at 91.44 41.91 0) (unit 1)
+  (symbol (lib_name "PWR_FLAG_1") (lib_id "power:PWR_FLAG") (at 91.44 41.91 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid df945a56-9d21-4c53-b23a-d2f719431cbe)
     (property "Reference" "#FLG0302" (at 91.44 40.005 0)
@@ -3458,7 +3778,7 @@
     (property "Datasheet" "~" (at 91.44 41.91 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 7a13dfb4-778e-48e8-9e9d-3a6545e8a5ce))
+    (pin "1" (uuid ad07c77a-0f68-43c2-964a-864288fd68a1))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3577,8 +3897,8 @@
     (property "Manufacturer" "TyoHM" (at 120.65 120.65 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 114e3205-694a-47d1-a17a-4d646dcc4c99))
-    (pin "2" (uuid 0e0d48ab-b3ac-4a23-b6ad-3742ed659afc))
+    (pin "1" (uuid 208451ab-8ef6-48d3-b28b-4726ffba6ec0))
+    (pin "2" (uuid 646d50be-cf98-47a2-b3db-497e24d297e8))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3608,7 +3928,7 @@
     (property "Datasheet" "~" (at 38.1 49.53 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 16cc9d56-56b4-4e7c-9d94-2f3b11636cdb))
+    (pin "1" (uuid 23544fe1-fcf6-414a-8209-13b9aa19dd78))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3662,8 +3982,8 @@
     (property "Manufacturer" "TyoHM" (at 143.51 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 008274fc-b700-4d8f-bdd2-7280ffba950b))
-    (pin "2" (uuid 7206039f-fb34-4b6a-8200-b214ea327c36))
+    (pin "1" (uuid 16b47e26-f750-4f01-8935-9e1ad6d2496e))
+    (pin "2" (uuid 5c3e5da2-0d2f-4ca6-98eb-ab4102dff87d))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3717,8 +4037,8 @@
     (property "Description" "50V 39pF NP0 ±5% 0603 Multilayer Ceramic Ca" (at 58.42 125.73 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5a5003b4-b332-4026-b0c0-874aa29261c4))
-    (pin "2" (uuid 6181e1d3-27d2-411b-a247-ce37e1eb3433))
+    (pin "1" (uuid e62301e2-fb51-49a9-a6dd-3108f5d435e8))
+    (pin "2" (uuid 14e10948-b296-40bf-981c-4d215351da2e))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"
@@ -3772,9 +4092,9 @@
     (property "Manufacturer" "Yangzhou Yangjie Elec Tech" (at 132.08 95.25 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 0b7e3ae6-092a-4da2-ab79-fbd27e13f34b))
-    (pin "2" (uuid f962d310-3ac3-49f6-9fa0-3fdbd43ff5cc))
-    (pin "3" (uuid 1b5ebd4e-4c5f-4f8c-a72e-14084e34f911))
+    (pin "1" (uuid 457f7942-5117-4e31-8bc3-0cd35e0b917a))
+    (pin "2" (uuid 1329ec75-475d-41dc-a7be-624ddfe8287a))
+    (pin "3" (uuid 0d357db2-de5d-44a0-a1ae-783bdbe287f2))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/2799eafe-5d1a-4095-9bfc-d8b3526b9754"

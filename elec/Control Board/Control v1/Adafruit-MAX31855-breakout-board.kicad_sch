@@ -196,6 +196,9 @@
     )
   )
 
+  (junction (at 73.66 102.87) (diameter 0) (color 0 0 0 0)
+    (uuid 1f47f7dc-2fd8-485f-9e7e-1420ea129ef1)
+  )
   (junction (at 90.17 102.87) (diameter 0) (color 0 0 0 0)
     (uuid 2071e5a1-cbea-497e-8463-b1d36fef0a46)
   )
@@ -250,6 +253,18 @@
     (stroke (width 0) (type default))
     (uuid 2212f741-dc26-47c8-875f-6a4ebe0540f8)
   )
+  (wire (pts (xy 46.99 83.82) (xy 60.96 83.82))
+    (stroke (width 0) (type default))
+    (uuid 264166db-7e50-4285-adb2-792df2b2d2da)
+  )
+  (wire (pts (xy 68.58 83.82) (xy 73.66 83.82))
+    (stroke (width 0) (type default))
+    (uuid 374793ba-c430-47c1-a2c2-da05c32daa8f)
+  )
+  (wire (pts (xy 73.66 83.82) (xy 73.66 102.87))
+    (stroke (width 0) (type default))
+    (uuid 44f44171-4824-49d3-928b-bff9291ea385)
+  )
   (wire (pts (xy 95.25 116.84) (xy 95.25 133.35))
     (stroke (width 0) (type default))
     (uuid 48346231-ac84-4e19-ad17-945db7320fbd)
@@ -270,7 +285,11 @@
     (stroke (width 0) (type default))
     (uuid 5f74b93f-a250-4942-b21d-10f11b0b2444)
   )
-  (wire (pts (xy 69.85 102.87) (xy 80.01 102.87))
+  (wire (pts (xy 73.66 102.87) (xy 80.01 102.87))
+    (stroke (width 0) (type default))
+    (uuid 6340c312-18eb-4dbb-b2c3-2aac2f624e2e)
+  )
+  (wire (pts (xy 69.85 102.87) (xy 73.66 102.87))
     (stroke (width 0) (type default))
     (uuid 69373285-a45f-40a1-9983-5c8dcbdbeaee)
   )
@@ -3878,6 +3897,10 @@
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid ebc89a1b-f1cc-45f7-93ed-fb365cf84523)
   )
+  (hierarchical_label "+3V3_MAX31855" (shape input) (at 46.99 83.82 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid f5bc4da6-c59b-4b90-96d7-f0bf0be9434f)
+  )
 
   (symbol (lib_id "power:GND") (at 143.51 107.95 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
@@ -3894,14 +3917,75 @@
     (property "Datasheet" "" (at 143.51 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fe772105-6f5f-400c-9008-9218713bb22d))
+    (pin "1" (uuid 24ad92c1-4663-4551-80f3-e772016b1954))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR040") (unit 1)
+          (reference "#PWR039") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 64.77 83.82 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 4c75f92a-8f06-4e80-821c-cef0e4d8155a)
+    (property "Reference" "R101" (at 66.04 78.74 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1R0" (at 64.77 81.28 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 64.77 82.042 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 64.77 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 64.77 83.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269434" (at 64.77 83.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 64.77 83.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 64.77 83.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 64.77 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 64.77 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 64.77 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid f3bb0bb2-2492-45c3-b57b-be93bc986955))
+    (pin "2" (uuid 3304a16d-8363-4967-bf75-cd895817bd5b))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R9") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "R51") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/3ff32a52-b1ed-4756-8661-90a95f721605"
+          (reference "R7") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
+          (reference "R84") (unit 1)
         )
       )
     )
@@ -3922,14 +4006,14 @@
     (property "Datasheet" "" (at 77.47 109.22 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9777a771-f744-4671-9a97-deeae474d836))
+    (pin "1" (uuid 996261bb-5b04-497f-82f3-34dbcaefdc1b))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR038") (unit 1)
+          (reference "#PWR037") (unit 1)
         )
       )
     )
@@ -3985,14 +4069,14 @@
     (property "Datasheet" "" (at 110.49 107.95 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid fb8a957a-7cc1-42b4-9d3a-b9a81f710d95))
+    (pin "1" (uuid 63329571-573e-4924-b300-57d4d0ed3b57))
     (instances
       (project "Control v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
           (reference "#PWR024") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "#PWR039") (unit 1)
+          (reference "#PWR038") (unit 1)
         )
       )
     )
@@ -4039,7 +4123,7 @@
     (property "Reference" "R101" (at 67.31 97.79 90)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1R0" (at 66.04 100.33 90)
+    (property "Value" "DNI" (at 66.04 100.33 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 66.04 101.092 90)
@@ -4069,8 +4153,8 @@
     (property "Cost" "0.0015" (at 66.04 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid f911a2de-20e6-463b-a4ce-cd0ed57a2375))
-    (pin "2" (uuid 1fc89f4b-858d-4cad-a439-6b89cf084021))
+    (pin "1" (uuid 9be1e35a-9568-4452-90aa-d5bae9f770d9))
+    (pin "2" (uuid f36a44fc-e283-4533-a50f-fb1bc9ea8b14))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -4112,7 +4196,7 @@
     (property "AssemblyType" "HAND" (at 80.01 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9e64fe02-e5a9-4e9d-84bf-c2f08d1f8ca9))
+    (pin "1" (uuid 7cc639ed-da12-472c-afcd-1abb076f7cfc))
     (instances
       (project "GeneralPurposeAlarmDevicePCB"
         (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
@@ -4124,7 +4208,7 @@
           (reference "TP1") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/9d641288-e168-4964-816e-23e1814d1b66"
-          (reference "TP8") (unit 1)
+          (reference "TP9") (unit 1)
         )
       )
     )
