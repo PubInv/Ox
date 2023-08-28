@@ -59,7 +59,6 @@ void createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr->post_heater_C);
   sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\",\n",msr->post_stack_C);
   sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr->post_getter_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterV\": \"%.2f\",\n",msr->heater_voltage);
   sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\",\n",msr->stack_voltage);
   sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\",\n",msr->stack_amps);
   if (msr->stack_ohms < 0.0) {
@@ -70,7 +69,7 @@ void createJSONReport(MachineStatusReport* msr, char *buffer) {
         // As of the summer of 2023, we are not planning to use a flow sensor
   //  sprintf(buffer+strlen(buffer), "\"FlowMlPerS\": \"%.2f\",\n",msr->flow_ml_per_s);
   sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
-  sprintf(buffer+strlen(buffer), "\"FanPWM\": \"%.2f\"\n",msr->fan_pwm);
+  sprintf(buffer+strlen(buffer), "\"FanPWM\": \"%.2f\",\n",msr->fan_pwm);
   sprintf(buffer+strlen(buffer), "\"FanRPM\": \"%.2f\"\n",msr->fan_rpm);
 }
 

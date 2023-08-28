@@ -241,7 +241,7 @@ namespace OxApp
     char ts[15];
     sprintf(ts, "%ld", epoch);
     Udp.write(ts, strlen(ts));
-    Udp.write(",", 1);
+    Udp.write(",\n", 2);
     if (data && strlen(data)) Udp.write(data, strlen(data));
     Udp.write("}", 1);
     Udp.endPacket();

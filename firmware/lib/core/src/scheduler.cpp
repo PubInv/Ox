@@ -78,12 +78,14 @@ bool Scheduler::AddTask(Task *task, TaskProperties *properties) {
         TaskState state = task->Init(properties);
         if (state == TaskState::Ready) {
             map.add(properties->id, task);
+            _numberOfTasks++;
             return true;
         } else {
             ErrorHandler::Log(ErrorLevel::Error, ErrorCode::CoreFailedToAddTask);
         }
     }
     // Out of bounds
+
     return false;
 }
 

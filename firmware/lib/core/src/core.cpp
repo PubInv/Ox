@@ -67,7 +67,7 @@ bool Core::Boot() {
     return result;
 }
 
-void Core::AddTask(Task *task, TaskProperties *properties) {
+bool Core::AddTask(Task *task, TaskProperties *properties) {
     bool taskAdded = _scheduler.AddTask(task, properties);
     if (taskAdded) {
 #ifndef ARDUINO
@@ -76,6 +76,7 @@ void Core::AddTask(Task *task, TaskProperties *properties) {
     } else {
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToAddTask);
     }
+    return taskAdded;
 }
 
 // 1. Set properties

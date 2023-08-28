@@ -121,7 +121,6 @@ void setup()
   readTempsProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&readTempsTask, &readTempsProperties);
 
-
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 21;
@@ -148,6 +147,9 @@ void setup()
   TempRefreshProperties.priority = OxCore::TaskPriority::Low;
   TempRefreshProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&tempRefreshTask, &TempRefreshProperties);
+
+  cogTask.tempRefreshTask = &tempRefreshTask;
+
 
   // OxCore::TaskProperties faultProperties;
   // faultProperties.name = "fault";
@@ -178,7 +180,12 @@ void setup()
   dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
   dutyCycleProperties.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+  bool dutyCycleAdd = core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+  if (!dutyCycleAdd) {
+    OxCore::Debug<const char *>("dutyCycleAdd Failed\n");
+    abort();
+  }
+
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
@@ -186,9 +193,12 @@ void setup()
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
+  bool heaterPIDAdd = core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
 
-
+  if (!heaterPIDAdd) {
+    OxCore::Debug<const char *>("heaterPIDAdd Faild\n");
+    abort();
+  }
 
   OxCore::Debug<const char *>("Added tasks\n");
 

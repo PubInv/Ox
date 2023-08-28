@@ -45,13 +45,14 @@ enum class CoreState {
 
 class Core {
     public:
+  int DEBUG_CORE = 1;
         bool Configure(void *config);
         bool Boot();
-        void AddTask(Task *task, TaskProperties *properties);
+        bool AddTask(Task *task, TaskProperties *properties);
         bool Run();
         static void RaiseCriticalError();
         static bool _criticalError;
-        
+
         Core(): _state(CoreState::Undefined) {};
         ~Core() = default;
         // Cannot copy class
@@ -60,7 +61,7 @@ class Core {
         // Cannot move class
         Core(Task&&) = delete;
         Core& operator=(Core&&) = delete;
-    
+
     private:
         uint32_t _elapsed;
         Timer _primaryTimer;
@@ -71,7 +72,7 @@ class Core {
         void CreateWatchdog(uint32_t timeoutMs);
         bool ResetWatchdog();
         uint32_t GetElapsedTime();
-        
+
 };
 
 }

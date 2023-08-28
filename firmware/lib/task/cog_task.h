@@ -44,6 +44,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 #endif
 
+#include <temp_refresh_task.h>
 
 
 #include "model.h"
@@ -55,7 +56,8 @@ namespace OxApp
     class CogTask : public OxCore::Task
     {
     public:
-      int DEBUG_LEVEL = 1;
+      TempRefreshTask* tempRefreshTask;
+      int DEBUG_LEVEL = 0;
       // TODO: This should probably be done dynamically, not here...
 
       // There are really several senosrs, but they are indexed!
