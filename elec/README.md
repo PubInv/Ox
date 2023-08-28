@@ -21,8 +21,9 @@ References:
 | D1                 	| J6-1         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D2                 	| J6-3         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D3                 	| J6-4         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
-| D4                 	| J6-5         	| NA              	| Input pullup.    	| None                                	| SD CS on Ethernet card.               	|
-| D5                 	| J6-6         	| TEMP1           	| BiDirection      	| Dallas 1 Wire / MAX31850K           	| Three daisy chained                   	|
+| D4                 	| J6-5         	| 
+SD ENABLE (BUT ALSO TEMP1) | Input pullup.    	| None                                	| SD CS on Ethernet card.               	|
+| D5                 	| J6-6         	| TEMP1           	| BiDirection      	| Dallas 1 Wire / MAX31850K           	| Three daisy chained, requires 4.7k ohm pull up resistor (but D4 does not!) Please see note                   	|
 | D6                 	| J6-7         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D7                 	| J6-8         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D8                 	| J7-1         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
