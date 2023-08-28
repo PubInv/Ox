@@ -1781,7 +1781,7 @@
     (property "LongLead" "NO" (at 186.69 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 8820395f-5348-4007-a6b0-4603bab05f8f))
+    (pin "1" (uuid 7f56fae0-adfe-4c67-bdb1-eb094d44e969))
     (instances
       (project "fan_I2C"
         (path "/27e09928-2db5-4ece-9e90-f2a9a0b91b8d/09141fd0-c295-4cc6-88a0-924ace0abc49"
