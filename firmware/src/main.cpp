@@ -30,6 +30,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
+#include <temp_refresh_task.h>
 
 // #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
@@ -49,6 +50,7 @@ OxApp::FaultTask faultTask;
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
 ReadTempsTask readTempsTask;
+TempRefreshTask tempRefreshTask;
 
 #include <machine.h>
 
@@ -57,9 +59,6 @@ MachineConfig machineConfig;
 
 #define ETHERNET_BOARD_PRESENT 1
 
-#define WIPER_VALUE_PIN A0
-
-#define TEST_PWM DAC0
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer
@@ -141,6 +140,15 @@ void setup()
   serialProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&serialTask, &serialProperties);
 
+
+  OxCore::TaskProperties TempRefreshProperties;
+  TempRefreshProperties.name = "TempRefresh";
+  TempRefreshProperties.id = 23;
+  TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
+  TempRefreshProperties.priority = OxCore::TaskPriority::Low;
+  TempRefreshProperties.state_and_config = (void *) &machineConfig;
+  core.AddTask(&tempRefreshTask, &TempRefreshProperties);
+
   // OxCore::TaskProperties faultProperties;
   // faultProperties.name = "fault";
   // faultProperties.id = 23;
@@ -150,16 +158,16 @@ void setup()
   // core.AddTask(&faultTask, &faultProperties);
 
 
-  // if (ETHERNET_BOARD_PRESENT) {
-  //   OxCore::TaskProperties retrieveScriptUDPProperties;
-  //   retrieveScriptUDPProperties.name = "retrieveScriptUDP";
-  //   retrieveScriptUDPProperties.id = 24;
-  //   retrieveScriptUDPProperties.period = 5000;
-  //   retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
-  //   retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
+  if (ETHERNET_BOARD_PRESENT) {
+    OxCore::TaskProperties retrieveScriptUDPProperties;
+    retrieveScriptUDPProperties.name = "retrieveScriptUDP";
+    retrieveScriptUDPProperties.id = 24;
+    retrieveScriptUDPProperties.period = 5000;
+    retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
+    retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
 
-  //   core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
-  // }
+    core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
+  }
 
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
@@ -176,10 +184,10 @@ void setup()
   HeaterPIDProperties.name = "HeaterPID";
   HeaterPIDProperties.id = 26;
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
-  //  HeaterPIDProperties.period = 10000;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) &machineConfig;
   core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
+
 
 
   OxCore::Debug<const char *>("Added tasks\n");
@@ -187,7 +195,6 @@ void setup()
   /*********************************************/
 }
 
-#define WIPER_VALUE_PIN A0
 
 void loop() {
   OxCore::Debug<const char *>("Loop starting...\n");

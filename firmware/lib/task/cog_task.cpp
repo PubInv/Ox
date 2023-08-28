@@ -77,18 +77,6 @@ namespace OxApp
 
         _stacks[0]->init();
 
-        // We know that in general NASA wants us to implement current
-        // control of the stack. However, at present, this code
-        // is doing voltage control. We therefore set the maximum
-        // current to that specified in the config file, and
-        // then control the heat by varying voltage.
-        // This strategy can and should be reversed; they would
-        // be equivalent except that it is in general more convenient
-        // to think of the amperage consumed by the stack because that
-        // is proportional (constant unkown) to the number of O2 ions
-        // produced!
-        _updateStackAmperage(getConfig()->TARGET_STACK_CURRENT_mA/1000.0);
-
 #else
         // Create a one ohm joule heater
         Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
