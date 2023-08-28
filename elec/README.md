@@ -104,6 +104,14 @@ References:
 | nRST2              	| NA           	| SPI_nRST        	| Input            	| S1 reset switch                     	|                                       	|
 | end                	|              	|                 	|                  	|                                     	|                                       	|  
 
+**Ethernet pin usage:**
+Pins usage on Arduino
+* D4: SD card chip select
+* D10: W5200 Chip Select
+* D11: SPI MOSI
+* D12: SPI MISO
+* D13: SPI SCK
+
 ### Chassis Wiring of ODECOS Unit 2.
 Diagram(s) here...
 
