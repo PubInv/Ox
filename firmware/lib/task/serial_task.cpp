@@ -118,10 +118,13 @@ void render_set_command_raw(SetCommand* m) {
                 if (new_temp_C < 20 || new_temp_C > 1000) {
                   Debug<const char *>("Temperature out of range!");
                 } else {
-                  cogConfig->MAX_POST_STACK_C = new_temp_C;
-                  Debug<const char *>("Post Stack Temp changed to: ");
-                  Debug<float>(cogConfig->MAX_POST_STACK_C);
-                  DebugLn<const char *>(" degrees C");
+                  DebugLn<const char *>("WARING! NOT YET IMPLEMENTED! THIS COMMAND CHANGES NOTHING YET!");
+
+
+                  //                  cogConfig->OPERATING_TEMPERATURE = new_temp_C;
+                  //                  Debug<const char *>("Post Stack Temp changed to: ");
+                  //                  Debug<float>(cogConfig->OPERATING_TEMPERATURE);
+                  //                  DebugLn<const char *>(" degrees C");
                 }
               }
             } if (sc.parameter == 'C') {
@@ -134,9 +137,9 @@ void render_set_command_raw(SetCommand* m) {
                 if (new_current_mA < 0 || new_current_mA > getConfig()->MAXIMUM_STACK_AMPS*1000.0) {
                   Debug<const char *>("Amperage out of range!");
                 } else {
-                  cogConfig->TARGET_STACK_CURRENT_mA = new_current_mA;
+                  cogConfig->MAXIMUM_STACK_AMPS = new_current_mA;
                   Debug<const char *>("Stack Current Amperage changed to: ");
-                  Debug<float>(cogConfig->TARGET_STACK_CURRENT_mA);
+                  Debug<float>(cogConfig->MAXIMUM_STACK_AMPS);
                   DebugLn<const char *>(" milliamps");
                 }
               }

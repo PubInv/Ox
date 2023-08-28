@@ -43,8 +43,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define RF_FAN 2
 #define RF_HEATER 3
 #define RF_STACK DAC0
+// This should change to PIN 5 when
+// we get the planned control board.
 #define MAX31850_DATA_PIN 4
-#define RF_FAN_TACH 5
+//#define MAX31850_DATA_PIN 5
+// #define RF_FAN_TACH 5
 #define RF_MOSTPLUS_FLOW_PIN A0
 #define RF_MOSTPLUS_FLOW_LOW_CUTOFF_VOLTAGE 1.75
 
@@ -119,8 +122,6 @@ public:
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
 
   // FAN CONTROL
-  //  const float FAN_PER_CENT = 60.0;
-  //  const int FAN_PWM = (int) (255.0*60.0/100.0);
   static constexpr float FULL_POWER_FOR_FAN = 0.6;
   static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
   static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = OPERATING_TEMPERATURE - 50.0;
@@ -150,7 +151,6 @@ public:
   // This is period of time we will use to compute the Ddela_C_per_min.
   // Note this does not have to be related to the DUTY_CYCLE_ADJUSTMENT_PERIOD_MS
 
-
   const long FAKE_NUMBER_OF_DUTY_CYCLES_TO_RUN = 100000;
 
   int num_duty_cycles = 0;
@@ -163,14 +163,6 @@ public:
   // These values are useful for testing by hand
 
   float COOLDOWN_TARGET_C = 27.0;
-  float WARMUP_TARGET_C = 150.0;
-  float MAX_POST_HEATER_C = 150.0;
-  float TARGET_STACK_C = 150.0;
-  float MAX_POST_STACK_C = 180.0;
-  float TARGET_STACK_CURRENT_mA = 1.0;
-
-
-
 
   void _updateFanPWM(float unitInterval);
   void _reportFanSpeed();
@@ -217,7 +209,6 @@ public:
 
   MachineHAL* hal;
   MachineStatusReport *report;
-
 };
 
 void outputReport(MachineStatusReport *msr);

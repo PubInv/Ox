@@ -14,6 +14,9 @@ References:
 1. Due Pin-Out Map for OEDCS1 : https://docs.google.com/spreadsheets/d/18wP1Cyg5-j3FP92x7no_JsCCFNvo9y2avyn5nvmAj6I/edit#gid=0
 2. Fan Controller and Fan Wiring for OEDCS1: https://docs.google.com/document/d/1n3v-AxqNKEzcKqmHicGKnFmG8sKbNEL_pGaUlU9CZ8U/edit
 
+   WARNING! At present pin D4 works without an external pull up resistor for the termocouples, but D5 does not; it requires an external pull up resistor
+   Until we have time to rework our perf board, I am going to continue to use D4 for the MAX31850 OneWire interface.
+
 #### Due Pin Wiring
 | **Due Pin Number** 	| **Breakout** 	| **Signal Name** 	| **Set as I/O**   	| **Connection**                      	| **Notes**                             	|
 |--------------------	|--------------	|-----------------	|------------------	|-------------------------------------	|---------------------------------------	|
@@ -21,8 +24,8 @@ References:
 | D1                 	| J6-1         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D2                 	| J6-3         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D3                 	| J6-4         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
-| D4                 	| J6-5         	| NA              	| Input pullup.    	| None                                	| SD CS on Ethernet card.               	|
-| D5                 	| J6-6         	| TEMP1           	| BiDirection      	| Dallas 1 Wire / MAX31850K           	| Three daisy chained                   	|
+| D4                 	| J6-5         	| SD ENABLE (BUT ALSO TEMP1) | Input pullup.    	| None                      	| SD CS on Ethernet card.               	|
+| D5                 	| J6-6         	| TEMP1           	| BiDirection      	| Dallas 1 Wire / MAX31850K           	| Three daisy chained, requires 4.7k ohm pull up resistor (but D4 does not!) Please see note                   	|
 | D6                 	| J6-7         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D7                 	| J6-8         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
 | D8                 	| J7-1         	| NA              	| Input pullup.    	| None                                	| Not used                              	|
