@@ -81,16 +81,8 @@ void setup()
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
-    //    while(1);
+    abort();
   }
-  // Serial.print("FLOW SENSOR SERIAL NUMBER : ");
-  // Serial.println(machineConfig.hal->_flowsensor->flowSensor->serialNumber,HEX);
-
-  // if (machineConfig.hal->_flowsensor->flowSensor->serialNumber == 0xFFFFFFFF) {
-  //   Serial.println("FLOW SENSOR NOT AVIALABLE!");
-  //   Serial.println("THIS IS A CRITICAL ERROR!");
-  //   //    while(1);
-  // }
 
   machineConfig.report = new MachineStatusReport();
 
@@ -119,8 +111,11 @@ void setup()
   readTempsProperties.period = readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
   readTempsProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&readTempsTask, &readTempsProperties);
-
+  bool readAdd = core.AddTask(&readTempsTask, &readTempsProperties);
+  if (!readAdd) {
+    OxCore::Debug<const char *>("ReadTemps Task add failed\n");
+    abort();
+  }
 
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
@@ -130,7 +125,11 @@ void setup()
   // Note: The machineConfig is universal to all tasks.
   // It respresents the entire machine.
   cogProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&cogTask, &cogProperties);
+  bool cogAdd = core.AddTask(&cogTask, &cogProperties);
+  if (!cogAdd) {
+    OxCore::Debug<const char *>("Cognitive Task add failed\n");
+    abort();
+  }
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";
@@ -138,7 +137,11 @@ void setup()
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&serialTask, &serialProperties);
+  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+  if (!serialAdd) {
+    OxCore::Debug<const char *>("SerialProperties add failed\n");
+    abort();
+  }
 
 
   OxCore::TaskProperties TempRefreshProperties;
@@ -147,15 +150,13 @@ void setup()
   TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
   TempRefreshProperties.priority = OxCore::TaskPriority::Low;
   TempRefreshProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&tempRefreshTask, &TempRefreshProperties);
+  bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
+  if (!tempRefresh) {
+    OxCore::Debug<const char *>("Temp Refresh add failed\n");
+    abort();
+  }
 
-  // OxCore::TaskProperties faultProperties;
-  // faultProperties.name = "fault";
-  // faultProperties.id = 23;
-  // faultProperties.period = 30000;
-  // faultProperties.priority = OxCore::TaskPriority::High;
-  // faultProperties.state_and_config = (void *) &machineConfig;
-  // core.AddTask(&faultTask, &faultProperties);
+  cogTask.tempRefreshTask = &tempRefreshTask;
 
 
   if (ETHERNET_BOARD_PRESENT) {
@@ -166,7 +167,11 @@ void setup()
     retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
     retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
 
-    core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
+    bool retrieveScriptUDP = core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
+    if (!retrieveScriptUDP) {
+      OxCore::Debug<const char *>("Retrieve Script UDP\n");
+      abort();
+    }
   }
 
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
@@ -178,7 +183,11 @@ void setup()
   dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
   dutyCycleProperties.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+  bool dutyCycleAdd = core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+  if (!dutyCycleAdd) {
+    OxCore::Debug<const char *>("dutyCycleAdd Failed\n");
+    abort();
+  }
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
@@ -186,9 +195,12 @@ void setup()
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) &machineConfig;
-  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
+  bool heaterPIDAdd = core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
 
-
+  if (!heaterPIDAdd) {
+    OxCore::Debug<const char *>("heaterPIDAdd Faild\n");
+    abort();
+  }
 
   OxCore::Debug<const char *>("Added tasks\n");
 

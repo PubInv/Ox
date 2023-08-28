@@ -103,6 +103,16 @@ namespace OxApp
     bool CogTask::_run()
     {
       MachineConfig *cogConfig = getConfig();
+
+      // To make sure startup has now wild surges,
+      // if we have a valid temperature we will make sure the
+      // TempRefreshTask has been run...
+      float postHeaterTemp = getConfig()->report->post_heater_C;
+      if ((tempRefreshTask->time_of_last_refresh == 0) &&
+          (postHeaterTemp > 0.0)) {
+        tempRefreshTask->run();
+      }
+
       // If we are in the off state there is nothing to do!
       if (cogConfig->ms == OffUserAck) {
           OxCore::DebugLn<const char *>("AN ERROR OCCURED. WILL NOT ENTER OFF STATE ");

@@ -157,9 +157,10 @@ public:
 
   const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
 
+  // These need more study
   float MAXIMUM_HEATER_VOLTAGE = 12.0;
   float MAXIMUM_STACK_VOLTAGE = 8.0;
-  float MAXIMUM_STACK_AMPS = 1.0;
+  float MAXIMUM_STACK_AMPS = 12.0;
   // These values are useful for testing by hand
 
   float COOLDOWN_TARGET_C = 27.0;
