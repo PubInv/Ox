@@ -44,7 +44,7 @@ namespace OxApp
 
 // send an NTP request to the time server at the given address
     unsigned long getTime();
-    void sendData(char *data);
+    void sendData(char *data,unsigned long time_epoch);
     // returns true if we are reading a packet
     bool getPacket();
 

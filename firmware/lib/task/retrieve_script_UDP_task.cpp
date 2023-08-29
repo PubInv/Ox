@@ -136,7 +136,8 @@ namespace OxApp
       Debug<const char *>("Sending buffer:");
       DebugLn<const char *>(buffer);
     }
-    sendData(buffer);
+    unsigned long current_epoch_time = epoch + millis() / 1000;
+    sendData(buffer,current_epoch_time);
   }
 
 
@@ -229,7 +230,7 @@ namespace OxApp
     return 0;
   }
 
-  void RetrieveScriptUDPTask::sendData(char *data) {
+  void RetrieveScriptUDPTask::sendData(char *data,unsigned long current_time) {
     Udp.beginPacket(mcogs, 57573);
     Udp.write("PUT ", 4);
     Udp.write("/", 1);
@@ -239,7 +240,7 @@ namespace OxApp
 
     Udp.write("{ \"TimeStamp\": ", 15);
     char ts[15];
-    sprintf(ts, "%ld", epoch);
+    sprintf(ts, "%ld", current_time);
     Udp.write(ts, strlen(ts));
     Udp.write(",\n", 2);
     if (data && strlen(data)) Udp.write(data, strlen(data));
