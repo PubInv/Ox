@@ -1,0 +1,27 @@
+Comment,Designator ,Footprint ,JLCPCB Part # 
+39pF,"C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C20, C21",Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,C107049 
+NCE01P30K,Q2,Package_TO_SOT_SMD:TO-252-2,C115991
+Conn_02x18_Odd_Even,J8,Connector_PinSocket_2.54mm:PinSocket_2x18_P2.54mm_Vertical,C132131
+SWITCH_TACTILE_SPST-NO_0.05A_24V,S1,PubInv_KiCad_PCB:Switch_Tactile_THT_6x6mm,C13828
+DB9_Female_MountingHoles,J1,Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset7.48mm,C141882
+0.100_2Pin,"J22, J23",Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,C168673
+DB25_Female_MountingHoles,J15,Connector_Dsub:DSUB-25_Female_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset7.48mm,C190083
+4M7,R32,Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C23163
+1R0,"R1, R2, R3, R4, R5, R6, R7, R8, R13, R14, R15, R16, R31, R33, R48, R76, R79, R80, R82, R84, R88",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C269434
+10K,"R39, R40, R41, R44, R46, R56, R61, R64, R65, R67, R68, R69, R70, R81",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C269701
+1K,"R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R36, R37, R38, R42, R45, R47, R54, R57, R58, R62",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C269704
+4K7,"R77, R78, R83",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C269713
+Conn_01x08,"J2, J4, J5, J6",Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical,C2894931
+Conn_01x08,J3,Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical,C2894931
+Conn_01x10,"J7, J9, J14",Connector_PinSocket_2.54mm:PinSocket_1x10_P2.54mm_Vertical,C2894933
+Conn_01x05,J17,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,C2897368
+Conn_01x04,"J16, J18, J24",Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,C2905415
+Conn_01x04,J20,Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,C2905415
+Conn_01x07,J19,Connector_PinHeader_2.54mm:PinHeader_1x07_P2.54mm_Vertical,C2932672
+RJ12_6P6C_HORZ,J21,PubInv_KiCad_PCB:RJ12_Amphenol_54601,C305981
+39R,"R71, R72",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C325713
+10nF,C22,Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,C389113
+BSS138,"Q1, Q3, Q4",Package_TO_SOT_SMD:SOT-23,C400505
+BSS138,"Q5, Q6, Q7, Q8, Q9, Q10",Package_TO_SOT_SMD:SOT-23,C400505
+1uF,"C16, C17, C18, C19",Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,C91183
+Screw_Terminal_01x02,"J11, J12, J13, J25",TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal,C918120
