@@ -511,10 +511,10 @@
   "pcbnew": {
     "last_paths": {
       "gencad": "",
-      "idf": "",
+      "idf": "Control v1.emn",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "Control_v1FcuEdgeCuts.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
