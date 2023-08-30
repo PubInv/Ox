@@ -49,7 +49,6 @@ bool DutyCycleTask::_run()
     Serial.println("DUTY CYCLE RUN!");
     Serial.println("DUTY NUM_HEATERS");
     Serial.println(MachineConfig::NUM_HEATERS);
-    delay(100);
   }
   // WARNING: This will fail when 2^32 ms are reached, about 28 days I think.
   unsigned long ms = millis();
@@ -60,7 +59,6 @@ bool DutyCycleTask::_run()
   recorded_dc_ms += delta_t;
   if (DEBUG_DUTY_CYCLE > 1) {
     Serial.println("DUTY CYCLE MID!");
-    delay(100);
   }
   if (recorded_dc_ms != 0) {
     recorded_duty_cycle = (old_dc * old_ms + ((isOn ? delta_t : 0))) / recorded_dc_ms;
@@ -74,7 +72,6 @@ bool DutyCycleTask::_run()
   if (DEBUG_DUTY_CYCLE > 1) {
     OxCore::Debug<const char *>("DUTY Heater On: ");
     OxCore::DebugLn<int>(isOn);
-    delay(100);
   }
 
   time_of_last_check = ms;
@@ -87,7 +84,6 @@ bool DutyCycleTask::_run()
   }
   if (DEBUG_DUTY_CYCLE > 1) {
     OxCore::DebugLn<const char *>("DUTY HEATERS SET! ");
-    delay(100);
   }
 
   return true;

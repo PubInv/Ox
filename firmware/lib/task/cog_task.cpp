@@ -24,86 +24,24 @@ using namespace std;
 namespace OxApp
 {
 
-    Temperature::SensorConfig config[3] = {
-        {
-            0,
-            Temperature::SensorMode::SPI,
-            Temperature::TemperatureUnits::C,
-            45,
-            1,
-            0,
-            30
-        },
-        {
-            1,
-            Temperature::SensorMode::SPI,
-            Temperature::TemperatureUnits::C,
-            47,
-            1,
-            0,
-            30
-        },
-        {
-            2,
-            Temperature::SensorMode::SPI,
-            Temperature::TemperatureUnits::C,
-            49,
-            1,
-            0,
-            30
-        }
-    };
 
   // TODO: Most of this should be moved into the machine definition
     bool CogTask::_init()
     {
         OxCore::Debug<const char *>("CogTask init\n");
 
-        getConfig()->report = new MachineStatusReport();
-
-        //        _configTemperatureSensors();
-
-
-#ifdef RIBBONFISH
-
-
-          // Our pre-heater measured 5.8 ohms
-        // Our main heater measured 5.6 ohms
-        //        Heater v1("PRIMARY_HEATER", 1, RF_HEATER, 0, 5.8);
-        //        _heaters[0] = v1;
         getConfig()->fanDutyCycle = 0.0;
 
         _stacks[0] = new SL_PS("FIRST_STACK",0);
 
         _stacks[0]->init();
 
-#else
-        // Create a one ohm joule heater
-        Heater v1("PRIMARY_HEATER", 1, 50, 5.3, 1.0);
-        _heaters[0] = v1;
-        // Create a two ohm (smaller) heater for the pure O2 stream
-        //        Heater v2("SECONDARY_HEATER",2, 51, 3.6, 2.0);
-        //        _heaters[1] = v2;
-
-#endif
         return true;
     }
 
-  // this is now handled by a separate task!
-  // void CogTask::updateTemperatures() {
-  //   _readTemperatureSensors();
-  //   double postHeaterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_heater_indices[0]);
-  //   double postStackTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_stack_indices[0]);
-  //   double postGetterTemp = _temperatureSensors[0].GetTemperature(getConfig()->post_getter_indices[0]);
-  //   getConfig()->report->post_heater_C = postHeaterTemp;
-  //   getConfig()->report->post_stack_C = postStackTemp;
-  //   getConfig()->report->post_getter_C = postGetterTemp;
-
-  // }
     bool CogTask::_run()
     {
-      MachineConfig *cogConfig = getConfig();
-
+      getConfig()->_reportFanSpeed();
       // To make sure startup has now wild surges,
       // if we have a valid temperature we will make sure the
       // TempRefreshTask has been run...
@@ -112,6 +50,16 @@ namespace OxApp
           (postHeaterTemp > 0.0)) {
         tempRefreshTask->run();
       }
+
+      StateMachineManager::_run();
+    }
+
+
+    bool StateMachineManager::_run()
+    {
+
+      MachineConfig *cogConfig = getConfig();
+
 
       // If we are in the off state there is nothing to do!
       if (cogConfig->ms == OffUserAck) {
@@ -123,7 +71,6 @@ namespace OxApp
           OxCore::DebugLn<const char *>("Currrently Off. Enter a single 'w' to warmup: ");
       }
 
-      getConfig()->_reportFanSpeed();
 
       MachineState new_state = _executeBasedOnState(cogConfig->ms);
       // if the state really changes, we want to log that and take some action!
@@ -138,14 +85,12 @@ namespace OxApp
       return true;
     }
 
-  static float compute_change_in_voltage(float current_C,float current_V,float desired_C) {
-  }
 
   // There is significant COG dependent logic here.
   // At the expense of extra lines of code, I'm
   // going to keep this mostly simple by making it look
   // "table-driven"
-  MachineState CogTask::_executeBasedOnState(MachineState ms) {
+  MachineState StateMachineManager::_executeBasedOnState(MachineState ms) {
     MachineState new_ms;
 
     if (DEBUG_LEVEL > 0) {
@@ -200,7 +145,7 @@ namespace OxApp
     return new_ms;
   }
 
-  float computeFanSpeed(float t) {
+  float StateMachineManager::computeFanSpeed(float t) {
     float f;
     float p = MachineConfig::FULL_POWER_FOR_FAN;
     float s = MachineConfig::FAN_SPEED_AT_OPERATING_TEMP;
@@ -218,7 +163,7 @@ namespace OxApp
     }
     return f;
   }
-  float computeAmperage(float t) {
+  float StateMachineManager::computeAmperage(float t) {
     return MachineConfig::MAX_AMPERAGE *
       ((t < MachineConfig::YELLOW_TEMPERATURE)
        ?  1.0
@@ -227,14 +172,14 @@ namespace OxApp
   }
 
 
-  float computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms) {
+  float StateMachineManager::computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms) {
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_UP = (ms - begin_up_time_ms) / (60 * 1000);
     float tt = recent_t + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
     tt = min(tt,MachineConfig::OPERATING_TEMPERATURE);
     return tt;
   }
-  float computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
+  float StateMachineManager::computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_DN = (ms - begin_dn_time_ms) / (60 * 1000);
 
@@ -284,6 +229,10 @@ namespace OxApp
       getConfig()->BEGIN_UP_TIME_MS = millis();
     } else {
       getConfig()->TARGET_TEMP = tt;
+      // now we will set the setPoint in the heater_pid_task...
+      // this requires a dependence on that task, but is
+      // better than creating a deeper global dependence.
+      heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
@@ -342,6 +291,7 @@ namespace OxApp
       getConfig()->BEGIN_DN_TIME_MS = millis();
     } else {
       getConfig()->TARGET_TEMP = tt;
+      heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
@@ -407,6 +357,7 @@ namespace OxApp
     getConfig()->_updateFanPWM(fs);
     _updateStackAmperage(a);
     getConfig()->TARGET_TEMP = tt;
+    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
      return new_ms;

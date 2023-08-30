@@ -39,6 +39,9 @@ void Scheduler::setupIdleTask() {
 
 Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     // Record how long the previous task took to run
+  if (DEBUG_SCHEDULER > 1) {
+    Serial.println("getNextTask");
+  }
 
     if (_lastTaskRan != nullptr) {
         _lastTaskRan->_lastRunDuration = currentTime - _lastTaskRan->_lastRun;
@@ -58,6 +61,11 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
         // > 0 time overrun
         task->_timeUntilDeadline = currentTime - (lastRunTime + period);
 
+        if (DEBUG_SCHEDULER > 1) {
+          Serial.println(task->_timeUntilDeadline);
+        }
+
+
         if (task->_timeUntilDeadline > maxTimeUntilDeadline) {
             maxTimeUntilDeadline = task->_timeUntilDeadline;
             nextTask = task;
@@ -67,6 +75,12 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
             nextTask = nullptr;
         }
     }
+  if (DEBUG_SCHEDULER > 1) {
+    Serial.println("nexTask");
+    Serial.println((long unsigned) nextTask);
+    Serial.println((long unsigned) nullptr);
+  }
+
     if (nextTask == nullptr) {
         nextTask = &_idleTask;
     }
@@ -120,7 +134,13 @@ TaskState Scheduler::RunNextTask(uint32_t msNow) {
         break;
     }
 
+  if (DEBUG_SCHEDULER > 1) {
+    Serial.println("About to Run task!");
+  }
     nextTask->Run(msNow);
+  if (DEBUG_SCHEDULER > 1) {
+    Serial.println("Finished Run!");
+  }
     _lastTaskRan = nextTask;
     return nextTask->GetState();
 }

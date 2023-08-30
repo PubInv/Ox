@@ -66,19 +66,21 @@ HeaterPIDTask::HeaterPIDTask() {
   {
     if (DEBUG_PID > 0) {
       OxCore::Debug<const char *>("HeaterPIDTask run\n");
+      double test_spud = getConfig()->report->post_heater_C;
       OxCore::Debug<const char *>("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
       OxCore::DebugLn<float>(this->Input_temperature_C);
+      OxCore::Debug<const char *>("AAA\n");
     }
 
-    HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-
-
     double previousInput = this->Input_temperature_C;
+
     this->Input_temperature_C = getConfig()->report->post_heater_C;
 
+    // didn't hang when return was here.
     pidControllerHeater->Compute();
 
     double s = this->dutyCycle_Output + this->final_dutyCycle;
+    // didn't hang when return was here
 
     s = min(s, 1.0);
     s = max(s, 0.0);

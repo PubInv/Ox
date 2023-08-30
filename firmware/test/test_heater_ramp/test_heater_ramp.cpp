@@ -23,7 +23,7 @@
 #include <string.h>
 #include <cstdint>
 #include <debug.h>
-#include <GGLabsSSR1.h>
+#include <OnePinHeater.h>
 #include <TF800A12K.h>
 
 using namespace OxCore;
@@ -45,14 +45,9 @@ using namespace OxCore;
 #endif
 
 // We aren't using this, but it brings in declarations we need!
-#include <cog_task.h>
-
 #include <duty_cycle_task.h>
-
 #include <heater_pid_task.h>
-
 #include <read_temps_task.h>
-
 
 using namespace OxCore;
 static Core core;
@@ -65,73 +60,8 @@ SanyoAceB97 *fan;
 
 // This exists purely to be compatible with the code
 // in the make task library
-MachineConfig *localGetConfig() {
-  return machineConfig;
-}
 
 unsigned long time_of_last_report = 0;
-
-//const float FAN_PER_CENT = 60.0;
-// const int FAN_PWM = (int) (255.0*60.0/100.0);
-
-// TEST CONFIGURATION PARAMETERS
-// ALL OF THESE COULD BE CONFIGURABLE, BUT FOR THIS TEST
-// THEY ARE "HARD_WIRED" HERE.
-// Edit these directly and re-upload to run a different test.
-// This test is designed to abort the processeor when done.
-
-// const float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
-// const float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
-
-// // This is the overall target_temp, which changes over time.
-
-// const float OPERATING_TEMPERATURE = 600.0;
-// const float STOP_TEMPERATURE = 27.0;
-// const float START_TEMPERATURE = 600.0;
-
-// float TARGET_TEMP = 27.0;
-
-// const unsigned long HOLD_TIME_MINUTES = 1;
-// const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
-// const float STARTING_DUTY_CYCLE_FRACTION = 0.0;
-// const float STACK_VOLTAGE = 12.0;
-// const float STACK_AMPERAGE = 3.0;
-
-// These parameters are related to our control procedure.
-// This is similar to a PID loop, but I don't think any integration
-// is needed, and want to have a test that doesn't depend on a PID
-// loop. Arguably, that is just implementing a very simple PD loop
-// myself; I'll accept that rap.
-
-// Let DutyCycle be changing Duty cycle, a fraction of 1.0.
-// In PID termonology, this is the "PLANT VARIABLE"--what we can control.
-//float GlobalDutyCycle = MachineConfig::STARTING_DUTY_CYCLE_FRACTION;
-// Temperature Read Period is how often we will update the
-// Temperature sensor.
-//const int TEMPERATURE_READ_PERIOD_MS = 5000;
-// Duty Cycle Adjustment Period is how often we will adject
-//const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
-// This is the number of periods around a point in time we will
-// average to produce a smooth temperature. (Our thermocouples have
-// only 0.25 C resolution, which is low for a 0.5C/minute control
-// situation!) These are always taken to be BACKWARD in time.
-// const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
-// const int TEMPERATRUE_TIME_DELTA_MS = 60000;
-//
-// const float MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN = 1.0 / 100.0;
-
-// const int NUM_TEMPS_TO_RECORD = ceil((((float) MachineConfig::TEMPERATRUE_TIME_DELTA_MS / (float) TEMPERATURE_READ_PERIOD_MS) +MachineConfig::NUMBER_OF_PERIODS_TO_AVERAGE));
-
-
-//const long FAKE_NUMBER_OF_DUTY_CYCLES_TO_RUN = 100000;
-
-// int num_duty_cycles = 0;
-
-// const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
-
-
-// GGLabsSSR1* _ac_heaters[NUM_HEATERS];
-
 
 AbstractPS* _stacks[MachineConfig::NUM_STACKS];
 
@@ -222,15 +152,15 @@ namespace OxApp
       if (DEBUG_ID > 0) {
         OxCore::Debug<const char *>("State: RAMPING UP\n");
       }
-      float postHeaterTemp = localGetConfig()->report->post_heater_C;
+      float postHeaterTemp = getConfig()->report->post_heater_C;
       if (postHeaterTemp > MachineConfig::OPERATING_TEMPERATURE) {
         global_state = Holding;
         OxCore::Debug<const char *>("State Changing to HOLDING\n");
         begin_hold_time = millis();
       } else {
         const unsigned long MINUTES_RAMPING_UP = ms / (60 * 1000);
-        localGetConfig()->TARGET_TEMP = localGetConfig()->RECENT_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
-        localGetConfig()->TARGET_TEMP = min(localGetConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMPERATURE);
+        getConfig()->TARGET_TEMP = getConfig()->RECENT_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = min(getConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMPERATURE);
       }
       break;
     };
@@ -252,7 +182,7 @@ namespace OxApp
       if (DEBUG_ID > 0) {
         OxCore::Debug<const char *>("State: RAMPING DN\n");
       }
-      float postHeaterTemp = localGetConfig()->report->post_heater_C;
+      float postHeaterTemp = getConfig()->report->post_heater_C;
       if (postHeaterTemp < MachineConfig::STOP_TEMPERATURE) {
         analogWrite(fan->PWM_PIN[0],5);
         OxCore::Debug<const char *>("Stop temperature reached!\n");
@@ -261,9 +191,9 @@ namespace OxApp
         while(1);
       } else {
         const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
-        localGetConfig()->TARGET_TEMP =
+        getConfig()->TARGET_TEMP =
           MachineConfig::OPERATING_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
-        localGetConfig()->TARGET_TEMP = max(localGetConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
+        getConfig()->TARGET_TEMP = max(getConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
       }
       break;
     };
@@ -277,6 +207,7 @@ FanReportTask fanReportTask;
 ReadTempsTask readTempsTask;
 SupervisorTask supervisorTask;
 HeaterPIDTask heaterPIDTask;
+DutyCycleTask dutyCycleTask;
 
 
 void setup() {
@@ -290,22 +221,17 @@ void setup() {
     //return EXIT_FAILURE;
     return;
   }
-  Serial.println("AAA!");
   machineConfig = new MachineConfig();
+  // This is a mystery. The system is hanging; I thought it was here,
+  // but now I don't know where!
   machineConfig->hal = new MachineHAL();
-  Serial.println("BBB!");
+   bool initSuccess  = machineConfig->hal->init();
+  if (!initSuccess) {
+    Serial.println("Could not init Hardware Abastraction Layer Properly!");
+    abort();
+  }
 
-  heaterPIDTask.HeaterSetPoint_C = localGetConfig()->TARGET_TEMP;
-
-
-
-   Serial.println("CCC!");
-
-  // bool initSuccess  = localGetConfig()->hal->init();
-  // Serial.println("about to start!");
-  // if (!initSuccess) {
-  //   Serial.println("Could not init Hardware Abastraction Layer Properly!");
-  // }
+  heaterPIDTask.HeaterSetPoint_C = machineConfig->TARGET_TEMP;
 
   _stacks[0] = new SL_PS("FIRST_STACK",0);
 
@@ -327,7 +253,7 @@ void setup() {
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 20;
-  cogProperties.state_and_config = (void *) localGetConfig();
+  cogProperties.state_and_config = (void *) machineConfig;
   delay(1000);
   Serial.println("About to run test!");
   delay(100);
@@ -351,7 +277,7 @@ void setup() {
   fanReportProperties.id = 19;
   fanReportProperties.period = fanReportTask.PERIOD_MS;
   fanReportProperties.priority = OxCore::TaskPriority::High;
-  fanReportProperties.state_and_config = (void *) localGetConfig();
+  fanReportProperties.state_and_config = (void *) machineConfig;
   delay(300);
   core.AddTask(&fanReportTask, &fanReportProperties);
   delay(100);
@@ -362,7 +288,7 @@ void setup() {
   readTempsProperties.id = 21;
   readTempsProperties.period = readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
-  readTempsProperties.state_and_config = (void *) localGetConfig();
+  readTempsProperties.state_and_config = (void *) machineConfig;
   delay(300);
   core.AddTask(&readTempsTask, &readTempsProperties);
   delay(100);
@@ -372,12 +298,9 @@ void setup() {
   supervisorProperties.id = 22;
   supervisorProperties.period = supervisorTask.PERIOD_MS;
   supervisorProperties.priority = OxCore::TaskPriority::High;
-  supervisorProperties.state_and_config = (void *) localGetConfig();
+  supervisorProperties.state_and_config = (void *) machineConfig;
   core.AddTask(&supervisorTask, &supervisorProperties);
 
-
-
-  DutyCycleTask dutyCycleTask;
   //  dutyCycleTask = new DutyCycleTask();
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
@@ -391,17 +314,21 @@ void setup() {
   OxCore::Debug<const char *>("\n");
   dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
   dutyCycleProperties.priority = OxCore::TaskPriority::Low;
-  dutyCycleProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+  dutyCycleProperties.state_and_config = (void *) machineConfig;
+  //  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
   HeaterPIDProperties.id = 24;
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
-  HeaterPIDProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
+  HeaterPIDProperties.state_and_config = (void *) machineConfig;
+  bool heaterPIDAdd = core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
 
+  if (!heaterPIDAdd) {
+    OxCore::Debug<const char *>("heaterPIDAdd Faild\n");
+    abort();
+  }
   OxCore::Debug<const char *>("Added tasks\n");
 
   _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);

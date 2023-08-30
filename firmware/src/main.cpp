@@ -74,8 +74,6 @@ void setup()
       return;
   }
 
-
-
   //  Eventually we will migrate all hardware to the MachineHAL..
   machineConfig.hal = new MachineHAL();
   bool initSuccess  = machineConfig.hal->init();
@@ -83,8 +81,6 @@ void setup()
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
     abort();
   }
-
-  machineConfig.report = new MachineStatusReport();
 
 
   //TODO: This needs to be placed inthe task init feature!
@@ -130,6 +126,8 @@ void setup()
     OxCore::Debug<const char *>("Cognitive Task add failed\n");
     abort();
   }
+
+  cogTask.heaterPIDTask = &heaterPIDTask;
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";

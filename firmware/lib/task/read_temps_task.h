@@ -36,7 +36,7 @@ class ReadTempsTask : public OxCore::Task
 {
 public:
   ReadTempsTask();
-  const int DEBUG_READ_TEMPS = 0;
+  int DEBUG_READ_TEMPS = 0;
   static const int PERIOD_MS = MachineConfig::TEMPERATURE_READ_PERIOD_MS;
   // This is a ring buffer...
 
@@ -54,7 +54,6 @@ public:
   static constexpr int NUM_TEMPS_TO_RECORD = ceil((((float) TEMPERATRUE_TIME_DELTA_MS / (float) MachineConfig::TEMPERATURE_READ_PERIOD_MS) + NUMBER_OF_PERIODS_TO_AVERAGE));
 
   float temps[NUM_TEMPS_TO_RECORD];
-
 
   // This is period of time we will use to compute the Ddela_C_per_min.
   // Note this does not have to be related to the DUTY_CYCLE_ADJUSTMENT_PERIOD_MS

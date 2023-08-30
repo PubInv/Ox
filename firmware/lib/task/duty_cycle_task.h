@@ -23,9 +23,20 @@
 
 #include <core_defines.h>
 #include <core.h>
-#include "GGLabsSSR1.h"
+#include <OnePinHeater.h>
 
 using namespace OxCore;
+
+/*
+  This whole class might seem like overkill;
+  why do something so complicated that resemble's
+  Bresenham's line drawing algorithm when PWM would work?
+  SSR only turn off on a zero-crossing (usually). Since
+  the AC frequency is 60 Hz, this is MUCH slower than
+  our PWM frequency of 2500 Hz typical of an Arduino.
+  It is very unclear to me what would happen if you
+  tried to control an SSR with a PWM signal. - rlr
+ */
 
 class DutyCycleTask : public OxCore::Task
   {
@@ -39,6 +50,9 @@ class DutyCycleTask : public OxCore::Task
     unsigned long time_of_last_check = 0;
     int DEBUG_DUTY_CYCLE = 0;
     void reset_duty_cycle();
+    // By placing a pointer here, we can have
+    // individual control of however many heaters are in the system.
+    OnePinHeater *ac_heater;
   private:
     bool _init() override;
     bool _run() override;

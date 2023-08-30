@@ -99,6 +99,10 @@ test_heater_ramp:
 	cd firmware \
 	&& pio test -v -e due_ribbonfish -f "test_heater_ramp"
 
+stage2_heater:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_stage2_heater"
+
 run_monitor:
 	cd firmware \
 	&& pio device monitor --filter=direct --baud=115200

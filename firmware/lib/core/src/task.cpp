@@ -49,13 +49,23 @@ namespace OxCore
         if (_state == TaskState::Ready) {
             _state = TaskState::Running;
             _lastRun = now;
+            if (DEBUG > 0) {
+              Serial.println("about to _run");
+            }
             _run(); // TODO: use result
+            if (DEBUG > 0) {
+              Serial.println("finished _run");
+            }
 
         } else {
             // Not ready to run
             // TODO: report
         }
         _state = TaskState::Ready;
+        if (DEBUG > 0) {
+          Serial.println("Returning Run");
+        }
+
     }
 
     TaskState Task::Wait(TimeMs now)
