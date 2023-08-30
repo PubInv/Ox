@@ -35,6 +35,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <MAX31850.h>
 
 #include <temp_refresh_task.h>
+#include <heater_pid_task.h>
 
 
 #include "model.h"
@@ -47,6 +48,7 @@ namespace OxApp
     {
     public:
       TempRefreshTask* tempRefreshTask;
+      HeaterPIDTask* heaterPIDTask;
       int DEBUG_LEVEL = 0;
       // TODO: This should probably be done dynamically, not here...
 

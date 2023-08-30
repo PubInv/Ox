@@ -72,8 +72,6 @@ HeaterPIDTask::HeaterPIDTask() {
       OxCore::Debug<const char *>("AAA\n");
     }
 
-    HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-
     double previousInput = this->Input_temperature_C;
 
     this->Input_temperature_C = getConfig()->report->post_heater_C;

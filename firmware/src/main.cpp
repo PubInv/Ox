@@ -127,6 +127,8 @@ void setup()
     abort();
   }
 
+  cogTask.heaterPIDTask = &heaterPIDTask;
+
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";
   serialProperties.id = 22;

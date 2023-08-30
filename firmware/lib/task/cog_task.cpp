@@ -284,6 +284,10 @@ namespace OxApp
       getConfig()->BEGIN_UP_TIME_MS = millis();
     } else {
       getConfig()->TARGET_TEMP = tt;
+      // now we will set the setPoint in the heater_pid_task...
+      // this requires a dependence on that task, but is
+      // better than creating a deeper global dependence.
+      heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
@@ -342,6 +346,7 @@ namespace OxApp
       getConfig()->BEGIN_DN_TIME_MS = millis();
     } else {
       getConfig()->TARGET_TEMP = tt;
+      heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
@@ -407,6 +412,7 @@ namespace OxApp
     getConfig()->_updateFanPWM(fs);
     _updateStackAmperage(a);
     getConfig()->TARGET_TEMP = tt;
+    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
      return new_ms;
