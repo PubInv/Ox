@@ -1,6 +1,8 @@
 // Copyright (C) 2021
 // Robert Read.
 
+// OnePinHeater.h --- a class to represent an AC Heater controllable by a single pin.
+
 // This program includes free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -15,13 +17,14 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
-// This is an interface for the GGLabs SSR1 Solid-state Relay.
+// This is an interface for a Solid-state Relay which is controllable by single
+// signal similar to the GPIO pin.
 // This is our attempt to control 110VAC, in particular to control a heater.
 // This is a very easy board to use; it has two channels and lets us
 // control them directly from a GPIO pin
 
-#ifndef GGLABSSSR1
-#define GGLABSSSR1
+#ifndef ONEPINHEATER
+#define ONEPINHEATER
 
 #ifdef ARDUINO
 #include <Arduino.h>
@@ -32,9 +35,9 @@
 #include <model.h>
 
 
-class GGLabsSSR1 {
+class OnePinHeater {
 public:
-  GGLabsSSR1();
+  OnePinHeater();
   const int NUM_CHANNELS = 1;
   // NOTE: GPIO PIN 53 on my DUE appears to be stuck HIGH!
   // This card is currently burned out
@@ -45,7 +48,7 @@ public:
   void init();
 
   bool setHeater(int heaterNum, bool onIfTrue);
-  virtual ~GGLabsSSR1() {};
+  virtual ~OnePinHeater() {};
 };
 
 

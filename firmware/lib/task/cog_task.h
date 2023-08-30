@@ -24,25 +24,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include "../collections/array.h"
 #include "heater.h"
-// #include "fan.h"
 #include "stack.h"
 #include "abstract_ps.h"
 #include "mostplus_flow.h"
-// #include "SensirionSFM3X00.h"
 #include <machine.h>
 
 #include <abstract_temperature.h>
 
-#ifndef RIBBONFISH
-#include <mock_temperature_sensor.h>
-#else
-#include "GGLabsSSR1.h"
-#ifdef USE_MAX31850_THERMOCOUPLES
+#include <OnePinHeater.h>
 #include <MAX31850.h>
-#else
-#include <DS18B20_temperature.h>
-#endif
-#endif
 
 #include <temp_refresh_task.h>
 

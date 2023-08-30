@@ -21,7 +21,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // Hardware Abstraction Layer
 // #include "SensirionSFM3X00.h"
 #include <SanyoAceB97.h>
-#include <GGLabsSSR1.h>
+#include <OnePinHeater.h>
 
 #include <machine_script.h>
 
@@ -67,7 +67,7 @@ class MachineHAL {
 public:
   //  SensirionFlow *_flowsensor;
   SanyoAceB97 _fans[NUM_FANS];
-  GGLabsSSR1 **_ac_heaters;
+  OnePinHeater **_ac_heaters;
   int DEBUG_HAL = 0;
   bool init();
   //  void _updateFanSpeed(float unitInterval);

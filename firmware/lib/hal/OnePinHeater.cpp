@@ -1,6 +1,8 @@
 // Copyright (C) 2021
 // Robert Read.
 
+// OnePinHeater -- A class to control an AC heater with a GPIO pin.
+
 // This program includes free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -22,16 +24,16 @@
 #include <SPI.h>
 #endif
 #include <core.h>
-#include "GGLabsSSR1.h"
+#include "OnePinHeater.h"
 
 
 #define DEBUG_FLOW_SENSOR 0
 
-GGLabsSSR1::GGLabsSSR1() {
+OnePinHeater::OnePinHeater() {
   init();
 }
 
-void GGLabsSSR1::init() {
+void OnePinHeater::init() {
   const int ACTUAL_CHANNELS = 2;
   // we initialize the Actual channels even if we are only using
   // one because we don't want to have a stray 110VAC line energized
@@ -40,7 +42,7 @@ void GGLabsSSR1::init() {
     digitalWrite(channel_pins[i],LOW);
   }
 }
-bool GGLabsSSR1::setHeater(int channelNum, bool onIfTrue) {
+bool OnePinHeater::setHeater(int channelNum, bool onIfTrue) {
   if (channelNum < NUM_CHANNELS)
     digitalWrite(channel_pins[channelNum],onIfTrue ? HIGH : LOW);
 }

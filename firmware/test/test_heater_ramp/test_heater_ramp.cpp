@@ -23,7 +23,7 @@
 #include <string.h>
 #include <cstdint>
 #include <debug.h>
-#include <GGLabsSSR1.h>
+#include <OnePinHeater.h>
 #include <TF800A12K.h>
 
 using namespace OxCore;
@@ -45,14 +45,9 @@ using namespace OxCore;
 #endif
 
 // We aren't using this, but it brings in declarations we need!
-#include <cog_task.h>
-
 #include <duty_cycle_task.h>
-
 #include <heater_pid_task.h>
-
 #include <read_temps_task.h>
-
 
 using namespace OxCore;
 static Core core;
@@ -67,68 +62,6 @@ SanyoAceB97 *fan;
 // in the make task library
 
 unsigned long time_of_last_report = 0;
-
-//const float FAN_PER_CENT = 60.0;
-// const int FAN_PWM = (int) (255.0*60.0/100.0);
-
-// TEST CONFIGURATION PARAMETERS
-// ALL OF THESE COULD BE CONFIGURABLE, BUT FOR THIS TEST
-// THEY ARE "HARD_WIRED" HERE.
-// Edit these directly and re-upload to run a different test.
-// This test is designed to abort the processeor when done.
-
-// const float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
-// const float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
-
-// // This is the overall target_temp, which changes over time.
-
-// const float OPERATING_TEMPERATURE = 600.0;
-// const float STOP_TEMPERATURE = 27.0;
-// const float START_TEMPERATURE = 600.0;
-
-// float TARGET_TEMP = 27.0;
-
-// const unsigned long HOLD_TIME_MINUTES = 1;
-// const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
-// const float STARTING_DUTY_CYCLE_FRACTION = 0.0;
-// const float STACK_VOLTAGE = 12.0;
-// const float STACK_AMPERAGE = 3.0;
-
-// These parameters are related to our control procedure.
-// This is similar to a PID loop, but I don't think any integration
-// is needed, and want to have a test that doesn't depend on a PID
-// loop. Arguably, that is just implementing a very simple PD loop
-// myself; I'll accept that rap.
-
-// Let DutyCycle be changing Duty cycle, a fraction of 1.0.
-// In PID termonology, this is the "PLANT VARIABLE"--what we can control.
-//float GlobalDutyCycle = MachineConfig::STARTING_DUTY_CYCLE_FRACTION;
-// Temperature Read Period is how often we will update the
-// Temperature sensor.
-//const int TEMPERATURE_READ_PERIOD_MS = 5000;
-// Duty Cycle Adjustment Period is how often we will adject
-//const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
-// This is the number of periods around a point in time we will
-// average to produce a smooth temperature. (Our thermocouples have
-// only 0.25 C resolution, which is low for a 0.5C/minute control
-// situation!) These are always taken to be BACKWARD in time.
-// const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
-// const int TEMPERATRUE_TIME_DELTA_MS = 60000;
-//
-// const float MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN = 1.0 / 100.0;
-
-// const int NUM_TEMPS_TO_RECORD = ceil((((float) MachineConfig::TEMPERATRUE_TIME_DELTA_MS / (float) TEMPERATURE_READ_PERIOD_MS) +MachineConfig::NUMBER_OF_PERIODS_TO_AVERAGE));
-
-
-//const long FAKE_NUMBER_OF_DUTY_CYCLES_TO_RUN = 100000;
-
-// int num_duty_cycles = 0;
-
-// const int DUTY_CYCLE_COMPUTATION_TIME_MS = 30*1000;
-
-
-// GGLabsSSR1* _ac_heaters[NUM_HEATERS];
-
 
 AbstractPS* _stacks[MachineConfig::NUM_STACKS];
 

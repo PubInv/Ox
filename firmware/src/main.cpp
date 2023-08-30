@@ -74,8 +74,6 @@ void setup()
       return;
   }
 
-
-
   //  Eventually we will migrate all hardware to the MachineHAL..
   machineConfig.hal = new MachineHAL();
   bool initSuccess  = machineConfig.hal->init();

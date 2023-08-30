@@ -88,9 +88,9 @@ bool MachineHAL::init() {
   _fans[0]._init();
 
 
-  _ac_heaters = new GGLabsSSR1*[MachineConfig::NUM_HEATERS];
+  _ac_heaters = new OnePinHeater*[MachineConfig::NUM_HEATERS];
   for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
-    _ac_heaters[i] = new GGLabsSSR1();
+    _ac_heaters[i] = new OnePinHeater();
     _ac_heaters[i]->setHeater(0,LOW);
     _ac_heaters[i]->setHeater(1,LOW);
   }

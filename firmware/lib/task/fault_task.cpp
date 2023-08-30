@@ -14,7 +14,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "fault_task.h"
-#include<cmath>
+#include <cmath>
 #include <abstract_temperature.h>
 
 using namespace std;
