@@ -1,19 +1,37 @@
 # Control V1
 Version 1 control board for NASA COG
 On line schematic viewing from **Kicanvas** See: https://kicanvas.org  
+The Control V1 is an Arduino DUE "Shield". The DUE will live below this printed wiring assembly. An Ethernet shield will live above as a "Socket". See KiCad Symbol & Footprint Library for Arduino Modules for "Shield" and "Socket"
 
 ## Schematics
-* [Control v1.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FControl%2520v1.kicad_sch)
+### Browser page view of the schematic by KiCanvas.org 
+Top page is "Control v1.kicad_sch". Note the page for MAX31856 is actualy for an MCP9600 but the page was not renamed (as of 20230830)
+*  [Control v1.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FControl%2520v1.kicad_sch)
 * [Adafruit-MAX31850-thermocouple-breakout-board.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FAdafruit-MAX31850-thermocouple-breakout-board.kicad_sch)
 * [Adafruit-MAX31855-breakout-board.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FAdafruit-MAX31855-breakout-board.kicad_sch)
 * [Adafruit-MAX31856-PCB-master.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FAdafruit-MAX31856-PCB-master.kicad_sch)
 * [Fan controller.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FFan%2520controller.kicad_sch)
 * [I2C_Level_Shifter.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FI2C_Level_Shifter.kicad_sch)
-
-
 * [SPI_ControllerLevel_Shifter.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FSSR%2520Interface.kicad_sch)
-
 * [SSR Interface.kicad_sch](https://kicanvas.org/?https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl+Board%2FControl+v1%2FSSR+Interface.kicad_sch=&github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FSSR%2520Interface.kicad_sch)
+
+## PCB / PWA
+### Browser page view of the PCB by KiCanvas.org 
+Printed Circuit Board, Printed Wiring Assembly
+* [Control v1.kicad_pcb](https://kicanvas.org/?https://github.com/ForrestErickson/NASA-COG/blob/develop/elec/Control%20Board/Control%20v1/Control%20v1.kicad_pcb](https://kicanvas.org/?https%3A%2F%2Fgithub.com%2FForrestErickson%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl+Board%2FControl+v1%2FControl+v1.kicad_pcb=&github=https%3A%2F%2Fgithub.com%2FForrestErickson%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FControl%2520v1.kicad_pcb))
+
+### PCB / PWA 3D Snapshot
+![image](https://github.com/ForrestErickson/NASA-COG/assets/5836181/18aa1c35-0588-4344-b7bf-c493b83415a6)
+
+File Notes:
+Add BOM spread sheet and a JLCPCB BOM.  The instructions / notes for generating the BOM and JLCPCB BOM are embedded in the file, Control_V1_BOM.xls. The proccess starts in KiCad with the BOM gewnerator nick name, "bom_csv_grouped_by_value"
+* Control_V1_BOM.xls
+* Control_V1_BOM_JLCPCB_20230829_2137.csv
+
+## License, Public Invention for this PCB, PWA
+* [Firmware: Affero GPL 3.0](https://www.gnu.org/licenses/agpl-3.0.en.html#license-text)
+* [CERN Open Hardware Licence Version 2 - Strongly Reciprocal](https://ohwr.org/cern_ohl_s_v2.txt)
+<hr> 
 
 ## KiCad Symbol & Footprint Library for Arduino Modules
 <a href="./PICS/Rev2/PWA_FrontView.png"><img src="./resources/banner.png" alt="./resources/banner.png" width="200">  
