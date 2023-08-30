@@ -53,29 +53,29 @@ void outputReport(MachineStatusReport *msr) {
 }
 
 void createJSONReport(MachineStatusReport* msr, char *buffer) {
-  sprintf(buffer+strlen(buffer), "\"MachineState\": \"%s\",\n",MachineConfig::MachineStateNames[msr->ms]);
-  sprintf(buffer+strlen(buffer), "\"TargetC\": \"%.2f\",\n",msr->target_temp_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterC\": \"%.2f\",\n",msr->post_heater_C);
-  sprintf(buffer+strlen(buffer), "\"StackC\": \"%.2f\",\n",msr->post_stack_C);
-  sprintf(buffer+strlen(buffer), "\"GetterC\": \"%.2f\",\n",msr->post_getter_C);
-  sprintf(buffer+strlen(buffer), "\"StackV\": \"%.2f\",\n",msr->stack_voltage);
-  sprintf(buffer+strlen(buffer), "\"StackA\": \"%.2f\",\n",msr->stack_amps);
+  sprintf(buffer+strlen(buffer), "\"MachineState\": %d,\n",msr->ms);
+  sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f,\n",msr->target_temp_C);
+  sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f,\n",msr->post_heater_C);
+  sprintf(buffer+strlen(buffer), "\"StackC\": %.2f,\n",msr->post_stack_C);
+  sprintf(buffer+strlen(buffer), "\"GetterC\": %.2f,\n",msr->post_getter_C);
+  sprintf(buffer+strlen(buffer), "\"StackV\": %.2f,\n",msr->stack_voltage);
+  sprintf(buffer+strlen(buffer), "\"StackA\": %.2f,\n",msr->stack_amps);
   if (isnan(msr->stack_ohms) || msr->stack_ohms < 0.0) {
-    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"-1.0\",\n");
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": -1.0,\n");
   } else {
-    sprintf(buffer+strlen(buffer), "\"StackOhms\": \"%.2f\",\n",msr->stack_ohms);
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": %.2f,\n",msr->stack_ohms);
   }
-  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": \"%.2f\",\n",msr->heater_duty_cycle);
-  sprintf(buffer+strlen(buffer), "\"FanPWM\": \"%.2f\",\n",msr->fan_pwm);
-  sprintf(buffer+strlen(buffer), "\"FanRPM\": \"%.2f\"\n",msr->fan_rpm);
+  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": %.2f,\n",msr->heater_duty_cycle);
+  sprintf(buffer+strlen(buffer), "\"FanPWM\": %.2f,\n",msr->fan_pwm);
+  sprintf(buffer+strlen(buffer), "\"FanRPM\": %.2f\n",msr->fan_rpm);
 }
 
 bool MachineHAL::init() {
   // we should probably check that we can read this effectively here
   // and return false if not
-  if (DEBUG_HAL > 0) {
-    Serial.println("HAL: About to run Wire!");
-  }
+  //  if (DEBUG_HAL > 0) {
+  //    Serial.println("HAL: About to run Wire!");
+  //  }
   // We are currently not using I2C
   //   Wire.begin();
 
