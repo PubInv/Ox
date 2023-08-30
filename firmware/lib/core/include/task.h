@@ -53,6 +53,7 @@ class Task {
                 _lastRun(0),
                 _properties({"noname", -1,TaskPriority::Undefined,0})
                 {};
+        int DEBUG = 0;
         MachineConfig* getConfig();
         virtual ~Task() = default;
         // Cannot copy class

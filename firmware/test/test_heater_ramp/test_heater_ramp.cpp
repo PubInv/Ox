@@ -65,9 +65,6 @@ SanyoAceB97 *fan;
 
 // This exists purely to be compatible with the code
 // in the make task library
-MachineConfig *localGetConfig() {
-  return machineConfig;
-}
 
 unsigned long time_of_last_report = 0;
 
@@ -222,15 +219,15 @@ namespace OxApp
       if (DEBUG_ID > 0) {
         OxCore::Debug<const char *>("State: RAMPING UP\n");
       }
-      float postHeaterTemp = localGetConfig()->report->post_heater_C;
+      float postHeaterTemp = getConfig()->report->post_heater_C;
       if (postHeaterTemp > MachineConfig::OPERATING_TEMPERATURE) {
         global_state = Holding;
         OxCore::Debug<const char *>("State Changing to HOLDING\n");
         begin_hold_time = millis();
       } else {
         const unsigned long MINUTES_RAMPING_UP = ms / (60 * 1000);
-        localGetConfig()->TARGET_TEMP = localGetConfig()->RECENT_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
-        localGetConfig()->TARGET_TEMP = min(localGetConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMPERATURE);
+        getConfig()->TARGET_TEMP = getConfig()->RECENT_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = min(getConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMPERATURE);
       }
       break;
     };
@@ -252,7 +249,7 @@ namespace OxApp
       if (DEBUG_ID > 0) {
         OxCore::Debug<const char *>("State: RAMPING DN\n");
       }
-      float postHeaterTemp = localGetConfig()->report->post_heater_C;
+      float postHeaterTemp = getConfig()->report->post_heater_C;
       if (postHeaterTemp < MachineConfig::STOP_TEMPERATURE) {
         analogWrite(fan->PWM_PIN[0],5);
         OxCore::Debug<const char *>("Stop temperature reached!\n");
@@ -261,9 +258,9 @@ namespace OxApp
         while(1);
       } else {
         const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
-        localGetConfig()->TARGET_TEMP =
+        getConfig()->TARGET_TEMP =
           MachineConfig::OPERATING_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
-        localGetConfig()->TARGET_TEMP = max(localGetConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
+        getConfig()->TARGET_TEMP = max(getConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
       }
       break;
     };
@@ -277,6 +274,7 @@ FanReportTask fanReportTask;
 ReadTempsTask readTempsTask;
 SupervisorTask supervisorTask;
 HeaterPIDTask heaterPIDTask;
+DutyCycleTask dutyCycleTask;
 
 
 void setup() {
@@ -290,22 +288,17 @@ void setup() {
     //return EXIT_FAILURE;
     return;
   }
-  Serial.println("AAA!");
   machineConfig = new MachineConfig();
+  // This is a mystery. The system is hanging; I thought it was here,
+  // but now I don't know where!
   machineConfig->hal = new MachineHAL();
-  Serial.println("BBB!");
+   bool initSuccess  = machineConfig->hal->init();
+  if (!initSuccess) {
+    Serial.println("Could not init Hardware Abastraction Layer Properly!");
+    abort();
+  }
 
-  heaterPIDTask.HeaterSetPoint_C = localGetConfig()->TARGET_TEMP;
-
-
-
-   Serial.println("CCC!");
-
-  // bool initSuccess  = localGetConfig()->hal->init();
-  // Serial.println("about to start!");
-  // if (!initSuccess) {
-  //   Serial.println("Could not init Hardware Abastraction Layer Properly!");
-  // }
+  heaterPIDTask.HeaterSetPoint_C = machineConfig->TARGET_TEMP;
 
   _stacks[0] = new SL_PS("FIRST_STACK",0);
 
@@ -327,7 +320,7 @@ void setup() {
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 20;
-  cogProperties.state_and_config = (void *) localGetConfig();
+  cogProperties.state_and_config = (void *) machineConfig;
   delay(1000);
   Serial.println("About to run test!");
   delay(100);
@@ -351,7 +344,7 @@ void setup() {
   fanReportProperties.id = 19;
   fanReportProperties.period = fanReportTask.PERIOD_MS;
   fanReportProperties.priority = OxCore::TaskPriority::High;
-  fanReportProperties.state_and_config = (void *) localGetConfig();
+  fanReportProperties.state_and_config = (void *) machineConfig;
   delay(300);
   core.AddTask(&fanReportTask, &fanReportProperties);
   delay(100);
@@ -362,7 +355,7 @@ void setup() {
   readTempsProperties.id = 21;
   readTempsProperties.period = readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
-  readTempsProperties.state_and_config = (void *) localGetConfig();
+  readTempsProperties.state_and_config = (void *) machineConfig;
   delay(300);
   core.AddTask(&readTempsTask, &readTempsProperties);
   delay(100);
@@ -372,12 +365,9 @@ void setup() {
   supervisorProperties.id = 22;
   supervisorProperties.period = supervisorTask.PERIOD_MS;
   supervisorProperties.priority = OxCore::TaskPriority::High;
-  supervisorProperties.state_and_config = (void *) localGetConfig();
+  supervisorProperties.state_and_config = (void *) machineConfig;
   core.AddTask(&supervisorTask, &supervisorProperties);
 
-
-
-  DutyCycleTask dutyCycleTask;
   //  dutyCycleTask = new DutyCycleTask();
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
@@ -391,17 +381,21 @@ void setup() {
   OxCore::Debug<const char *>("\n");
   dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
   dutyCycleProperties.priority = OxCore::TaskPriority::Low;
-  dutyCycleProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
+  dutyCycleProperties.state_and_config = (void *) machineConfig;
+  //  core.AddTask(&dutyCycleTask, &dutyCycleProperties);
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
   HeaterPIDProperties.id = 24;
   HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
-  HeaterPIDProperties.state_and_config = (void *) localGetConfig();
-  core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
+  HeaterPIDProperties.state_and_config = (void *) machineConfig;
+  bool heaterPIDAdd = core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
 
+  if (!heaterPIDAdd) {
+    OxCore::Debug<const char *>("heaterPIDAdd Faild\n");
+    abort();
+  }
   OxCore::Debug<const char *>("Added tasks\n");
 
   _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);

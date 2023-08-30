@@ -1,6 +1,6 @@
 /*
 
-  heater_pid_task.h -- control an AC heater with an SSR
+  temp_refresh_task.h -- adjust recent temp so that the actual temperature never gets too far
 
   Copyright (C) 2023 Robert Read.
 
@@ -18,33 +18,25 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef HEATER_PID_TASK_H
-#define HEATER_PID_TASK_H
+#ifndef TEMP_REFRESH_TASK_H
+#define TEMP_REFRESH_TASK_H
 
 #include <core_defines.h>
 #include <core.h>
-#include <PID_v1.h>
-#include <duty_cycle_task.h>
 
 // Runs the Pressure Swing Adsorption cycle
-  class HeaterPIDTask : public OxCore::Task
+  class TempRefreshTask : public OxCore::Task
   {
   public:
-    HeaterPIDTask();
-    PID *pidControllerHeater;
-    int DEBUG_PID = 0;
-    const int PERIOD_MS = 60*1000;
-
-    // These are on a scale of 1.0;
-    double dutyCycle_Output = 0.0;
-    double final_dutyCycle = 0.0;
-    double HeaterSetPoint_C = 25.0;
-    double Input_temperature_C = 25.0;
-    DutyCycleTask *dutyCycleTask;
+    TempRefreshTask();
+    int DEBUG_TEMP_REFRESH = 0;
+    const int PERIOD_MS = 5*60*1000;
+    unsigned long time_of_last_refresh = 0;
+    // In this case, we need a public ability to run the task
+    bool run();
   private:
     bool _init() override;
     bool _run() override;
-    // This would go into the abstract class.
   };
 
 #endif
