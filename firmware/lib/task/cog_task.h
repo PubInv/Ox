@@ -26,7 +26,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "heater.h"
 #include "stack.h"
 #include "abstract_ps.h"
-#include "mostplus_flow.h"
+// #include "mostplus_flow.h"
+#include <machine_core_defs.h>
 #include <machine.h>
 
 #include <abstract_temperature.h>
@@ -38,13 +39,36 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <heater_pid_task.h>
 
 
-#include "model.h"
+// #include "model.h"
 
 
 namespace OxApp
 {
-    // Runs the Pressure Swing Adsorption cycle
-    class CogTask : public OxCore::Task
+
+  class StateMachineManager : public OxCore::Task {
+  public:
+      int DEBUG_LEVEL = 0;
+      MachineState _executeBasedOnState(MachineState ms);
+      virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) = 0;
+      virtual MachineState _updatePowerComponentsOff() = 0 ;
+      virtual MachineState _updatePowerComponentsWarmup() = 0;
+      virtual MachineState _updatePowerComponentsIdle() = 0;
+      virtual MachineState _updatePowerComponentsCooldown() = 0;
+      virtual MachineState _updatePowerComponentsCritialFault() = 0;
+      virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
+      virtual MachineState _updatePowerComponentsOffUserAck() = 0;
+
+    // These code in theory be made static
+      float  computeFanSpeed(float t);
+      float  computeAmperage(float t);
+      float  computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms);
+      float  computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
+
+      bool _run() override;
+  };
+
+
+    class CogTask : public StateMachineManager
     {
     public:
       TempRefreshTask* tempRefreshTask;
@@ -61,43 +85,65 @@ namespace OxApp
       // WARNING! This is a fragile; I believe a rate based algorithm is better.
       unsigned long begin_down_time = 0;
 
-      //      void updateTemperatures();
-
-      Temperature::AbstractTemperature* _temperatureSensors;
-
       AbstractPS* _stacks[NUM_STACKS];
-      //      MostPlusFlow _flowsensor;
-      //      SensirionFlow *_flowsensor;
-    private:
-      bool _init() override;
-      bool _run() override;
-      // This would go into the abstract class.
 
-      MachineState _executeBasedOnState(MachineState ms);
-      MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o);
-      MachineState _updatePowerComponentsOff();
-      MachineState _updatePowerComponentsWarmup();
-      MachineState _updatePowerComponentsIdle();
-      MachineState _updatePowerComponentsCooldown();
-      MachineState _updatePowerComponentsCritialFault();
-      MachineState _updatePowerComponentsEmergencyShutdown();
-      MachineState _updatePowerComponentsOffUserAck();
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
-      //      void _readTemperatureSensors();
 
       void _updateFanSpeed(float percentage);
       void _updateStackVoltage(float voltage);
       void _updateStackAmperage(float amperage);
-      // We will use a model for mocking, which may grow into
-      // something...
-      Model model;
 
-      // We have some mock heaters for simulation, but
-      // we don't sue them in the Ribbon Fish configuration
-#ifndef RIBBONFISH
-      void RunForward(float t,Model& m);
-#endif
+
+
+       MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
+       MachineState _updatePowerComponentsOff() override;
+       MachineState _updatePowerComponentsWarmup() override;
+       MachineState _updatePowerComponentsIdle() override;
+       MachineState _updatePowerComponentsCooldown() override;
+       MachineState _updatePowerComponentsCritialFault() override;
+       MachineState _updatePowerComponentsEmergencyShutdown() override;
+       MachineState _updatePowerComponentsOffUserAck() override;
+
+    private:
+      bool _run() override;
+      bool _init() override;
+
+    };
+
+
+    class Stage2HeaterTask : public StateMachineManager
+    {
+    public:
+      TempRefreshTask* tempRefreshTask;
+      // Thee Stage2 problem controls 3 heaters.
+      HeaterPIDTask* heaterPIDTask[3];
+      int DEBUG_LEVEL = 0;
+
+      const static int NUM_TEMPERATURE_SENSORS = 3;
+      const static int NUM_TEMPERATURE_INDICES = 2;
+      const static int NUM_FANS = 1;
+      const static int NUM_STACKS = 1;
+
+      unsigned long begin_down_time = 0;
+
+      void _updatePowerComponentsVoltage(float voltage);
+      void _configTemperatureSensors();
+
+
+       MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
+       MachineState _updatePowerComponentsOff() override;
+       MachineState _updatePowerComponentsWarmup() override;
+       MachineState _updatePowerComponentsIdle() override;
+       MachineState _updatePowerComponentsCooldown() override;
+       MachineState _updatePowerComponentsCritialFault() override;
+       MachineState _updatePowerComponentsEmergencyShutdown() override;
+       MachineState _updatePowerComponentsOffUserAck() override;
+
+    private:
+      bool _init() override;
+      bool _run() override;
+
     };
 }
 
