@@ -39,6 +39,7 @@ using namespace OxCore;
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
+#include <stage2SerialReportTask.h>
 
 
 using namespace OxCore;
@@ -47,9 +48,7 @@ static Core core;
 const unsigned long REPORT_PERIOD_MS = 5000;
 TaskProperties _properties;
 unsigned long time_of_last_report = 0;
-Stage2Config *machineConfig;
-
-const int DEBUG_LEVEL = 2;
+MachineConfig *machineConfig;
 
 // This is a key parameter, which should perhaps be moved to a specific
 // default file to make it clearer!
@@ -73,6 +72,8 @@ Stage2HeaterTask stage2HeaterTask_int1;
 Stage2HeaterTask stage2HeaterTask_ext1;
 Stage2HeaterTask stage2HeaterTask_ext2;
 
+Stage2SerialReportTask stage2SerialReportTask;
+
 void setup() {
 
  OxCore::serialBegin(115200UL);
@@ -85,11 +86,14 @@ void setup() {
     return;
   }
 
-  machineConfig = new Stage2Config();
+  machineConfig = new MachineConfig();
 
   machineConfig->hal = new MachineHAL();
 
   machineConfig->ms = Off;
+  machineConfig->s2sr->ms_int1 = Off;
+  machineConfig->s2sr->ms_ext1 = Off;
+  machineConfig->s2sr->ms_ext2 = Off;
 
   bool initSuccess  = machineConfig->hal->init();
   Serial.println("about to start!");
@@ -108,7 +112,7 @@ void setup() {
 
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
-  readTempsProperties.id = 21;
+  readTempsProperties.id = 20;
   readTempsProperties.period = readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
   readTempsProperties.state_and_config = (void *) machineConfig;
@@ -116,6 +120,26 @@ void setup() {
   core.AddTask(&readTempsTask, &readTempsProperties);
   delay(100);
 
+  //  readTempsTask.DEBUG_READ_TEMPS = 1;
+
+  OxCore::TaskProperties stage2SerialReportProperties;
+  stage2SerialReportProperties.name = "stage2SerialReportTemps";
+  stage2SerialReportProperties.id = 21;
+  stage2SerialReportProperties.period = stage2SerialReportTask.PERIOD_MS;
+  stage2SerialReportProperties.priority = OxCore::TaskPriority::High;
+  stage2SerialReportProperties.state_and_config = (void *) machineConfig;
+
+
+  Serial.println((unsigned long) machineConfig);
+
+  bool stage2SerialReportAdd = core.AddTask(&stage2SerialReportTask, &stage2SerialReportProperties);
+  if (!stage2SerialReportAdd) {
+     OxCore::Debug<const char *>("stage2SerialReport Task add failed\n");
+     abort();
+  }
+
+  OxCore::DebugLn<long>(machineConfig->s2sr->ms_int1);
+  delay(100);
   OxCore::TaskProperties dutyCycleProperties_int1;
   dutyCycleProperties_int1.name = "dutyCycle_int1";
   dutyCycleProperties_int1.id = 23;
@@ -203,6 +227,10 @@ void setup() {
     OxCore::Debug<const char *>("stage2 ext2 Failedd\n");
     abort();
   }
+
+  stage2HeaterTask_int1.DEBUG_LEVEL = 1;
+  stage2HeaterTask_ext1.DEBUG_LEVEL = 1;
+  stage2HeaterTask_ext2.DEBUG_LEVEL = 1;
 
   stage2HeaterTask_int1.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_INT1;
   stage2HeaterTask_ext1.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_EXT1;

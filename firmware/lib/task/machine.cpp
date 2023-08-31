@@ -104,6 +104,7 @@ bool MachineHAL::init() {
 MachineConfig::MachineConfig() {
   script = new MachineScript();
   report = new MachineStatusReport();
+  s2sr = new Stage2StatusReport();
   // How we make certain assertions to make sure we are well configured
   assert(RAMP_UP_TARGET_D_MIN >= 0.0);
   assert(RAMP_DN_TARGET_D_MIN <= 0.0);

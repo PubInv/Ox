@@ -21,36 +21,52 @@
 #include <core.h>
 
 
-Stage2Config::Stage2Config()  {
-    s2sr = new Stage2StatusReport();
-  }
+void MachineConfig::outputStage2Report(Stage2StatusReport *s2sr) {
+        // OxCore::Debug<const char *>("Machine State: (INT1, EXT1, EXT2) ");
+        // delay(100);
+        // OxCore::DebugLn<int>(s2sr->ms_int1);
+        // OxCore::DebugLn<int>(s2sr->ms_ext1);
+        // OxCore::DebugLn<int>(s2sr->ms_ext2);
+        // delay(100);
+        // OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_int1]);
+        // OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_ext1]);
+        // OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_ext2]);
+        // delay(100);
+        OxCore::Debug<const char *>("target_int1_temp_C: ");
+        OxCore::DebugLn<float>(s2sr->target_int1_temp_C);
+        OxCore::Debug<const char *>("target_ext1_temp_C: ");
+        OxCore::DebugLn<float>(s2sr->target_ext1_temp_C);
+        OxCore::Debug<const char *>("target_ext2_temp_C: ");
+        OxCore::DebugLn<float>(s2sr->target_ext2_temp_C);
 
-
-void Stage2Config::outputReport(Stage2StatusReport *msr) {
-        OxCore::DebugLn<const char *>("");
-        OxCore::Debug<const char *>("Machine State: ");
-        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
         OxCore::Debug<const char *>("int1_temp_C: ");
-        OxCore::DebugLn<float>(msr->int1_temp_C);
+        OxCore::DebugLn<float>(s2sr->int1_temp_C);
         OxCore::Debug<const char *>("ext1_temp_C: ");
-        OxCore::DebugLn<float>(msr->ext1_temp_C);
+        OxCore::DebugLn<float>(s2sr->ext1_temp_C);
         OxCore::Debug<const char *>("ext2_temp_C: ");
-        OxCore::DebugLn<float>(msr->ext2_temp_C);
+        OxCore::DebugLn<float>(s2sr->ext2_temp_C);
 
         OxCore::Debug<const char *>("Heater DC int1: ");
-        Serial.println(msr->heater_duty_cycle_int1,4);
+        Serial.println(s2sr->heater_duty_cycle_int1,4);
         OxCore::Debug<const char *>("Heater DC ext1: ");
-        Serial.println(msr->heater_duty_cycle_ext1,4);
+        Serial.println(s2sr->heater_duty_cycle_ext1,4);
         OxCore::Debug<const char *>("Heater DC ext2: ");
-        Serial.println(msr->heater_duty_cycle_ext2,4);
+        Serial.println(s2sr->heater_duty_cycle_ext2,4);
 }
 
-void Stage2Config::createJSONReport(Stage2StatusReport* msr, char *buffer) {
-  sprintf(buffer+strlen(buffer), "\"MachineState\": %d,\n",msr->ms);
-  sprintf(buffer+strlen(buffer), "\"int1_temp_C\": %.2f,\n",msr->int1_temp_C);
-  sprintf(buffer+strlen(buffer), "\"ext1_temp_C\": %.2f,\n",msr->ext1_temp_C);
-  sprintf(buffer+strlen(buffer), "\"ext2_temp_C\": %.2f,\n",msr->ext2_temp_C);
-  sprintf(buffer+strlen(buffer), "\"heater_duty_cycle_int1\": %.2f,\n",msr->heater_duty_cycle_int1);
-  sprintf(buffer+strlen(buffer), "\"heater_duty_cycle_ext1\": %.2f,\n",msr->heater_duty_cycle_ext1);
-  sprintf(buffer+strlen(buffer), "\"heater_duty_cycle_ext2\": %.2f,\n",msr->heater_duty_cycle_ext2);
+void MachineConfig::createStage2JSONReport(Stage2StatusReport* s2sr, char *buffer) {
+  // sprintf(buffer+strlen(buffer), "\"MachineState INT1\": %d,\n",s2sr->ms_int1);
+  // sprintf(buffer+strlen(buffer), "\"MachineState EXT1\": %d,\n",s2sr->ms_ext1);
+  // sprintf(buffer+strlen(buffer), "\"MachineState EXT2\": %d,\n",s2sr->ms_ext2)
+    ;
+  sprintf(buffer+strlen(buffer), "\"target_int1_temp_C\": %.2f,\n",s2sr->target_int1_temp_C);
+  sprintf(buffer+strlen(buffer), "\"target_ext1_temp_C\": %.2f,\n",s2sr->target_ext1_temp_C);
+  sprintf(buffer+strlen(buffer), "\"target_ext2_temp_C\": %.2f,\n",s2sr->target_ext2_temp_C);
+
+  sprintf(buffer+strlen(buffer), "\"int1_temp_C\": %.2f,\n",s2sr->int1_temp_C);
+  sprintf(buffer+strlen(buffer), "\"ext1_temp_C\": %.2f,\n",s2sr->ext1_temp_C);
+  sprintf(buffer+strlen(buffer), "\"ext2_temp_C\": %.2f,\n",s2sr->ext2_temp_C);
+  sprintf(buffer+strlen(buffer), "\"heater_duty_cycle_int1\": %.2f,\n",s2sr->heater_duty_cycle_int1);
+  sprintf(buffer+strlen(buffer), "\"heater_duty_cycle_ext1\": %.2f,\n",s2sr->heater_duty_cycle_ext1);
+  sprintf(buffer+strlen(buffer), "\"heater_duty_cycle_ext2\": %.2f,\n",s2sr->heater_duty_cycle_ext2);
 }

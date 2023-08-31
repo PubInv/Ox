@@ -1,7 +1,8 @@
 /*
-  stage2_config -- configuration specifically for the Stage2 heaters of the high-oxygen experiment
 
-  Copyright 2023, Robert L. Read
+  serialReport.h -- read temperatures sensors
+
+  Copyright (C) 2023 Robert Read.
 
   This program includes free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -17,25 +18,23 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef STAGE2_CONFIG_H
-#define STAGE2_CONFIG_H
+#ifndef SERIAL_REPORT_H
+#define SERIAL_REPORT_H
 
-#include <machine_core_defs.h>
+#include <core_defines.h>
+#include <core.h>
 
+using namespace OxCore;
 
-struct Stage2StatusReport {
-  MachineState ms_int1;
-  MachineState ms_ext1;
-  MachineState ms_ext2;
-  float target_int1_temp_C;
-  float target_ext1_temp_C;
-  float target_ext2_temp_C;
-  float int1_temp_C;
-  float ext1_temp_C;
-  float ext2_temp_C;
-  float heater_duty_cycle_int1;
-  float heater_duty_cycle_ext1;
-  float heater_duty_cycle_ext2;
+class SerialReportTask : public OxCore::Task
+{
+public:
+  SerialReportTask();
+  int DEBUG_SERIAL_REPORT = 1;
+  int PERIOD_MS = 10000;
+private:
+  bool _init() override;
+  bool _run() override;
 };
 
 

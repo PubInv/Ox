@@ -39,7 +39,7 @@ namespace OxApp
       // in the machineConfig.
       float STAGE2_TARGET_TEMP;
       float STAGE2_OPERATING_TEMP;
-      int DEBUG_LEVEL = 0;
+      int DEBUG_LEVEL = 1;
 
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
@@ -60,8 +60,6 @@ namespace OxApp
        MachineState _updatePowerComponentsCritialFault() override;
        MachineState _updatePowerComponentsEmergencyShutdown() override;
        MachineState _updatePowerComponentsOffUserAck() override;
-
-       Stage2Config *getStage2Config();
 
     private:
       bool _init() override;

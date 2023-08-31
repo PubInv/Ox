@@ -77,8 +77,7 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     }
   if (DEBUG_SCHEDULER > 1) {
     Serial.println("nexTask");
-    Serial.println((long unsigned) nextTask);
-    Serial.println((long unsigned) nullptr);
+    Serial.println(nextTask->_properties.name);
   }
 
     if (nextTask == nullptr) {
@@ -136,6 +135,7 @@ TaskState Scheduler::RunNextTask(uint32_t msNow) {
 
   if (DEBUG_SCHEDULER > 1) {
     Serial.println("About to Run task!");
+    Serial.println(nextTask->_properties.name);
   }
     nextTask->Run(msNow);
   if (DEBUG_SCHEDULER > 1) {

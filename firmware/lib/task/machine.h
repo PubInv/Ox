@@ -24,6 +24,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <OnePinHeater.h>
 
 #include <machine_script.h>
+#include <stage2_config.h>
+
 
 #define HAND_TEST 1
 
@@ -211,8 +213,26 @@ public:
   MachineHAL* hal;
   MachineStatusReport *report;
 
-  void outputReport(MachineStatusReport *msr);
+
+    void outputReport(MachineStatusReport *msr);
   void createJSONReport(MachineStatusReport *msr, char *buffer);
+
+  // Stage2 specific stuff; this should be handled
+  // as a subclass, not a decorator, but I don't have time for that,
+  // and it puts the main code at risk, so adding it in here is
+  // reasonable - rlrl
+  Stage2StatusReport *s2sr;
+  float STAGE2_DEFAULT_TEMP_INT1;
+  float STAGE2_DEFAULT_TEMP_EXT1;
+  float STAGE2_DEFAULT_TEMP_EXT2;
+
+  float STAGE2_OPERATING_TEMP_INT1;
+  float STAGE2_OPERATING_TEMP_EXT1;
+  float STAGE2_OPERATING_TEMP_EXT2;
+
+  void outputStage2Report(Stage2StatusReport *msr);
+  void createStage2JSONReport(Stage2StatusReport *msr, char *buffer);
+
 };
 
 

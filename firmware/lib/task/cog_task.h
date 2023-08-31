@@ -66,10 +66,10 @@ namespace OxApp
       bool _run() override;
   };
 
-
     class CogTask : public StateMachineManager
     {
     public:
+      int PERIOD_MS = 10000;
       TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
       int DEBUG_LEVEL = 0;

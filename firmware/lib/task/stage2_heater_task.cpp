@@ -24,10 +24,6 @@ using namespace std;
 namespace OxApp
 {
 
-  Stage2Config *Stage2HeaterTask::getStage2Config() {
-    return (Stage2Config *) getConfig();
-  }
-
 
   // TODO: Most of this should be moved into the machine definition
     bool Stage2HeaterTask::_init()
@@ -38,12 +34,14 @@ namespace OxApp
 
       bool Stage2HeaterTask::_run()
     {
+      if (DEBUG_LEVEL > 0) {
+              OxCore::Debug<const char *>("Stage2HeaterTask run\n");
+      }
 
-      getStage2Config()->outputReport(getStage2Config()->s2sr);
       // To make sure startup has now wild surges,
       // if we have a valid temperature we will make sure the
       // TempRefreshTask has been run...
-      float postHeaterTemp = getStage2Config()->report->post_heater_C;
+      float postHeaterTemp = getConfig()->report->post_heater_C;
       if ((tempRefreshTask->time_of_last_refresh == 0) &&
           (postHeaterTemp > 0.0)) {
         tempRefreshTask->run();
@@ -62,20 +60,15 @@ namespace OxApp
       OxCore::Debug<const char *>("Warmup Mode!\n");
     }
 
-    float t = getStage2Config()->report->post_heater_C;
-
-    //    float fs = computeFanSpeed(t);
-    //    float a = computeAmperage(t);
+    // This needs to be made dendent on which one we are!
+    // probably should use and enum and a switch here.
+    float t = getConfig()->report->post_heater_C;
     float tt = computeRampUpTargetTemp(t,
-                                       getStage2Config()->RECENT_TEMPERATURE,
-                                       getStage2Config()->BEGIN_UP_TIME_MS);
+                                       getConfig()->RECENT_TEMPERATURE,
+                                       getConfig()->BEGIN_UP_TIME_MS);
 
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("tt\n");
-      //      OxCore::Debug<float>(fs);
-      //      OxCore::Debug<const char *>(" ");
-      //      OxCore::Debug<float>(a);
-      //      OxCore::Debug<const char *>(" ");
       OxCore::DebugLn<float>(tt);
     }
 
@@ -93,23 +86,24 @@ namespace OxApp
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Cooldown Mode!\n");
     }
-    if (getStage2Config()->previous_ms != Cooldown) {
+    if (getConfig()->previous_ms != Cooldown) {
       // can this be be made RECENT_TEMPERATURE?
-      getStage2Config()->COOL_DOWN_BEGIN_TEMPERATURE = getStage2Config()->report->post_heater_C;
+      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = getConfig()->report->post_heater_C;
     }
 
-    if (getStage2Config()->report->post_heater_C <= getStage2Config()->COOLDOWN_TARGET_C
+    if (getConfig()->report->post_heater_C <= getConfig()->COOLDOWN_TARGET_C
         &&
-        getStage2Config()->report->post_stack_C <= getStage2Config()->COOLDOWN_TARGET_C) {
+        getConfig()->report->post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
       return new_ms;
     }
 
-    float t = getStage2Config()->report->post_heater_C;
+    // This is dependent on which heater we control!
+    float t = getConfig()->report->post_heater_C;
 
     float tt = computeRampDnTargetTemp(t,
-                                       getStage2Config()->COOL_DOWN_BEGIN_TEMPERATURE,
-                                       getStage2Config()->BEGIN_DN_TIME_MS);
+                                       getConfig()->COOL_DOWN_BEGIN_TEMPERATURE,
+                                       getConfig()->BEGIN_DN_TIME_MS);
 
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("tt\n");
@@ -118,6 +112,7 @@ namespace OxApp
 
     STAGE2_TARGET_TEMP = tt;
     heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
+    getConfig()->s2sr->
 
     return new_ms;
   }
@@ -125,7 +120,7 @@ namespace OxApp
   MachineState Stage2HeaterTask::_updatePowerComponentsIdle() {
     OxCore::Debug<const char *>("IN IDLE FUNCTION ");
     MachineState new_ms = NormalOperation;
-    getStage2Config()->idleOrOperate = Idle;
+    getConfig()->idleOrOperate = Idle;
     return new_ms;
   }
   MachineState Stage2HeaterTask::_updatePowerComponentsCritialFault() {
@@ -144,7 +139,7 @@ namespace OxApp
    MachineState Stage2HeaterTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
      MachineState new_ms = NormalOperation;
 
-    float t = getStage2Config()->report->post_heater_C;
+    float t = getConfig()->report->post_heater_C;
     float tt = STAGE2_OPERATING_TEMP;
 
     if (DEBUG_LEVEL > 0) {

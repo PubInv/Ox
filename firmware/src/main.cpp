@@ -31,6 +31,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
 #include <temp_refresh_task.h>
+#include <serialReportTask.h>
 
 // #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
@@ -51,6 +52,7 @@ HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
 ReadTempsTask readTempsTask;
 TempRefreshTask tempRefreshTask;
+SerialReportTask serialReportTask;
 
 #include <machine.h>
 
@@ -103,7 +105,7 @@ void setup()
 
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
-  readTempsProperties.id = 20;
+  readTempsProperties.id = 19;
   readTempsProperties.period = readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
   readTempsProperties.state_and_config = (void *) &machineConfig;
@@ -113,10 +115,22 @@ void setup()
     abort();
   }
 
+  OxCore::TaskProperties serialReportProperties;
+  serialReportProperties.name = "serialReportTemps";
+  serialReportProperties.id = 20;
+  serialReportProperties.period = serialReportTask.PERIOD_MS;
+  serialReportProperties.priority = OxCore::TaskPriority::High;
+  serialReportProperties.state_and_config = (void *) &machineConfig;
+  bool serialReportAdd = core.AddTask(&serialReportTask, &serialReportProperties);
+  if (!serialReportAdd) {
+    OxCore::Debug<const char *>("serialReport Task add failed\n");
+    abort();
+  }
+
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 21;
-  cogProperties.period = 10000;
+  cogProperties.period = cogTask.PERIOD_MS;
   cogProperties.priority = OxCore::TaskPriority::High;
   // Note: The machineConfig is universal to all tasks.
   // It respresents the entire machine.
