@@ -45,6 +45,15 @@ Miscellaneous 6-32, 8-32 and 10-24 screws may have been used.
 ? April 2023? Robert relocated the ground lug terminal strip inside the cabinet. Lee believes new holes had to be drilled.
 
 
+### Wiring of Assemblies In Enclosure
+**The Arduino Due Ethernet Rail Mount Shield. ** 
+For controller Unit 1, before we have the Controller V1 PWA, make doe with this for Due and Ethernet on Rail mount 
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/1c1011f5-1c0c-4df1-b620-2a30f3e9a277) 
+**From an email:**
+> On Wed, Aug 23, 2023 at 10:00 AM Robert Read wrote:
+Last night I used a variant of Lawrence's approach; after talking with him, I used not one but TWO stack able headers to obtain the correct height on all pins. I had to trim the posts to about half their normal height with side cutters to make this work. (The two-row header at the end is a pain, I need to order proper headers for it, I built it out of spare parts.)
+> But the result works. I have notest connectivity on every pin, but it works for the Ethernet card, which is now working. I am working with Geoff to make some tweaks, but we are now producing a datalog at his data server which we can feed into Cumulocity, though at present it is boring because I am not turning it on.
+
 ### Cautions
 None.
 
