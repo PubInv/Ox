@@ -13,10 +13,9 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include "cog_task.h"
+#include "stage2_heater_task.h"
 #include <cmath>
 #include <abstract_temperature.h>
-#include <TF800A12K.h>
 
 using namespace std;
 
@@ -29,13 +28,11 @@ namespace OxApp
     bool Stage2HeaterTask::_init()
     {
         OxCore::Debug<const char *>("Stage2HeaterTask init\n");
-
         return true;
     }
 
       bool Stage2HeaterTask::_run()
     {
-      getConfig()->_reportFanSpeed();
       // To make sure startup has now wild surges,
       // if we have a valid temperature we will make sure the
       // TempRefreshTask has been run...
@@ -75,18 +72,12 @@ namespace OxApp
       OxCore::DebugLn<float>(tt);
     }
 
-    //    getConfig()->_updateFanPWM(fs);
-    //    _updateStackAmperage(a);
-    // This will be used by the HeaterPID task.
-    //    float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
 
-    getConfig()->TARGET_TEMP = tt;
+    STAGE2_TARGET_TEMP = tt;
     // now we will set the setPoint in the heater_pid_task...
     // this requires a dependence on that task, but is
     // better than creating a deeper global dependence.
-    heaterPIDTask[0]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    heaterPIDTask[1]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    heaterPIDTask[2]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
+    heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
 
     return new_ms;
   }
@@ -118,10 +109,8 @@ namespace OxApp
       OxCore::DebugLn<float>(tt);
     }
 
-    getConfig()->TARGET_TEMP = tt;
-    heaterPIDTask[0]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    heaterPIDTask[1]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    heaterPIDTask[2]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
+    STAGE2_TARGET_TEMP = tt;
+    heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
 
     return new_ms;
   }
@@ -149,18 +138,16 @@ namespace OxApp
      MachineState new_ms = NormalOperation;
 
     float t = getConfig()->report->post_heater_C;
-    float tt = MachineConfig::OPERATING_TEMPERATURE;
+    float tt = STAGE2_OPERATING_TEMP;
 
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("tt\n");
       OxCore::DebugLn<float>(tt);
     }
 
-    getConfig()->TARGET_TEMP = tt;
-    heaterPIDTask[0]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    heaterPIDTask[1]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    heaterPIDTask[2]->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
+    STAGE2_TARGET_TEMP = tt;
+    heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
 
-     return new_ms;
+    return new_ms;
    }
 }
