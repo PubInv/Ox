@@ -127,11 +127,11 @@ namespace OxApp
     // that the datalogging should be done at the frequency as checking
     // for a new script, but for now we will keep here rather than
     // creating a new task that we could schedule separately.
-    outputReport(getConfig()->report);
+    getConfig()->outputReport(getConfig()->report);
     char buffer[1024];
     // we need to make sure we start with a null string...
     buffer[0] = 0;
-    createJSONReport(getConfig()->report,buffer);
+    getConfig()->createJSONReport(getConfig()->report,buffer);
     if (DEBUG_UDP > 0) {
       Debug<const char *>("Sending buffer:");
       DebugLn<const char *>(buffer);

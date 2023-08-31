@@ -140,7 +140,7 @@ namespace OxApp
 
   bool SupervisorTask::_run()
   {
-    outputReport(getConfig()->report);
+    getConfig()->outputReport(getConfig()->report);
     // This should not be necessary here, it should be required only once...
     _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
     _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
