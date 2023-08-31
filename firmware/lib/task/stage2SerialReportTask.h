@@ -30,8 +30,8 @@ class Stage2SerialReportTask : public OxCore::Task
 {
 public:
   Stage2SerialReportTask();
-  int DEBUG_SERIAL_REPORT = 1;
-  int PERIOD_MS = 5000;
+  int DEBUG_SERIAL_REPORT = 0;
+  int PERIOD_MS = 10000;
 private:
   bool _init() override;
   bool _run() override;

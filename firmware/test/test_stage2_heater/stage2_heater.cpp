@@ -40,6 +40,7 @@ using namespace OxCore;
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
 #include <stage2SerialReportTask.h>
+#include <serial_task.h>
 
 
 using namespace OxCore;
@@ -73,6 +74,8 @@ Stage2HeaterTask stage2HeaterTask_ext1;
 Stage2HeaterTask stage2HeaterTask_ext2;
 
 Stage2SerialReportTask stage2SerialReportTask;
+
+SerialTask serialTask;
 
 void setup() {
 
@@ -120,8 +123,6 @@ void setup() {
   core.AddTask(&readTempsTask, &readTempsProperties);
   delay(100);
 
-  //  readTempsTask.DEBUG_READ_TEMPS = 1;
-
   OxCore::TaskProperties stage2SerialReportProperties;
   stage2SerialReportProperties.name = "stage2SerialReportTemps";
   stage2SerialReportProperties.id = 21;
@@ -129,8 +130,6 @@ void setup() {
   stage2SerialReportProperties.priority = OxCore::TaskPriority::High;
   stage2SerialReportProperties.state_and_config = (void *) machineConfig;
 
-
-  Serial.println((unsigned long) machineConfig);
 
   bool stage2SerialReportAdd = core.AddTask(&stage2SerialReportTask, &stage2SerialReportProperties);
   if (!stage2SerialReportAdd) {
@@ -147,6 +146,7 @@ void setup() {
   dutyCycleProperties_int1.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties_int1.state_and_config = (void *) machineConfig;
   core.AddTask(&dutyCycleTask_int1, &dutyCycleProperties_int1);
+  dutyCycleTask_int1.whichHeater = Int1;
 
   OxCore::TaskProperties dutyCycleProperties_ext1;
   dutyCycleProperties_ext1.name = "dutyCycle_ext1";
@@ -155,6 +155,7 @@ void setup() {
   dutyCycleProperties_ext1.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties_ext1.state_and_config = (void *) machineConfig;
   core.AddTask(&dutyCycleTask_ext1, &dutyCycleProperties_ext1);
+  dutyCycleTask_ext1.whichHeater = Ext1;
 
   OxCore::TaskProperties dutyCycleProperties_ext2;
   dutyCycleProperties_ext2.name = "dutyCycle_ext2";
@@ -163,6 +164,7 @@ void setup() {
   dutyCycleProperties_ext2.priority = OxCore::TaskPriority::Low;
   dutyCycleProperties_ext2.state_and_config = (void *) machineConfig;
   core.AddTask(&dutyCycleTask_ext2, &dutyCycleProperties_ext2);
+  dutyCycleTask_ext1.whichHeater = Ext2;
 
   OxCore::TaskProperties HeaterPIDProperties_int1;
   HeaterPIDProperties_int1.name = "HeaterPID_int1";
@@ -171,6 +173,7 @@ void setup() {
   HeaterPIDProperties_int1.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties_int1.state_and_config = (void *) machineConfig;
   core.AddTask(&heaterPIDTask_int1, &HeaterPIDProperties_int1);
+  heaterPIDTask_int1.whichHeater = Int1;
 
   OxCore::TaskProperties HeaterPIDProperties_ext1;
   HeaterPIDProperties_ext1.name = "HeaterPID_ext1";
@@ -179,6 +182,7 @@ void setup() {
   HeaterPIDProperties_ext1.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties_ext1.state_and_config = (void *) machineConfig;
   core.AddTask(&heaterPIDTask_ext1, &HeaterPIDProperties_ext1);
+  heaterPIDTask_int1.whichHeater = Ext1;
 
   OxCore::TaskProperties HeaterPIDProperties_ext2;
   HeaterPIDProperties_ext2.name = "HeaterPID_ext2";
@@ -187,6 +191,7 @@ void setup() {
   HeaterPIDProperties_ext2.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties_ext2.state_and_config = (void *) machineConfig;
   core.AddTask(&heaterPIDTask_ext2, &HeaterPIDProperties_ext2);
+  heaterPIDTask_int1.whichHeater = Ext1;
 
   heaterPIDTask_int1.dutyCycleTask = &dutyCycleTask_int1;
   heaterPIDTask_ext1.dutyCycleTask = &dutyCycleTask_ext1;
@@ -203,6 +208,7 @@ void setup() {
     OxCore::Debug<const char *>("stage2 int1 Failed\n");
     abort();
   }
+  stage2HeaterTask_int1.whichHeater = Int1;
 
   OxCore::TaskProperties stage2HeaterProperties_ext1;
   stage2HeaterProperties_ext1.name = "stage2_ext1";
@@ -215,6 +221,7 @@ void setup() {
     OxCore::Debug<const char *>("stage2 ext1 Failed\n");
     abort();
   }
+  stage2HeaterTask_ext1.whichHeater = Ext1;
 
   OxCore::TaskProperties stage2HeaterProperties_ext2;
   stage2HeaterProperties_ext2.name = "stage2_ext2";
@@ -227,6 +234,7 @@ void setup() {
     OxCore::Debug<const char *>("stage2 ext2 Failedd\n");
     abort();
   }
+  stage2HeaterTask_ext2.whichHeater = Ext2;
 
   stage2HeaterTask_int1.DEBUG_LEVEL = 1;
   stage2HeaterTask_ext1.DEBUG_LEVEL = 1;
@@ -240,6 +248,18 @@ void setup() {
   stage2HeaterTask_ext1.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT1;
   stage2HeaterTask_ext2.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT2;
 
+
+  OxCore::TaskProperties serialProperties;
+  serialProperties.name = "serial";
+  serialProperties.id = 32;
+  serialProperties.period = 250;
+  serialProperties.priority = OxCore::TaskPriority::High;
+  serialProperties.state_and_config = (void *) &machineConfig;
+  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+  if (!serialAdd) {
+    OxCore::Debug<const char *>("SerialProperties add failed\n");
+    abort();
+  }
 
   OxCore::Debug<const char *>("Added tasks\n");
 }

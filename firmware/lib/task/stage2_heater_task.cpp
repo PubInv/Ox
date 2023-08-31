@@ -24,7 +24,6 @@ using namespace std;
 namespace OxApp
 {
 
-
   // TODO: Most of this should be moved into the machine definition
     bool Stage2HeaterTask::_init()
     {
@@ -62,7 +61,20 @@ namespace OxApp
 
     // This needs to be made dendent on which one we are!
     // probably should use and enum and a switch here.
-    float t = getConfig()->report->post_heater_C;
+
+    float t;
+    switch(whichHeater) {
+    case Int1:
+      t = getConfig()->s2sr->int1_temp_C;
+      break;
+    case Ext1:
+      t = getConfig()->s2sr->ext1_temp_C;
+      break;
+    case Ext2:
+      t = getConfig()->s2sr->ext2_temp_C;
+      break;
+    }
+    // These also are dependent on which heater we are using
     float tt = computeRampUpTargetTemp(t,
                                        getConfig()->RECENT_TEMPERATURE,
                                        getConfig()->BEGIN_UP_TIME_MS);
@@ -78,6 +90,17 @@ namespace OxApp
     // this requires a dependence on that task, but is
     // better than creating a deeper global dependence.
     heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
+    switch(whichHeater) {
+    case Int1:
+      getConfig()->s2sr->target_int1_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    case Ext1:
+      getConfig()->s2sr->target_ext1_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    case Ext2:
+      getConfig()->s2sr->target_ext2_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    }
 
     return new_ms;
   }
@@ -98,8 +121,18 @@ namespace OxApp
       return new_ms;
     }
 
-    // This is dependent on which heater we control!
-    float t = getConfig()->report->post_heater_C;
+    float t;
+    switch(whichHeater) {
+    case Int1:
+      t = getConfig()->s2sr->int1_temp_C;
+      break;
+    case Ext1:
+      t = getConfig()->s2sr->ext1_temp_C;
+      break;
+    case Ext2:
+      t = getConfig()->s2sr->ext2_temp_C;
+      break;
+    }
 
     float tt = computeRampDnTargetTemp(t,
                                        getConfig()->COOL_DOWN_BEGIN_TEMPERATURE,
@@ -112,7 +145,18 @@ namespace OxApp
 
     STAGE2_TARGET_TEMP = tt;
     heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
-    getConfig()->s2sr->
+    switch(whichHeater) {
+    case Int1:
+      getConfig()->s2sr->target_int1_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    case Ext1:
+      getConfig()->s2sr->target_ext1_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    case Ext2:
+      getConfig()->s2sr->target_ext2_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    }
+
 
     return new_ms;
   }
@@ -149,6 +193,18 @@ namespace OxApp
 
     STAGE2_TARGET_TEMP = tt;
     heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
+
+    switch(whichHeater) {
+    case Int1:
+      getConfig()->s2sr->target_int1_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    case Ext1:
+      getConfig()->s2sr->target_ext1_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    case Ext2:
+      getConfig()->s2sr->target_ext2_temp_C = STAGE2_TARGET_TEMP;
+      break;
+    }
 
     return new_ms;
    }

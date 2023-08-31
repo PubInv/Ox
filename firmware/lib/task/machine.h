@@ -214,7 +214,7 @@ public:
   MachineStatusReport *report;
 
 
-    void outputReport(MachineStatusReport *msr);
+  void outputReport(MachineStatusReport *msr);
   void createJSONReport(MachineStatusReport *msr, char *buffer);
 
   // Stage2 specific stuff; this should be handled
@@ -222,6 +222,10 @@ public:
   // and it puts the main code at risk, so adding it in here is
   // reasonable - rlrl
   Stage2StatusReport *s2sr;
+  // This is used by the Serial listener to control which
+  // state machine/heater/thermocouple we are controlling
+  Stage2Heater s2heaterToControl = Int1;
+
   float STAGE2_DEFAULT_TEMP_INT1;
   float STAGE2_DEFAULT_TEMP_EXT1;
   float STAGE2_DEFAULT_TEMP_EXT2;

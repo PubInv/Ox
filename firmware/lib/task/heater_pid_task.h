@@ -31,6 +31,7 @@
   {
   public:
     HeaterPIDTask();
+    Stage2Heater whichHeater;
     PID *pidControllerHeater;
     int DEBUG_PID = 0;
     const int PERIOD_MS = 60*1000;

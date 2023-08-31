@@ -21,34 +21,36 @@
 
 namespace OxApp
 {
-
-  class SerialTask : public OxCore::Task {
+  class AbstractSerialTask : public OxCore::Task {
   private:
     bool one_char_command_found(int num_read, char buffer[], int k);
 
   public:
-    bool initialization_success;
-    bool set_goal_success;
-    bool set_action_success;
-    bool action_success;
-    bool goal_reached;
-    bool new_from_UI;
+        bool initialization_success;
+        bool new_from_UI;
     // A buffer is needed to cross boundaries that may occur
     // within a PIRCS command within the
     char input_buffer[INPUT_BUFFER_SIZE];
-
-    int number_of_goals;
-    size_t goal_number;
-
-    int number_of_actions;
-    size_t action_number;
     bool _init() override;
     bool _run() override;
 
     virtual int clear_buffers(char buffer[]);
-
     virtual bool listen(char buffer[], int length);
   };
+
+  class SerialTask : public AbstractSerialTask {
+  public:
+    bool _init() override;
+    bool _run() override;
+  };
+
+  class Stage2SerialTask : public AbstractSerialTask {
+  public:
+
+    bool _init() override;
+    bool _run() override;
+  };
+
 }
 
 #endif

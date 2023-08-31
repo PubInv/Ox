@@ -42,6 +42,7 @@ class DutyCycleTask : public OxCore::Task
   {
   public:
     DutyCycleTask();
+    Stage2Heater whichHeater;
     float dutyCycle;
     const int PERIOD_MS = 50;
     boolean isOn = false;

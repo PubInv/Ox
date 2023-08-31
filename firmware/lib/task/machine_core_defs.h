@@ -44,6 +44,14 @@ enum IdleOrOperateSubState {
   Idle
 };
 
+// this is which of the Stage2Heaters we operate on.
+// This also will control which thermocouple to use.
+enum Stage2Heater {
+  Int1,
+  Ext1,
+  Ext2
+};
+
 struct MachineStatusReport {
   MachineState ms;
   float target_temp_C;

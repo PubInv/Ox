@@ -33,6 +33,7 @@ namespace OxApp
     class Stage2HeaterTask : public StateMachineManager
     {
     public:
+      Stage2Heater whichHeater;
       TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
       // This must NOT be confused with the TARGET_TEMP
