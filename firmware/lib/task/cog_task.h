@@ -22,7 +22,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 #endif
 #include <core.h>
-#include "../collections/array.h"
 #include "heater.h"
 #include "stack.h"
 #include "abstract_ps.h"
@@ -112,39 +111,6 @@ namespace OxApp
     };
 
 
-    class Stage2HeaterTask : public StateMachineManager
-    {
-    public:
-      TempRefreshTask* tempRefreshTask;
-      // Thee Stage2 problem controls 3 heaters.
-      HeaterPIDTask* heaterPIDTask[3];
-      int DEBUG_LEVEL = 0;
-
-      const static int NUM_TEMPERATURE_SENSORS = 3;
-      const static int NUM_TEMPERATURE_INDICES = 2;
-      const static int NUM_FANS = 1;
-      const static int NUM_STACKS = 1;
-
-      unsigned long begin_down_time = 0;
-
-      void _updatePowerComponentsVoltage(float voltage);
-      void _configTemperatureSensors();
-
-
-       MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
-       MachineState _updatePowerComponentsOff() override;
-       MachineState _updatePowerComponentsWarmup() override;
-       MachineState _updatePowerComponentsIdle() override;
-       MachineState _updatePowerComponentsCooldown() override;
-       MachineState _updatePowerComponentsCritialFault() override;
-       MachineState _updatePowerComponentsEmergencyShutdown() override;
-       MachineState _updatePowerComponentsOffUserAck() override;
-
-    private:
-      bool _init() override;
-      bool _run() override;
-
-    };
 }
 
 #endif

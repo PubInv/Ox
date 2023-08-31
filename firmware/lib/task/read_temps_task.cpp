@@ -129,7 +129,7 @@ void ReadTempsTask::updateTemperatures() {
 
   getConfig()->report->target_temp_C = getConfig()->TARGET_TEMP;
   if (DEBUG_READ_TEMPS > 0) {
-    outputReport(getConfig()->report);
+    getConfig()->outputReport(getConfig()->report);
     OxCore::Debug<const char *>("Target Temp : ");
     OxCore::DebugLn<float>(getConfig()->TARGET_TEMP);
   }

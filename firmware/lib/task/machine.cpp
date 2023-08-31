@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <assert.h>
 
 
-void outputReport(MachineStatusReport *msr) {
+void MachineConfig::outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
         OxCore::Debug<const char *>("Machine State: ");
         OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
@@ -52,7 +52,7 @@ void outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<float>(msr->fan_rpm);
 }
 
-void createJSONReport(MachineStatusReport* msr, char *buffer) {
+void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"MachineState\": %d,\n",msr->ms);
   sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f,\n",msr->target_temp_C);
   sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f,\n",msr->post_heater_C);

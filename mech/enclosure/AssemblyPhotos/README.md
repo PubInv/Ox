@@ -1,4 +1,6 @@
 ## File Descriptions / Quick View
+This folder contains information related to the OEDCS **Serial_number1** build.
+
 Memories of how this was assembled in March 2023
 
 ![20230404_180900.jpg](20230404_180900.jpg)   

@@ -210,10 +210,10 @@ public:
 
   MachineHAL* hal;
   MachineStatusReport *report;
-};
 
-void outputReport(MachineStatusReport *msr);
-void createJSONReport(MachineStatusReport *msr, char *buffer);
+  void outputReport(MachineStatusReport *msr);
+  void createJSONReport(MachineStatusReport *msr, char *buffer);
+};
 
 
 #endif

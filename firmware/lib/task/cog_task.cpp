@@ -81,7 +81,7 @@ namespace OxApp
         OxCore::DebugLn<const char *>("");
       }
 
-      outputReport(getConfig()->report);
+      getConfig()->outputReport(getConfig()->report);
       return true;
     }
 
