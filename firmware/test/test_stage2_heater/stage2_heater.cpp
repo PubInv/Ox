@@ -30,6 +30,7 @@ using namespace OxCore;
 #include <core_defines.h>
 #include <core.h>
 #include <machine.h>
+#include <stage2_config.h>
 
 #include <Arduino.h>
 
@@ -46,7 +47,7 @@ static Core core;
 const unsigned long REPORT_PERIOD_MS = 5000;
 TaskProperties _properties;
 unsigned long time_of_last_report = 0;
-MachineConfig *machineConfig;
+Stage2Config *machineConfig;
 
 const int DEBUG_LEVEL = 2;
 
@@ -84,7 +85,7 @@ void setup() {
     return;
   }
 
-  machineConfig = new MachineConfig();
+  machineConfig = new Stage2Config();
 
   machineConfig->hal = new MachineHAL();
 
@@ -168,7 +169,7 @@ void setup() {
   heaterPIDTask_ext2.dutyCycleTask = &dutyCycleTask_ext2;
 
   OxCore::TaskProperties stage2HeaterProperties_int1;
-  stage2HeaterProperties_int1.name = "stage2_ext2";
+  stage2HeaterProperties_int1.name = "stage2_int1";
   stage2HeaterProperties_int1.id = 29;
   stage2HeaterProperties_int1.period = heaterPIDTask_ext2.PERIOD_MS;
   stage2HeaterProperties_int1.priority = OxCore::TaskPriority::High;
@@ -180,7 +181,7 @@ void setup() {
   }
 
   OxCore::TaskProperties stage2HeaterProperties_ext1;
-  stage2HeaterProperties_ext1.name = "stage2_ext2";
+  stage2HeaterProperties_ext1.name = "stage2_ext1";
   stage2HeaterProperties_ext1.id = 30;
   stage2HeaterProperties_ext1.period = heaterPIDTask_ext2.PERIOD_MS;
   stage2HeaterProperties_ext1.priority = OxCore::TaskPriority::High;
@@ -203,13 +204,13 @@ void setup() {
     abort();
   }
 
-  stage2HeaterTask_int1.STAGE2_TARGET_TEMP = STAGE2_DEFAULT_TEMP;
-  stage2HeaterTask_ext1.STAGE2_TARGET_TEMP = STAGE2_DEFAULT_TEMP;
-  stage2HeaterTask_ext2.STAGE2_TARGET_TEMP = STAGE2_DEFAULT_TEMP;
+  stage2HeaterTask_int1.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_INT1;
+  stage2HeaterTask_ext1.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_EXT1;
+  stage2HeaterTask_ext2.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_EXT2;
 
-  stage2HeaterTask_int1.STAGE2_OPERATING_TEMP = STAGE2_OPERATING_TEMP;
-  stage2HeaterTask_ext1.STAGE2_OPERATING_TEMP = STAGE2_OPERATING_TEMP;
-  stage2HeaterTask_ext2.STAGE2_OPERATING_TEMP = STAGE2_OPERATING_TEMP;
+  stage2HeaterTask_int1.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_INT1;
+  stage2HeaterTask_ext1.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT1;
+  stage2HeaterTask_ext2.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT2;
 
 
   OxCore::Debug<const char *>("Added tasks\n");

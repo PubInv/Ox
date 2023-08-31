@@ -25,6 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <state_machine_manager.h>
 #include <temp_refresh_task.h>
 #include <heater_pid_task.h>
+#include <stage2_config.h>
 
 namespace OxApp
 {
@@ -59,6 +60,8 @@ namespace OxApp
        MachineState _updatePowerComponentsCritialFault() override;
        MachineState _updatePowerComponentsEmergencyShutdown() override;
        MachineState _updatePowerComponentsOffUserAck() override;
+
+       Stage2Config *getStage2Config();
 
     private:
       bool _init() override;
