@@ -23,7 +23,7 @@ namespace OxApp
 {
   class AbstractSerialTask : public OxCore::Task {
   private:
-    bool one_char_command_found(int num_read, char buffer[], int k);
+    virtual bool one_char_command_found(int num_read, char buffer[], int k);
 
   public:
         bool initialization_success;
@@ -40,13 +40,14 @@ namespace OxApp
 
   class SerialTask : public AbstractSerialTask {
   public:
+    bool one_char_command_found(int num_read, char buffer[], int k) override;
     bool _init() override;
     bool _run() override;
   };
 
   class Stage2SerialTask : public AbstractSerialTask {
   public:
-
+    bool one_char_command_found(int num_read, char buffer[], int k) override;
     bool _init() override;
     bool _run() override;
   };

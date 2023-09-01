@@ -22,16 +22,12 @@
 
 
 void MachineConfig::outputStage2Report(Stage2StatusReport *s2sr) {
-        // OxCore::Debug<const char *>("Machine State: (INT1, EXT1, EXT2) ");
-        // delay(100);
-        // OxCore::DebugLn<int>(s2sr->ms_int1);
-        // OxCore::DebugLn<int>(s2sr->ms_ext1);
-        // OxCore::DebugLn<int>(s2sr->ms_ext2);
-        // delay(100);
-        // OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_int1]);
-        // OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_ext1]);
-        // OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_ext2]);
-        // delay(100);
+        OxCore::DebugLn<const char *>("Machine State: (INT1, EXT1, EXT2) ");
+        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_int1]);
+        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_ext1]);
+        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms_ext2]);
+
+
         OxCore::Debug<const char *>("target_int1_temp_C: ");
         OxCore::DebugLn<float>(s2sr->target_int1_temp_C);
         OxCore::Debug<const char *>("target_ext1_temp_C: ");
@@ -55,10 +51,9 @@ void MachineConfig::outputStage2Report(Stage2StatusReport *s2sr) {
 }
 
 void MachineConfig::createStage2JSONReport(Stage2StatusReport* s2sr, char *buffer) {
-  // sprintf(buffer+strlen(buffer), "\"MachineState INT1\": %d,\n",s2sr->ms_int1);
-  // sprintf(buffer+strlen(buffer), "\"MachineState EXT1\": %d,\n",s2sr->ms_ext1);
-  // sprintf(buffer+strlen(buffer), "\"MachineState EXT2\": %d,\n",s2sr->ms_ext2)
-    ;
+  sprintf(buffer+strlen(buffer), "\"MachineState INT1\": %d,\n",s2sr->ms_int1);
+  sprintf(buffer+strlen(buffer), "\"MachineState EXT1\": %d,\n",s2sr->ms_ext1);
+  sprintf(buffer+strlen(buffer), "\"MachineState EXT2\": %d,\n",s2sr->ms_ext2);
   sprintf(buffer+strlen(buffer), "\"target_int1_temp_C\": %.2f,\n",s2sr->target_int1_temp_C);
   sprintf(buffer+strlen(buffer), "\"target_ext1_temp_C\": %.2f,\n",s2sr->target_ext1_temp_C);
   sprintf(buffer+strlen(buffer), "\"target_ext2_temp_C\": %.2f,\n",s2sr->target_ext2_temp_C);

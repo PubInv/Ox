@@ -75,7 +75,7 @@ Stage2HeaterTask stage2HeaterTask_ext2;
 
 Stage2SerialReportTask stage2SerialReportTask;
 
-SerialTask serialTask;
+Stage2SerialTask stage2SerialTask;
 
 void setup() {
 
@@ -248,14 +248,21 @@ void setup() {
   stage2HeaterTask_ext1.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT1;
   stage2HeaterTask_ext2.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT2;
 
+  // Now set all the states...
+  machineConfig->s2sr->ms_int1 = Off;
+  machineConfig->s2sr->ms_ext1 = Off;
+  machineConfig->s2sr->ms_ext2 = Off;
+  machineConfig->s2heaterToControl = Ext1;
 
+  Serial.println("S2 Heater To Control:");
+  Serial.println(machineConfig->s2heaterToControl);
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";
   serialProperties.id = 32;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
-  serialProperties.state_and_config = (void *) &machineConfig;
-  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+  serialProperties.state_and_config = (void *) machineConfig;
+  bool serialAdd = core.AddTask(&stage2SerialTask, &serialProperties);
   if (!serialAdd) {
     OxCore::Debug<const char *>("SerialProperties add failed\n");
     abort();

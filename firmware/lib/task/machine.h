@@ -192,6 +192,10 @@ public:
   MachineState ms;
   // This is used to make decisions that happen at transition time.
   MachineState previous_ms;
+  // This should be an enum, but I am having a lot of problems with it, I am going to
+  // try using an int...
+  Stage2Heater s2heaterToControl;
+
   MachineScript* script;
 
   IdleOrOperateSubState idleOrOperate = Operate;
@@ -213,18 +217,16 @@ public:
   MachineHAL* hal;
   MachineStatusReport *report;
 
-
   void outputReport(MachineStatusReport *msr);
   void createJSONReport(MachineStatusReport *msr, char *buffer);
 
   // Stage2 specific stuff; this should be handled
   // as a subclass, not a decorator, but I don't have time for that,
   // and it puts the main code at risk, so adding it in here is
-  // reasonable - rlrl
+  // reasonable - rlr
   Stage2StatusReport *s2sr;
   // This is used by the Serial listener to control which
   // state machine/heater/thermocouple we are controlling
-  Stage2Heater s2heaterToControl = Int1;
 
   float STAGE2_DEFAULT_TEMP_INT1;
   float STAGE2_DEFAULT_TEMP_EXT1;
