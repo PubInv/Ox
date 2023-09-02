@@ -212,6 +212,8 @@ void setup()
     abort();
   }
 
+  heaterPIDTask.DEBUG_PID = 1;
+
   OxCore::Debug<const char *>("Added tasks\n");
 
   /*********************************************/
@@ -225,8 +227,13 @@ void loop() {
   if (core.Run() == false) {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);
 #ifdef ARDUINO
+      // make sure we print anything needed!
+      delay(100);
       // Loop endlessly to stop the program from running
-      while (true) {}
+      while (true) {
+        Serial.println("INTERNAL ERROR!");
+        delay(100);
+      }
 #endif
       return;
   }

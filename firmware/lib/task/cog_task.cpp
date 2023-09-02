@@ -46,9 +46,11 @@ namespace OxApp
       // if we have a valid temperature we will make sure the
       // TempRefreshTask has been run...
       float postHeaterTemp = getConfig()->report->post_heater_C;
-      if ((tempRefreshTask->time_of_last_refresh == 0) &&
-          (postHeaterTemp > 0.0)) {
+      if ((abs(getConfig()->TARGET_TEMP - postHeaterTemp) > 40.0) ||
+          ((tempRefreshTask->time_of_last_refresh == 0) &&
+           (postHeaterTemp > 0.0))) {
         tempRefreshTask->run();
+        heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
       }
 
       StateMachineManager::_run();

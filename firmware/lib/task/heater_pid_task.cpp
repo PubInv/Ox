@@ -33,7 +33,8 @@ HeaterPIDTask::HeaterPIDTask() {
     // double FKi = 0.003;
     // double FKd = 0.0;
 
-    // This "AJUSTMEMNT" was found by experiment
+    // This "AJUSTMEMNT" was found by experiment. Make it larger
+  // to slow down the adjustements.
     double ADJUSTMENT = 10.0;
     double FKp = 0.03/ADJUSTMENT;
     // I want zero overshoot, so I am setting this to zero!
@@ -94,6 +95,8 @@ HeaterPIDTask::HeaterPIDTask() {
     getConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
 
     if (DEBUG_PID > 0) {
+      OxCore::Debug<const char *>("Setpoing");
+      Serial.println(this->HeaterSetPoint_C,5);
       OxCore::Debug<const char *>("previous input ");
       Serial.println(previousInput,5);
       OxCore::Debug<const char *>("Final dutyCycle_Output ");

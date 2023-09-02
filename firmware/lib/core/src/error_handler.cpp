@@ -63,7 +63,6 @@ void ErrorHandler::Log(ErrorLevel level, ErrorCode type) {
     errors.add(error);
     switch (errorMode) {
         case ErrorMode::Log:
-            // TODO
         break;
         case ErrorMode::StdOut:
 #ifdef ARDUINO

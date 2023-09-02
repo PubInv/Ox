@@ -26,6 +26,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
+
+  unsigned long num_of_report = 0;
+  unsigned long time_since_last_report = 0;
+  const unsigned long TIME_TO_REPORT_SCHEDULER_MS = 20*1000;
+
+
 #define SW_TICK 1
 #define TICK_PERIOD 2
 
@@ -90,13 +96,23 @@ bool Core::Run() {
 #ifdef SW_TICK
     while (true) {
         if (_criticalError == true) {
+          Serial.println("Ending Core Run due to critical error!");
             return false;
         }
         _elapsed = _primaryTimer.Update();
 #endif
+
+        unsigned long m = millis();
+        if (m > (time_since_last_report + TIME_TO_REPORT_SCHEDULER_MS)) {
+          Serial.print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ\n");
+          Serial.print("Scheduler Still Alive, Number of Ticks:");
+          Serial.println(num_of_report++);
+          time_since_last_report = m;
+        }
         Tick();
          bool reset = ResetWatchdog();
         if (reset == false) {
+          Serial.println("Ending Core Run due to internal Watchdog!");
             return false;
         }
 #ifdef SW_TICK
