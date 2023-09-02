@@ -35,22 +35,31 @@ TempRefreshTask::TempRefreshTask() {
 bool TempRefreshTask::run() {
   _run();
 }
-  bool TempRefreshTask::_run()
-  {
-      if (DEBUG_TEMP_REFRESH > 0) {
-      OxCore::Debug<const char *>("TempRefreshTask run\n");
-    }
-
-    if (getConfig()->ms == Warmup) {
-      time_of_last_refresh = millis();
-      getConfig()->BEGIN_UP_TIME_MS = time_of_last_refresh;
-      getConfig()->RECENT_TEMPERATURE = getConfig()->report->post_heater_C;
-
-    } else if (getConfig()->ms == Cooldown) {
-      time_of_last_refresh = millis();
-      getConfig()->BEGIN_UP_TIME_MS = time_of_last_refresh;
-      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = getConfig()->report->post_heater_C;
-    }
-
-    return true;
+bool TempRefreshTask::_run()
+{
+  if (DEBUG_TEMP_REFRESH > 0) {
+    OxCore::Debug<const char *>("TempRefreshTask run\n");
   }
+  float t = (getConfig()->report->post_heater_C +
+    getConfig()->report->post_getter_C +
+             getConfig()->report->post_stack_C)/3.0;
+
+  if (getConfig()->ms == Warmup) {
+    time_of_last_refresh = millis();
+
+    if (abs(t - getConfig()->RECENT_TEMPERATURE) > getConfig()->TEMP_REFRESH_LIMIT) {
+      getConfig()->BEGIN_UP_TIME_MS = time_of_last_refresh;
+      getConfig()->RECENT_TEMPERATURE = t;
+    }
+
+
+  } else if (getConfig()->ms == Cooldown) {
+    time_of_last_refresh = millis();
+    if (abs(t - getConfig()->RECENT_TEMPERATURE) > getConfig()->TEMP_REFRESH_LIMIT) {
+      getConfig()->BEGIN_UP_TIME_MS = time_of_last_refresh;
+      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = t;
+    }
+  }
+
+  return true;
+}

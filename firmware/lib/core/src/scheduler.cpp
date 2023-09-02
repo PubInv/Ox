@@ -31,6 +31,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
+  unsigned long num_of_report = 0;
+  unsigned long time_since_last_report = 0;
+  const unsigned long TIME_TO_REPORT_SCHEDULER_MS = 20*1000;
+
 void Scheduler::setupIdleTask() {
     _idleTask._properties.priority = static_cast<TaskPriority>(TaskPriorityOS::Idle);
     _idleTask._properties.period = 1;
@@ -41,6 +45,13 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     // Record how long the previous task took to run
   if (DEBUG_SCHEDULER > 1) {
     Serial.println("getNextTask");
+  }
+  unsigned long m = millis();
+  if (m > (time_since_last_report + TIME_TO_REPORT_SCHEDULER_MS)) {
+    Serial.print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ\n");
+    Serial.print("Scheduler Still Alive: ");
+    Serial.println(num_of_report++);
+    time_since_last_report = m;
   }
 
     if (_lastTaskRan != nullptr) {

@@ -132,8 +132,6 @@ void setup()
   cogProperties.id = 21;
   cogProperties.period = cogTask.PERIOD_MS;
   cogProperties.priority = OxCore::TaskPriority::High;
-  // Note: The machineConfig is universal to all tasks.
-  // It respresents the entire machine.
   cogProperties.state_and_config = (void *) &machineConfig;
   bool cogAdd = core.AddTask(&cogTask, &cogProperties);
   if (!cogAdd) {

@@ -123,9 +123,7 @@ void SanyoAceB97::_init() {
 // this is an oversimplification
 void SanyoAceB97::update(float pwm_ratio) {
 
-  fanSpeedPerCentage((pwm_ratio == 0.0) ?
-               0 :
-               100);
+  fanSpeedPerCentage((int)( pwm_ratio * 100));
 
   _pwm_ratio[0] = pwm_ratio;
 

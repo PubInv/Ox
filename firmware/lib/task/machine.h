@@ -98,19 +98,21 @@ public:
 
   // This is the overall target_temp, which changes over time.
 
-  static constexpr float YELLOW_TEMPERATURE = 50.0;
-  static constexpr float RED_TEMPERATURE = 60.0;
-  static constexpr float OPERATING_TEMPERATURE = 40.0;
+  static constexpr float YELLOW_TEMPERATURE = 760.0;
+  static constexpr float RED_TEMPERATURE = 780.0;
+  static constexpr float OPERATING_TEMPERATURE = 740.0;
   static constexpr float STOP_TEMPERATURE = 27.0;
-  static constexpr float MAX_CROSS_STACK_TEMP = 4.0;
+  static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
 
-  float RECENT_TEMPERATURE = 27.0;
+  float RECENT_TEMPERATURE = 30.0;
 
-  static constexpr float HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT = 500.0;
-  static constexpr float HIGH_TEMPERATURE_FAN_PWM = 0.4;
+  static constexpr float TEMP_REFRESH_LIMIT = 40.0;
+
+  static constexpr float HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT = 250.0;
+  static constexpr float HIGH_TEMPERATURE_FAN_PWM = 0.2;
 
   float COOL_DOWN_BEGIN_TEMPERATURE;
-  float TARGET_TEMP = 27.0;
+  float TARGET_TEMP = 30.0;
 
   static const unsigned long HOLD_TIME_MINUTES = 1;
   static const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
@@ -124,9 +126,9 @@ public:
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
 
   // FAN CONTROL
-  static constexpr float FULL_POWER_FOR_FAN = 0.6;
-  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
-  static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = OPERATING_TEMPERATURE - 50.0;
+  static constexpr float FULL_POWER_FOR_FAN = 0.4;
+  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.2;
+  static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = 250;
   static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMPERATURE + 25.0;
 
   // These parameters are related to our control procedure.

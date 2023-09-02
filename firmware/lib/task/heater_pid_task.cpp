@@ -34,7 +34,7 @@ HeaterPIDTask::HeaterPIDTask() {
     // double FKd = 0.0;
 
     // This "AJUSTMEMNT" was found by experiment
-    double ADJUSTMENT = 15.0;
+    double ADJUSTMENT = 10.0;
     double FKp = 0.03/ADJUSTMENT;
     // I want zero overshoot, so I am setting this to zero!
     //    double FKi = 0.003/ADJUSTMENT;
