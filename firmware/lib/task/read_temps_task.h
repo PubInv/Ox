@@ -37,7 +37,7 @@ class ReadTempsTask : public OxCore::Task
 public:
   ReadTempsTask();
   int DEBUG_READ_TEMPS = 0;
-  static const int PERIOD_MS = MachineConfig::TEMPERATURE_READ_PERIOD_MS;
+  static const int PERIOD_MS = MachineConfig::TEMP_READ_PERIOD_MS;
   // This is a ring buffer...
 
   // Ddelta is the change in temperature in C per min
@@ -51,7 +51,7 @@ public:
   static const int TEMPERATRUE_TIME_DELTA_MS = 60000;
   static constexpr float MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN = 1.0 / 100.0;
 
-  static constexpr int NUM_TEMPS_TO_RECORD = ceil((((float) TEMPERATRUE_TIME_DELTA_MS / (float) MachineConfig::TEMPERATURE_READ_PERIOD_MS) + NUMBER_OF_PERIODS_TO_AVERAGE));
+  static constexpr int NUM_TEMPS_TO_RECORD = ceil((((float) TEMPERATRUE_TIME_DELTA_MS / (float) MachineConfig::TEMP_READ_PERIOD_MS) + NUMBER_OF_PERIODS_TO_AVERAGE));
 
   float temps[NUM_TEMPS_TO_RECORD];
 
@@ -60,8 +60,8 @@ public:
 
   // we will add one to this
   int next_temp_idx = 0;
-  const static int NUM_TEMPERATURE_SENSORS = 3;
-  const static int NUM_TEMPERATURE_INDICES = 1;
+  const static int NUM_TEMP_SENSORS = 3;
+  const static int NUM_TEMP_INDICES = 1;
   Temperature::AbstractTemperature* _temperatureSensors;
 
   void _readTemperatureSensors();

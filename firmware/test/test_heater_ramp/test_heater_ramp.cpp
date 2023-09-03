@@ -156,14 +156,14 @@ namespace OxApp
         OxCore::Debug<const char *>("State: RAMPING UP\n");
       }
       float postHeaterTemp = getConfig()->report->post_heater_C;
-      if (postHeaterTemp > MachineConfig::OPERATING_TEMPERATURE) {
+      if (postHeaterTemp > MachineConfig::OPERATING_TEMP) {
         global_state = Holding;
         OxCore::Debug<const char *>("State Changing to HOLDING\n");
         begin_hold_time = millis();
       } else {
         const unsigned long MINUTES_RAMPING_UP = ms / (60 * 1000);
-        getConfig()->TARGET_TEMP = getConfig()->RECENT_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
-        getConfig()->TARGET_TEMP = min(getConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMPERATURE);
+        getConfig()->TARGET_TEMP = getConfig()->RECENT_TEMP + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = min(getConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMP);
       }
       break;
     };
@@ -186,7 +186,7 @@ namespace OxApp
         OxCore::Debug<const char *>("State: RAMPING DN\n");
       }
       float postHeaterTemp = getConfig()->report->post_heater_C;
-      if (postHeaterTemp < MachineConfig::STOP_TEMPERATURE) {
+      if (postHeaterTemp < MachineConfig::STOP_TEMP) {
         analogWrite(fan->PWM_PIN[0],5);
         OxCore::Debug<const char *>("Stop temperature reached!\n");
         OxCore::Debug<const char *>("=======================\n");
@@ -195,8 +195,8 @@ namespace OxApp
       } else {
         const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
         getConfig()->TARGET_TEMP =
-          MachineConfig::OPERATING_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
-        getConfig()->TARGET_TEMP = max(getConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
+          MachineConfig::OPERATING_TEMP + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = max(getConfig()->TARGET_TEMP,MachineConfig::STOP_TEMP);
       }
       break;
     };

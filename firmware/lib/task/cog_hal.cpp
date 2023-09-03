@@ -1,5 +1,5 @@
 /*
-  stage2_hal.cpp -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
+  cog_hal.cpp -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
 
   Copyright 2023, Robert L. Read
 
@@ -17,15 +17,40 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <stage2_hal.h>
+#include <cog_hal.h>
+#include <TF800A12K.h>
 
-bool Stage2HAL::init() {
+bool COG_HAL::init() {
+
+  if (DEBUG_HAL > 0) {
+      Serial.println("HAL: About to init Fan!");
+  }
+
   pinMode(MAX31850_DATA_PIN, INPUT);
+  pinMode(RF_FAN, OUTPUT);
+  pinMode(RF_STACK, OUTPUT);
+
+
+  _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
+  _fans[0]._init();
 
   init_heaters();
+
+  _stacks[0] = new SL_PS("FIRST_STACK",0);
+  _stacks[0]->init();
+
 
   if (DEBUG_HAL > 0) {
       Serial.println("HAL:About to return!");
   }
   return true;
+}
+
+// updateTheFanSpeed to a percentage of the maximum flow.
+// We may have the ability to specify flow absolutely in the future,
+// but this is genertic.
+void COG_HAL::_updateFanPWM(float unitInterval) {
+  for (int i = 0; i < NUM_FANS; i++) {
+    _fans[i].update(unitInterval);
+  }
 }

@@ -47,11 +47,15 @@ namespace OxApp
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
 
-      void tempRefresh(float t,MachineState ms);
+      void tempRefresh(float t,float RECENT_TEMP,MachineState ms);
 
+
+      float getTemperatureReading();
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
 
+
+      MachineState _executeBasedOnState(MachineState ms);
 
        MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
        MachineState _updatePowerComponentsOff() override;

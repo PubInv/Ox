@@ -33,20 +33,20 @@ namespace OxApp
 
   // TODO --- I would like to make this a static function so that it can be moved into
   // the parent task.
-  void Stage2HeaterTask::tempRefresh(float t,MachineState ms) {
+  void Stage2HeaterTask::tempRefresh(float t,float RECENT_TEMP,MachineState ms) {
     if (ms == Warmup) {
       time_of_last_refresh = millis();
 
-      if (abs(t - RECENT_TEMPERATURE) > getConfig()->TEMP_REFRESH_LIMIT) {
-        getConfig()->STAGE2_BEGIN_UP_TIME_MS[whichHeater] = time_of_last_refresh;
-        RECENT_TEMPERATURE = t;
+      if (abs(t - RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
+        getConfig()->STAGE2_BEGIN_UP_TIME[whichHeater] = time_of_last_refresh;
+        RECENT_TEMP = t;
         STAGE2_TARGET_TEMP = t;
       }
     } else if (ms == Cooldown) {
       time_of_last_refresh = millis();
-      if (abs(t - RECENT_TEMPERATURE) > getConfig()->TEMP_REFRESH_LIMIT) {
-        getConfig()->STAGE2_BEGIN_DN_TIME_MS[whichHeater] = time_of_last_refresh;
-        RECENT_TEMPERATURE = t;
+      if (abs(t - RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
+        getConfig()->STAGE2_BEGIN_DN_TIME[whichHeater] = time_of_last_refresh;
+        RECENT_TEMP = t;
         STAGE2_TARGET_TEMP = t;
       }
     }
@@ -79,13 +79,26 @@ namespace OxApp
       OxCore::Debug<const char *>("Stage2HeaterTask run\n");
     }
 
-    StateMachineManager::_run();
+    MachineState ms = getConfig()->s2sr->ms[whichHeater];
+    printOffWarnings(ms);
+
+    MachineState new_state = _executeBasedOnState(ms);
+    // if the state really changes, we want to log that and take some action!
+    if (new_state != getConfig()->ms) {
+      getConfig()->ms = new_state;
+      OxCore::Debug<const char *>("CHANGING STATE TO: ");
+      OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[getConfig()->ms]);
+      OxCore::DebugLn<const char *>("");
+    }
+
+    return true;
+
   }
 
   // TODO: This code is too similar to the
   // same function in cog_task.cpp, it should be
   // lamba-lifted.
-  MachineState StateMachineManager::_executeBasedOnState(MachineState ms) {
+  MachineState Stage2HeaterTask::_executeBasedOnState(MachineState ms) {
     MachineState new_ms;
 
     if (DEBUG_LEVEL > 0) {
@@ -95,7 +108,6 @@ namespace OxApp
       OxCore::DebugLn<const char *>(getConfig()->MachineSubStateNames[getConfig()->idleOrOperate]);
     }
 
-    MachineState ms = getConfig()->s2sr[whichHeater];
 
     switch(ms) {
     case Off:
@@ -146,16 +158,16 @@ namespace OxApp
     // if we've reached operating temperature, we switch
     // states
     if (t >= getConfig()->STAGE2_OPERATING_TEMP[whichHeater]) {
-      return Operating;
+      return NormalOperation;
     }
 
     // This is an important "sanity check"
     // for surviving restarts...
-    temp_refresh(t);
+    tempRefresh(t,getConfig()->GLOBAL_RECENT_TEMP,Warmup);
 
     // These also are dependent on which heater we are using
     float tt = computeRampUpTargetTemp(t,
-                                       RECENT_TEMPERATURE,
+                                       getConfig()->GLOBAL_RECENT_TEMP,
                                        getConfig()->BEGIN_UP_TIME_MS);
 
     if (DEBUG_LEVEL > 0) {
@@ -181,7 +193,7 @@ namespace OxApp
     float t = getTemperatureReading();
 
     if (getConfig()->previous_ms != Cooldown) {
-      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = t;
+      getConfig()->COOL_DOWN_BEGIN_TEMP = t;
     }
 
     if (t <= getConfig()->COOLDOWN_TARGET_C) {
@@ -189,10 +201,10 @@ namespace OxApp
       return new_ms;
     }
 
-    temp_refresh(t);
+    tempRefresh(t,getConfig()->GLOBAL_RECENT_TEMP,Cooldown);
 
     float tt = computeRampDnTargetTemp(t,
-                                       getConfig()->COOL_DOWN_BEGIN_TEMPERATURE,
+                                       getConfig()->COOL_DOWN_BEGIN_TEMP,
                                        getConfig()->BEGIN_DN_TIME_MS);
 
     if (DEBUG_LEVEL > 0) {
@@ -229,7 +241,7 @@ namespace OxApp
   MachineState Stage2HeaterTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
     MachineState new_ms = NormalOperation;
 
-    float tt = STAGE2_OPERATING_TEMP[whichHeater];
+    float tt = getConfig()->STAGE2_OPERATING_TEMP[whichHeater];
     STAGE2_TARGET_TEMP = tt;
     heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
     getConfig()->s2sr->target_temp_C[whichHeater] = STAGE2_TARGET_TEMP;

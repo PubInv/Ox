@@ -29,8 +29,6 @@ bool DutyCycleTask::_init()
   OxCore::Debug<const char *>("DutyCycleTask init\n");
     if (DEBUG_DUTY_CYCLE > 1) {
     Serial.println("DUTY CYCLE RUN!");
-    Serial.println("DUTY NUM_HEATERS");
-    Serial.println(MachineConfig::NUM_HEATERS);
   }
 
   return true;
@@ -47,8 +45,6 @@ bool DutyCycleTask::_run()
 {
   if (DEBUG_DUTY_CYCLE > 1) {
     Serial.println("DUTY CYCLE RUN!");
-    Serial.println("DUTY NUM_HEATERS");
-    Serial.println(MachineConfig::NUM_HEATERS);
   }
   // WARNING: This will fail when 2^32 ms are reached, about 28 days I think.
   unsigned long ms = millis();

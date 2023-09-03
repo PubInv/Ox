@@ -73,7 +73,7 @@ void ReadTempsTask::dumpQueue() {
 // compute an average temperature backward in time t
 float ReadTempsTask::tempFromTime(int t_ms) {
   float temp = 0.0;
-  const int num_periods_back = (t_ms / MachineConfig::TEMPERATURE_READ_PERIOD_MS);
+  const int num_periods_back = (t_ms / MachineConfig::TEMP_READ_PERIOD_MS);
   int num_valid = 0;
   for(int i = 0; i < NUMBER_OF_PERIODS_TO_AVERAGE; i++) {
     float t = temps[ringCompuation(next_temp_idx - (num_periods_back + i))];
@@ -112,19 +112,19 @@ void ReadTempsTask::updateTemperatures() {
   // value unchanged from the last read.
   if (postHeaterTemp > -100.0) {
     getConfig()->report->post_heater_C = postHeaterTemp;
-    getConfig()->s2sr->int1_temp_C = postHeaterTemp;
+    getConfig()->s2sr->temp_C[Int1] = postHeaterTemp;
   } else {
     OxCore::Debug<const char *>("Bad post_heater_C\n");
   }
   if (postGetterTemp > -100.0) {
     getConfig()->report->post_getter_C = postGetterTemp;
-    getConfig()->s2sr->ext1_temp_C = postGetterTemp;
+    getConfig()->s2sr->temp_C[Ext1] = postGetterTemp;
   } else {
     OxCore::Debug<const char *>("Bad post_getter_C\n");
   }
   if (postStackTemp > -100.0) {
     getConfig()->report->post_stack_C = postStackTemp;
-    getConfig()->s2sr->ext2_temp_C = postStackTemp;
+    getConfig()->s2sr->temp_C[Ext2] = postStackTemp;
   } else {
     OxCore::Debug<const char *>("Bad post_stack_C\n");
   }
@@ -147,7 +147,7 @@ void ReadTempsTask::_configTemperatureSensors() {
 }
 
 void ReadTempsTask::_readTemperatureSensors() {
-  for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
+  for (int i = 0; i < NUM_TEMP_INDICES; i++) {
     _temperatureSensors[i].ReadTemperature();
     float temperature = _temperatureSensors[0].GetTemperature(i);
     if (DEBUG_READ_TEMPS > 0) {
@@ -171,7 +171,7 @@ bool ReadTempsTask::_init()
   OxCore::Debug<const char *>("ReadTempsTask init\n");
   _configTemperatureSensors();
   OxCore::Debug<const char *>("Config of temperature sensors done\n");
-  for (int i = 0; i < NUM_TEMPERATURE_INDICES; i++) {
+  for (int i = 0; i < NUM_TEMP_INDICES; i++) {
     temps[i] = 0.0;
   }
   return true;

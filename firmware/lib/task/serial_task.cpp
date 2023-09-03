@@ -553,25 +553,7 @@ namespace OxApp
           Debug<const char *>("Unrecognized parameter type!");
         }
       }
-      if (new_ms_set) {
-        switch (getConfig()->s2heaterToControl) {
-        case 0:
-          getConfig()->s2sr->ms_int1 = new_ms;
-          Serial.println("AAAA");
-          break;
-        case 1:
-          getConfig()->s2sr->ms_ext1 = new_ms;
-          Serial.println("BBB");
-          break;
-        case 2:
-          getConfig()->s2sr->ms_ext2 = new_ms;
-          Serial.println("CCC");
-          break;
-        default:
-          Serial.println("s2heaterToCntrol not set!");
-          break;
-        }
-      }
+      getConfig()->s2sr->ms[getConfig()->s2heaterToControl] = new_ms;
     }
   }
 }

@@ -22,6 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 
 #include <core.h>
+#include <cog_hal.h>
 
 #include <retrieve_script_UDP_task.h>
 #include <cog_task.h>
@@ -61,6 +62,12 @@ MachineConfig machineConfig;
 
 #define ETHERNET_BOARD_PRESENT 1
 
+
+// This is to allow a code idiom compatible with the way
+// the machine config is found  inside the Tasks
+MachineConfig *getConfig() {
+  return &machineConfig;
+}
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer

@@ -28,6 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // #include "mostplus_flow.h"
 #include <machine_core_defs.h>
 #include <machine.h>
+#include <cog_hal.h>
 
 #include <abstract_temperature.h>
 
@@ -48,6 +49,7 @@ namespace OxApp
   public:
       int DEBUG_LEVEL = 0;
 
+    void printOffWarnings(MachineState ms);
 
       MachineState _executeBasedOnState(MachineState ms);
       virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) = 0;
@@ -67,9 +69,9 @@ namespace OxApp
 
 
     // Every subclass manages a temperature, so we can define this here
-    float RECENT_TEMPERATURE = 30.0;
+    float RECENT_TEMP = 30.0;
     // subclasses must override
-    float getTemperatureReading() = 0;
+    virtual float getTemperatureReading() = 0;
 
       bool _run() override;
   };
@@ -86,9 +88,12 @@ namespace OxApp
       // TODO: This should probably be done dynamically, not here...
 
       // There are really several senosrs, but they are indexed!
-      const static int NUM_TEMPERATURE_SENSORS = 3;
-      const static int NUM_TEMPERATURE_INDICES = 2;
+      const static int NUM_TEMP_SENSORS = 3;
+      const static int NUM_TEMP_INDICES = 2;
       const static int NUM_FANS = 1;
+
+     float getTemperatureReading();
+     COG_HAL* getHAL();
 
 
       void _updatePowerComponentsVoltage(float voltage);

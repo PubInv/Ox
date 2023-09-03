@@ -1,5 +1,5 @@
 /*
-  stage2_hal.cpp -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
+  cog_hal.h -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
 
   Copyright 2023, Robert L. Read
 
@@ -17,15 +17,23 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#include <stage2_hal.h>
+#ifndef COG_HAL_H
+#define COG_HAL_H
 
-bool Stage2HAL::init() {
-  pinMode(MAX31850_DATA_PIN, INPUT);
+#include <machine.h>
+#include <abstract_ps.h>
 
-  init_heaters();
 
-  if (DEBUG_HAL > 0) {
-      Serial.println("HAL:About to return!");
-  }
-  return true;
-}
+class COG_HAL : public MachineHAL {
+public:
+  const static int NUM_FANS = 1;
+  SanyoAceB97 _fans[NUM_FANS];
+  const int NUM_HEATERS = 1;
+  const static int NUM_STACKS = 1;
+  AbstractPS* _stacks[NUM_STACKS];
+  bool init() override;
+  void _updateFanPWM(float unitInterval);
+  const int HEATER_PINS[1] = {51};
+};
+
+#endif

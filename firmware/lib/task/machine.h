@@ -66,37 +66,20 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 class MachineHAL {
 public:
-  //  SensirionFlow *_flowsensor;
+  int NUM_HEATERS;
   OnePinHeater **_ac_heaters;
   int DEBUG_HAL = 0;
-  virtual bool init() = 0;
   bool init_heaters();
+  virtual bool init() = 0;
 };
 
-class COG_HAL : MachineHAL {
-public:
-  const int NUM_FANS = 1;
-  SanyoAceB97 _fans[NUM_FANS];
-  const int NUM_HEATERS = 1;
-  const int HEATER_PINS[] = {51};
-  const static int NUM_STACKS = 1;
-  AbstractPS* _stacks[NUM_STACKS];
-  bool init() override;
-}
-class Stage2HAL : MachineHAL {
-public:
-  const int NUM_HEATERS = 3;
-  const int HEATER_PINS[] = {51,50,49};
-  bool init() override;
-}
 
 
 class MachineConfig {
 public:
   MachineConfig();
 
-  // Our AC heater...confusingly named!
-  static const int NUM_STACKS = 1;
+  //  static const int NUM_STACKS = 1;
 
 
   // TEST CONFIGURATION PARAMETERS
@@ -112,17 +95,17 @@ public:
 
   // This is the overall target_temp, which changes over time.
 
-  static constexpr float YELLOW_TEMPERATURE = 760.0;
-  static constexpr float RED_TEMPERATURE = 780.0;
-  static constexpr float OPERATING_TEMPERATURE = 740.0;
-  static constexpr float STOP_TEMPERATURE = 27.0;
+  static constexpr float YELLOW_TEMP = 760.0;
+  static constexpr float RED_TEMP = 780.0;
+  static constexpr float OPERATING_TEMP = 740.0;
+  static constexpr float STOP_TEMP = 27.0;
   static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
 
   static constexpr float TEMP_REFRESH_LIMIT = 40.0;
 
-  static constexpr float HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT = 400.0;
+  static constexpr float HIGH_TEMP_FAN_SLOW_DOWN_LIMIT = 400.0;
 
-  float COOL_DOWN_BEGIN_TEMPERATURE;
+  float COOL_DOWN_BEGIN_TEMP;
 
   float TARGET_TEMP = 30.0;
 
@@ -144,10 +127,10 @@ public:
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
 
   // FAN CONTROL
-  static constexpr float FULL_POWER_FOR_FAN = 0.5;
-  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.2;
-  static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = 250;
-  static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMPERATURE + 25.0;
+  static constexpr float FULL_POWER_FOR_FAN = 0.6;
+  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
+  static constexpr float TEMP_TO_BEGIN_FAN_SLOW_DOWN = 500;
+  static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMP + 25.0;
 
   // These parameters are related to our control procedure.
   // This is similar to a PID loop, but I don't think any integration
@@ -160,7 +143,7 @@ public:
   float GlobalDutyCycle = STARTING_DUTY_CYCLE_FRACTION;
   // Temperature Read Period is how often we will update the
   // Temperature sensor.
-  static const int TEMPERATURE_READ_PERIOD_MS = 5000;
+  static const int TEMP_READ_PERIOD_MS = 5000;
   // Duty Cycle Adjustment Period is how often we will adject
   const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
   // This is the number of periods around a point in time we will
@@ -183,7 +166,7 @@ public:
 
   float COOLDOWN_TARGET_C = 27.0;
 
-  void _updateFanPWM(float unitInterval);
+  //  void _updateFanPWM(float unitInterval);
   void _reportFanSpeed();
 
   static const int NUM_MACHINE_STATES = 8;

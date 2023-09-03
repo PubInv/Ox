@@ -65,7 +65,7 @@ bool TempRefreshTask::_run()
                     getConfig()->report->post_getter_C),
                 getConfig()->report->post_stack_C);
 
-  computerRefreshedTargetTemp(t,getConfig()->ms,getConfig()->TEMP_REFRESH_LIMIT);
+  computeRefreshedTargetTemp(t,getConfig()->ms,getConfig()->TEMP_REFRESH_LIMIT);
 
 
   return true;

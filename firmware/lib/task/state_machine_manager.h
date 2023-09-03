@@ -41,6 +41,8 @@ namespace OxApp
       virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
       virtual MachineState _updatePowerComponentsOffUserAck() = 0;
 
+
+    void printOffWarnings(MachineState ms);
     // These code in theory be made static
       float  computeFanSpeed(float t);
       float  computeAmperage(float t);

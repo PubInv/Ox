@@ -79,33 +79,6 @@ bool MachineHAL::init_heaters()  {
 }
 
 
-bool COG_HAL::init() {
-
-  if (DEBUG_HAL > 0) {
-      Serial.println("HAL: About to init Fan!");
-  }
-
-  pinMode(MAX31850_DATA_PIN, INPUT);
-  pinMode(RF_FAN, OUTPUT);
-  pinMode(RF_STACK, OUTPUT);
-
-
-  _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
-  _fans[0]._init();
-
-  init_heaters();
-
-  _stacks[0] = new SL_PS("FIRST_STACK",0);
-  _stacks[0]->init();
-
-
-  if (DEBUG_HAL > 0) {
-      Serial.println("HAL:About to return!");
-  }
-  return true;
-}
-
-
 MachineConfig::MachineConfig() {
   script = new MachineScript();
   report = new MachineStatusReport();
@@ -114,29 +87,20 @@ MachineConfig::MachineConfig() {
   assert(RAMP_UP_TARGET_D_MIN >= 0.0);
   assert(RAMP_DN_TARGET_D_MIN <= 0.0);
 
-  assert(YELLOW_TEMPERATURE < RED_TEMPERATURE);
-  assert(OPERATING_TEMPERATURE < YELLOW_TEMPERATURE);
-  assert(STOP_TEMPERATURE < OPERATING_TEMPERATURE);
+  assert(YELLOW_TEMP < RED_TEMP);
+  assert(OPERATING_TEMP < YELLOW_TEMP);
+  assert(STOP_TEMP < OPERATING_TEMP);
 
   assert(FAN_SPEED_AT_OPERATING_TEMP < FULL_POWER_FOR_FAN);
-  assert(TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN < OPERATING_TEMPERATURE);
-  assert(OPERATING_TEMPERATURE < END_FAN_SLOW_DOWN);
+  assert(TEMP_TO_BEGIN_FAN_SLOW_DOWN < OPERATING_TEMP);
+  assert(OPERATING_TEMP < END_FAN_SLOW_DOWN);
 
 }
 
-// updateTheFanSpeed to a percentage of the maximum flow.
-// We may have the ability to specify flow absolutely in the future,
-// but this is genertic.
-void MachineConfig::_updateFanPWM(float unitInterval) {
-  for (int i = 0; i < NUM_FANS; i++) {
-    hal->_fans[i].update(unitInterval);
-  }
-  this->report->fan_pwm = unitInterval;
-}
 
 // updateTheFanSpeed to a percentage of the maximum flow.
 // We may have the ability to specify flow absolutely in the future,
 // but this is genertic.
-void MachineConfig::_reportFanSpeed() {
-  this->report->fan_rpm = hal->_fans[0]._calcRPM(0);
-}
+//void MachineConfig::_reportFanSpeed() {
+//  this->report->fan_rpm = ((COG_HAL) hal)->_fans[0]._calcRPM(0);
+//}
