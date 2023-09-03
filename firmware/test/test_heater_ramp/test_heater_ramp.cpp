@@ -83,6 +83,9 @@ void _updateStackAmperage(float amperage,MachineConfig *machineConfig) {
 const int DEBUG_LEVEL = 2;
 using namespace std;
 
+float STACK_AMPERAGE = 3.0;
+
+
 namespace OxApp
 {
 
@@ -143,7 +146,7 @@ namespace OxApp
     getConfig()->outputReport(getConfig()->report);
     // This should not be necessary here, it should be required only once...
     _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
-    _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
+    _updateStackAmperage(STACK_AMPERAGE,machineConfig);
 
     const unsigned long ms = millis();
     switch (global_state) {
@@ -224,7 +227,7 @@ void setup() {
   machineConfig = new MachineConfig();
   // This is a mystery. The system is hanging; I thought it was here,
   // but now I don't know where!
-  machineConfig->hal = new MachineHAL();
+  machineConfig->hal = new COG_HAL();
    bool initSuccess  = machineConfig->hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
@@ -332,7 +335,7 @@ void setup() {
   OxCore::Debug<const char *>("Added tasks\n");
 
   _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
-  _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
+  _updateStackAmperage(STACK_AMPERAGE,machineConfig);
   analogWrite(fan->PWM_PIN[0],153);
 
   Serial.println("Setup Done!");

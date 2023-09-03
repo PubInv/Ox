@@ -76,12 +76,7 @@ bool DutyCycleTask::_run()
 
   time_of_last_check = ms;
 
-  // I have to figure out how to get a reference
-  // to this into the task...
-  // maybe we just initialize it?
-  for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
-    getConfig()->hal->_ac_heaters[i]->setHeater(0,isOn);
-  }
+  one_pin_heater->setHeater(0,isOn);
   if (DEBUG_DUTY_CYCLE > 1) {
     OxCore::DebugLn<const char *>("DUTY HEATERS SET! ");
   }

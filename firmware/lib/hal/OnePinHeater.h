@@ -41,10 +41,11 @@ public:
   const int NUM_CHANNELS = 1;
   // NOTE: GPIO PIN 53 on my DUE appears to be stuck HIGH!
   // This card is currently burned out
+
+  // TODO: we should remove these second CHANNEL
   int CHANNEL_0_PIN = 51;
-  //  int CHANNEL_1_PIN = 51;
   int CHANNEL_1_PIN = 52;
-  int channel_pins[2] = {CHANNEL_0_PIN,CHANNEL_1_PIN};
+  int channel_pins[NUM_CHANNELS] = {CHANNEL_0_PIN};
   void init();
 
   bool setHeater(int heaterNum, bool onIfTrue);

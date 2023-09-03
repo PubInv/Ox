@@ -63,17 +63,30 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <machine_core_defs.h>
 
-const static int NUM_FANS = 1;
 
 class MachineHAL {
 public:
   //  SensirionFlow *_flowsensor;
-  SanyoAceB97 _fans[NUM_FANS];
   OnePinHeater **_ac_heaters;
   int DEBUG_HAL = 0;
-  bool init();
-  //  void _updateFanSpeed(float unitInterval);
+  virtual bool init() = 0;
+  bool init_heaters();
 };
+
+class COG_HAL : MachineHAL {
+public:
+  const int NUM_FANS = 1;
+  SanyoAceB97 _fans[NUM_FANS];
+  const int NUM_HEATERS = 1;
+  const int HEATER_PINS[] = {51};
+  bool init() override;
+}
+class Stage2HAL : MachineHAL {
+public:
+  const int NUM_HEATERS = 3;
+  const int HEATER_PINS[] = {51,50,49};
+  bool init() override;
+}
 
 
 class MachineConfig {
@@ -81,7 +94,6 @@ public:
   MachineConfig();
 
   // Our AC heater...confusingly named!
-  static const int NUM_HEATERS = 1;
   static const int NUM_STACKS = 1;
 
 
@@ -93,8 +105,8 @@ public:
 
   static constexpr float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
   static constexpr float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
-  float BEGIN_DN_TIME_MS;
-  float BEGIN_UP_TIME_MS;
+  unsigned long BEGIN_DN_TIME_MS;
+  unsigned long BEGIN_UP_TIME_MS;
 
   // This is the overall target_temp, which changes over time.
 
@@ -104,14 +116,21 @@ public:
   static constexpr float STOP_TEMPERATURE = 27.0;
   static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
 
-  float RECENT_TEMPERATURE = 30.0;
 
   static constexpr float TEMP_REFRESH_LIMIT = 40.0;
 
   static constexpr float HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT = 400.0;
 
   float COOL_DOWN_BEGIN_TEMPERATURE;
+
   float TARGET_TEMP = 30.0;
+
+  // TODO: This would better be attached to the statemanager
+  // class, as it is used in those task---but also in the
+  // separate temp_refresh_task. Until I can refactor
+  // temp_refresh_task by placing its funciton in the
+  // state manager, I need this gloabl.
+  float GLOBAL_RECENT_TEMP;
 
   static const unsigned long HOLD_TIME_MINUTES = 1;
   static const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
@@ -120,13 +139,12 @@ public:
   // AMPERAGE CONTROL
   static constexpr float MAX_AMPERAGE = 60.0;
   float STACK_VOLTAGE = 12.0;
-  float STACK_AMPERAGE = 3.0;
   static constexpr float IDLE_STACK_VOLTAGE = 1.0;
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
 
   // FAN CONTROL
   static constexpr float FULL_POWER_FOR_FAN = 0.5;
-  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
+  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.2;
   static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = 250;
   static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMPERATURE + 25.0;
 
@@ -225,13 +243,13 @@ public:
   // This is used by the Serial listener to control which
   // state machine/heater/thermocouple we are controlling
 
-  float STAGE2_DEFAULT_TEMP_INT1;
-  float STAGE2_DEFAULT_TEMP_EXT1;
-  float STAGE2_DEFAULT_TEMP_EXT2;
 
-  float STAGE2_OPERATING_TEMP_INT1;
-  float STAGE2_OPERATING_TEMP_EXT1;
-  float STAGE2_OPERATING_TEMP_EXT2;
+  // TODO: Make these indexed arrays
+
+  float STAGE2_OPERATING_TEMP[3];
+
+  unsigned long STAGE2_BEGIN_UP_TIME[3];
+  unsigned long STAGE2_BEGIN_DN_TIME[3];
 
   void outputStage2Report(Stage2StatusReport *msr);
   void createStage2JSONReport(Stage2StatusReport *msr, char *buffer);

@@ -47,6 +47,8 @@ namespace OxApp
   class StateMachineManager : public OxCore::Task {
   public:
       int DEBUG_LEVEL = 0;
+
+
       MachineState _executeBasedOnState(MachineState ms);
       virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) = 0;
       virtual MachineState _updatePowerComponentsOff() = 0 ;
@@ -57,11 +59,17 @@ namespace OxApp
       virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
       virtual MachineState _updatePowerComponentsOffUserAck() = 0;
 
-    // These code in theory be made static
+    // These functions in theory be made static
       float  computeFanSpeed(float t);
       float  computeAmperage(float t);
       float  computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms);
       float  computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
+
+
+    // Every subclass manages a temperature, so we can define this here
+    float RECENT_TEMPERATURE = 30.0;
+    // subclasses must override
+    float getTemperatureReading() = 0;
 
       bool _run() override;
   };
@@ -73,6 +81,8 @@ namespace OxApp
       TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
       int DEBUG_LEVEL = 0;
+
+
       // TODO: This should probably be done dynamically, not here...
 
       // There are really several senosrs, but they are indexed!

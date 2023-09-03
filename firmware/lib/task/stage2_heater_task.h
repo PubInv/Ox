@@ -34,12 +34,14 @@ namespace OxApp
     {
     public:
       Stage2Heater whichHeater;
-      TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
-      // This must NOT be confused with the TARGET_TEMP
-      // in the machineConfig.
+      // These must NOT be confused with the TARGET_TEMP
+      // in the machineConfig. These are specific to one
+      // heater
+      unsigned long time_of_last_refresh;
       float STAGE2_TARGET_TEMP;
       float STAGE2_OPERATING_TEMP;
+
       int DEBUG_LEVEL = 1;
 
       const static int NUM_TEMPERATURE_SENSORS = 3;
@@ -48,6 +50,8 @@ namespace OxApp
       const static int NUM_STACKS = 1;
 
       unsigned long begin_down_time = 0;
+
+      void tempRefresh(float t,MachineState ms);
 
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();

@@ -70,36 +70,38 @@ void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"FanRPM\": %.2f\n",msr->fan_rpm);
 }
 
-bool MachineHAL::init() {
-  // we should probably check that we can read this effectively here
-  // and return false if not
-  //  if (DEBUG_HAL > 0) {
-  //    Serial.println("HAL: About to run Wire!");
-  //  }
-  // We are currently not using I2C
-  //   Wire.begin();
+bool MachineHAL::init_heaters()  {
+  _ac_heaters = new OnePinHeater*[NUM_HEATERS];
+  for(int i = 0; i < NUM_HEATERS; i++) {
+    _ac_heaters[i] = new OnePinHeater();
+    _ac_heaters[i]->init();
+  }
+}
+
+
+bool COG_HAL::init() {
 
   if (DEBUG_HAL > 0) {
       Serial.println("HAL: About to init Fan!");
   }
 
+  pinMode(MAX31850_DATA_PIN, INPUT);
+  pinMode(RF_FAN, OUTPUT);
+  pinMode(RF_STACK, OUTPUT);
+
+
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
 
   _fans[0]._init();
 
-
-  _ac_heaters = new OnePinHeater*[MachineConfig::NUM_HEATERS];
-  for(int i = 0; i < MachineConfig::NUM_HEATERS; i++) {
-    _ac_heaters[i] = new OnePinHeater();
-    _ac_heaters[i]->setHeater(0,LOW);
-    _ac_heaters[i]->setHeater(1,LOW);
-  }
+  init_heaters();
 
   if (DEBUG_HAL > 0) {
       Serial.println("HAL:About to return!");
   }
   return true;
 }
+
 
 MachineConfig::MachineConfig() {
   script = new MachineScript();

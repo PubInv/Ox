@@ -39,29 +39,33 @@ namespace OxApp
         return true;
     }
 
+
+  float Stage2HeaterTask::getTemperatureReading() {
+    return getConfig()->report->post_heater_C;
+  }
     bool CogTask::_run()
     {
       getConfig()->_reportFanSpeed();
       // To make sure startup has now wild surges,
       // if we have a valid temperature we will make sure the
       // TempRefreshTask has been run...
-      float postHeaterTemp = getConfig()->report->post_heater_C;
-      if ((abs(getConfig()->TARGET_TEMP - postHeaterTemp) > 40.0) ||
+      float t = getTemperatureReading();
+
+      // This is only run once, to handle a reset without waiting
+      // 5 minutes.
+      if ((abs(getConfig()->TARGET_TEMP - t) > 40.0) ||
           ((tempRefreshTask->time_of_last_refresh == 0) &&
-           (postHeaterTemp > 0.0))) {
+           (t > 0.0))) {
         tempRefreshTask->run();
         heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
       }
-
       StateMachineManager::_run();
     }
-
 
     bool StateMachineManager::_run()
     {
 
       MachineConfig *cogConfig = getConfig();
-
 
       // If we are in the off state there is nothing to do!
       if (cogConfig->ms == OffUserAck) {
@@ -196,12 +200,18 @@ namespace OxApp
       OxCore::Debug<const char *>("Warmup Mode!\n");
     }
 
-    float t = getConfig()->report->post_heater_C;
+    float t = getTemperatureReading();
+
+    // if we've reached operating temperature, we switch
+    // states
+    if (t >= getConfig()->OPERATING_TEMP) {
+      return Operating;
+    }
 
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
     float tt = computeRampUpTargetTemp(t,
-                                       getConfig()->RECENT_TEMPERATURE,
+                                       getConfig()->GLOBAL_RECENT_TEMP,
                                        getConfig()->BEGIN_UP_TIME_MS);
 
     if (DEBUG_LEVEL > 0) {
@@ -215,18 +225,18 @@ namespace OxApp
 
     getConfig()->_updateFanPWM(fs);
     _updateStackAmperage(a);
+
     // This will be used by the HeaterPID task.
     float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
 
     if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
-      if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("PAUSING DUE TO CROSS STACK TEMP\n");
-      }
+      OxCore::Debug<const char *>("PAUSING INCREASED DUE TO CROSS STACK TEMP: ");
+      OxCore::DebugLn<float>(cross_stack_temp);
       // here now we will not change the TARGET_TEMP.
       // in order to be prepared when this condition is
       // releived, we need to recent the time and temp
       // so that we can smoothly been operating.
-      getConfig()->RECENT_TEMPERATURE = t;
+      getConfig()->GLOBAL_RECENT_TEMP = t;
       getConfig()->BEGIN_UP_TIME_MS = millis();
     } else {
       getConfig()->TARGET_TEMP = tt;
@@ -245,19 +255,17 @@ namespace OxApp
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Cooldown Mode!\n");
     }
+
+    float t = getTemperatureReading();
     if (getConfig()->previous_ms != Cooldown) {
-      // can this be be made RECENT_TEMPERATURE?
-      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = getConfig()->report->post_heater_C;
+      getConfig()->GLOBAL_RECENT_TEMP = t;
     }
 
-    if (getConfig()->report->post_heater_C <= getConfig()->COOLDOWN_TARGET_C
-        &&
-        getConfig()->report->post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
+    if (t <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
       return new_ms;
     }
 
-    float t = getConfig()->report->post_heater_C;
 
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
@@ -277,20 +285,26 @@ namespace OxApp
     getConfig()->_updateFanPWM(fs);
     _updateStackAmperage(a);
 
-    float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
+    // Note that Tom Taylor said not to do this check
+    // when cooling down, because it might let the system
+    // get stuck cooling. I'm leaving it commented here
+    // to be symmetric with warmp - rlr
+    // float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
 
-    if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
+    // if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
 
-      if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("PAUSING DUE TO CROSS STACK TEMP\n");
-      }
-      // here now we will not change the TARGET_TEMP.
-      // in order to be prepared when this condition is
-      // releived, we need to recent the time and temp
-      // so that we can smoothly been operating.
-      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = t;
-      getConfig()->BEGIN_DN_TIME_MS = millis();
-    } else {
+    //   if (DEBUG_LEVEL > 0) {
+    //   OxCore::Debug<const char *>("PAUSING DUE TO CROSS STACK TEMP\n");
+    //   }
+    //   // here now we will not change the TARGET_TEMP.
+    //   // in order to be prepared when this condition is
+    //   // releived, we need to recent the time and temp
+    //   // so that we can smoothly been operating.
+    //   getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = t;
+    //   getConfig()->BEGIN_DN_TIME_MS = millis();
+    // } else
+
+      {
       getConfig()->TARGET_TEMP = tt;
       heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
@@ -341,7 +355,7 @@ namespace OxApp
    MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
      MachineState new_ms = NormalOperation;
 
-    float t = getConfig()->report->post_heater_C;
+    float t = getTemperatureReading();;
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
     float tt = MachineConfig::OPERATING_TEMPERATURE;
