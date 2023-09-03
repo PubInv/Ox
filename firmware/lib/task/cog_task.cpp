@@ -32,10 +32,6 @@ namespace OxApp
 
         getConfig()->fanDutyCycle = 0.0;
 
-        _stacks[0] = new SL_PS("FIRST_STACK",0);
-
-        _stacks[0]->init();
-
         return true;
     }
 
@@ -342,13 +338,13 @@ namespace OxApp
   // a fixed voltage; that will have to be added later
    void CogTask::_updateStackVoltage(float voltage) {
         for (int i = 0; i < NUM_STACKS; i++) {
-          _stacks[i]->updateVoltage(voltage,getConfig());
+          getConfig()->hal->_stacks[i]->updateVoltage(voltage,getConfig());
         }
     }
 
    void CogTask::_updateStackAmperage(float amperage) {
         for (int i = 0; i < NUM_STACKS; i++) {
-          _stacks[i]->updateAmperage(amperage,getConfig());
+          getConfig()->hal->_stacks[i]->updateAmperage(amperage,getConfig());
         }
     }
 

@@ -91,10 +91,13 @@ bool COG_HAL::init() {
 
 
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
-
   _fans[0]._init();
 
   init_heaters();
+
+  _stacks[0] = new SL_PS("FIRST_STACK",0);
+  _stacks[0]->init();
+
 
   if (DEBUG_HAL > 0) {
       Serial.println("HAL:About to return!");

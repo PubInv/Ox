@@ -89,12 +89,7 @@ namespace OxApp
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
       const static int NUM_FANS = 1;
-      const static int NUM_STACKS = 1;
 
-      // WARNING! This is a fragile; I believe a rate based algorithm is better.
-      unsigned long begin_down_time = 0;
-
-      AbstractPS* _stacks[NUM_STACKS];
 
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();

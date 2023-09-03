@@ -46,10 +46,6 @@ namespace OxApp
 
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
-      const static int NUM_FANS = 1;
-      const static int NUM_STACKS = 1;
-
-      unsigned long begin_down_time = 0;
 
       void tempRefresh(float t,MachineState ms);
 

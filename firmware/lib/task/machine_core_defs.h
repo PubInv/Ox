@@ -53,6 +53,8 @@ enum Stage2Heater {
   Ext2
 };
 
+
+
 struct MachineStatusReport {
   MachineState ms;
   float target_temp_C;

@@ -79,6 +79,8 @@ public:
   SanyoAceB97 _fans[NUM_FANS];
   const int NUM_HEATERS = 1;
   const int HEATER_PINS[] = {51};
+  const static int NUM_STACKS = 1;
+  AbstractPS* _stacks[NUM_STACKS];
   bool init() override;
 }
 class Stage2HAL : MachineHAL {
@@ -115,7 +117,6 @@ public:
   static constexpr float OPERATING_TEMPERATURE = 740.0;
   static constexpr float STOP_TEMPERATURE = 27.0;
   static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
-
 
   static constexpr float TEMP_REFRESH_LIMIT = 40.0;
 
@@ -204,6 +205,13 @@ public:
     "Post Heater",
     "Post Stack"
   };
+
+  constexpr inline static char const *HeaterNames[3] = {
+    "Int1",
+    "Ext1",
+    "Ext2"
+  };
+
   MachineState ms;
   // This is used to make decisions that happen at transition time.
   MachineState previous_ms;
@@ -242,9 +250,6 @@ public:
   Stage2StatusReport *s2sr;
   // This is used by the Serial listener to control which
   // state machine/heater/thermocouple we are controlling
-
-
-  // TODO: Make these indexed arrays
 
   float STAGE2_OPERATING_TEMP[3];
 
