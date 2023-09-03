@@ -136,20 +136,20 @@ void setup() {
     OxCore::TaskProperties dutyCycleProperties;
     dutyCycleProperties.name = "dutyCycle";
     dutyCycleProperties.id = 23+i;
-    dutyCycleProperties.period = dutyCycleTask.PERIOD_MS;
+    dutyCycleProperties.period = dutyCycleTask[i].PERIOD_MS;
     dutyCycleProperties.priority = OxCore::TaskPriority::Low;
     dutyCycleProperties.state_and_config = (void *) getConfig();
     core.AddTask(&dutyCycleTask[i], &dutyCycleProperties);
-    dutyCycleTask[i].whichHeater = i;
+    dutyCycleTask[i].whichHeater = (Stage2Heater) i;
 
     OxCore::TaskProperties HeaterPIDProperties;
     HeaterPIDProperties.name = "HeaterPID";
     HeaterPIDProperties.id = 26+i;
-    HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
+    HeaterPIDProperties.period = heaterPIDTask[i].PERIOD_MS;
     HeaterPIDProperties.priority = OxCore::TaskPriority::High;
     HeaterPIDProperties.state_and_config = (void *) getConfig();
     core.AddTask(&heaterPIDTask[i], &HeaterPIDProperties);
-    heaterPIDTask[i].whichHeater = i;
+    heaterPIDTask[i].whichHeater = (Stage2Heater) i;
 
     dutyCycleTask[i].one_pin_heater = getConfig()->hal->_ac_heaters[i];
 
@@ -157,17 +157,16 @@ void setup() {
     // I really need to do a concatenation here to make the name complete.
     stage2HeaterProperties.name = getConfig()->HeaterNames[i];
     stage2HeaterProperties.id = 29+i;
-    stage2HeaterProperties.period = heaterPIDTask2.PERIOD_MS;
+    stage2HeaterProperties.period = stage2HeaterTask[i].PERIOD_MS;
     stage2HeaterProperties.priority = OxCore::TaskPriority::High;
     stage2HeaterProperties.state_and_config = (void *) getConfig();
-    bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask[i], &stage2HeaterProperties2);
+    bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask[i], &stage2HeaterProperties);
     if (!stage2HeaterTaskAdded) {
       OxCore::Debug<const char *>("stage add Failed\n");
       abort();
     }
-    stage2HeaterTask[i].whichHeater = i;
+    stage2HeaterTask[i].whichHeater = (Stage2Heater) i;
 
-    stage2HeaterTask[i].DEBUG_LEVEL = 1;
     stage2HeaterTask[i].STAGE2_TARGET_TEMP = getConfig()->TARGET_TEMP;
     stage2HeaterTask[i].STAGE2_OPERATING_TEMP = getConfig()->STAGE2_OPERATING_TEMP[i];
     getConfig()->s2sr->ms[i] = Off;
@@ -175,6 +174,10 @@ void setup() {
     heaterPIDTask[i].dutyCycleTask = &dutyCycleTask[i];
   }
 
+  // Let's put our DEBUG_LEVELS here...
+  for(int i = 0; i < 3; i++) {
+    stage2HeaterTask[i].DEBUG_LEVEL = 1;
+  }
 
 
   // This is used to determine which machine will

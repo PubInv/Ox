@@ -22,7 +22,7 @@
 
 #include <machine.h>
 
-class Stage2HAL : MachineHAL {
+class Stage2HAL : public MachineHAL {
 public:
   const int NUM_HEATERS = 3;
   bool init() override;
