@@ -89,6 +89,7 @@ void setup() {
   machineConfig = new MachineConfig();
 
   getConfig()->hal = new Stage2HAL();
+  getConfig()->hal->DEBUG_HAL = 2;
 
   getConfig()->ms = Off;
   getConfig()->s2sr->ms[Int1] = Off;
@@ -154,17 +155,16 @@ void setup() {
     dutyCycleTask[i].one_pin_heater = getConfig()->hal->_ac_heaters[i];
 
     OxCore::TaskProperties stage2HeaterProperties ;
-    // I really need to do a concatenation here to make the name complete.
     stage2HeaterProperties.name = getConfig()->HeaterNames[i];
     stage2HeaterProperties.id = 29+i;
     stage2HeaterProperties.period = stage2HeaterTask[i].PERIOD_MS;
     stage2HeaterProperties.priority = OxCore::TaskPriority::High;
     stage2HeaterProperties.state_and_config = (void *) getConfig();
-    bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask[i], &stage2HeaterProperties);
-    if (!stage2HeaterTaskAdded) {
-      OxCore::Debug<const char *>("stage add Failed\n");
-      abort();
-    }
+    //    bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask[i], &stage2HeaterProperties);
+    //    if (!stage2HeaterTaskAdded) {
+    //      OxCore::Debug<const char *>("stage add Failed\n");
+    //      abort();
+    //    }
     stage2HeaterTask[i].whichHeater = (Stage2Heater) i;
 
     stage2HeaterTask[i].STAGE2_TARGET_TEMP = getConfig()->TARGET_TEMP;
@@ -177,6 +177,7 @@ void setup() {
   // Let's put our DEBUG_LEVELS here...
   for(int i = 0; i < 3; i++) {
     stage2HeaterTask[i].DEBUG_LEVEL = 1;
+    dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
   }
 
 

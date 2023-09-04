@@ -22,10 +22,32 @@
 bool Stage2HAL::init() {
   pinMode(MAX31850_DATA_PIN, INPUT);
 
-  init_heaters();
+  // TODO: This block of code appears in cog_hal.cpp
+  // as well. There should be a way to move this into the
+  // superclass, but I can't figure out how to do it.
+  if (DEBUG_HAL > 0) {
+      Serial.println("About to initialize heaters");
+      Serial.println(NUM_HEATERS);
+      delay(100);
+  }
+  _ac_heaters = new OnePinHeater*[NUM_HEATERS];
+  for(int i = 0; i < NUM_HEATERS; i++) {
+      Serial.println("000");
+      delay(100);
+    _ac_heaters[i] = new OnePinHeater();
+      Serial.println("AAA");
+      delay(100);
+    _ac_heaters[i]->CHANNEL_0_PIN = HEATER_PINS[i];
+      Serial.println("BBB");
+      delay(100);
+    _ac_heaters[i]->init();
+      Serial.println("CCC");
+      delay(100);
+  }
 
   if (DEBUG_HAL > 0) {
       Serial.println("HAL:About to return!");
+      delay(100);
   }
   return true;
 }

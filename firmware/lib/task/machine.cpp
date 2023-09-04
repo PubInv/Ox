@@ -60,7 +60,7 @@ void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"GetterC\": %.2f,\n",msr->post_getter_C);
   sprintf(buffer+strlen(buffer), "\"StackV\": %.2f,\n",msr->stack_voltage);
   sprintf(buffer+strlen(buffer), "\"StackA\": %.2f,\n",msr->stack_amps);
-  if (isnan(msr->stack_ohms) || msr->stack_ohms < 0.0) {
+  if (isnan(msr->stack_ohms) || isinf(msr->stack_ohms) || msr->stack_ohms < 0.0) {
     sprintf(buffer+strlen(buffer), "\"StackOhms\": -1.0,\n");
   } else {
     sprintf(buffer+strlen(buffer), "\"StackOhms\": %.2f,\n",msr->stack_ohms);
@@ -70,12 +70,8 @@ void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"FanRPM\": %.2f\n",msr->fan_rpm);
 }
 
-bool MachineHAL::init_heaters()  {
-  _ac_heaters = new OnePinHeater*[NUM_HEATERS];
-  for(int i = 0; i < NUM_HEATERS; i++) {
-    _ac_heaters[i] = new OnePinHeater();
-    _ac_heaters[i]->init();
-  }
+bool MachineHAL::init() {
+  init_heaters();
 }
 
 
@@ -96,11 +92,3 @@ MachineConfig::MachineConfig() {
   assert(OPERATING_TEMP < END_FAN_SLOW_DOWN);
 
 }
-
-
-// updateTheFanSpeed to a percentage of the maximum flow.
-// We may have the ability to specify flow absolutely in the future,
-// but this is genertic.
-//void MachineConfig::_reportFanSpeed() {
-//  this->report->fan_rpm = ((COG_HAL) hal)->_fans[0]._calcRPM(0);
-//}

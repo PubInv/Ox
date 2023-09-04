@@ -28,12 +28,13 @@ class COG_HAL : public MachineHAL {
 public:
   const static int NUM_FANS = 1;
   SanyoAceB97 _fans[NUM_FANS];
-  const int NUM_HEATERS = 1;
   const static int NUM_STACKS = 1;
   AbstractPS* _stacks[NUM_STACKS];
   bool init() override;
   void _updateFanPWM(float unitInterval);
-  const int HEATER_PINS[1] = {51};
+
+  static const int NUM_HEATERS = 1;
+  const int HEATER_PINS[NUM_HEATERS] = {51};
 };
 
 #endif

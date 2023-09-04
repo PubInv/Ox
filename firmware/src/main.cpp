@@ -60,7 +60,7 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0
 
 
 // This is to allow a code idiom compatible with the way
@@ -75,13 +75,15 @@ void setup()
 {
   OxCore::serialBegin(115200UL);
   Debug<const char *>("Starting Ox...\n");
-
+  delay(100);
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
       // TODO: Output error message
       //return EXIT_FAILURE;
       return;
   }
+  Debug<const char *>("Core booted...\n");
+  delay(100);
 
   //  Eventually we will migrate all hardware to the COG_HAL..
   machineConfig.hal = new COG_HAL();
@@ -170,6 +172,7 @@ void setup()
     retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
     retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
 
+    retrieveScriptUDPTask.DEBUG_UDP = 2;
     bool retrieveScriptUDP = core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
     if (!retrieveScriptUDP) {
       OxCore::Debug<const char *>("Retrieve Script UDP\n");

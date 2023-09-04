@@ -69,6 +69,7 @@ public:
   int NUM_HEATERS;
   OnePinHeater **_ac_heaters;
   int DEBUG_HAL = 0;
+  int *HEATER_PINS;
   bool init_heaters();
   virtual bool init() = 0;
 };
@@ -98,6 +99,7 @@ public:
   static constexpr float YELLOW_TEMP = 760.0;
   static constexpr float RED_TEMP = 780.0;
   static constexpr float OPERATING_TEMP = 740.0;
+  static constexpr float OPERATING_TEMP_OVERTARGET_DELTA = 10.0;
   static constexpr float STOP_TEMP = 27.0;
   static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
 

@@ -32,13 +32,8 @@ OnePinHeater::OnePinHeater() {
 }
 
 void OnePinHeater::init() {
-  const int ACTUAL_CHANNELS = 2;
-  // we initialize the Actual channels even if we are only using
-  // one because we don't want to have a stray 110VAC line energized
-  for(int i = 0; i < ACTUAL_CHANNELS; i++) {
-    pinMode(channel_pins[i], OUTPUT);
-    digitalWrite(channel_pins[i],LOW);
-  }
+  pinMode(channel_pins[0], OUTPUT);
+  digitalWrite(channel_pins[0],LOW);
 }
 bool OnePinHeater::setHeater(int channelNum, bool onIfTrue) {
   if (channelNum < NUM_CHANNELS)

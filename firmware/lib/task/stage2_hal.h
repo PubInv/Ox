@@ -24,8 +24,8 @@
 
 class Stage2HAL : public MachineHAL {
 public:
-  const int NUM_HEATERS = 3;
   bool init() override;
+  const int NUM_HEATERS = 3;
   const int HEATER_PINS[3] = {51,50,49};
 };
 

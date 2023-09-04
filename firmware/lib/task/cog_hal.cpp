@@ -34,7 +34,19 @@ bool COG_HAL::init() {
   _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
   _fans[0]._init();
 
-  init_heaters();
+  // TODO: This block of code appears in cog_hal.cpp
+  // as well. There should be a way to move this into the
+  // superclass, but I can't figure out how to do it.
+  if (DEBUG_HAL > 0) {
+      Serial.println("About to initialize heaters");
+      delay(100);
+  }
+  _ac_heaters = new OnePinHeater*[NUM_HEATERS];
+  for(int i = 0; i < NUM_HEATERS; i++) {
+    _ac_heaters[i] = new OnePinHeater();
+    _ac_heaters[i]->CHANNEL_0_PIN = HEATER_PINS[i];
+    _ac_heaters[i]->init();
+  }
 
   _stacks[0] = new SL_PS("FIRST_STACK",0);
   _stacks[0]->init();
