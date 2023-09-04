@@ -69,6 +69,9 @@ HeaterPIDTask::HeaterPIDTask() {
       OxCore::Debug<const char *>("HeaterPIDTask run\n");
       double test_spud = getConfig()->report->post_heater_C;
       OxCore::Debug<const char *>("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+      Serial.println((unsigned long) this);
+      Serial.println("Setpoint, input:");
+      OxCore::Debug<float>(this->HeaterSetPoint_C);
       OxCore::DebugLn<float>(this->Input_temperature_C);
       OxCore::Debug<const char *>("AAA\n");
     }
@@ -96,13 +99,13 @@ HeaterPIDTask::HeaterPIDTask() {
 
     if (DEBUG_PID > 0) {
       OxCore::Debug<const char *>("Setpoing");
-      Serial.println(this->HeaterSetPoint_C,5);
+      Serial.println(this->HeaterSetPoint_C,2);
       OxCore::Debug<const char *>("previous input ");
-      Serial.println(previousInput,5);
+      Serial.println(previousInput,2);
       OxCore::Debug<const char *>("Final dutyCycle_Output ");
-      Serial.println(this->dutyCycle_Output,5);
+      Serial.println(this->dutyCycle_Output,2);
       OxCore::Debug<const char *>("Final dutyCycle ");
-      Serial.println(this->final_dutyCycle,5);
+      Serial.println(this->final_dutyCycle,2);
     }
 
     return true;

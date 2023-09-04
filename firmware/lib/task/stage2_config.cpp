@@ -23,30 +23,38 @@
 
 void MachineConfig::outputStage2Report(Stage2StatusReport *s2sr) {
         OxCore::DebugLn<const char *>("Machine State: (INT1, EXT1, EXT2) ");
-        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms[Int1]]);
-        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms[Ext1]]);
+        OxCore::Debug<const char *>(MachineConfig::MachineStateNames[s2sr->ms[Int1]]);
+        OxCore::Debug<const char *>(" ");
+        OxCore::Debug<const char *>(MachineConfig::MachineStateNames[s2sr->ms[Ext1]]);
+        OxCore::Debug<const char *>(" ");
         OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[s2sr->ms[Ext2]]);
 
-        OxCore::Debug<const char *>("target_int1_temp_C: ");
-        OxCore::DebugLn<float>(s2sr->target_temp_C[Int1]);
-        OxCore::Debug<const char *>("target_ext1_temp_C: ");
-        OxCore::DebugLn<float>(s2sr->target_temp_C[Ext1]);
-        OxCore::Debug<const char *>("target_ext2_temp_C: ");
+        OxCore::Debug<const char *>("target_temp_C (Int1, Ext1, Ext2): ");
+        OxCore::Debug<float>(s2sr->target_temp_C[Int1]);
+                OxCore::Debug<const char *>(" ");
+                //        OxCore::Debug<const char *>("target_ext1_temp_C: ");
+        OxCore::Debug<float>(s2sr->target_temp_C[Ext1]);
+        //        OxCore::Debug<const char *>("target_ext2_temp_C: ");
+        OxCore::Debug<const char *>(" ");
         OxCore::DebugLn<float>(s2sr->target_temp_C[Ext2]);
 
-        OxCore::Debug<const char *>("int1_temp_C: ");
-        OxCore::DebugLn<float>(s2sr->temp_C[Int1]);
-        OxCore::Debug<const char *>("ext1_temp_C: ");
-        OxCore::DebugLn<float>(s2sr->temp_C[Ext1]);
-        OxCore::Debug<const char *>("ext2_temp_C: ");
+        OxCore::Debug<const char *>("temp_C (Int1, Ext1, Ext2)       : ");
+        OxCore::Debug<float>(s2sr->temp_C[Int1]);
+        OxCore::Debug<const char *>(" ");
+        //        OxCore::Debug<const char *>("ext1_temp_C: ");
+        OxCore::Debug<float>(s2sr->temp_C[Ext1]);
+        OxCore::Debug<const char *>(" ");
+        //        OxCore::Debug<const char *>("ext2_temp_C: ");
         OxCore::DebugLn<float>(s2sr->temp_C[Ext2]);
 
-        OxCore::Debug<const char *>("Heater DC int1: ");
-        Serial.println(s2sr->heater_duty_cycle[Int1],4);
-        OxCore::Debug<const char *>("Heater DC ext1: ");
-        Serial.println(s2sr->heater_duty_cycle[Ext1],4);
-        OxCore::Debug<const char *>("Heater DC ext2: ");
-        Serial.println(s2sr->heater_duty_cycle[Ext2],4);
+        OxCore::Debug<const char *>("Heater DC (Int1,Ext1,Ext2)      : ");
+        Serial.print(s2sr->heater_duty_cycle[Int1],2);
+        OxCore::Debug<const char *>(" ");
+        //        OxCore::Debug<const char *>("Heater DC ext1: ");
+        Serial.print(s2sr->heater_duty_cycle[Ext1],2);
+        OxCore::Debug<const char *>(" ");
+        //        OxCore::Debug<const char *>("Heater DC ext2: ");
+        Serial.println(s2sr->heater_duty_cycle[Ext2],2);
 }
 
 void MachineConfig::createStage2JSONReport(Stage2StatusReport* s2sr, char *buffer) {

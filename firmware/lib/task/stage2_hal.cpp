@@ -32,17 +32,9 @@ bool Stage2HAL::init() {
   }
   _ac_heaters = new OnePinHeater*[NUM_HEATERS];
   for(int i = 0; i < NUM_HEATERS; i++) {
-      Serial.println("000");
-      delay(100);
     _ac_heaters[i] = new OnePinHeater();
-      Serial.println("AAA");
-      delay(100);
     _ac_heaters[i]->CHANNEL_0_PIN = HEATER_PINS[i];
-      Serial.println("BBB");
-      delay(100);
     _ac_heaters[i]->init();
-      Serial.println("CCC");
-      delay(100);
   }
 
   if (DEBUG_HAL > 0) {

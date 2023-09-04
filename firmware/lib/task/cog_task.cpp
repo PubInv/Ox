@@ -69,7 +69,7 @@ namespace OxApp
       if (new_state != ms) {
         getConfig()->ms = new_state;
         OxCore::Debug<const char *>("CHANGING STATE TO: ");
-        OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[getConfig()->ms]);
+        OxCore::DebugLn<const char *>(getConfig()->MachineStateNames[getConfig()->ms]);
         OxCore::DebugLn<const char *>("");
       }
     }
@@ -145,20 +145,20 @@ namespace OxApp
     getConfig()->fanDutyCycle = fs;
     getHAL()->_updateFanPWM(fs);
     getConfig()->report->fan_pwm = fs;
-    _updateStackVoltage(MachineConfig::MIN_OPERATING_STACK_VOLTAGE);
+    _updateStackVoltage(getConfig()->MIN_OPERATING_STACK_VOLTAGE);
 
     return new_ms;
   }
 
   float StateMachineManager::computeFanSpeed(float t) {
     float f;
-    float p = MachineConfig::FULL_POWER_FOR_FAN;
-    float s = MachineConfig::FAN_SPEED_AT_OPERATING_TEMP;
-    float d = MachineConfig::TEMP_TO_BEGIN_FAN_SLOW_DOWN;
-    float e = MachineConfig::END_FAN_SLOW_DOWN;
-    float h = MachineConfig::OPERATING_TEMP;
-    float r = MachineConfig::RED_TEMP;
-    float y = MachineConfig::YELLOW_TEMP;
+    float p = getConfig()->FULL_POWER_FOR_FAN;
+    float s = getConfig()->FAN_SPEED_AT_OPERATING_TEMP;
+    float d = getConfig()->TEMP_TO_BEGIN_FAN_SLOW_DOWN;
+    float e = getConfig()->END_FAN_SLOW_DOWN;
+    float h = getConfig()->OPERATING_TEMP;
+    float r = getConfig()->RED_TEMP;
+    float y = getConfig()->YELLOW_TEMP;
     if (t < d) {
       f = p;
     } else if (t >= d && t < y) {
@@ -170,18 +170,25 @@ namespace OxApp
   }
   float StateMachineManager::computeAmperage(float t) {
     return MachineConfig::MAX_AMPERAGE *
-      ((t < MachineConfig::YELLOW_TEMP)
+      ((t < getConfig()->YELLOW_TEMP)
        ?  1.0
-       : MachineConfig::MAX_AMPERAGE * max(0,MachineConfig::RED_TEMP - t) /
-       (MachineConfig::RED_TEMP - MachineConfig::YELLOW_TEMP));
+       : MachineConfig::MAX_AMPERAGE * max(0,getConfig()->RED_TEMP - t) /
+       (getConfig()->RED_TEMP - getConfig()->YELLOW_TEMP));
   }
 
 
   float StateMachineManager::computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms) {
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_UP = (ms - begin_up_time_ms) / (60 * 1000);
-    float tt = recent_t + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
-    tt = min(tt,MachineConfig::OPERATING_TEMP);
+    float tt = recent_t + MINUTES_RAMPING_UP * getConfig()->RAMP_UP_TARGET_D_MIN;
+    Serial.println("min test AAAA");
+    Serial.println(recent_t);
+    Serial.println(begin_up_time_ms);
+    Serial.println(MINUTES_RAMPING_UP);
+    Serial.println(tt);
+    Serial.println(getConfig()->OPERATING_TEMP);
+    tt = min(tt,getConfig()->OPERATING_TEMP);
+    Serial.println(tt);
     return tt;
   }
   float StateMachineManager::computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
@@ -189,8 +196,8 @@ namespace OxApp
     const unsigned long MINUTES_RAMPING_DN = (ms - begin_dn_time_ms) / (60 * 1000);
 
     float tt =
-     recent_t - MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
-    tt = max(tt,MachineConfig::STOP_TEMP);
+     recent_t - MINUTES_RAMPING_DN * getConfig()->RAMP_DN_TARGET_D_MIN;
+    tt = max(tt,getConfig()->STOP_TEMP);
     return t;
   }
 
@@ -206,6 +213,11 @@ namespace OxApp
     // states
     if (t >= getConfig()->OPERATING_TEMP) {
       return NormalOperation;
+    }
+
+    if (t > getConfig()->OPERATING_TEMP) {
+      new_ms = NormalOperation;
+      return new_ms;
     }
 
     float fs = computeFanSpeed(t);
@@ -230,7 +242,9 @@ namespace OxApp
     // This will be used by the HeaterPID task.
     float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
 
-    if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
+
+
+    if (cross_stack_temp > getConfig()->MAX_CROSS_STACK_TEMP) {
       OxCore::Debug<const char *>("PAUSING INCREASED DUE TO CROSS STACK TEMP: ");
       OxCore::DebugLn<float>(cross_stack_temp);
       // here now we will not change the TARGET_TEMP.
@@ -253,6 +267,8 @@ namespace OxApp
   }
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
+
+    _updateStackVoltage(getConfig()->IDLE_STACK_VOLTAGE);
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Cooldown Mode!\n");
     }
@@ -311,8 +327,6 @@ namespace OxApp
       heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
 
-    _updateStackVoltage(getConfig()->STACK_VOLTAGE);
-
     return new_ms;
   }
 
@@ -360,7 +374,7 @@ namespace OxApp
     float t = getTemperatureReading();;
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
-    float tt = MachineConfig::OPERATING_TEMP;
+    float tt = getConfig()->OPERATING_TEMP;
 
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("fan speed, amperage, tt\n");

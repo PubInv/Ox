@@ -41,7 +41,7 @@ void TempRefreshTask::computeRefreshedTargetTemp(float tmeasured,MachineState ms
     time_of_last_refresh = millis();
 
 
-    float max_t =MachineConfig::OPERATING_TEMP+MachineConfig::OPERATING_TEMP_OVERTARGET_DELTA;
+    float max_t =getConfig()->OPERATING_TEMP+getConfig()->OPERATING_TEMP_OVERTARGET_DELTA;
 
     float t = min(tmeasured,max_t);
     if (abs(t - getConfig()->GLOBAL_RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
@@ -55,7 +55,7 @@ void TempRefreshTask::computeRefreshedTargetTemp(float tmeasured,MachineState ms
     time_of_last_refresh = millis();
 
     float t = tmeasured;
-    t = min(t,MachineConfig::OPERATING_TEMP);
+    t = min(t,getConfig()->OPERATING_TEMP);
     if (abs(t - getConfig()->GLOBAL_RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
       getConfig()->BEGIN_DN_TIME_MS = time_of_last_refresh;
       getConfig()->GLOBAL_RECENT_TEMP = t;
@@ -73,7 +73,6 @@ bool TempRefreshTask::_run()
                 getConfig()->report->post_stack_C);
 
   computeRefreshedTargetTemp(t,getConfig()->ms,getConfig()->TEMP_REFRESH_LIMIT);
-
 
   return true;
 }

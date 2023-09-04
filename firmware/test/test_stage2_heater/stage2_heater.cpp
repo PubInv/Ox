@@ -133,7 +133,8 @@ void setup() {
      abort();
   }
 
-  for(int i = 0; i < 3; i++) {
+  //  for(int i = 0; i < 3; i++) {
+  for(int i = 0; i < 1; i++) {
     OxCore::TaskProperties dutyCycleProperties;
     dutyCycleProperties.name = "dutyCycle";
     dutyCycleProperties.id = 23+i;
@@ -160,12 +161,13 @@ void setup() {
     stage2HeaterProperties.period = stage2HeaterTask[i].PERIOD_MS;
     stage2HeaterProperties.priority = OxCore::TaskPriority::High;
     stage2HeaterProperties.state_and_config = (void *) getConfig();
-    //    bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask[i], &stage2HeaterProperties);
-    //    if (!stage2HeaterTaskAdded) {
-    //      OxCore::Debug<const char *>("stage add Failed\n");
-    //      abort();
-    //    }
+       bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask[i], &stage2HeaterProperties);
+       if (!stage2HeaterTaskAdded) {
+         OxCore::Debug<const char *>("stage add Failed\n");
+         abort();
+       }
     stage2HeaterTask[i].whichHeater = (Stage2Heater) i;
+    stage2HeaterTask[i].heaterPIDTask = &heaterPIDTask[i];
 
     stage2HeaterTask[i].STAGE2_TARGET_TEMP = getConfig()->TARGET_TEMP;
     stage2HeaterTask[i].STAGE2_OPERATING_TEMP = getConfig()->STAGE2_OPERATING_TEMP[i];
@@ -176,8 +178,14 @@ void setup() {
 
   // Let's put our DEBUG_LEVELS here...
   for(int i = 0; i < 3; i++) {
-    stage2HeaterTask[i].DEBUG_LEVEL = 1;
+    heaterPIDTask[i].DEBUG_PID = 2;
+    stage2HeaterTask[i].DEBUG_LEVEL = 2;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
+  }
+
+  // Now set the temperatures until we can document how to edit through the interface...
+  for(int i = 0; i < 3; i++) {
+    getConfig()->STAGE2_OPERATING_TEMP[i] = 50.0;
   }
 
 

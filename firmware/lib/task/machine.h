@@ -89,19 +89,21 @@ public:
   // Edit these directly and re-upload to run a different test.
   // This test is designed to abort the processeor when done.
 
-  static constexpr float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
-  static constexpr float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
-  unsigned long BEGIN_DN_TIME_MS;
-  unsigned long BEGIN_UP_TIME_MS;
+  float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
+  float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
+  unsigned long BEGIN_DN_TIME_MS = 0;
+  unsigned long BEGIN_UP_TIME_MS = 0;
 
   // This is the overall target_temp, which changes over time.
 
-  static constexpr float YELLOW_TEMP = 760.0;
-  static constexpr float RED_TEMP = 780.0;
-  static constexpr float OPERATING_TEMP = 740.0;
-  static constexpr float OPERATING_TEMP_OVERTARGET_DELTA = 10.0;
-  static constexpr float STOP_TEMP = 27.0;
-  static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
+  // These can be adjusted at run time.
+  float YELLOW_TEMP = 760.0;
+  float RED_TEMP = 780.0;
+  float OPERATING_TEMP = 740.0;
+  // Note! This is a difference (delta), not an absolute temperature
+  float OPERATING_TEMP_OVERTARGET_DELTA = 10.0;
+  float STOP_TEMP = 27.0;
+  float MAX_CROSS_STACK_TEMP = 40.0;
 
   static constexpr float TEMP_REFRESH_LIMIT = 40.0;
 
@@ -132,7 +134,9 @@ public:
   static constexpr float FULL_POWER_FOR_FAN = 0.6;
   static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
   static constexpr float TEMP_TO_BEGIN_FAN_SLOW_DOWN = 500;
-  static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMP + 25.0;
+  // TODO --- change this as a delta to the operating temp, so it beccomes
+  // a simple constant
+  static constexpr float END_FAN_SLOW_DOWN = 740.0 + 25.0;
 
   // These parameters are related to our control procedure.
   // This is similar to a PID loop, but I don't think any integration
