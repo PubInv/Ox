@@ -133,10 +133,10 @@ public:
   // FAN CONTROL
   static constexpr float FULL_POWER_FOR_FAN = 0.6;
   static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
-  static constexpr float TEMP_TO_BEGIN_FAN_SLOW_DOWN = 500;
+  float TEMP_TO_BEGIN_FAN_SLOW_DOWN = 500;
   // TODO --- change this as a delta to the operating temp, so it beccomes
   // a simple constant
-  static constexpr float END_FAN_SLOW_DOWN = 740.0 + 25.0;
+  float END_FAN_SLOW_DOWN = 740.0 + 25.0;
 
   // These parameters are related to our control procedure.
   // This is similar to a PID loop, but I don't think any integration

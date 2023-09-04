@@ -80,6 +80,10 @@ MachineConfig::MachineConfig() {
   report = new MachineStatusReport();
   s2sr = new Stage2StatusReport();
   // How we make certain assertions to make sure we are well configured
+
+  Serial.println("BEGGINING ASSERTION CHECKS!!");
+  Serial.println("IF YOU DO NOT SEE THE WORDS 'ALL CLEAR' BELOW AN ASSERTION HAS FAILED");
+  delay(100);
   assert(RAMP_UP_TARGET_D_MIN >= 0.0);
   assert(RAMP_DN_TARGET_D_MIN <= 0.0);
 
@@ -90,5 +94,6 @@ MachineConfig::MachineConfig() {
   assert(FAN_SPEED_AT_OPERATING_TEMP < FULL_POWER_FOR_FAN);
   assert(TEMP_TO_BEGIN_FAN_SLOW_DOWN < OPERATING_TEMP);
   assert(OPERATING_TEMP < END_FAN_SLOW_DOWN);
+  Serial.println("ALL CLEAR!!");
 
 }
