@@ -101,6 +101,8 @@ public:
   static constexpr float YELLOW_TEMPERATURE = 760.0;
   static constexpr float RED_TEMPERATURE = 780.0;
   static constexpr float OPERATING_TEMPERATURE = 740.0;
+  // Note! This is a difference (delta), not an absolute temperature
+  static constexpr float OPERATING_TEMPERATURE_OVERTARGET_DELTA = 10.0;
   static constexpr float STOP_TEMPERATURE = 27.0;
   static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
 
@@ -125,9 +127,9 @@ public:
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
 
   // FAN CONTROL
-  static constexpr float FULL_POWER_FOR_FAN = 0.5;
+  static constexpr float FULL_POWER_FOR_FAN = 0.6;
   static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
-  static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = 250;
+  static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = 500;
   static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMPERATURE + 25.0;
 
   // These parameters are related to our control procedure.

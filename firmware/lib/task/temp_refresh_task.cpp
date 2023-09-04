@@ -47,6 +47,9 @@ bool TempRefreshTask::_run()
   if (getConfig()->ms == Warmup) {
     time_of_last_refresh = millis();
 
+    float max_t =MachineConfig::OPERATING_TEMPERATURE+MachineConfig::OPERATING_TEMPERATURE_OVERTARGET_DELTA;
+    t = min(t,max_t);
+
     if (abs(t - getConfig()->RECENT_TEMPERATURE) > getConfig()->TEMP_REFRESH_LIMIT) {
       getConfig()->BEGIN_UP_TIME_MS = time_of_last_refresh;
       getConfig()->RECENT_TEMPERATURE = t;
@@ -55,6 +58,8 @@ bool TempRefreshTask::_run()
 
 
   } else if (getConfig()->ms == Cooldown) {
+    t = min(t,MachineConfig::OPERATING_TEMPERATURE);
+
     time_of_last_refresh = millis();
     if (abs(t - getConfig()->RECENT_TEMPERATURE) > getConfig()->TEMP_REFRESH_LIMIT) {
       getConfig()->BEGIN_UP_TIME_MS = time_of_last_refresh;

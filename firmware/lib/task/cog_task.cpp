@@ -178,6 +178,9 @@ namespace OxApp
     const unsigned long MINUTES_RAMPING_UP = (ms - begin_up_time_ms) / (60 * 1000);
     float tt = recent_t + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
     tt = min(tt,MachineConfig::OPERATING_TEMPERATURE);
+    if (tt > MachineConfig::OPERATING_TEMPERATURE) {
+      Serial.println("interanl error: target temperature above operating temperature");
+    }
     return tt;
   }
   float StateMachineManager::computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
@@ -198,6 +201,11 @@ namespace OxApp
 
     float t = getConfig()->report->post_heater_C;
 
+    if (t > MachineConfig::OPERATING_TEMPERATURE) {
+      new_ms = NormalOperation;
+      return new_ms;
+    }
+
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
     float tt = computeRampUpTargetTemp(t,
@@ -217,6 +225,8 @@ namespace OxApp
     _updateStackAmperage(a);
     // This will be used by the HeaterPID task.
     float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
+
+
 
     if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
       if (DEBUG_LEVEL > 0) {
@@ -242,6 +252,8 @@ namespace OxApp
   }
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
+
+    _updateStackVoltage(getConfig()->IDLE_STACK_VOLTAGE);
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Cooldown Mode!\n");
     }
@@ -277,25 +289,24 @@ namespace OxApp
     getConfig()->_updateFanPWM(fs);
     _updateStackAmperage(a);
 
-    float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
+    // float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
 
-    if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
+    // if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
 
-      if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("PAUSING DUE TO CROSS STACK TEMP\n");
-      }
-      // here now we will not change the TARGET_TEMP.
-      // in order to be prepared when this condition is
-      // releived, we need to recent the time and temp
-      // so that we can smoothly been operating.
-      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = t;
-      getConfig()->BEGIN_DN_TIME_MS = millis();
-    } else {
+    //   if (DEBUG_LEVEL > 0) {
+    //   OxCore::Debug<const char *>("PAUSING DUE TO CROSS STACK TEMP\n");
+    //   }
+    //   // here now we will not change the TARGET_TEMP.
+    //   // in order to be prepared when this condition is
+    //   // releived, we need to recent the time and temp
+    //   // so that we can smoothly been operating.
+    //   getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = t;
+    //   getConfig()->BEGIN_DN_TIME_MS = millis();
+    // }    else
+      {
       getConfig()->TARGET_TEMP = tt;
       heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
-
-    _updateStackVoltage(getConfig()->STACK_VOLTAGE);
 
     return new_ms;
   }
