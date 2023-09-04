@@ -1,1 +1,0 @@
-This is a PIRDS/PIRCS networking library that is essentially a C++ wrapper for the Cesanta Mongoose networking library.
