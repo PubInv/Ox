@@ -60,7 +60,7 @@ void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"GetterC\": %.2f,\n",msr->post_getter_C);
   sprintf(buffer+strlen(buffer), "\"StackV\": %.2f,\n",msr->stack_voltage);
   sprintf(buffer+strlen(buffer), "\"StackA\": %.2f,\n",msr->stack_amps);
-  if (isnan(msr->stack_ohms) || msr->stack_ohms < 0.0) {
+  if (isnan(msr->stack_ohms) || isinf(msr->stack_ohms) || msr->stack_ohms < 0.0) {
     sprintf(buffer+strlen(buffer), "\"StackOhms\": -1.0,\n");
   } else {
     sprintf(buffer+strlen(buffer), "\"StackOhms\": %.2f,\n",msr->stack_ohms);
