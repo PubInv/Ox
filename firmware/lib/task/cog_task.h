@@ -37,51 +37,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <temp_refresh_task.h>
 #include <heater_pid_task.h>
-
-
-// #include "model.h"
+#include <state_machine_manager.h>
 
 
 namespace OxApp
 {
-
-  class StateMachineManager : public OxCore::Task {
-  public:
-      int DEBUG_LEVEL = 0;
-
-    void printOffWarnings(MachineState ms);
-
-      MachineState _executeBasedOnState(MachineState ms);
-      virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) = 0;
-      virtual MachineState _updatePowerComponentsOff() = 0 ;
-      virtual MachineState _updatePowerComponentsWarmup() = 0;
-      virtual MachineState _updatePowerComponentsIdle() = 0;
-      virtual MachineState _updatePowerComponentsCooldown() = 0;
-      virtual MachineState _updatePowerComponentsCritialFault() = 0;
-      virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
-      virtual MachineState _updatePowerComponentsOffUserAck() = 0;
-
-    // These functions in theory be made static
-      float  computeFanSpeed(float t);
-      float  computeAmperage(float t);
-      float  computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms);
-      float  computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
-
-
-    // Every subclass manages a temperature, so we can define this here
-    float RECENT_TEMP = 30.0;
-    // subclasses must override
-    virtual float getTemperatureReading() = 0;
-
-      bool _run() override;
-  };
-
     class CogTask : public StateMachineManager
     {
     public:
       int PERIOD_MS = 10000;
-      TempRefreshTask* tempRefreshTask;
-      HeaterPIDTask* heaterPIDTask;
       int DEBUG_LEVEL = 0;
 
 
@@ -102,7 +66,6 @@ namespace OxApp
       void _updateFanSpeed(float percentage);
       void _updateStackVoltage(float voltage);
       void _updateStackAmperage(float amperage);
-
 
 
        MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;

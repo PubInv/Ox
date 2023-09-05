@@ -233,6 +233,9 @@ void loop() {
       }
 #endif
       return;
+  } else {
+    Serial.println("INTERNAL ERROR!");
+    delay(100);
   }
 }
 

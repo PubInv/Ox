@@ -69,6 +69,7 @@ public:
   int NUM_HEATERS;
   OnePinHeater **_ac_heaters;
   int DEBUG_HAL = 0;
+  Stage2Heater s2heaterToControl = Int1;
   int *HEATER_PINS;
   bool init_heaters();
   virtual bool init() = 0;
@@ -79,9 +80,6 @@ public:
 class MachineConfig {
 public:
   MachineConfig();
-
-  //  static const int NUM_STACKS = 1;
-
 
   // TEST CONFIGURATION PARAMETERS
   // ALL OF THESE COULD BE CONFIGURABLE, BUT FOR THIS TEST
@@ -204,9 +202,7 @@ public:
   MachineState ms;
   // This is used to make decisions that happen at transition time.
   MachineState previous_ms;
-  // This should be an enum, but I am having a lot of problems with it, I am going to
-  // try using an int...
-  Stage2Heater s2heaterToControl;
+  Stage2Heater s2heater;
 
   MachineScript* script;
 
@@ -236,17 +232,12 @@ public:
   // as a subclass, not a decorator, but I don't have time for that,
   // and it puts the main code at risk, so adding it in here is
   // reasonable - rlr
-  Stage2StatusReport *s2sr;
-  // This is used by the Serial listener to control which
-  // state machine/heater/thermocouple we are controlling
 
-  float STAGE2_OPERATING_TEMP[3];
-
-  unsigned long STAGE2_BEGIN_UP_TIME[3];
-  unsigned long STAGE2_BEGIN_DN_TIME[3];
-
-  void outputStage2Report(Stage2StatusReport *msr);
-  void createStage2JSONReport(Stage2StatusReport *msr, char *buffer);
+  void outputStage2Report(Stage2Heater s2h,MachineStatusReport *msr,
+                          float target_temp,
+                          float measured_temp,
+                          float duty_cycle);
+  void createStage2JSONReport(Stage2Heater s2h,MachineStatusReport *msr, char *buffer);
 
 };
 

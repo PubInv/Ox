@@ -23,6 +23,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <machine_core_defs.h>
 #include <core.h>
+#include <heater_pid_task.h>
+#include <temp_refresh_task.h>
 
 
 namespace OxApp
@@ -31,6 +33,11 @@ namespace OxApp
   class StateMachineManager : public OxCore::Task {
   public:
       int DEBUG_LEVEL = 0;
+      TempRefreshTask* tempRefreshTask;
+      HeaterPIDTask* heaterPIDTask;
+
+
+
       MachineState _executeBasedOnState(MachineState ms);
       virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) = 0;
       virtual MachineState _updatePowerComponentsOff() = 0 ;
@@ -40,7 +47,8 @@ namespace OxApp
       virtual MachineState _updatePowerComponentsCritialFault() = 0;
       virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
       virtual MachineState _updatePowerComponentsOffUserAck() = 0;
-
+      virtual float getTemperatureReading() = 0;
+      bool run_generic();
 
     void printOffWarnings(MachineState ms);
     // These code in theory be made static

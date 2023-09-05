@@ -78,7 +78,7 @@ bool MachineHAL::init() {
 MachineConfig::MachineConfig() {
   script = new MachineScript();
   report = new MachineStatusReport();
-  s2sr = new Stage2StatusReport();
+  //  s2sr = new Stage2StatusReport();
   // How we make certain assertions to make sure we are well configured
 
   Serial.println("BEGGINING ASSERTION CHECKS!!");

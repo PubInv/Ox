@@ -27,6 +27,7 @@
 #include <string.h>
 #include <PIRCS.h>
 #include <machine.h>
+#include <stage2_hal.h>
 
 using namespace OxCore;
 #define DEBUG_SERIAL_LISTEN 1
@@ -58,6 +59,10 @@ namespace OxApp
     return initialization_success = true;
   } // Setup communication channel
 
+  MachineConfig *Stage2SerialTask::getConfig(int i) {
+    return machineConfigs[i];
+  }
+
   void render_set_command_raw(SetCommand* m) {
     Debug<const char *>("Command :");
     DebugLn<char>(m->command);
@@ -83,10 +88,10 @@ namespace OxApp
 
     new_from_UI = false;
 
-#if DEBUG_SERIAL_LISTEN > 3
-    Debug<const char *>("Start");
-    DebugLn<const int>(Serial.available());
-#endif
+    if (DEBUG_LEVEL > 3) {
+      Debug<const char *>("Start");
+      DebugLn<const int>(Serial.available());
+    }
     if (Serial.available()) {
       new_from_UI = true;
       int n = strlen(input_buffer);
@@ -105,17 +110,18 @@ namespace OxApp
       input_buffer[n - to_del] = '\0';
       n = n - to_del;
 
-#if DEBUG_SERIAL_LISTEN > 1
-      Debug<const char *>("Starting with:");
-      DebugLn<const int>(n);
-#endif
+      if (DEBUG_LEVEL > 1) {
+        Debug<const char *>("Starting with:");
+        DebugLn<const int>(n);
+      }
+
       // We have to be very careful with our sizes here...
       size_t num_read = Serial.readBytesUntil('\n', input_buffer + n, 255 - n);
 
-#if DEBUG_SERIAL_LISTEN > 1
-      DebugLn<const char *>("num_read");
-      DebugLn<int>(num_read);
-#endif
+      if (DEBUG_LEVEL > 1) {
+        DebugLn<const char *>("num_read");
+        DebugLn<int>(num_read);
+      }
 
       // Here we need to check that n+num_read+1 is less that the size of the
       // input_buffer...
@@ -197,13 +203,13 @@ namespace OxApp
     char buffer[256];
     SetCommand sc;
     if (listen(buffer, 256)) {
-#if DEBUG_INPUT > 2
-      DebugLn("read buffer\n");
-#endif
+      if (DEBUG_LEVEL > 2) {
+        DebugLn("read buffer\n");
+      }
       sc = get_set_command_from_JSON(buffer, (uint16_t)256);
-#if DEBUG_INPUT > 2
-      //      render_set_command_raw(&sc);
-#endif
+      if (DEBUG_LEVEL > 2) {
+        render_set_command_raw(&sc);
+      }
       DebugLn<const char *>("rendered command");
       delay(100);
 
@@ -211,6 +217,7 @@ namespace OxApp
       // This needs to be taken out to a separate routine, probably
       // implemented in the machine
       MachineConfig *cogConfig = getConfig();
+
       // TODO: This would probably be better handled by setting
       // the most recent command into the state, and having the
       // the cog_task remove it. Then all state changes would be made in
@@ -417,19 +424,19 @@ namespace OxApp
 
     switch (c) {
     case '1':
-      getConfig()->s2heaterToControl = Int1;
+      hal->s2heaterToControl = Int1;
       DebugLn<const char *>("Switching to controlling the Int1 Heater!\n");
       clear_buffers(input_buffer);
       return false;
       break;
     case '2':
-      getConfig()->s2heaterToControl = Ext1;
+      hal->s2heaterToControl = Ext1;
       DebugLn<const char *>("Switching to controlling the Ext1 Heater!\n");
       clear_buffers(input_buffer);
       return false;
       break;
     case '3':
-      getConfig()->s2heaterToControl = Ext2;
+      hal->s2heaterToControl = Ext2;
       DebugLn<const char *>("Switching to controlling the Ext2 Heater!\n");
       clear_buffers(input_buffer);
       return false;
@@ -496,38 +503,45 @@ namespace OxApp
     char buffer[256];
     SetCommand sc;
     if (listen(buffer, 256)) {
-#if DEBUG_INPUT > 2
-      DebugLn<const char *>(buffer);
-#endif
+      if (DEBUG_LEVEL > 2) {
+        DebugLn<const char *>(buffer);
+      }
       // Could this be causing a buffer overflow?
       sc = get_set_command_from_JSON(buffer, (uint16_t)256);
-#if DEBUG_INPUT > 2
-      render_set_command_raw(&sc);
-#endif
+      if (DEBUG_LEVEL > 2) {
+        render_set_command_raw(&sc);
+      }
       // Need to have this modify the correct machine
       MachineState new_ms;
       bool new_ms_set = false;
       if (sc.command == 'W') {
-        if (getConfig()->ms == Off) {
+        Serial.println("AAA got warm up command!");
+        Serial.println((unsigned long) hal);
+        Serial.println(hal->s2heaterToControl);
+        Serial.println(getConfig(hal->s2heaterToControl)->ms);
+        if (getConfig(hal->s2heaterToControl)->ms == Off) {
+          Serial.println("Inside IF");
           new_ms = Warmup;
           new_ms_set = true;
           Debug<const char *>("New State: Warmup!");
           delay(100);
+        } else {
+          Debug<const char *>("Can only enter Warmp from Off!");
         }
       } else if (sc.command == 'C') {
-        if (getConfig()->ms != Off) {
+        if (getConfig(hal->s2heaterToControl)->ms != Off) {
           new_ms = Cooldown;
           new_ms_set = true;
           Debug<const char *>("New State: Cooldown!");
         }
       } else if (sc.command == 'E') {
-        if (getConfig()->ms != Off) {
+        if (getConfig(hal->s2heaterToControl)->ms != Off) {
           new_ms = EmergencyShutdown;
           new_ms_set = true;
           Debug<const char *>("New State: Emergency Shutdown!");
         }
       } else if (sc.command == 'A') {
-        if (getConfig()->ms == OffUserAck) {
+        if (getConfig(hal->s2heaterToControl)->ms == OffUserAck) {
           new_ms = Off;
           new_ms_set = true;
           Debug<const char *>("New State: Off!");
@@ -553,7 +567,12 @@ namespace OxApp
           Debug<const char *>("Unrecognized parameter type!");
         }
       }
-      getConfig()->s2sr->ms[getConfig()->s2heaterToControl] = new_ms;
+      if (new_ms_set) {
+        getConfig(hal->s2heaterToControl)->ms = new_ms;
+        Serial.println("new MS");
+        Serial.println(hal->s2heaterToControl);
+        Serial.println(getConfig(hal->s2heaterToControl)->ms);
+      }
     }
   }
 }

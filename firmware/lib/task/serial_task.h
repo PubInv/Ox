@@ -10,6 +10,7 @@
 #include <core.h>
 
 #include <machine.h>
+#include <stage2_hal.h>
 
 #define SERIAL_BAUD_RATE 19200
 // #define SERIAL_BAUD_RATE 9600
@@ -33,6 +34,7 @@ namespace OxApp
     char input_buffer[INPUT_BUFFER_SIZE];
     bool _init() override;
     bool _run() override;
+    int DEBUG_LEVEL = 0;
 
     virtual int clear_buffers(char buffer[]);
     virtual bool listen(char buffer[], int length);
@@ -47,6 +49,14 @@ namespace OxApp
 
   class Stage2SerialTask : public AbstractSerialTask {
   public:
+    // Stage2 consists of three separate Heating machines,
+    MachineConfig *machineConfigs[3];
+    // There is only HAL, and we need it for configuration
+    // switching
+    Stage2HAL *hal;
+
+
+    MachineConfig *getConfig(int i);
     bool one_char_command_found(int num_read, char buffer[], int k) override;
     bool _init() override;
     bool _run() override;

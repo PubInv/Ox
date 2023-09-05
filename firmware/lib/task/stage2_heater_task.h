@@ -34,21 +34,15 @@ namespace OxApp
     {
     public:
       int PERIOD_MS = 10*1000;
+
+      // This is used for us to choose a thermocuple
       Stage2Heater whichHeater;
+      TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
-      // These must NOT be confused with the TARGET_TEMP
-      // in the machineConfig. These are specific to one
-      // heater
-      unsigned long time_of_last_refresh;
-      float STAGE2_TARGET_TEMP;
-      float STAGE2_OPERATING_TEMP;
-
-      int DEBUG_LEVEL = 1;
-
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
 
-      void tempRefresh(float t,float RECENT_TEMP,MachineState ms);
+      //      void tempRefresh(float t,float RECENT_TEMP,MachineState ms);
 
 
       float getTemperatureReading();

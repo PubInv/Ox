@@ -23,12 +23,12 @@
 #include <machine_core_defs.h>
 
 
-struct Stage2StatusReport {
-  MachineState ms[NUM_STAGE2_HEATERS];
-  float target_temp_C[NUM_STAGE2_HEATERS];
-  float temp_C[NUM_STAGE2_HEATERS];
-  float heater_duty_cycle[NUM_STAGE2_HEATERS];
-};
+/* struct Stage2StatusReport { */
+/*   MachineState ms[NUM_STAGE2_HEATERS]; */
+/*   float target_temp_C[NUM_STAGE2_HEATERS]; */
+/*   float temp_C[NUM_STAGE2_HEATERS]; */
+/*   float heater_duty_cycle[NUM_STAGE2_HEATERS]; */
+/* }; */
 
 
 #endif

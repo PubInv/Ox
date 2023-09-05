@@ -112,19 +112,16 @@ void ReadTempsTask::updateTemperatures() {
   // value unchanged from the last read.
   if (postHeaterTemp > -100.0) {
     getConfig()->report->post_heater_C = postHeaterTemp;
-    getConfig()->s2sr->temp_C[Int1] = postHeaterTemp;
   } else {
     OxCore::Debug<const char *>("Bad post_heater_C\n");
   }
   if (postGetterTemp > -100.0) {
     getConfig()->report->post_getter_C = postGetterTemp;
-    getConfig()->s2sr->temp_C[Ext1] = postGetterTemp;
   } else {
     OxCore::Debug<const char *>("Bad post_getter_C\n");
   }
   if (postStackTemp > -100.0) {
     getConfig()->report->post_stack_C = postStackTemp;
-    getConfig()->s2sr->temp_C[Ext2] = postStackTemp;
   } else {
     OxCore::Debug<const char *>("Bad post_stack_C\n");
   }

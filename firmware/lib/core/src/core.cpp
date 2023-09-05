@@ -97,22 +97,26 @@ bool Core::Run() {
     while (true) {
         if (_criticalError == true) {
           Serial.println("Ending Core Run due to critical error!");
+          delay(100);
             return false;
         }
         _elapsed = _primaryTimer.Update();
 #endif
 
         unsigned long m = millis();
-        if (m > (time_since_last_report + TIME_TO_REPORT_SCHEDULER_MS)) {
-          Serial.print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ\n");
-          Serial.print("Scheduler Still Alive, Number of Ticks:");
-          Serial.println(num_of_report++);
-          time_since_last_report = m;
+        if (DEBUG_CORE > 1) {
+          if (m > (time_since_last_report + TIME_TO_REPORT_SCHEDULER_MS)) {
+            Serial.print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ\n");
+            Serial.print("Scheduler Still Alive, Number of Ticks:");
+            Serial.println(num_of_report++);
+            time_since_last_report = m;
+          }
         }
         Tick();
          bool reset = ResetWatchdog();
         if (reset == false) {
           Serial.println("Ending Core Run due to internal Watchdog!");
+          delay(100);
             return false;
         }
 #ifdef SW_TICK
