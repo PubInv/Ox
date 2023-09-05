@@ -47,7 +47,7 @@ This document describes the pinouts for the Stage 2 heater
 
 Notes: 			
 Most components require a GND rail. There are three of them on the DUE. I have tied the all of these to GND.			
-The GND rail is tied to the GND of the 12V (fixed) power supply, which is also tied to the GND bus bar.			
+The GND rail is tied to the GND of the 12V (fixed) power supply, which is NOT tied to the GND bus bar.			
 Pin Signal Names are constant, all upper case. 			
 Leading "n" indicated active low naming convention			
 
