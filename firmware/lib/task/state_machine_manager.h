@@ -32,7 +32,7 @@ namespace OxApp
 
   class StateMachineManager : public OxCore::Task {
   public:
-      int DEBUG_LEVEL = 0;
+      int DEBUG_LEVEL = 2;
       TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
 

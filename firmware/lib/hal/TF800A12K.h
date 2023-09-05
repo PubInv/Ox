@@ -38,7 +38,7 @@
 // an abstract "power supply"
 class SL_PS : public AbstractPS  {
 public:
-  int DEBUG_SL_PS = 0;
+  int DEBUG_SL_PS = 1;
   int init(); // return -1 if it failes!
   uint8_t address = ADDRESS;
   char manuf[17]; // INFO 0

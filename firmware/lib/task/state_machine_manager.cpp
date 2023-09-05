@@ -21,9 +21,19 @@ namespace OxApp
       heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
     MachineState ms = getConfig()->ms;
+    if (DEBUG_LEVEL > 0) {
+      OxCore::DebugLn<const char *>("ms");
+      OxCore::DebugLn<int>(ms);
+    }
     printOffWarnings(ms);
 
+    delay(100);
+      OxCore::DebugLn<const char *>("start execute");
     MachineState new_state = _executeBasedOnState(ms);
+      OxCore::DebugLn<const char *>("finished execute");
+    if (DEBUG_LEVEL > 0) {
+      OxCore::DebugLn<const char *>("finished execute");
+    }
     // if the state really changes, we want to log that and take some action!
     if (new_state != ms) {
       getConfig()->ms = new_state;
@@ -56,9 +66,13 @@ namespace OxApp
 
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("\nMachine State: ");
+      Serial.println(ms);
+      delay(100);
+      Serial.println((unsigned long) getConfig());
       OxCore::Debug<const char *>(getConfig()->MachineStateNames[ms]);
       OxCore::Debug<const char *>(" : ");
       OxCore::DebugLn<const char *>(getConfig()->MachineSubStateNames[getConfig()->idleOrOperate]);
+      delay(100);
     }
     switch(ms) {
     case Off:
@@ -90,7 +104,9 @@ namespace OxApp
     }
     getConfig()->previous_ms = ms;
     getConfig()->ms = new_ms;
+    Serial.println("spud");
     getConfig()->report->ms = new_ms;
+        Serial.println("bud");
     return new_ms;
   }
 

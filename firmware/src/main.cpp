@@ -74,6 +74,8 @@ MachineConfig *getConfig() {
 void setup()
 {
   OxCore::serialBegin(115200UL);
+  delay(500);
+
   Debug<const char *>("Starting Ox...\n");
   delay(100);
   if (core.Boot() == false) {
@@ -85,6 +87,7 @@ void setup()
   Debug<const char *>("Core booted...\n");
   delay(100);
 
+  machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
   machineConfig.hal = new COG_HAL();
   bool initSuccess  = machineConfig.hal->init();
@@ -94,7 +97,7 @@ void setup()
   }
 
   // Now we will set the machine state to "Off"
-  machineConfig.ms = Off;
+  getConfig()->ms = Off;
 
   /***** Configure and add your tasks here *****/
 
@@ -134,6 +137,7 @@ void setup()
     abort();
   }
 
+  getConfig()->ms = Off;
   cogTask.heaterPIDTask = &heaterPIDTask;
 
   OxCore::TaskProperties serialProperties;
@@ -142,7 +146,7 @@ void setup()
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) &machineConfig;
-  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+   bool serialAdd = core.AddTask(&serialTask, &serialProperties);
   if (!serialAdd) {
     OxCore::Debug<const char *>("SerialProperties add failed\n");
     abort();
@@ -180,7 +184,7 @@ void setup()
     }
   }
 
-  heaterPIDTask.dutyCycleTask = &dutyCycleTask;
+  dutyCycleTask.whichHeater = (Stage2Heater) 0;
 
   OxCore::Debug<const char *>("Duty Cycle Setup\n");
   OxCore::TaskProperties dutyCycleProperties;
@@ -209,9 +213,17 @@ void setup()
     abort();
   }
 
-  heaterPIDTask.DEBUG_PID = 1;
+  heaterPIDTask.whichHeater = (Stage2Heater) 0;
 
-  OxCore::Debug<const char *>("Added tasks\n");
+  heaterPIDTask.dutyCycleTask = &dutyCycleTask;
+
+  cogTask.heaterPIDTask = &heaterPIDTask;
+  cogTask.tempRefreshTask = &tempRefreshTask;
+
+  heaterPIDTask.DEBUG_PID = 1;
+  cogTask.DEBUG_LEVEL = 2;
+
+   OxCore::Debug<const char *>("Added tasks\n");
 
   /*********************************************/
 }
@@ -225,6 +237,7 @@ void loop() {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);
 #ifdef ARDUINO
       // make sure we print anything needed!
+      Serial.println("Critical error!");
       delay(100);
       // Loop endlessly to stop the program from running
       while (true) {

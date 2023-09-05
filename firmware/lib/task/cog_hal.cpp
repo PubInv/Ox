@@ -51,7 +51,8 @@ bool COG_HAL::init() {
   _stacks[0] = new SL_PS("FIRST_STACK",0);
   _stacks[0]->init();
 
-
+  Serial.println("STACK ADDRESS =");
+  Serial.println((unsigned long) _stacks[0]);
   if (DEBUG_HAL > 0) {
       Serial.println("HAL:About to return!");
   }
@@ -63,6 +64,10 @@ bool COG_HAL::init() {
 // but this is genertic.
 void COG_HAL::_updateFanPWM(float unitInterval) {
   for (int i = 0; i < NUM_FANS; i++) {
+    Serial.println("xxi = ");
+    Serial.println(i);
     _fans[i].update(unitInterval);
+    Serial.println("updated!");
+    delay(100);
   }
 }

@@ -72,15 +72,18 @@ void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
 
 bool MachineHAL::init() {
   init_heaters();
+
 }
 
 
 MachineConfig::MachineConfig() {
-  script = new MachineScript();
-  report = new MachineStatusReport();
-  //  s2sr = new Stage2StatusReport();
-  // How we make certain assertions to make sure we are well configured
+ script = new MachineScript();
+ report = new MachineStatusReport();
 
+}
+
+bool MachineConfig::init() {
+  // How we make certain assertions to make sure we are well configured
   Serial.println("BEGGINING ASSERTION CHECKS!!");
   Serial.println("IF YOU DO NOT SEE THE WORDS 'ALL CLEAR' BELOW AN ASSERTION HAS FAILED");
   delay(100);

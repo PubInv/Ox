@@ -225,6 +225,8 @@ public:
   MachineHAL* hal;
   MachineStatusReport *report;
 
+  bool init();
+
   void outputReport(MachineStatusReport *msr);
   void createJSONReport(MachineStatusReport *msr, char *buffer);
 
