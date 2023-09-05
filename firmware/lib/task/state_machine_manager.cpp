@@ -27,10 +27,7 @@ namespace OxApp
     }
     printOffWarnings(ms);
 
-    delay(100);
-      OxCore::DebugLn<const char *>("start execute");
     MachineState new_state = _executeBasedOnState(ms);
-      OxCore::DebugLn<const char *>("finished execute");
     if (DEBUG_LEVEL > 0) {
       OxCore::DebugLn<const char *>("finished execute");
     }
@@ -66,13 +63,9 @@ namespace OxApp
 
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("\nMachine State: ");
-      Serial.println(ms);
-      delay(100);
-      Serial.println((unsigned long) getConfig());
       OxCore::Debug<const char *>(getConfig()->MachineStateNames[ms]);
       OxCore::Debug<const char *>(" : ");
       OxCore::DebugLn<const char *>(getConfig()->MachineSubStateNames[getConfig()->idleOrOperate]);
-      delay(100);
     }
     switch(ms) {
     case Off:
@@ -104,9 +97,7 @@ namespace OxApp
     }
     getConfig()->previous_ms = ms;
     getConfig()->ms = new_ms;
-    Serial.println("spud");
     getConfig()->report->ms = new_ms;
-        Serial.println("bud");
     return new_ms;
   }
 
@@ -142,14 +133,7 @@ namespace OxApp
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_UP = (ms - begin_up_time_ms) / (60 * 1000);
     float tt = recent_t + MINUTES_RAMPING_UP * getConfig()->RAMP_UP_TARGET_D_MIN;
-    Serial.println("min test AAAA");
-    Serial.println(recent_t);
-    Serial.println(begin_up_time_ms);
-    Serial.println(MINUTES_RAMPING_UP);
-    Serial.println(tt);
-    Serial.println(getConfig()->OPERATING_TEMP);
     tt = min(tt,getConfig()->OPERATING_TEMP);
-    Serial.println(tt);
     return tt;
   }
   float StateMachineManager::computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {

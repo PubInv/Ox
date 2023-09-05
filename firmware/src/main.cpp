@@ -124,7 +124,6 @@ void setup()
     OxCore::Debug<const char *>("serialReport Task add failed\n");
     abort();
   }
-
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 21;
@@ -139,6 +138,7 @@ void setup()
 
   getConfig()->ms = Off;
   cogTask.heaterPIDTask = &heaterPIDTask;
+
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";

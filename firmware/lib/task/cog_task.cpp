@@ -36,7 +36,7 @@ namespace OxApp
     }
 
   COG_HAL* CogTask::getHAL() {
-    (COG_HAL *) getConfig()->hal;
+    return (COG_HAL *) (getConfig()->hal);
   }
 
   float CogTask::getTemperatureReading() {
@@ -53,19 +53,11 @@ namespace OxApp
   MachineState CogTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
 
-    Serial.println("AAA");
     float fs = 0.0;
     getConfig()->fanDutyCycle = fs;
-    Serial.println("QQQ");
-    delay(100);
     getHAL()->_updateFanPWM(fs);
-    Serial.println("BBB");
     getConfig()->report->fan_pwm = fs;
-    Serial.println("BBBXXX");
-    delay(100);
     _updateStackVoltage(getConfig()->MIN_OPERATING_STACK_VOLTAGE);
-    Serial.println("CCC");
-    delay(100);
     return new_ms;
   }
 
@@ -225,14 +217,7 @@ namespace OxApp
   // TODO: This would go better on the HAL
    void CogTask::_updateStackVoltage(float voltage) {
      for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
-       Serial.println("yi ");
-       Serial.println(i);
-       delay(100);
-       Serial.println((unsigned long) (getHAL()->_stacks[i]));
-       delay(100);
        getHAL()->_stacks[i]->updateVoltage(voltage,getConfig());
-       Serial.println("updated");
-       delay(100);
      }
    }
 

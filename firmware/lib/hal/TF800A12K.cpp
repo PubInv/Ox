@@ -356,20 +356,15 @@ void SL_PS::updateAmperage(float amperage, MachineConfig *config) {
 }
 
 void SL_PS::updateVoltage(float voltage, MachineConfig *config) {
-  Serial.print("AAAAAA: ");
-  delay(100);
 
   MachineStatusReport *msr = config->report;
   uint16_t volts = (uint16_t) (voltage * 100.0);
 
-  Serial.print("BBBB: ");
   if (DEBUG_SL_PS > 0) {
     Serial.print("Setting SL_PS_Volts: ");
     Serial.println(volts);
   }
-  Serial.print("QQQQ: ");
   int ret_val = setPS_Voltage(this->address, volts);
-  Serial.print("Spud returents: ");
   if (!ret_val) {
     Serial.println("FAILED TO SET VOLTAGE!");
   }
