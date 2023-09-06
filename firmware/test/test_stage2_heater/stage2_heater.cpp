@@ -41,7 +41,8 @@ using namespace OxCore;
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
 #include <stage2SerialReportTask.h>
-#include <serial_task.h>
+// #include <serial_task.h>
+#include <stage2_serial_task.h>
 #include <temp_refresh_task.h>
 
 using namespace OxCore;
@@ -60,7 +61,7 @@ using namespace std;
 
 
 using namespace OxApp;
-ReadTempsTask readTempsTask;
+stage2_ReadTempsTask stage2_readTempsTask;
 
 HeaterPIDTask heaterPIDTask[3];
 DutyCycleTask dutyCycleTask[3];
@@ -106,7 +107,6 @@ void setup() {
 
   }
 
-
   Serial.println("About to run test!");
 
   // Now we have a problem; we want 3 configurations for 3 different
@@ -117,14 +117,17 @@ void setup() {
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
   readTempsProperties.id = 20;
-  readTempsProperties.period = readTempsTask.PERIOD_MS;
+  readTempsProperties.period = stage2_readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
   readTempsProperties.state_and_config = (void *) getConfig(0);
   delay(300);
-  core.AddTask(&readTempsTask, &readTempsProperties);
+  core.AddTask(&stage2_readTempsTask, &readTempsProperties);
   delay(100);
-
-
+  // For this class, we give it all configs, so it can place
+  // the temperatures in them
+  for (int i = 0; i < 3; i++) {
+    stage2_readTempsTask.mcs[i] = getConfig(i);
+  }
 
   for(int i = 0; i < 3; i++) {
     OxCore::TaskProperties stage2SerialReportProperties;
@@ -190,21 +193,20 @@ void setup() {
       delay(100);
       abort();
     }
-
     stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
-
   }
 
   // Let's put our DEBUG_LEVELS here...
   for(int i = 0; i < 3; i++) {
-    heaterPIDTask[i].DEBUG_PID = 2;
-    stage2HeaterTask[i].DEBUG_LEVEL = 2;
+    heaterPIDTask[i].DEBUG_PID = 0;
+    stage2HeaterTask[i].DEBUG_LEVEL = 0;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
-    tempRefreshTask[i].DEBUG = 2;
+    tempRefreshTask[i].DEBUG = 3;
   }
 
     core.DEBUG_CORE = 0;
     core._scheduler.DEBUG_SCHEDULER = 0;
+    stage2_readTempsTask.DEBUG_READ_TEMPS = 0;
 
   // Now set the temperatures until we can document how to edit through the interface...
   // This sets up a very basic experiment
@@ -226,6 +228,9 @@ void setup() {
   getConfig(0)->s2heater = Int1;
   getConfig(1)->s2heater = Ext1;
   getConfig(2)->s2heater = Ext2;
+  for(int i = 0; i < 3; i++) {
+    getConfig(i)->IS_STAGE2_HEATER_CONFIG = true;
+  }
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";

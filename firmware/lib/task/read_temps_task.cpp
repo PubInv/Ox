@@ -55,7 +55,7 @@ void ReadTempsTask::addTempToQueue(float c) {
   this->temps[next_temp_idx] = c;
   this->next_temp_idx = (next_temp_idx + 1) % NUM_TEMPS_TO_RECORD;
 }
-int ReadTempsTask::ringCompuation(int n) {
+int ReadTempsTask::ringComputation(int n) {
   if (n >0)
     return n % NUM_TEMPS_TO_RECORD;
   else
@@ -66,7 +66,7 @@ void ReadTempsTask::dumpQueue() {
   for(int i = 0; i < NUM_TEMPS_TO_RECORD; i++) {
     OxCore::Debug<int>(i*1000);
     OxCore::Debug<const char *>(" : ");
-    OxCore::DebugLn<float>(this->temps[ringCompuation(this->next_temp_idx - i)]);
+    OxCore::DebugLn<float>(this->temps[ringComputation(this->next_temp_idx - i)]);
   }
 }
 
@@ -76,7 +76,7 @@ float ReadTempsTask::tempFromTime(int t_ms) {
   const int num_periods_back = (t_ms / MachineConfig::TEMP_READ_PERIOD_MS);
   int num_valid = 0;
   for(int i = 0; i < NUMBER_OF_PERIODS_TO_AVERAGE; i++) {
-    float t = temps[ringCompuation(next_temp_idx - (num_periods_back + i))];
+    float t = temps[ringComputation(next_temp_idx - (num_periods_back + i))];
     if (t != 0) {
       temp += t;
       num_valid++;
@@ -126,7 +126,8 @@ void ReadTempsTask::updateTemperatures() {
     OxCore::Debug<const char *>("Bad post_stack_C\n");
   }
 
-
+  // WARNING! This needs to be done for all configs if we are
+  // a 2-stage heater; this is handled by the subclass.
   getConfig()->report->target_temp_C = getConfig()->TARGET_TEMP;
 
   if (DEBUG_READ_TEMPS > 0) {
@@ -134,8 +135,22 @@ void ReadTempsTask::updateTemperatures() {
     OxCore::Debug<const char *>("Target Temp : ");
     OxCore::DebugLn<float>(getConfig()->TARGET_TEMP);
   }
+  // Notice we are keeping the queue only for the post_heater thermocouple,
+  // which is what we are using as a control variable.
   addTempToQueue(getConfig()->report->post_heater_C);
   calculateDdelta();
+}
+
+void stage2_ReadTempsTask::updateTemperatures() {
+  ReadTempsTask::updateTemperatures();
+  mcs[0]->report->post_heater_C = getConfig()->report->post_heater_C;
+  mcs[1]->report->post_getter_C = getConfig()->report->post_getter_C;
+  mcs[2]->report->post_stack_C = getConfig()->report->post_stack_C;
+  // The TARGET_TEMP is not computed here, this is just a reporting function!
+  for(int i = 0; i < 3; i++) {
+    mcs[i]->report->target_temp_C = mcs[i]->TARGET_TEMP;
+  }
+
 }
 // I don't fully understand this!
 void ReadTempsTask::_configTemperatureSensors() {

@@ -116,7 +116,7 @@ public:
   // separate temp_refresh_task. Until I can refactor
   // temp_refresh_task by placing its funciton in the
   // state manager, I need this gloabl.
-  float GLOBAL_RECENT_TEMP;
+  float GLOBAL_RECENT_TEMP = 30.0;
 
   static const unsigned long HOLD_TIME_MINUTES = 1;
   static const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
@@ -202,6 +202,7 @@ public:
   MachineState ms;
   // This is used to make decisions that happen at transition time.
   MachineState previous_ms;
+  bool IS_STAGE2_HEATER_CONFIG = false;
   Stage2Heater s2heater;
 
   MachineScript* script;

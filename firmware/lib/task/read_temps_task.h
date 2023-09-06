@@ -66,15 +66,28 @@ public:
 
   void _readTemperatureSensors();
   void _configTemperatureSensors();
-  void updateTemperatures();
+  virtual void updateTemperatures();
   void addTempToQueue(float c);
   float tempFromTime(int t_ms);
   void calculateDdelta();
   void dumpQueue();
-  int ringCompuation(int n);
+  int ringComputation(int n);
 private:
   bool _init() override;
   bool _run() override;
+};
+
+
+// This will class has a reference to the three
+// separate MachineConfigs for each heater, so it
+// can update them after calling the superclass.
+// This is the minum extension that I can image to
+// stage2 without changing the core OEDCS class.
+class stage2_ReadTempsTask : public ReadTempsTask
+{
+public:
+  MachineConfig* mcs[3];
+  void updateTemperatures();
 };
 
 

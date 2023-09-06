@@ -1,14 +1,10 @@
 #ifndef SERIAL_TASK_H
 #define SERIAL_TASK_H
 
-#ifdef ARDUINO
 #include <Arduino.h>
-#else // Native
-#include <iostream>
-#endif
-
 #include <core.h>
-
+#include <debug.h>
+#include <PIRCS.h>
 #include <machine.h>
 #include <stage2_hal.h>
 
@@ -47,20 +43,9 @@ namespace OxApp
     bool _run() override;
   };
 
-  class Stage2SerialTask : public AbstractSerialTask {
-  public:
-    // Stage2 consists of three separate Heating machines,
-    MachineConfig *machineConfigs[3];
-    // There is only HAL, and we need it for configuration
-    // switching
-    Stage2HAL *hal;
-
-
-    MachineConfig *getConfig(int i);
-    bool one_char_command_found(int num_read, char buffer[], int k) override;
-    bool _init() override;
-    bool _run() override;
-  };
+  // WARNING! This is duplciated code. It should be moved into
+  // the abstract class when that is created.
+  void render_set_command_raw(SetCommand* m);
 
 }
 

@@ -7,20 +7,27 @@ namespace OxApp
 
   bool StateMachineManager::run_generic()
   {
+
+    if (DEBUG_LEVEL > 0) {
+      OxCore::DebugLn<const char *>("starting run generic");
+    }
     // To make sure startup has now wild surges,
     // if we have a valid temperature we will make sure the
     // TempRefreshTask has been run...
     float t = getTemperatureReading();
 
+    MachineState ms = getConfig()->ms;
     // This is only run once, to handle a reset without waiting
     // 5 minutes.
-    if ((abs(getConfig()->TARGET_TEMP - t) > 40.0) ||
-        ((tempRefreshTask->time_of_last_refresh == 0) &&
-         (t > 0.0))) {
-      tempRefreshTask->run();
-      heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
+    if ((ms == Warmup) || (ms == Cooldown)) {
+      if ((abs(getConfig()->TARGET_TEMP - t) > 40.0) ||
+          ((tempRefreshTask->time_of_last_refresh == 0) &&
+           (t > 0.0))) {
+        tempRefreshTask->run();
+        heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
+      }
     }
-    MachineState ms = getConfig()->ms;
+
     if (DEBUG_LEVEL > 0) {
       OxCore::DebugLn<const char *>("ms");
       OxCore::DebugLn<int>(ms);

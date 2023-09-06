@@ -69,8 +69,6 @@ HeaterPIDTask::HeaterPIDTask() {
       OxCore::Debug<const char *>("HeaterPIDTask run\n");
       double test_spud = getConfig()->report->post_heater_C;
       OxCore::Debug<const char *>("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-      Serial.println((unsigned long) this);
-      Serial.println("Setpoint, input:");
       OxCore::Debug<float>(this->HeaterSetPoint_C);
       OxCore::DebugLn<float>(this->Input_temperature_C);
       OxCore::Debug<const char *>("AAA\n");

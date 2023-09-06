@@ -1,8 +1,5 @@
 /*
-
-  stage2SerialReport.h -- read temperatures sensors
-
-  Copyright (C) 2023 Robert Read.
+  Copyright (C) 2023 Robert L. Read
 
   This program includes free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -18,29 +15,31 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef STAGE2_SERIAL_REPORT_H
-#define STAGE2_SERIAL_REPORT_H
+#ifndef STAGE2_SERIAL_TASK_H
+#define STAGE2_SERIAL_TASK_H
 
-#include <core_defines.h>
 #include <core.h>
+#include <serial_task.h>
+#include <machine.h>
 
-using namespace OxCore;
-
-class Stage2SerialReportTask : public OxCore::Task
+namespace OxApp
 {
-public:
-  Stage2SerialReportTask();
 
-  MachineConfig *machineConfigs[3];
+class Stage2SerialTask : public AbstractSerialTask {
+  public:
+    // Stage2 consists of three separate Heating machines,
+    MachineConfig *machineConfigs[3];
+    // There is only HAL, and we need it for configuration
+    // switching
+    Stage2HAL *hal;
 
-  int DEBUG_SERIAL_REPORT = 0;
-  // since we have three, we report them a little less often to keep the
-  // serial traffic down
-  int PERIOD_MS = 30*1000;
-private:
-  bool _init() override;
-  bool _run() override;
-};
+    MachineConfig *getConfig(int i);
+    bool one_char_command_found(int num_read, char buffer[], int k) override;
+    bool _init() override;
+    bool _run() override;
+  };
 
+
+}
 
 #endif
