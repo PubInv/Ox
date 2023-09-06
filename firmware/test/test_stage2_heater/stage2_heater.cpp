@@ -97,7 +97,7 @@ void setup() {
   for(int i = 0; i < 3; i++) {
     machineConfig[i] = new MachineConfig();
     getConfig(i)->hal = s2hal;
-    getConfig(i)->hal->DEBUG_HAL = 2;
+    getConfig(i)->hal->DEBUG_HAL = 0;
     getConfig(i)->ms = Off;
 
     // Now this is problematic and probably should be undone
@@ -198,10 +198,10 @@ void setup() {
 
   // Let's put our DEBUG_LEVELS here...
   for(int i = 0; i < 3; i++) {
-    heaterPIDTask[i].DEBUG_PID = 0;
-    stage2HeaterTask[i].DEBUG_LEVEL = 0;
+    heaterPIDTask[i].DEBUG_PID = 3;
+    stage2HeaterTask[i].DEBUG_LEVEL = 3;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
-    tempRefreshTask[i].DEBUG = 3;
+    tempRefreshTask[i].DEBUG = 0;
   }
 
     core.DEBUG_CORE = 0;

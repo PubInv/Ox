@@ -169,12 +169,7 @@ namespace OxApp
       MachineState new_ms;
       bool new_ms_set = false;
       if (sc.command == 'W') {
-        Serial.println("AAA got warm up command!");
-        Serial.println((unsigned long) hal);
-        Serial.println(hal->s2heaterToControl);
-        Serial.println(getConfig(hal->s2heaterToControl)->ms);
         if (getConfig(hal->s2heaterToControl)->ms == Off) {
-          Serial.println("Inside IF");
           new_ms = Warmup;
           new_ms_set = true;
           Debug<const char *>("New State: Warmup!");

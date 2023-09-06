@@ -80,14 +80,16 @@ namespace OxApp
     }
 
      getConfig()->GLOBAL_RECENT_TEMP = t;
-     getConfig()->BEGIN_UP_TIME_MS = millis();
+     //     getConfig()->BEGIN_UP_TIME_MS = millis();
 
     if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("Warmup tt\n");
+      OxCore::Debug<const char *>("Warmup tt for :");
+      Serial.println(getConfig()->s2heater);
       OxCore::DebugLn<float>(tt);
       OxCore::Debug<const char *>("Global Recent temp\n");
       OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
-      Serial.println((unsigned long) heaterPIDTask);
+      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
+
     }
 
     getConfig()->TARGET_TEMP = tt;
@@ -116,8 +118,12 @@ namespace OxApp
                                        getConfig()->BEGIN_DN_TIME_MS);
 
     if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("tt\n");
+      OxCore::Debug<const char *>("CoolDown tt for :");
+      Serial.println((unsigned long) heaterPIDTask);
       OxCore::DebugLn<float>(tt);
+      OxCore::Debug<const char *>("Global Recent temp\n");
+      OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
+      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
     }
 
     getConfig()->TARGET_TEMP = tt;

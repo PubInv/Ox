@@ -30,8 +30,8 @@
 #include <stage2_hal.h>
 
 using namespace OxCore;
-#define DEBUG_SERIAL_LISTEN 1
-#define DEBUG_INPUT 3
+#define DEBUG_SERIAL_LISTEN 0
+#define DEBUG_INPUT 0
 
 namespace OxApp
 {
