@@ -1,27 +1,28 @@
 /* WatchDog_Due_Eval.ino
- * 
- *  By:   (Forrest) Lee Erickson
- *  Date: 20230904
+
+    By:   (Forrest) Lee Erickson
+    Date: 20230904
+    Date: 20230905 Make state persistant through reset
 */
 
 /* Copyright (C) 2023 Forrest Lee Erickson and Public Invention
 
-This program includes free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+  This program includes free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
 
-See the GNU Affero General Public License for more details.
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  See the GNU Affero General Public License for more details.
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #define PROG_NAME "WatchDog_Due_Eval.ino"
-#define VERSION "; Rev: 0.1"  //
+#define VERSION "; Rev: 0.2"  //
 #define BAUDRATE 115200
 #define DEVICE_UNDER_TEST "Hardware: Due"
 
@@ -31,8 +32,16 @@ const long WATCH_DOG_TIME = 1500; // mS. Verified this has period of about 1.5 s
 
 
 //const int LED_BUILTIN = 13;
+const int D12 = 12;     // An input, Make low to count state
 const int D7 = 7;     // An input Make low to make watchdog time out.
 char *resetTypes[] = { "general", "backup", "watchdog", "software", "user" };  //Watch dog
+
+int buttonState = 0;
+//uint8_t reset_counter __attribute__ ((section (".noinit")));
+int reset_counter __attribute__ ((section (".noinit")));
+
+int buttonPresses = 0;
+
 //Functions
 
 void watchdogSetup() {
@@ -59,6 +68,15 @@ void setup() {
   uint32_t resetCause = rstc_get_reset_cause(RSTC) >> RSTC_SR_RSTTYP_Pos;
   Serial.print("ResetCause: ");
   Serial.println(resetTypes[resetCause]);
+
+//  if(resetCause != 2){
+//  if(resetCause == 0){
+  if(true){
+      ++reset_counter;
+  }
+
+  Serial.print("Reset counts: ");
+  Serial.println(reset_counter, DEC);
 
   watchdogSetup();
 
