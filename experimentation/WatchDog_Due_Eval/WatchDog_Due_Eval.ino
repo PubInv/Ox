@@ -3,7 +3,7 @@
     By:   (Forrest) Lee Erickson
     Date: 20230904
     Date: 20230905 Make state persistant through reset. Using section (".noinit") did not work.
-    Date: 20230906 Use FLASH storage for state to persist through reset.  Blink an LED.
+    Date: 20230906 Use FLASH storage for state to persist through reset.  Blink an LED. Counts resets.
 
 */
 
@@ -24,7 +24,7 @@
 */
 
 #define PROG_NAME "WatchDog_Due_Eval.ino"
-#define VERSION "; Rev: 0.3"  //
+#define VERSION "; Rev: 0.4"  //
 #define BAUDRATE 115200
 #define DEVICE_UNDER_TEST "Hardware: Due"
 
@@ -71,7 +71,7 @@ void CheckIfRunFirstTime() {
   /* Flash is erased every time new code is uploaded. Write the default configuration to flash if first time */
   // running for the first time?
   uint8_t codeRunningForTheFirstTime = dueFlashStorage.read(0); // flash bytes will be 255 at first run
-  //  Serial.println(codeRunningForTheFirstTime);
+  Serial.println(codeRunningForTheFirstTime);
   Serial.print("codeRunningForTheFirstTime: ");
   if (codeRunningForTheFirstTime != 0) {
     Serial.println("yes");
@@ -94,7 +94,9 @@ void CheckIfRunFirstTime() {
   }
   else {
     Serial.println("no. Incrment boot count.");
-//    readConfigurationFromFlash();
+    //Gets the current configuration so we can increment reset count.
+     memcpy(&configurationFromFlash, b, sizeof(Configuration)); // copy byte array to temporary struct
+    
     //Update only .a the boot count.
     configuration.a = configurationFromFlash.a + 1;
     configuration.b = configurationFromFlash.b;
@@ -194,7 +196,7 @@ void setup() {
 
   //Print out the reset reason
   uint32_t resetCause = rstc_get_reset_cause(RSTC) >> RSTC_SR_RSTTYP_Pos;
-  Serial.print("ResetCause: ");
+//  Serial.print("ResetCause: ");
   Serial.println(resetTypes[resetCause]);
 
   CheckIfRunFirstTime(); //If so set up flash with defaults.  Prints state from flash
