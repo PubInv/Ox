@@ -59,8 +59,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 1
-
+//#define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer
