@@ -4,7 +4,7 @@
     Date: 20230904
     Date: 20230905 Make state persistant through reset. Using section (".noinit") did not work.
     Date: 20230906 Use FLASH storage for state to persist through reset.  Blink an LED. Counts resets.
-
+    Date: 20230907 Add compile_date.  Move print program information into function.
 */
 
 /* Copyright (C) 2023 Forrest Lee Erickson and Public Invention
@@ -23,13 +23,13 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#define PROG_NAME "WatchDog_Due_Eval.ino"
-#define VERSION "; Rev: 0.4"  //
 #define BAUDRATE 115200
-#define DEVICE_UNDER_TEST "Hardware: Due"
 
+/* Watchdog */
 const long WATCH_DOG_TIME = 1500; // mS. Verified this has period of about 1.5 seconds
+char *resetTypes[] = { "general", "backup", "watchdog", "software", "user" };
 
+/* Winking LED */
 //Set LED for Uno or ESP32 Dev Kit on board blue LED.
 //const int LED_BUILTIN = 2;    // ESP32 Kit
 //const int LED_BUILTIN = 13;    //Not really needed for Arduino UNO it is defined in library
@@ -38,10 +38,28 @@ const int LOW_TIME_LED = 100;
 unsigned long lastLEDtime = 0;
 unsigned long nextLEDchange = 100; //time in ms.
 
-
-const int D12 = 12;     // An input, Make low to count state
+/* Magic numbers, HARDWARE, Some input pins */
+const int D12 = 12;     // An input, ???Make low to change state???
 const int D7 = 7;     // An input. Make low to make watchdog time out.
-char *resetTypes[] = { "general", "backup", "watchdog", "software", "user" };  //Watch dog
+
+/* Functions */
+
+// Program information
+#define COMPANY_NAME "pubinv.org"
+#define PROG_NAME "WatchDog_Due_Eval.ino"
+#define VERSION "; Rev: 0.5"  //
+#define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
+#define LICENSE "GNU Affero General Public License, version 3 "
+
+void printProgramInfo() {
+  Serial.print(COMPANY_NAME);
+  Serial.print(PROG_NAME);
+  Serial.println(VERSION);
+  Serial.println(DEVICE_UNDER_TEST);
+  Serial.println(LICENSE);
+  Serial.print("Compiled at: ");
+  Serial.println(F(__DATE__ " " __TIME__) ); //compile date that is used for a unique identifier
+}//end printProgramInfo()
 
 // Code for Flash storage
 #include <DueFlashStorage.h>
@@ -49,8 +67,8 @@ DueFlashStorage dueFlashStorage;
 
 // The struct of the configuration.
 struct Configuration {
-  uint8_t a;  //Boot count
-  uint8_t b;  //Flash write count
+  uint8_t a;  //Reset count, from all causes.
+  uint8_t b;  //Flash write count from program
   int32_t bigInteger;
   char* message;
   char c;
@@ -63,15 +81,12 @@ Configuration configuration;
 byte* b = dueFlashStorage.readAddress(4); // byte array which is read from flash at adress 4
 Configuration configurationFromFlash; // create a temporary struct
 
-
-//Functions
-
-//If so set up flash with defaults.  Prints state from flash
+//If first run set up flash with defaults.  Prints state from flash
 void CheckIfRunFirstTime() {
   /* Flash is erased every time new code is uploaded. Write the default configuration to flash if first time */
   // running for the first time?
   uint8_t codeRunningForTheFirstTime = dueFlashStorage.read(0); // flash bytes will be 255 at first run
-  Serial.println(codeRunningForTheFirstTime);
+//  Serial.println(codeRunningForTheFirstTime);  //Uncomment to check the flash read.
   Serial.print("codeRunningForTheFirstTime: ");
   if (codeRunningForTheFirstTime != 0) {
     Serial.println("yes");
@@ -95,15 +110,15 @@ void CheckIfRunFirstTime() {
   else {
     Serial.println("no. Incrment boot count.");
     //Gets the current configuration so we can increment reset count.
-     memcpy(&configurationFromFlash, b, sizeof(Configuration)); // copy byte array to temporary struct
-    
+    memcpy(&configurationFromFlash, b, sizeof(Configuration)); // copy byte array to temporary struct
+
     //Update only .a the boot count.
     configuration.a = configurationFromFlash.a + 1;
     configuration.b = configurationFromFlash.b;
-    configuration.bigInteger = configurationFromFlash.bigInteger; 
+    configuration.bigInteger = configurationFromFlash.bigInteger;
     configuration.message = configurationFromFlash.message;
     configuration.c = configurationFromFlash.c;
-  
+
     // write update configuration struct to flash at adress 4
     byte b2[sizeof(Configuration)]; // create byte array to store the struct
     memcpy(b2, &configuration, sizeof(Configuration)); // copy the struct to the byte array
@@ -152,10 +167,6 @@ void changeConfigurationInFlash() {
   dueFlashStorage.write(4, b2, sizeof(Configuration)); // write byte array to flash
 }//end changeConfigurationInFlash
 
-void watchdogSetup() {
-  watchdogEnable(WATCH_DOG_TIME);
-}
-
 void checkD7() {
   while (!digitalRead(D7)); //It's a trap!
 }//end checkD7
@@ -183,26 +194,28 @@ void wink_N_displayFromFlash() {
 
 void setup() {
   // put your setup code here, to run once:
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);  //Signal start of setup.
+
   Serial.begin(BAUDRATE);
   delay(500);  //CAUTION This delay was important for correct read of flash.
+  printProgramInfo();
+
+  //Configure Hardware
   pinMode(D7, INPUT_PULLUP);
   digitalWrite(LED_BUILTIN, HIGH);
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
-
-  Serial.print(PROG_NAME);
-  Serial.println(VERSION);
-  Serial.println(DEVICE_UNDER_TEST);
 
   //Print out the reset reason
   uint32_t resetCause = rstc_get_reset_cause(RSTC) >> RSTC_SR_RSTTYP_Pos;
-//  Serial.print("ResetCause: ");
+  //  Serial.print("ResetCause: ");
   Serial.println(resetTypes[resetCause]);
 
+  //TODO make update FLASH for reset type counts.
   CheckIfRunFirstTime(); //If so set up flash with defaults.  Prints state from flash
 
-  watchdogSetup();
-  digitalWrite(LED_BUILTIN, LOW);   //At end of setup.
+  watchdogEnable(WATCH_DOG_TIME);  //Start the watchdog.
+
+  digitalWrite(LED_BUILTIN, LOW);   //Signal end of setup.
 }//end setup()
 
 void loop() {
