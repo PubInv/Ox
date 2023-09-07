@@ -60,7 +60,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 0
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
