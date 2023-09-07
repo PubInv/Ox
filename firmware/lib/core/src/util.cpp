@@ -28,7 +28,7 @@ namespace OxCore {
 
 // TODO: make template
 bool WithinArrayBounds(int index, int length) {
-    return (index >= 0 && index < length);
+  return ((index >= 0) && (index < length));
 }
 
 }

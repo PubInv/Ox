@@ -27,9 +27,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include "scheduler.h"
 #include "util.h"
 #include "debug.h"
-#include "error_handler.h"
+#include <error_handler.h>
 
 namespace OxCore {
+
 
 void Scheduler::setupIdleTask() {
     _idleTask._properties.priority = static_cast<TaskPriority>(TaskPriorityOS::Idle);
@@ -39,7 +40,10 @@ void Scheduler::setupIdleTask() {
 
 Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     // Record how long the previous task took to run
-    
+  if (DEBUG_SCHEDULER > 1) {
+    Serial.println("getNextTask");
+  }
+
     if (_lastTaskRan != nullptr) {
         _lastTaskRan->_lastRunDuration = currentTime - _lastTaskRan->_lastRun;
     }
@@ -58,6 +62,11 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
         // > 0 time overrun
         task->_timeUntilDeadline = currentTime - (lastRunTime + period);
 
+        if (DEBUG_SCHEDULER > 1) {
+          Serial.println(task->_timeUntilDeadline);
+        }
+
+
         if (task->_timeUntilDeadline > maxTimeUntilDeadline) {
             maxTimeUntilDeadline = task->_timeUntilDeadline;
             nextTask = task;
@@ -67,6 +76,14 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
             nextTask = nullptr;
         }
     }
+  if (DEBUG_SCHEDULER > 1) {
+    if (nextTask == nullptr) {
+    } else {
+      Serial.println("nexTask");
+      Serial.println(nextTask->_properties.name);
+    }
+  }
+
     if (nextTask == nullptr) {
         nextTask = &_idleTask;
     }
@@ -78,12 +95,14 @@ bool Scheduler::AddTask(Task *task, TaskProperties *properties) {
         TaskState state = task->Init(properties);
         if (state == TaskState::Ready) {
             map.add(properties->id, task);
+            _numberOfTasks++;
             return true;
         } else {
             ErrorHandler::Log(ErrorLevel::Error, ErrorCode::CoreFailedToAddTask);
         }
     }
     // Out of bounds
+
     return false;
 }
 
@@ -118,7 +137,14 @@ TaskState Scheduler::RunNextTask(uint32_t msNow) {
         break;
     }
 
+  if (DEBUG_SCHEDULER > 1) {
+    Serial.println("About to Run task!");
+    Serial.println(nextTask->_properties.name);
+  }
     nextTask->Run(msNow);
+  if (DEBUG_SCHEDULER > 1) {
+    Serial.println("Finished Run!");
+  }
     _lastTaskRan = nextTask;
     return nextTask->GetState();
 }

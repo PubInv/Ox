@@ -26,6 +26,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define TASK_H
 
 #include "core_defines.h"
+#include <machine.h>
 
 namespace OxCore {
 
@@ -35,7 +36,7 @@ class Task {
         // User defined:
         virtual bool _init() = 0;
         virtual bool _run() = 0;
-        
+
         // Only the scheduler should call these:
         TaskState Init(TaskProperties *properties);
         void Run(TimeMs now);
@@ -52,6 +53,8 @@ class Task {
                 _lastRun(0),
                 _properties({"noname", -1,TaskPriority::Undefined,0})
                 {};
+        int DEBUG = 0;
+        MachineConfig* getConfig();
         virtual ~Task() = default;
         // Cannot copy class
         Task(const Task&) = delete;

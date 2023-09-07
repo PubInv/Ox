@@ -23,7 +23,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "core.h"
-#include "error_handler.h"
+#include <error_handler.h>
 #ifndef ARDUINO
 #include <iostream>
 #endif
@@ -48,11 +48,11 @@ const char *ErrorMessage[] = {
     "Core Failed To Add Task",
     "Core Failed To Boot",
     "Core Failed To Run",
-    "Task Priority Time Exceeded Hard",
-    "Task Priority Time Exceeded Soft",
+    "Task Priority Time Exceeded",
     "Watchdog Exceeded",
     "Not Implemented",
 };
+
 
 void ErrorHandler::SetErrorMode(ErrorMode mode) {
     errorMode = mode;
@@ -63,7 +63,6 @@ void ErrorHandler::Log(ErrorLevel level, ErrorCode type) {
     errors.add(error);
     switch (errorMode) {
         case ErrorMode::Log:
-            // TODO
         break;
         case ErrorMode::StdOut:
 #ifdef ARDUINO

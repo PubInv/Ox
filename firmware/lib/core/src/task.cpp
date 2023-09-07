@@ -29,6 +29,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <iostream>
 #endif
 
+#include <debug.h>
+
 namespace OxCore
 {
 
@@ -47,13 +49,23 @@ namespace OxCore
         if (_state == TaskState::Ready) {
             _state = TaskState::Running;
             _lastRun = now;
+            if (DEBUG > 0) {
+              Serial.println("about to _run");
+            }
             _run(); // TODO: use result
-            
+            if (DEBUG > 0) {
+              Serial.println("finished _run");
+            }
+
         } else {
             // Not ready to run
             // TODO: report
         }
         _state = TaskState::Ready;
+        if (DEBUG > 0) {
+          Serial.println("Returning Run");
+        }
+
     }
 
     TaskState Task::Wait(TimeMs now)
@@ -85,10 +97,14 @@ namespace OxCore
         return _lastRun;
     }
 
-    TimeMs Task::GetPeriod() const 
+    TimeMs Task::GetPeriod() const
     {
         return _properties.period;
     }
+  MachineConfig *Task::getConfig() {
+    return  (MachineConfig *) _properties.state_and_config;
+  }
+
 
     /*bool Task::Callback(char *message)
     {

@@ -20,7 +20,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# 
+#
 # For some reason 'sudo' is required before the commands when using Mac OSX
 
 pio-run-mac:
@@ -49,23 +49,18 @@ docker-pio-run:
 	docker build --tag pioc .
 	docker run --rm -it --name pi pioc bash -c 'cd firmware && platformio lib install && platformio lib list && pio run -e native && .pio/build/native/program'
 
-# Build and run on FeatherESP32 and start serial monitor
-pio-run-esp32:
-	cd firmware \
-	&& pio run -e featheresp32 -t upload \
-	&& pio device monitor
-
-# Build and run on Adafruit Grand Central Arm-M4F and start serial monitor
-pio-run-gcm4:
-	cd firmware \
-	&& pio run -e adafruit_grandcentral_m4 -t upload \
-	&& pio device monitor
-
 # Build and run on Arduino Mega 2560 and start serial monitor
 pio-run-mega:
 	cd firmware \
 	&& pio run -e megaatmega2560 -t upload \
 	&& pio device monitor
+
+# Build and run on Arduino Due
+pio-run-due:
+	cd firmware \
+	&& pio run -e due -t upload \
+	&& pio device monitor
+
 
 pio-run-native:
 	cd firmware \
@@ -76,3 +71,44 @@ pio-run-native:
 pio-clear-cache:
 	cd firmware \
 	&& rm -rf .pio
+
+# These tests are not working well right now
+ribbonfish_tests:
+	cd firmware \
+	&& pio test -vvv -e due_ribbonfish -f "test_*"
+
+test_stack_power:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_stack_*"
+	&& pio device monitor --filter direct
+
+test_parse_script:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_parse_*"
+	&& pio device monitor --filter direct
+
+# DANGER! THE INPUT DOESN'T WORK FROM THIS
+# MAKEFILE. BUT, if you make this target,
+# and, then break it, and then "make run_monitor"
+# that makes sense
+test_SanyoAceB97:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_Sanyo*"
+
+test_heater_ramp:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_heater_ramp"
+
+stage2_heater:
+	cd firmware \
+	&& pio test -v -e due_ribbonfish -f "test_stage2_heater"
+
+run_monitor:
+	cd firmware \
+	&& pio device monitor --filter=direct --baud=115200
+
+
+pio-run-due_ribbonfish:
+	cd firmware \
+	&& pio run -e due_ribbonfish -t upload \
+	&& pio device monitor --filter=direct --baud=115200

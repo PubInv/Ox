@@ -27,7 +27,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // Header files must be declared here to be used by files including <core.h>
 #include "scheduler.h"
-//#include "logger.h"
 #include "error_handler.h"
 #include "timer.h"
 #include "debug.h"
@@ -45,13 +44,14 @@ enum class CoreState {
 
 class Core {
     public:
+  int DEBUG_CORE = 1;
         bool Configure(void *config);
         bool Boot();
-        void AddTask(Task *task, TaskProperties *properties);
+        bool AddTask(Task *task, TaskProperties *properties);
         bool Run();
         static void RaiseCriticalError();
         static bool _criticalError;
-        
+
         Core(): _state(CoreState::Undefined) {};
         ~Core() = default;
         // Cannot copy class
@@ -60,18 +60,20 @@ class Core {
         // Cannot move class
         Core(Task&&) = delete;
         Core& operator=(Core&&) = delete;
-    
+
+  // make this public to allow debug to be set.
+        Scheduler _scheduler;
+
     private:
         uint32_t _elapsed;
         Timer _primaryTimer;
         Timer _watchdogTimer;
         CoreState _state;
-        Scheduler _scheduler;
         void Tick();
         void CreateWatchdog(uint32_t timeoutMs);
         bool ResetWatchdog();
         uint32_t GetElapsedTime();
-        
+
 };
 
 }

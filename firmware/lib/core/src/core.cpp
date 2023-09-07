@@ -1,12 +1,5 @@
 /*
-Public Invention's Ox Project is an open source hardware design for an oxygen
-concentrator for use by field hospitals around the world. This team aims to
-design an oxygen concentrator that can be manufactured locally while overcoming
-challenges posed by human resources, hospital location (geographically),
-infrastructure and logistics; in addition, this project attempts the minimum
-documentation expected of their design for international approval whilst
-tackling regulatory requirements for medical devices. Copyright (C) 2021
-Robert Read, Ben Coombs, and Darío Hereñú.
+Copyright (C) 2021 Robert Read, Ben Coombs.
 
 This program includes free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -33,9 +26,19 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxCore {
 
+
+  unsigned long num_of_report = 0;
+  unsigned long time_since_last_report = 0;
+  const unsigned long TIME_TO_REPORT_SCHEDULER_MS = 20*1000;
+
+
 #define SW_TICK 1
 #define TICK_PERIOD 2
-#define WATCHDOG_TIMEOUT_MS 250
+
+  // The WATCHDOG is nice but annoying if too fast;
+  // I'm configuring it to every 25 seconds
+  // #define WATCHDOG_TIMEOUT_MS 250
+#define WATCHDOG_TIMEOUT_MS 250000
 bool Core::_criticalError = false;
 
 bool Core::Boot() {
@@ -70,7 +73,7 @@ bool Core::Boot() {
     return result;
 }
 
-void Core::AddTask(Task *task, TaskProperties *properties) {
+bool Core::AddTask(Task *task, TaskProperties *properties) {
     bool taskAdded = _scheduler.AddTask(task, properties);
     if (taskAdded) {
 #ifndef ARDUINO
@@ -79,6 +82,7 @@ void Core::AddTask(Task *task, TaskProperties *properties) {
     } else {
         ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToAddTask);
     }
+    return taskAdded;
 }
 
 // 1. Set properties
@@ -92,13 +96,26 @@ bool Core::Run() {
 #ifdef SW_TICK
     while (true) {
         if (_criticalError == true) {
+          Serial.println("Ending Core Run due to critical error!");
+          delay(100);
             return false;
         }
         _elapsed = _primaryTimer.Update();
 #endif
+
+        unsigned long m = millis();
+        if (DEBUG_CORE > 1) {
+          if (m > (time_since_last_report + TIME_TO_REPORT_SCHEDULER_MS)) {
+            Serial.print("Scheduler Still Alive, Number of Ticks:");
+            Serial.println(num_of_report++);
+            time_since_last_report = m;
+          }
+        }
         Tick();
-        bool reset = ResetWatchdog();
+         bool reset = ResetWatchdog();
         if (reset == false) {
+          Serial.println("Ending Core Run due to internal Watchdog!");
+          delay(100);
             return false;
         }
 #ifdef SW_TICK
@@ -112,7 +129,6 @@ bool Core::Run() {
         }
     }
 #endif
-    OxCore::Debug<const char *>("Exiting Core::Run!\n");
     return false;
 }
 
@@ -123,7 +139,7 @@ void Core::Tick() {
     uint32_t elapsed = _primaryTimer.Update();
     TaskState state = _scheduler.RunNextTask(elapsed);
 #ifndef ARDUINO
-    std::cout << "State: " << static_cast<int>(state) << std::endl;
+    //    std::cout << "State: " << static_cast<int>(state) << std::endl;
 #endif
 }
 
@@ -135,11 +151,11 @@ void Core::CreateWatchdog(uint32_t timeoutMs) {
 bool Core::ResetWatchdog() {
     uint32_t elapsed = _watchdogTimer.Update();
     if (elapsed > WATCHDOG_TIMEOUT_MS) {
-        ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeded);
+          ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::WatchdogExceeded);
         return false;
     } else {
 #ifndef ARDUINO
-        std::cout << "Watchdog reset. Elapsed: " << elapsed << std::endl;
+      //        std::cout << "Watchdog reset. Elapsed: " << elapsed << std::endl;
 #endif
         _watchdogTimer.Reset();
         return true;

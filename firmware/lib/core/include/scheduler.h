@@ -34,7 +34,7 @@ namespace OxCore {
 // This is a lightweight co-operative scheduler.
 // There is no overhead in context switching,
 // there are some conditions:
-// - Tasks must 'yield' by returning 
+// - Tasks must 'yield' by returning
 //   true (success) or false (failure).
 // - Tasks should be small, fast and non-blocking.
 // - Interrupts are handled by the scheduler.
@@ -69,7 +69,7 @@ class Scheduler {
     private:
         Task* _lastTaskRan;
         IdleTask _idleTask; // Special task not part of the task map
-        static const int32_t MAX_TASKS = 5; // TODO: make this better
+        static const int32_t MAX_TASKS = 30; // TODO: make this better
         OxCollections::Map<TaskId, Task*, MAX_TASKS> map;
         TaskId _currentRunningTaskId = 0;
         int32_t _numberOfTasks = 0;
@@ -77,6 +77,7 @@ class Scheduler {
         void setupIdleTask();
         Task* getNextTaskToRun(TimeMs currentTime);
     public:
+        int DEBUG_SCHEDULER = 0;
         bool Init();
         bool AddTask(Task *task, TaskProperties *properties);
         TaskState RunNextTask(uint32_t msNow);
