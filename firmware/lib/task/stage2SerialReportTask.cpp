@@ -33,7 +33,7 @@ bool Stage2SerialReportTask::_run()
                                                    getConfig()->s2heater,
                                                    getConfig());
 
-  float duty_cycle = getConfig()->fanDutyCycle;
+  float duty_cycle = getConfig()->report->heater_duty_cycle;
   getConfig()->outputStage2Report(getConfig()->s2heater,
                                   getConfig()->report,
                                   target_temp,

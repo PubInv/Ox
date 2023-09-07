@@ -74,6 +74,16 @@ HeaterPIDTask::HeaterPIDTask() {
       OxCore::Debug<const char *>("AAA\n");
     }
 
+    // I'm considering checking the state here...
+    MachineState ms = getConfig()->ms;
+    if ((ms == Off) || (ms == EmergencyShutdown) || (ms == OffUserAck)) {
+      // in this case, we do nothing...but we will put the set point
+      // to room temperature.
+      this->HeaterSetPoint_C = 25.0;
+      getConfig()->report->heater_duty_cycle = 0.0;
+      return true;
+    }
+
     double previousInput = this->Input_temperature_C;
 
     this->Input_temperature_C = getConfig()->report->post_heater_C;
@@ -96,7 +106,7 @@ HeaterPIDTask::HeaterPIDTask() {
     getConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
 
     if (DEBUG_PID > 0) {
-      OxCore::Debug<const char *>("Setpoing");
+      OxCore::Debug<const char *>("Setpoint");
       Serial.println(this->HeaterSetPoint_C,2);
       OxCore::Debug<const char *>("previous input ");
       Serial.println(previousInput,2);
