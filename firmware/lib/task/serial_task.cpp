@@ -199,8 +199,6 @@ namespace OxApp
       if (DEBUG_LEVEL > 2) {
         render_set_command_raw(&sc);
       }
-      DebugLn<const char *>("rendered command");
-      delay(100);
 
       // This is an over simplifcation of possible state transitions!
       // This needs to be taken out to a separate routine, probably

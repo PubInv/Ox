@@ -108,7 +108,7 @@ run_monitor:
 	&& pio device monitor --filter=direct --baud=115200
 
 
-pio-run-due_ribbonfish:
+oedcs:
 	cd firmware \
 	&& pio run -e due_ribbonfish -t upload \
 	&& pio device monitor --filter=direct --baud=115200
