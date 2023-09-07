@@ -33,25 +33,24 @@ namespace OxApp
     class Stage2HeaterTask : public StateMachineManager
     {
     public:
+      int PERIOD_MS = 10*1000;
+
+      // This is used for us to choose a thermocuple
       Stage2Heater whichHeater;
       TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
-      // This must NOT be confused with the TARGET_TEMP
-      // in the machineConfig.
-      float STAGE2_TARGET_TEMP;
-      float STAGE2_OPERATING_TEMP;
-      int DEBUG_LEVEL = 1;
-
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
-      const static int NUM_FANS = 1;
-      const static int NUM_STACKS = 1;
 
-      unsigned long begin_down_time = 0;
+      //      void tempRefresh(float t,float RECENT_TEMP,MachineState ms);
 
+
+      float getTemperatureReading();
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
 
+
+      MachineState _executeBasedOnState(MachineState ms);
 
        MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
        MachineState _updatePowerComponentsOff() override;

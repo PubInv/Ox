@@ -17,6 +17,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <cmath>
 #include <abstract_temperature.h>
 #include <stage2_config.h>
+#include <stage2_hal.h>
 
 using namespace std;
 
@@ -25,30 +26,25 @@ namespace OxApp
 {
 
   // TODO: Most of this should be moved into the machine definition
-    bool Stage2HeaterTask::_init()
+  bool Stage2HeaterTask::_init()
+  {
+    OxCore::Debug<const char *>("Stage2HeaterTask init\n");
+    return true;
+  }
+
+  float Stage2HeaterTask::getTemperatureReading() {
+    Stage2HAL* s2h = (Stage2HAL *)(getConfig()->hal);
+    return s2h->
+      getTemperatureReading(getConfig()->s2heater,
+                            getConfig());
+  }
+
+  // There has to be a better way to do this in C++
+  bool Stage2HeaterTask::_run()
     {
-        OxCore::Debug<const char *>("Stage2HeaterTask init\n");
-        return true;
+      Serial.println("running");
+      this->run_generic();
     }
-
-      bool Stage2HeaterTask::_run()
-    {
-      // put an ms switch here
-      if (DEBUG_LEVEL > 0) {
-              OxCore::Debug<const char *>("Stage2HeaterTask run\n");
-      }
-
-      // To make sure startup has now wild surges,
-      // if we have a valid temperature we will make sure the
-      // TempRefreshTask has been run...
-      float postHeaterTemp = getConfig()->report->post_heater_C;
-      if ((tempRefreshTask->time_of_last_refresh == 0) &&
-          (postHeaterTemp > 0.0)) {
-        tempRefreshTask->run();
-      }
-      StateMachineManager::_run();
-    }
-
 
   MachineState Stage2HeaterTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
@@ -62,46 +58,42 @@ namespace OxApp
 
     // This needs to be made dendent on which one we are!
     // probably should use and enum and a switch here.
+    float t = getTemperatureReading();
 
-    float t;
-    switch(whichHeater) {
-    case Int1:
-      t = getConfig()->s2sr->int1_temp_C;
-      break;
-    case Ext1:
-      t = getConfig()->s2sr->ext1_temp_C;
-      break;
-    case Ext2:
-      t = getConfig()->s2sr->ext2_temp_C;
-      break;
+    // if we've reached operating temperature, we switch
+    // states
+    if (t >= getConfig()->OPERATING_TEMP) {
+      return NormalOperation;
     }
+
     // These also are dependent on which heater we are using
     float tt = computeRampUpTargetTemp(t,
-                                       getConfig()->RECENT_TEMPERATURE,
+                                       getConfig()->GLOBAL_RECENT_TEMP,
                                        getConfig()->BEGIN_UP_TIME_MS);
 
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("tt\n");
+    if (!isnormal(tt)) {
+      OxCore::Debug<const char *>("XXXXXXXXXXX non-normal target value tt\n");
       OxCore::DebugLn<float>(tt);
+      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
+      OxCore::DebugLn<int>(getConfig()->s2heater);
+
     }
 
+     getConfig()->GLOBAL_RECENT_TEMP = t;
+     //     getConfig()->BEGIN_UP_TIME_MS = millis();
 
-    STAGE2_TARGET_TEMP = tt;
-    // now we will set the setPoint in the heater_pid_task...
-    // this requires a dependence on that task, but is
-    // better than creating a deeper global dependence.
-    heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
-    switch(whichHeater) {
-    case Int1:
-      getConfig()->s2sr->target_int1_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    case Ext1:
-      getConfig()->s2sr->target_ext1_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    case Ext2:
-      getConfig()->s2sr->target_ext2_temp_C = STAGE2_TARGET_TEMP;
-      break;
+    if (DEBUG_LEVEL > 0) {
+      OxCore::Debug<const char *>("Warmup tt for :");
+      Serial.println(getConfig()->s2heater);
+      OxCore::DebugLn<float>(tt);
+      OxCore::Debug<const char *>("Global Recent temp\n");
+      OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
+      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
+
     }
+
+    getConfig()->TARGET_TEMP = tt;
+    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
 
     return new_ms;
   }
@@ -110,54 +102,32 @@ namespace OxApp
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Cooldown Mode!\n");
     }
+    float t = getTemperatureReading();
+
     if (getConfig()->previous_ms != Cooldown) {
-      // can this be be made RECENT_TEMPERATURE?
-      getConfig()->COOL_DOWN_BEGIN_TEMPERATURE = getConfig()->report->post_heater_C;
+      getConfig()->COOL_DOWN_BEGIN_TEMP = t;
     }
 
-    if (getConfig()->report->post_heater_C <= getConfig()->COOLDOWN_TARGET_C
-        &&
-        getConfig()->report->post_stack_C <= getConfig()->COOLDOWN_TARGET_C) {
+    if (t <= getConfig()->COOLDOWN_TARGET_C) {
       new_ms = Off;
       return new_ms;
     }
 
-    float t;
-    switch(whichHeater) {
-    case Int1:
-      t = getConfig()->s2sr->int1_temp_C;
-      break;
-    case Ext1:
-      t = getConfig()->s2sr->ext1_temp_C;
-      break;
-    case Ext2:
-      t = getConfig()->s2sr->ext2_temp_C;
-      break;
-    }
-
     float tt = computeRampDnTargetTemp(t,
-                                       getConfig()->COOL_DOWN_BEGIN_TEMPERATURE,
+                                       getConfig()->COOL_DOWN_BEGIN_TEMP,
                                        getConfig()->BEGIN_DN_TIME_MS);
 
     if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("tt\n");
+      OxCore::Debug<const char *>("CoolDown tt for :");
+      Serial.println((unsigned long) heaterPIDTask);
       OxCore::DebugLn<float>(tt);
+      OxCore::Debug<const char *>("Global Recent temp\n");
+      OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
+      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
     }
 
-    STAGE2_TARGET_TEMP = tt;
-    heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
-    switch(whichHeater) {
-    case Int1:
-      getConfig()->s2sr->target_int1_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    case Ext1:
-      getConfig()->s2sr->target_ext1_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    case Ext2:
-      getConfig()->s2sr->target_ext2_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    }
-
+    getConfig()->TARGET_TEMP = tt;
+    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
 
     return new_ms;
   }
@@ -180,33 +150,12 @@ namespace OxApp
     MachineState new_ms = CriticalFault;
     return new_ms;
   }
+  MachineState Stage2HeaterTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
+    MachineState new_ms = NormalOperation;
 
-   MachineState Stage2HeaterTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
-     MachineState new_ms = NormalOperation;
-
-    float t = getConfig()->report->post_heater_C;
-    float tt = STAGE2_OPERATING_TEMP;
-
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("tt\n");
-      OxCore::DebugLn<float>(tt);
-    }
-
-    STAGE2_TARGET_TEMP = tt;
-    heaterPIDTask->HeaterSetPoint_C = STAGE2_TARGET_TEMP;
-
-    switch(whichHeater) {
-    case Int1:
-      getConfig()->s2sr->target_int1_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    case Ext1:
-      getConfig()->s2sr->target_ext1_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    case Ext2:
-      getConfig()->s2sr->target_ext2_temp_C = STAGE2_TARGET_TEMP;
-      break;
-    }
-
+    float tt = getConfig()->OPERATING_TEMP;
+    getConfig()->TARGET_TEMP = tt;
+    heaterPIDTask->HeaterSetPoint_C = tt;
     return new_ms;
-   }
+  }
 }

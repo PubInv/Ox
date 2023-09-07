@@ -20,32 +20,25 @@
 
 #include <stage2SerialReportTask.h>
 #include <stage2_config.h>
-
-
-#ifdef __arm__
-// should use uinstd.h to define sbrk but Due causes a conflict
-extern "C" char* sbrk(int incr);
-#else  // __ARM__
-extern char *__brkval;
-#endif  // __arm__
-
-int freeMemory() {
-  char top;
-#ifdef __arm__
-  return &top - reinterpret_cast<char*>(sbrk(0));
-#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
-  return &top - __brkval;
-#else  // __arm__
-  return __brkval ? &top - __brkval : &top - __malloc_heap_start;
-#endif  // __arm__
-}
+#include <stage2_hal.h>
 
 bool Stage2SerialReportTask::_run()
 {
   if (DEBUG_SERIAL_REPORT > 0) {
     OxCore::Debug<const char *>("Running Stage2SerialReport Task\n");
   }
-  getConfig()->outputStage2Report(getConfig()->s2sr);
+  float target_temp = getConfig()->report->target_temp_C;
+  Stage2HAL* hal = (Stage2HAL *)(getConfig()->hal);
+  float measured_temp = hal->getTemperatureReading(
+                                                   getConfig()->s2heater,
+                                                   getConfig());
+
+  float duty_cycle = getConfig()->report->heater_duty_cycle;
+  getConfig()->outputStage2Report(getConfig()->s2heater,
+                                  getConfig()->report,
+                                  target_temp,
+                                  measured_temp,
+                                  duty_cycle);
 }
 bool Stage2SerialReportTask::_init()
 {

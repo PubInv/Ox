@@ -69,7 +69,7 @@ class Scheduler {
     private:
         Task* _lastTaskRan;
         IdleTask _idleTask; // Special task not part of the task map
-        static const int32_t MAX_TASKS = 15; // TODO: make this better
+        static const int32_t MAX_TASKS = 30; // TODO: make this better
         OxCollections::Map<TaskId, Task*, MAX_TASKS> map;
         TaskId _currentRunningTaskId = 0;
         int32_t _numberOfTasks = 0;

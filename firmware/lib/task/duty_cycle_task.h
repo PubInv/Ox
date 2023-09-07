@@ -53,7 +53,7 @@ class DutyCycleTask : public OxCore::Task
     void reset_duty_cycle();
     // By placing a pointer here, we can have
     // individual control of however many heaters are in the system.
-    OnePinHeater *ac_heater;
+    OnePinHeater *one_pin_heater;
   private:
     bool _init() override;
     bool _run() override;

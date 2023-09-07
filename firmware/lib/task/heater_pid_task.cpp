@@ -69,8 +69,19 @@ HeaterPIDTask::HeaterPIDTask() {
       OxCore::Debug<const char *>("HeaterPIDTask run\n");
       double test_spud = getConfig()->report->post_heater_C;
       OxCore::Debug<const char *>("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+      OxCore::Debug<float>(this->HeaterSetPoint_C);
       OxCore::DebugLn<float>(this->Input_temperature_C);
       OxCore::Debug<const char *>("AAA\n");
+    }
+
+    // I'm considering checking the state here...
+    MachineState ms = getConfig()->ms;
+    if ((ms == Off) || (ms == EmergencyShutdown) || (ms == OffUserAck)) {
+      // in this case, we do nothing...but we will put the set point
+      // to room temperature.
+      this->HeaterSetPoint_C = 25.0;
+      getConfig()->report->heater_duty_cycle = 0.0;
+      return true;
     }
 
     double previousInput = this->Input_temperature_C;
@@ -95,14 +106,14 @@ HeaterPIDTask::HeaterPIDTask() {
     getConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
 
     if (DEBUG_PID > 0) {
-      OxCore::Debug<const char *>("Setpoing");
-      Serial.println(this->HeaterSetPoint_C,5);
+      OxCore::Debug<const char *>("Setpoint");
+      Serial.println(this->HeaterSetPoint_C,2);
       OxCore::Debug<const char *>("previous input ");
-      Serial.println(previousInput,5);
+      Serial.println(previousInput,2);
       OxCore::Debug<const char *>("Final dutyCycle_Output ");
-      Serial.println(this->dutyCycle_Output,5);
+      Serial.println(this->dutyCycle_Output,2);
       OxCore::Debug<const char *>("Final dutyCycle ");
-      Serial.println(this->final_dutyCycle,5);
+      Serial.println(this->final_dutyCycle,2);
     }
 
     return true;

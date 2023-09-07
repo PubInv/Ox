@@ -373,6 +373,10 @@ void SL_PS::updateVoltage(float voltage, MachineConfig *config) {
   // I don't like to use delay but I think some time is needed here...
   delay(10);
 
+  if (DEBUG_SL_PS > 0) {
+    Serial.print("RRRR");
+  }
+
   getPS_OutVoltage(this->address);
   getPS_OutCurrent(this->address);
   msr->stack_voltage = out_voltage / 100.0;

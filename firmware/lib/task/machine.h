@@ -63,27 +63,23 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <machine_core_defs.h>
 
-const static int NUM_FANS = 1;
 
 class MachineHAL {
 public:
-  //  SensirionFlow *_flowsensor;
-  SanyoAceB97 _fans[NUM_FANS];
+  int NUM_HEATERS;
   OnePinHeater **_ac_heaters;
   int DEBUG_HAL = 0;
-  bool init();
-  //  void _updateFanSpeed(float unitInterval);
+  Stage2Heater s2heaterToControl = Int1;
+  int *HEATER_PINS;
+  bool init_heaters();
+  virtual bool init() = 0;
 };
+
 
 
 class MachineConfig {
 public:
   MachineConfig();
-
-  // Our AC heater...confusingly named!
-  static const int NUM_HEATERS = 1;
-  static const int NUM_STACKS = 1;
-
 
   // TEST CONFIGURATION PARAMETERS
   // ALL OF THESE COULD BE CONFIGURABLE, BUT FOR THIS TEST
@@ -91,29 +87,36 @@ public:
   // Edit these directly and re-upload to run a different test.
   // This test is designed to abort the processeor when done.
 
-  static constexpr float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
-  static constexpr float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
-  float BEGIN_DN_TIME_MS;
-  float BEGIN_UP_TIME_MS;
+  float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
+  float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
+  unsigned long BEGIN_DN_TIME_MS = 0;
+  unsigned long BEGIN_UP_TIME_MS = 0;
 
   // This is the overall target_temp, which changes over time.
 
-  static constexpr float YELLOW_TEMPERATURE = 760.0;
-  static constexpr float RED_TEMPERATURE = 780.0;
-  static constexpr float OPERATING_TEMPERATURE = 740.0;
+  // These can be adjusted at run time.
+  float YELLOW_TEMP = 760.0;
+  float RED_TEMP = 780.0;
+  float OPERATING_TEMP = 740.0;
   // Note! This is a difference (delta), not an absolute temperature
-  static constexpr float OPERATING_TEMPERATURE_OVERTARGET_DELTA = 10.0;
-  static constexpr float STOP_TEMPERATURE = 27.0;
-  static constexpr float MAX_CROSS_STACK_TEMP = 40.0;
-
-  float RECENT_TEMPERATURE = 30.0;
+  float OPERATING_TEMP_OVERTARGET_DELTA = 10.0;
+  float STOP_TEMP = 27.0;
+  float MAX_CROSS_STACK_TEMP = 40.0;
 
   static constexpr float TEMP_REFRESH_LIMIT = 40.0;
 
-  static constexpr float HIGH_TEMPERATURE_FAN_SLOW_DOWN_LIMIT = 400.0;
+  static constexpr float HIGH_TEMP_FAN_SLOW_DOWN_LIMIT = 400.0;
 
-  float COOL_DOWN_BEGIN_TEMPERATURE;
+  float COOL_DOWN_BEGIN_TEMP;
+
   float TARGET_TEMP = 30.0;
+
+  // TODO: This would better be attached to the statemanager
+  // class, as it is used in those task---but also in the
+  // separate temp_refresh_task. Until I can refactor
+  // temp_refresh_task by placing its funciton in the
+  // state manager, I need this gloabl.
+  float GLOBAL_RECENT_TEMP = 30.0;
 
   static const unsigned long HOLD_TIME_MINUTES = 1;
   static const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
@@ -122,15 +125,16 @@ public:
   // AMPERAGE CONTROL
   static constexpr float MAX_AMPERAGE = 60.0;
   float STACK_VOLTAGE = 12.0;
-  float STACK_AMPERAGE = 3.0;
   static constexpr float IDLE_STACK_VOLTAGE = 1.0;
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
 
   // FAN CONTROL
   static constexpr float FULL_POWER_FOR_FAN = 0.6;
   static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
-  static constexpr float TEMPERATURE_TO_BEGIN_FAN_SLOW_DOWN = 500;
-  static constexpr float END_FAN_SLOW_DOWN = OPERATING_TEMPERATURE + 25.0;
+  float TEMP_TO_BEGIN_FAN_SLOW_DOWN = 500;
+  // TODO --- change this as a delta to the operating temp, so it beccomes
+  // a simple constant
+  float END_FAN_SLOW_DOWN = 740.0 + 25.0;
 
   // These parameters are related to our control procedure.
   // This is similar to a PID loop, but I don't think any integration
@@ -143,7 +147,7 @@ public:
   float GlobalDutyCycle = STARTING_DUTY_CYCLE_FRACTION;
   // Temperature Read Period is how often we will update the
   // Temperature sensor.
-  static const int TEMPERATURE_READ_PERIOD_MS = 5000;
+  static const int TEMP_READ_PERIOD_MS = 5000;
   // Duty Cycle Adjustment Period is how often we will adject
   const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
   // This is the number of periods around a point in time we will
@@ -166,7 +170,7 @@ public:
 
   float COOLDOWN_TARGET_C = 27.0;
 
-  void _updateFanPWM(float unitInterval);
+  //  void _updateFanPWM(float unitInterval);
   void _reportFanSpeed();
 
   static const int NUM_MACHINE_STATES = 8;
@@ -188,12 +192,18 @@ public:
     "Post Heater",
     "Post Stack"
   };
+
+  constexpr inline static char const *HeaterNames[3] = {
+    "Int1",
+    "Ext1",
+    "Ext2"
+  };
+
   MachineState ms;
   // This is used to make decisions that happen at transition time.
   MachineState previous_ms;
-  // This should be an enum, but I am having a lot of problems with it, I am going to
-  // try using an int...
-  Stage2Heater s2heaterToControl;
+  bool IS_STAGE2_HEATER_CONFIG = false;
+  Stage2Heater s2heater;
 
   MachineScript* script;
 
@@ -216,6 +226,8 @@ public:
   MachineHAL* hal;
   MachineStatusReport *report;
 
+  bool init();
+
   void outputReport(MachineStatusReport *msr);
   void createJSONReport(MachineStatusReport *msr, char *buffer);
 
@@ -223,20 +235,12 @@ public:
   // as a subclass, not a decorator, but I don't have time for that,
   // and it puts the main code at risk, so adding it in here is
   // reasonable - rlr
-  Stage2StatusReport *s2sr;
-  // This is used by the Serial listener to control which
-  // state machine/heater/thermocouple we are controlling
 
-  float STAGE2_DEFAULT_TEMP_INT1;
-  float STAGE2_DEFAULT_TEMP_EXT1;
-  float STAGE2_DEFAULT_TEMP_EXT2;
-
-  float STAGE2_OPERATING_TEMP_INT1;
-  float STAGE2_OPERATING_TEMP_EXT1;
-  float STAGE2_OPERATING_TEMP_EXT2;
-
-  void outputStage2Report(Stage2StatusReport *msr);
-  void createStage2JSONReport(Stage2StatusReport *msr, char *buffer);
+  void outputStage2Report(Stage2Heater s2h,MachineStatusReport *msr,
+                          float target_temp,
+                          float measured_temp,
+                          float heater_duty_cycle);
+  void createStage2JSONReport(Stage2Heater s2h,MachineStatusReport *msr, char *buffer);
 
 };
 

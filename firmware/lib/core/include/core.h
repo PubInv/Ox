@@ -27,7 +27,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // Header files must be declared here to be used by files including <core.h>
 #include "scheduler.h"
-//#include "logger.h"
 #include "error_handler.h"
 #include "timer.h"
 #include "debug.h"
@@ -62,12 +61,14 @@ class Core {
         Core(Task&&) = delete;
         Core& operator=(Core&&) = delete;
 
+  // make this public to allow debug to be set.
+        Scheduler _scheduler;
+
     private:
         uint32_t _elapsed;
         Timer _primaryTimer;
         Timer _watchdogTimer;
         CoreState _state;
-        Scheduler _scheduler;
         void Tick();
         void CreateWatchdog(uint32_t timeoutMs);
         bool ResetWatchdog();

@@ -30,8 +30,13 @@ class Stage2SerialReportTask : public OxCore::Task
 {
 public:
   Stage2SerialReportTask();
+
+  MachineConfig *machineConfigs[3];
+
   int DEBUG_SERIAL_REPORT = 0;
-  int PERIOD_MS = 10000;
+  // since we have three, we report them a little less often to keep the
+  // serial traffic down
+  int PERIOD_MS = 30*1000;
 private:
   bool _init() override;
   bool _run() override;

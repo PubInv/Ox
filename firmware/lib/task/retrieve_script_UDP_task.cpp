@@ -99,10 +99,12 @@ namespace OxApp
     printNet();
     delay(1000);
 
+    Serial.println("BBB");
     for (int i = 10; epoch == 0 && i > 0; i--) {
       epoch = getTime();
       delay(500);
     }
+    Serial.println("CCC");
     if (epoch == 0) Serial.println(F("Can't get time!"));
     else printTime(epoch);
 
@@ -178,6 +180,7 @@ namespace OxApp
 
   // send an NTP request to the time server at the given address
   unsigned long RetrieveScriptUDPTask::getTime() {
+    Serial.println("AAA");
 #define NTP_PACKET_SIZE 48
     byte ntpBuffer[NTP_PACKET_SIZE];
 
@@ -194,15 +197,27 @@ namespace OxApp
     ntpBuffer[14]  = 49;
     ntpBuffer[15]  = 52;
 
+    Serial.println("QQQQ");
     // all NTP fields have been given values, now
     // you can send a packet requesting a timestamp:
     Udp.beginPacket(timeServer, 123); //NTP requests are to port 123
+    Serial.println("ZZZZZZ");
     Udp.write(ntpBuffer, NTP_PACKET_SIZE);
+    Serial.println("MMMMMMM");
     Udp.endPacket();
+    Serial.println("NNNNNNNN");
+    delay(100);
 
     unsigned long startMs = millis();
     // Note: This is a hard loop --- UDP_TIMEOUT blocks the machine for that time.
-    while (!Udp.available() && (millis() - startMs) < UDP_TIMEOUT) {}
+    Serial.println("BEGINNING");
+    delay(100);
+    while (!Udp.available() && (millis() - startMs) < UDP_TIMEOUT) {
+      Serial.println("x");
+      delay(100);
+      Serial.println(millis());
+      delay(100);
+    }
 
     // if there's data available, read a packet
     int packetSize = Udp.parsePacket();
@@ -323,7 +338,11 @@ namespace OxApp
     Serial.print(F("The MAC address is: "));
     for (byte octet = 0; octet < 6; octet++) {
       if (DEBUG_UDP > 1) {
-        Serial.print(mac[octet], HEX);
+        Serial.println(octet);
+        delay(100);
+        //        Serial.print(mac[octet], HEX);
+        Serial.println(mac[octet], HEX);
+        delay(100);
       }
       if (octet < 5) {
         Serial.print(F(':'));

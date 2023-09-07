@@ -31,17 +31,19 @@ using namespace OxCore;
 #include <core.h>
 #include <machine.h>
 #include <stage2_config.h>
+#include <stage2_hal.h>
 
 #include <Arduino.h>
 
-#include <MAX31850.h>
+// #include <MAX31850.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
 #include <stage2SerialReportTask.h>
-#include <serial_task.h>
-
+// #include <serial_task.h>
+#include <stage2_serial_task.h>
+#include <temp_refresh_task.h>
 
 using namespace OxCore;
 static Core core;
@@ -49,7 +51,7 @@ static Core core;
 const unsigned long REPORT_PERIOD_MS = 5000;
 TaskProperties _properties;
 unsigned long time_of_last_report = 0;
-MachineConfig *machineConfig;
+MachineConfig *machineConfig[3];
 
 // This is a key parameter, which should perhaps be moved to a specific
 // default file to make it clearer!
@@ -59,27 +61,24 @@ using namespace std;
 
 
 using namespace OxApp;
-ReadTempsTask readTempsTask;
+stage2_ReadTempsTask stage2_readTempsTask;
 
-HeaterPIDTask heaterPIDTask_ext1;
-HeaterPIDTask heaterPIDTask_ext2;
-HeaterPIDTask heaterPIDTask_int1;
+HeaterPIDTask heaterPIDTask[3];
+DutyCycleTask dutyCycleTask[3];
+Stage2HeaterTask stage2HeaterTask[3];
 
-DutyCycleTask dutyCycleTask_ext1;
-DutyCycleTask dutyCycleTask_ext2;
-DutyCycleTask dutyCycleTask_int1;
-
-Stage2HeaterTask stage2HeaterTask_int1;
-Stage2HeaterTask stage2HeaterTask_ext1;
-Stage2HeaterTask stage2HeaterTask_ext2;
-
-Stage2SerialReportTask stage2SerialReportTask;
+Stage2SerialReportTask stage2SerialReportTask[3];
+TempRefreshTask tempRefreshTask[3];
 
 Stage2SerialTask stage2SerialTask;
 
+MachineConfig *getConfig(int i) {
+  return machineConfig[i];
+}
+
 void setup() {
 
- OxCore::serialBegin(115200UL);
+  OxCore::serialBegin(115200UL);
   delay(500);
 
   if (core.Boot() == false) {
@@ -88,185 +87,174 @@ void setup() {
     //return EXIT_FAILURE;
     return;
   }
-
-  machineConfig = new MachineConfig();
-
-  machineConfig->hal = new MachineHAL();
-
-  machineConfig->ms = Off;
-  machineConfig->s2sr->ms_int1 = Off;
-  machineConfig->s2sr->ms_ext1 = Off;
-  machineConfig->s2sr->ms_ext2 = Off;
-
-  bool initSuccess  = machineConfig->hal->init();
+  Stage2HAL *s2hal = new Stage2HAL();
+  bool initSuccess  = s2hal->init();
   Serial.println("about to start!");
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
   }
 
-  pinMode(RF_HEATER, OUTPUT);
+  for(int i = 0; i < 3; i++) {
+    machineConfig[i] = new MachineConfig();
+    getConfig(i)->hal = s2hal;
+    getConfig(i)->hal->DEBUG_HAL = 0;
+    getConfig(i)->ms = Off;
 
-  OxCore::TaskProperties cogProperties;
-  cogProperties.name = "cog";
-  cogProperties.id = 20;
-  cogProperties.state_and_config = (void *) machineConfig;
-  delay(1000);
+    // Now this is problematic and probably should be undone
+    getConfig(i)->ms = Off;
+    getConfig(i)->ms = Off;
+    getConfig(i)->ms = Off;
+
+  }
+
   Serial.println("About to run test!");
+
+  // Now we have a problem; we want 3 configurations for 3 different
+  // heaters, but not everything can be triplicated.
+  // we will use the "0" config as a special config;
+  // this is the one that will be used for reporting.
 
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
   readTempsProperties.id = 20;
-  readTempsProperties.period = readTempsTask.PERIOD_MS;
+  readTempsProperties.period = stage2_readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
-  readTempsProperties.state_and_config = (void *) machineConfig;
+  readTempsProperties.state_and_config = (void *) getConfig(0);
   delay(300);
-  core.AddTask(&readTempsTask, &readTempsProperties);
+  core.AddTask(&stage2_readTempsTask, &readTempsProperties);
   delay(100);
-
-  OxCore::TaskProperties stage2SerialReportProperties;
-  stage2SerialReportProperties.name = "stage2SerialReportTemps";
-  stage2SerialReportProperties.id = 21;
-  stage2SerialReportProperties.period = stage2SerialReportTask.PERIOD_MS;
-  stage2SerialReportProperties.priority = OxCore::TaskPriority::High;
-  stage2SerialReportProperties.state_and_config = (void *) machineConfig;
-
-
-  bool stage2SerialReportAdd = core.AddTask(&stage2SerialReportTask, &stage2SerialReportProperties);
-  if (!stage2SerialReportAdd) {
-     OxCore::Debug<const char *>("stage2SerialReport Task add failed\n");
-     abort();
+  // For this class, we give it all configs, so it can place
+  // the temperatures in them
+  for (int i = 0; i < 3; i++) {
+    stage2_readTempsTask.mcs[i] = getConfig(i);
   }
 
-  OxCore::DebugLn<long>(machineConfig->s2sr->ms_int1);
-  delay(100);
-  OxCore::TaskProperties dutyCycleProperties_int1;
-  dutyCycleProperties_int1.name = "dutyCycle_int1";
-  dutyCycleProperties_int1.id = 23;
-  dutyCycleProperties_int1.period = dutyCycleTask_int1.PERIOD_MS;
-  dutyCycleProperties_int1.priority = OxCore::TaskPriority::Low;
-  dutyCycleProperties_int1.state_and_config = (void *) machineConfig;
-  core.AddTask(&dutyCycleTask_int1, &dutyCycleProperties_int1);
-  dutyCycleTask_int1.whichHeater = Int1;
+  for(int i = 0; i < 3; i++) {
+    OxCore::TaskProperties stage2SerialReportProperties;
+    stage2SerialReportProperties.name = "stage2SerialReportTemps";
+    stage2SerialReportProperties.id = 21+i;
+    stage2SerialReportProperties.period = stage2SerialReportTask[i].PERIOD_MS;
+    stage2SerialReportProperties.priority = OxCore::TaskPriority::High;
+    stage2SerialReportProperties.state_and_config = (void *) getConfig(i);
+    bool stage2SerialReportAdd = core.AddTask(&stage2SerialReportTask[i], &stage2SerialReportProperties);
+    if (!stage2SerialReportAdd) {
+      OxCore::Debug<const char *>("stage2SerialReport Task add failed\n");
+      abort();
+    }
 
-  OxCore::TaskProperties dutyCycleProperties_ext1;
-  dutyCycleProperties_ext1.name = "dutyCycle_ext1";
-  dutyCycleProperties_ext1.id = 24;
-  dutyCycleProperties_ext1.period = dutyCycleTask_ext1.PERIOD_MS;
-  dutyCycleProperties_ext1.priority = OxCore::TaskPriority::Low;
-  dutyCycleProperties_ext1.state_and_config = (void *) machineConfig;
-  core.AddTask(&dutyCycleTask_ext1, &dutyCycleProperties_ext1);
-  dutyCycleTask_ext1.whichHeater = Ext1;
+    OxCore::TaskProperties dutyCycleProperties;
+    dutyCycleProperties.name = "dutyCycle";
+    dutyCycleProperties.id = 24+i;
+    dutyCycleProperties.period = dutyCycleTask[i].PERIOD_MS;
+    dutyCycleProperties.priority = OxCore::TaskPriority::Low;
+    dutyCycleProperties.state_and_config = (void *) getConfig(i);
+    core.AddTask(&dutyCycleTask[i], &dutyCycleProperties);
+    dutyCycleTask[i].whichHeater = (Stage2Heater) i;
 
-  OxCore::TaskProperties dutyCycleProperties_ext2;
-  dutyCycleProperties_ext2.name = "dutyCycle_ext2";
-  dutyCycleProperties_ext2.id = 25;
-  dutyCycleProperties_ext2.period = dutyCycleTask_ext2.PERIOD_MS;
-  dutyCycleProperties_ext2.priority = OxCore::TaskPriority::Low;
-  dutyCycleProperties_ext2.state_and_config = (void *) machineConfig;
-  core.AddTask(&dutyCycleTask_ext2, &dutyCycleProperties_ext2);
-  dutyCycleTask_ext1.whichHeater = Ext2;
+    OxCore::TaskProperties HeaterPIDProperties;
+    HeaterPIDProperties.name = "HeaterPID";
+    HeaterPIDProperties.id = 27+i;
+    HeaterPIDProperties.period = heaterPIDTask[i].PERIOD_MS;
+    HeaterPIDProperties.priority = OxCore::TaskPriority::High;
+    HeaterPIDProperties.state_and_config = (void *) getConfig(i);
+    core.AddTask(&heaterPIDTask[i], &HeaterPIDProperties);
+    heaterPIDTask[i].whichHeater = (Stage2Heater) i;
 
-  OxCore::TaskProperties HeaterPIDProperties_int1;
-  HeaterPIDProperties_int1.name = "HeaterPID_int1";
-  HeaterPIDProperties_int1.id = 26;
-  HeaterPIDProperties_int1.period = heaterPIDTask_int1.PERIOD_MS;
-  HeaterPIDProperties_int1.priority = OxCore::TaskPriority::High;
-  HeaterPIDProperties_int1.state_and_config = (void *) machineConfig;
-  core.AddTask(&heaterPIDTask_int1, &HeaterPIDProperties_int1);
-  heaterPIDTask_int1.whichHeater = Int1;
+    dutyCycleTask[i].one_pin_heater = getConfig(i)->hal->_ac_heaters[i];
 
-  OxCore::TaskProperties HeaterPIDProperties_ext1;
-  HeaterPIDProperties_ext1.name = "HeaterPID_ext1";
-  HeaterPIDProperties_ext1.id = 27;
-  HeaterPIDProperties_ext1.period = heaterPIDTask_ext1.PERIOD_MS;
-  HeaterPIDProperties_ext1.priority = OxCore::TaskPriority::High;
-  HeaterPIDProperties_ext1.state_and_config = (void *) machineConfig;
-  core.AddTask(&heaterPIDTask_ext1, &HeaterPIDProperties_ext1);
-  heaterPIDTask_int1.whichHeater = Ext1;
+    OxCore::TaskProperties stage2HeaterProperties ;
+    stage2HeaterProperties.name = "stage2HeaterTask";
+    stage2HeaterProperties.id = 30+i;
+    stage2HeaterProperties.period = stage2HeaterTask[i].PERIOD_MS;
+    stage2HeaterProperties.priority = OxCore::TaskPriority::High;
+    stage2HeaterProperties.state_and_config = (void *) getConfig(i);
+    bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask[i], &stage2HeaterProperties);
+    if (!stage2HeaterTaskAdded) {
+      OxCore::Debug<const char *>("stage add Failed\n");
+      delay(100);
+      abort();
+    }
+    stage2HeaterTask[i].whichHeater = (Stage2Heater) i;
+    stage2HeaterTask[i].heaterPIDTask = &heaterPIDTask[i];
 
-  OxCore::TaskProperties HeaterPIDProperties_ext2;
-  HeaterPIDProperties_ext2.name = "HeaterPID_ext2";
-  HeaterPIDProperties_ext2.id = 28;
-  HeaterPIDProperties_ext2.period = heaterPIDTask_ext2.PERIOD_MS;
-  HeaterPIDProperties_ext2.priority = OxCore::TaskPriority::High;
-  HeaterPIDProperties_ext2.state_and_config = (void *) machineConfig;
-  core.AddTask(&heaterPIDTask_ext2, &HeaterPIDProperties_ext2);
-  heaterPIDTask_int1.whichHeater = Ext1;
+    getConfig(i)->ms = Off;
 
-  heaterPIDTask_int1.dutyCycleTask = &dutyCycleTask_int1;
-  heaterPIDTask_ext1.dutyCycleTask = &dutyCycleTask_ext1;
-  heaterPIDTask_ext2.dutyCycleTask = &dutyCycleTask_ext2;
+    heaterPIDTask[i].dutyCycleTask = &dutyCycleTask[i];
 
-  OxCore::TaskProperties stage2HeaterProperties_int1;
-  stage2HeaterProperties_int1.name = "stage2_int1";
-  stage2HeaterProperties_int1.id = 29;
-  stage2HeaterProperties_int1.period = heaterPIDTask_ext2.PERIOD_MS;
-  stage2HeaterProperties_int1.priority = OxCore::TaskPriority::High;
-  stage2HeaterProperties_int1.state_and_config = (void *) machineConfig;
-  bool stage2HeaterTaskAdded = core.AddTask(&stage2HeaterTask_int1, &stage2HeaterProperties_int1);
-  if (!stage2HeaterTaskAdded) {
-    OxCore::Debug<const char *>("stage2 int1 Failed\n");
-    abort();
+    OxCore::TaskProperties TempRefreshProperties;
+    TempRefreshProperties.name = "TempRefresh";
+    TempRefreshProperties.id = 33+i;
+    TempRefreshProperties.period = tempRefreshTask[i].PERIOD_MS;
+    TempRefreshProperties.priority = OxCore::TaskPriority::Low;
+    TempRefreshProperties.state_and_config = (void *) getConfig(i);
+      bool tempRefresh = core.AddTask(&tempRefreshTask[i], &TempRefreshProperties);
+    if (!tempRefresh) {
+      OxCore::Debug<const char *>("Temp Refresh add failed\n");
+      delay(100);
+      abort();
+    }
+    stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
   }
-  stage2HeaterTask_int1.whichHeater = Int1;
 
-  OxCore::TaskProperties stage2HeaterProperties_ext1;
-  stage2HeaterProperties_ext1.name = "stage2_ext1";
-  stage2HeaterProperties_ext1.id = 30;
-  stage2HeaterProperties_ext1.period = heaterPIDTask_ext2.PERIOD_MS;
-  stage2HeaterProperties_ext1.priority = OxCore::TaskPriority::High;
-  stage2HeaterProperties_ext1.state_and_config = (void *) machineConfig;
-  bool stage2HeaterTaskAdded_ext1 = core.AddTask(&stage2HeaterTask_ext1, &stage2HeaterProperties_ext1);
-  if (!stage2HeaterTaskAdded_ext1) {
-    OxCore::Debug<const char *>("stage2 ext1 Failed\n");
-    abort();
+  // Let's put our DEBUG_LEVELS here...
+  for(int i = 0; i < 3; i++) {
+    heaterPIDTask[i].DEBUG_PID = 0;
+    stage2HeaterTask[i].DEBUG_LEVEL = 0;
+    dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
+    tempRefreshTask[i].DEBUG = 0;
   }
-  stage2HeaterTask_ext1.whichHeater = Ext1;
 
-  OxCore::TaskProperties stage2HeaterProperties_ext2;
-  stage2HeaterProperties_ext2.name = "stage2_ext2";
-  stage2HeaterProperties_ext2.id = 31;
-  stage2HeaterProperties_ext2.period = heaterPIDTask_ext2.PERIOD_MS;
-  stage2HeaterProperties_ext2.priority = OxCore::TaskPriority::High;
-  stage2HeaterProperties_ext2.state_and_config = (void *) machineConfig;
-  bool stage2HeaterTaskAdded_ext2 = core.AddTask(&stage2HeaterTask_ext2, &stage2HeaterProperties_ext2);
-  if (!stage2HeaterTaskAdded_ext2) {
-    OxCore::Debug<const char *>("stage2 ext2 Failedd\n");
-    abort();
+    core.DEBUG_CORE = 0;
+    core._scheduler.DEBUG_SCHEDULER = 0;
+    stage2_readTempsTask.DEBUG_READ_TEMPS = 0;
+
+  // Now set the temperatures until we can document how to edit through the interface...
+  // This sets up a very basic experiment
+  //
+  for(int i = 0; i < 3; i++) {
+    getConfig(i)->OPERATING_TEMP = 50;
+    getConfig(i)->YELLOW_TEMP = 60;
+    getConfig(i)->RED_TEMP = 70;
+    getConfig(i)->STOP_TEMP = 30;
+    // Note, there is no fan in the Stage 2 system, but we need this until we
+    // make good classes separating the configurations due to assertions
+    // in the system.
+    getConfig(i)->TEMP_TO_BEGIN_FAN_SLOW_DOWN = 40;
   }
-  stage2HeaterTask_ext2.whichHeater = Ext2;
 
-  stage2HeaterTask_int1.DEBUG_LEVEL = 1;
-  stage2HeaterTask_ext1.DEBUG_LEVEL = 1;
-  stage2HeaterTask_ext2.DEBUG_LEVEL = 1;
 
-  stage2HeaterTask_int1.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_INT1;
-  stage2HeaterTask_ext1.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_EXT1;
-  stage2HeaterTask_ext2.STAGE2_TARGET_TEMP = machineConfig->STAGE2_DEFAULT_TEMP_EXT2;
+  // This is used to determine which machine will
+  // be set by keyboard commands; you switch between them
+  // with simple commands
+  getConfig(0)->s2heater = Int1;
+  getConfig(1)->s2heater = Ext1;
+  getConfig(2)->s2heater = Ext2;
+  for(int i = 0; i < 3; i++) {
+    getConfig(i)->IS_STAGE2_HEATER_CONFIG = true;
+  }
 
-  stage2HeaterTask_int1.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_INT1;
-  stage2HeaterTask_ext1.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT1;
-  stage2HeaterTask_ext2.STAGE2_OPERATING_TEMP = machineConfig->STAGE2_OPERATING_TEMP_EXT2;
-
-  // Now set all the states...
-  machineConfig->s2sr->ms_int1 = Off;
-  machineConfig->s2sr->ms_ext1 = Off;
-  machineConfig->s2sr->ms_ext2 = Off;
-  machineConfig->s2heaterToControl = Ext1;
-
-  Serial.println("S2 Heater To Control:");
-  Serial.println(machineConfig->s2heaterToControl);
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";
-  serialProperties.id = 32;
+  serialProperties.id = 36;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
-  serialProperties.state_and_config = (void *) machineConfig;
+  serialProperties.state_and_config = (void *) getConfig(0);
   bool serialAdd = core.AddTask(&stage2SerialTask, &serialProperties);
   if (!serialAdd) {
     OxCore::Debug<const char *>("SerialProperties add failed\n");
+    delay(100);
     abort();
   }
+  stage2SerialTask.DEBUG_LEVEL = 2;
+  stage2SerialTask.hal = s2hal;
+
+  for(int i = 0; i < 3; i++) {
+    stage2SerialTask.machineConfigs[i] = getConfig(i);
+  }
+
+  s2hal->s2heaterToControl = Int1;
+
+  core.DEBUG_CORE = 2;
 
   OxCore::Debug<const char *>("Added tasks\n");
 }

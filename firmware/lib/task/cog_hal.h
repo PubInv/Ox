@@ -1,5 +1,5 @@
 /*
-  stage2_config -- configuration specifically for the Stage2 heaters of the high-oxygen experiment
+  cog_hal.h -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
 
   Copyright 2023, Robert L. Read
 
@@ -17,18 +17,24 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef STAGE2_CONFIG_H
-#define STAGE2_CONFIG_H
+#ifndef COG_HAL_H
+#define COG_HAL_H
 
-#include <machine_core_defs.h>
+#include <machine.h>
+#include <abstract_ps.h>
 
 
-/* struct Stage2StatusReport { */
-/*   MachineState ms[NUM_STAGE2_HEATERS]; */
-/*   float target_temp_C[NUM_STAGE2_HEATERS]; */
-/*   float temp_C[NUM_STAGE2_HEATERS]; */
-/*   float heater_duty_cycle[NUM_STAGE2_HEATERS]; */
-/* }; */
+class COG_HAL : public MachineHAL {
+public:
+  const static int NUM_FANS = 1;
+  SanyoAceB97 _fans[NUM_FANS];
+  const static int NUM_STACKS = 1;
+  AbstractPS* _stacks[NUM_STACKS];
+  bool init() override;
+  void _updateFanPWM(float unitInterval);
 
+  static const int NUM_HEATERS = 1;
+  const int HEATER_PINS[NUM_HEATERS] = {51};
+};
 
 #endif
