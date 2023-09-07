@@ -84,7 +84,7 @@ MachineConfig::MachineConfig() {
 
 bool MachineConfig::init() {
   // How we make certain assertions to make sure we are well configured
-  Serial.println("BEGGINING ASSERTION CHECKS!!");
+  Serial.println("BEGINNING ASSERTION CHECKS!!");
   Serial.println("IF YOU DO NOT SEE THE WORDS 'ALL CLEAR' BELOW AN ASSERTION HAS FAILED");
   delay(100);
   assert(RAMP_UP_TARGET_D_MIN >= 0.0);

@@ -106,7 +106,6 @@ bool Core::Run() {
         unsigned long m = millis();
         if (DEBUG_CORE > 1) {
           if (m > (time_since_last_report + TIME_TO_REPORT_SCHEDULER_MS)) {
-            Serial.print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ\n");
             Serial.print("Scheduler Still Alive, Number of Ticks:");
             Serial.println(num_of_report++);
             time_since_last_report = m;

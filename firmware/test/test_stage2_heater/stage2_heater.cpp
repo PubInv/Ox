@@ -198,8 +198,8 @@ void setup() {
 
   // Let's put our DEBUG_LEVELS here...
   for(int i = 0; i < 3; i++) {
-    heaterPIDTask[i].DEBUG_PID = 3;
-    stage2HeaterTask[i].DEBUG_LEVEL = 3;
+    heaterPIDTask[i].DEBUG_PID = 0;
+    stage2HeaterTask[i].DEBUG_LEVEL = 0;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
     tempRefreshTask[i].DEBUG = 0;
   }
@@ -216,8 +216,9 @@ void setup() {
     getConfig(i)->YELLOW_TEMP = 60;
     getConfig(i)->RED_TEMP = 70;
     getConfig(i)->STOP_TEMP = 30;
-    // Note, there is fan in the Stage 2 system, but we need this until we
-    // make good classes separating the configurations
+    // Note, there is no fan in the Stage 2 system, but we need this until we
+    // make good classes separating the configurations due to assertions
+    // in the system.
     getConfig(i)->TEMP_TO_BEGIN_FAN_SLOW_DOWN = 40;
   }
 
