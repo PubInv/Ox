@@ -230,6 +230,7 @@ void setup()
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   retrieveScriptUDPTask.DEBUG_UDP = 0;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
 
    OxCore::Debug<const char *>("Added tasks\n");
 
@@ -248,15 +249,15 @@ void loop() {
       Serial.println("Critical error!");
       delay(100);
       // Loop endlessly to stop the program from running
-      while (true) {
-        Serial.println("INTERNAL ERROR!");
-        delay(100);
-      }
+      Serial.println("INTERNAL ERROR (CORE RETURNED)!");
+      delay(1000);
+      abort();
 #endif
       return;
   } else {
-    Serial.println("INTERNAL ERROR!");
-    delay(100);
+    Serial.println("INTERNAL ERROR (CORE DID NOT START)!");
+    delay(300000);
+    abort();
   }
 }
 

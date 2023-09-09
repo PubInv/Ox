@@ -104,6 +104,9 @@ void ReadTempsTask::calculateDdelta() {
 
 void ReadTempsTask::updateTemperatures() {
   _readTemperatureSensors();
+
+  // These are added just to test if reading quickly causes an error,
+  // which might induce us to add power to the Dallas One-Wire board, for example.
   float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
   float postStackTemp = _temperatureSensors[0].GetTemperature(1);
   float postGetterTemp = _temperatureSensors[0].GetTemperature(2);
@@ -112,18 +115,24 @@ void ReadTempsTask::updateTemperatures() {
   // value unchanged from the last read.
   if (postHeaterTemp > -100.0) {
     getConfig()->report->post_heater_C = postHeaterTemp;
+    good_temp_reads++;
   } else {
     OxCore::Debug<const char *>("Bad post_heater_C\n");
+    bad_temp_reads++;
   }
   if (postGetterTemp > -100.0) {
     getConfig()->report->post_getter_C = postGetterTemp;
+    good_temp_reads++;
   } else {
     OxCore::Debug<const char *>("Bad post_getter_C\n");
+    bad_temp_reads++;
   }
   if (postStackTemp > -100.0) {
     getConfig()->report->post_stack_C = postStackTemp;
+    good_temp_reads++;
   } else {
     OxCore::Debug<const char *>("Bad post_stack_C\n");
+    bad_temp_reads++;
   }
 
   // WARNING! This needs to be done for all configs if we are
@@ -139,6 +148,14 @@ void ReadTempsTask::updateTemperatures() {
   // which is what we are using as a control variable.
   addTempToQueue(getConfig()->report->post_heater_C);
   calculateDdelta();
+  if (DEBUG_READ_TEMPS > 0) {
+    OxCore::Debug<const char *>("Good Temp Reads:");
+    OxCore::Debug<unsigned long>(good_temp_reads);
+    OxCore::DebugLn<const char *>("");
+    OxCore::Debug<const char *>("Bad  Temp Reads:");
+    OxCore::Debug<unsigned long>(bad_temp_reads);
+    OxCore::DebugLn<const char *>("");
+  }
 }
 
 void stage2_ReadTempsTask::updateTemperatures() {
@@ -168,10 +185,6 @@ void ReadTempsTask::_readTemperatureSensors() {
       OxCore::Debug<const char *>(": ");
       OxCore::DebugLn<float>(temperature);
     }
-  }
-  if (DEBUG_READ_TEMPS > 1) {
-    OxCore::Debug<const char *>("Ddelta_C_per_min :");
-    Serial.println(Ddelta_C_per_min,5);
   }
   if (DEBUG_READ_TEMPS > 1) {
     dumpQueue();
