@@ -14,10 +14,17 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+// Program information
+#define COMPANY_NAME "pubinv.org "
+#define PROG_NAME "main.cpp"
+#define VERSION "; Rev: 0.3.0"  //
+#define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
+#define LICENSE "GNU Affero General Public License, version 3 "
+
+
 #ifdef ARDUINO
 #include <Arduino.h>
 //#include <display.h>
-#else // Native
 //
 #endif
 
@@ -177,7 +184,6 @@ void setup()
     retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
     retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
 
-    retrieveScriptUDPTask.DEBUG_UDP = 2;
     bool retrieveScriptUDP = core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
     if (!retrieveScriptUDP) {
       OxCore::Debug<const char *>("Retrieve Script UDP\n");
@@ -221,8 +227,10 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
   cogTask.tempRefreshTask = &tempRefreshTask;
 
-  heaterPIDTask.DEBUG_PID = 1;
-  cogTask.DEBUG_LEVEL = 2;
+  heaterPIDTask.DEBUG_PID = 0;
+  cogTask.DEBUG_LEVEL = 0;
+  retrieveScriptUDPTask.DEBUG_UDP = 0;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
 
    OxCore::Debug<const char *>("Added tasks\n");
 
@@ -241,15 +249,15 @@ void loop() {
       Serial.println("Critical error!");
       delay(100);
       // Loop endlessly to stop the program from running
-      while (true) {
-        Serial.println("INTERNAL ERROR!");
-        delay(100);
-      }
+      Serial.println("INTERNAL ERROR (CORE RETURNED)!");
+      delay(1000);
+      abort();
 #endif
       return;
   } else {
-    Serial.println("INTERNAL ERROR!");
-    delay(100);
+    Serial.println("INTERNAL ERROR (CORE DID NOT START)!");
+    delay(300000);
+    abort();
   }
 }
 

@@ -140,9 +140,6 @@ namespace OxApp
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_UP = (ms - begin_up_time_ms) / (60 * 1000);
     float tt = recent_t + MINUTES_RAMPING_UP * getConfig()->RAMP_UP_TARGET_D_MIN;
-    Serial.println("preliminary tt, minutes");
-    Serial.println(MINUTES_RAMPING_UP);
-    Serial.println(getConfig()->OPERATING_TEMP);
     tt = min(tt,getConfig()->OPERATING_TEMP);
     return tt;
   }
