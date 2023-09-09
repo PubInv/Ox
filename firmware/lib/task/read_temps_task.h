@@ -37,7 +37,12 @@ class ReadTempsTask : public OxCore::Task
 public:
   ReadTempsTask();
   int DEBUG_READ_TEMPS = 0;
-  static const int PERIOD_MS = MachineConfig::TEMPERATURE_READ_PERIOD_MS;
+
+  // These two fields are used to track the
+  // missing stack
+  unsigned long good_temp_reads = 0;
+  unsigned long bad_temp_reads = 0;
+  static const int PERIOD_MS = MachineConfig::TEMP_READ_PERIOD_MS;
   // This is a ring buffer...
 
   // Ddelta is the change in temperature in C per min
@@ -51,7 +56,7 @@ public:
   static const int TEMPERATRUE_TIME_DELTA_MS = 60000;
   static constexpr float MAXIMUM_CHANGE_IN_DUTY_CYCLE_PER_MIN = 1.0 / 100.0;
 
-  static constexpr int NUM_TEMPS_TO_RECORD = ceil((((float) TEMPERATRUE_TIME_DELTA_MS / (float) MachineConfig::TEMPERATURE_READ_PERIOD_MS) + NUMBER_OF_PERIODS_TO_AVERAGE));
+  static constexpr int NUM_TEMPS_TO_RECORD = ceil((((float) TEMPERATRUE_TIME_DELTA_MS / (float) MachineConfig::TEMP_READ_PERIOD_MS) + NUMBER_OF_PERIODS_TO_AVERAGE));
 
   float temps[NUM_TEMPS_TO_RECORD];
 
@@ -60,21 +65,34 @@ public:
 
   // we will add one to this
   int next_temp_idx = 0;
-  const static int NUM_TEMPERATURE_SENSORS = 3;
-  const static int NUM_TEMPERATURE_INDICES = 1;
+  const static int NUM_TEMP_SENSORS = 3;
+  const static int NUM_TEMP_INDICES = 1;
   Temperature::AbstractTemperature* _temperatureSensors;
 
   void _readTemperatureSensors();
   void _configTemperatureSensors();
-  void updateTemperatures();
+  virtual void updateTemperatures();
   void addTempToQueue(float c);
   float tempFromTime(int t_ms);
   void calculateDdelta();
   void dumpQueue();
-  int ringCompuation(int n);
+  int ringComputation(int n);
 private:
   bool _init() override;
   bool _run() override;
+};
+
+
+// This will class has a reference to the three
+// separate MachineConfigs for each heater, so it
+// can update them after calling the superclass.
+// This is the minum extension that I can image to
+// stage2 without changing the core OEDCS class.
+class stage2_ReadTempsTask : public ReadTempsTask
+{
+public:
+  MachineConfig* mcs[3];
+  void updateTemperatures();
 };
 
 

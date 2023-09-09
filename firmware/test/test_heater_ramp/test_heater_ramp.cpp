@@ -83,6 +83,9 @@ void _updateStackAmperage(float amperage,MachineConfig *machineConfig) {
 const int DEBUG_LEVEL = 2;
 using namespace std;
 
+float STACK_AMPERAGE = 3.0;
+
+
 namespace OxApp
 {
 
@@ -143,7 +146,7 @@ namespace OxApp
     getConfig()->outputReport(getConfig()->report);
     // This should not be necessary here, it should be required only once...
     _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
-    _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
+    _updateStackAmperage(STACK_AMPERAGE,machineConfig);
 
     const unsigned long ms = millis();
     switch (global_state) {
@@ -153,14 +156,14 @@ namespace OxApp
         OxCore::Debug<const char *>("State: RAMPING UP\n");
       }
       float postHeaterTemp = getConfig()->report->post_heater_C;
-      if (postHeaterTemp > MachineConfig::OPERATING_TEMPERATURE) {
+      if (postHeaterTemp > MachineConfig::OPERATING_TEMP) {
         global_state = Holding;
         OxCore::Debug<const char *>("State Changing to HOLDING\n");
         begin_hold_time = millis();
       } else {
         const unsigned long MINUTES_RAMPING_UP = ms / (60 * 1000);
-        getConfig()->TARGET_TEMP = getConfig()->RECENT_TEMPERATURE + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
-        getConfig()->TARGET_TEMP = min(getConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMPERATURE);
+        getConfig()->TARGET_TEMP = getConfig()->RECENT_TEMP + MINUTES_RAMPING_UP * MachineConfig::RAMP_UP_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = min(getConfig()->TARGET_TEMP, MachineConfig::OPERATING_TEMP);
       }
       break;
     };
@@ -183,7 +186,7 @@ namespace OxApp
         OxCore::Debug<const char *>("State: RAMPING DN\n");
       }
       float postHeaterTemp = getConfig()->report->post_heater_C;
-      if (postHeaterTemp < MachineConfig::STOP_TEMPERATURE) {
+      if (postHeaterTemp < MachineConfig::STOP_TEMP) {
         analogWrite(fan->PWM_PIN[0],5);
         OxCore::Debug<const char *>("Stop temperature reached!\n");
         OxCore::Debug<const char *>("=======================\n");
@@ -192,8 +195,8 @@ namespace OxApp
       } else {
         const unsigned long MINUTES_RAMPING_DN = (ms - begin_down_time) / (60 * 1000);
         getConfig()->TARGET_TEMP =
-          MachineConfig::OPERATING_TEMPERATURE + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
-        getConfig()->TARGET_TEMP = max(getConfig()->TARGET_TEMP,MachineConfig::STOP_TEMPERATURE);
+          MachineConfig::OPERATING_TEMP + MINUTES_RAMPING_DN * MachineConfig::RAMP_DN_TARGET_D_MIN;
+        getConfig()->TARGET_TEMP = max(getConfig()->TARGET_TEMP,MachineConfig::STOP_TEMP);
       }
       break;
     };
@@ -224,7 +227,7 @@ void setup() {
   machineConfig = new MachineConfig();
   // This is a mystery. The system is hanging; I thought it was here,
   // but now I don't know where!
-  machineConfig->hal = new MachineHAL();
+  machineConfig->hal = new COG_HAL();
    bool initSuccess  = machineConfig->hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
@@ -332,7 +335,7 @@ void setup() {
   OxCore::Debug<const char *>("Added tasks\n");
 
   _updateStackVoltage(machineConfig->STACK_VOLTAGE,machineConfig);
-  _updateStackAmperage(machineConfig->STACK_AMPERAGE,machineConfig);
+  _updateStackAmperage(STACK_AMPERAGE,machineConfig);
   analogWrite(fan->PWM_PIN[0],153);
 
   Serial.println("Setup Done!");

@@ -28,6 +28,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // #include "mostplus_flow.h"
 #include <machine_core_defs.h>
 #include <machine.h>
+#include <cog_hal.h>
 
 #include <abstract_temperature.h>
 
@@ -36,55 +37,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <temp_refresh_task.h>
 #include <heater_pid_task.h>
-
-
-// #include "model.h"
+#include <state_machine_manager.h>
 
 
 namespace OxApp
 {
-
-  class StateMachineManager : public OxCore::Task {
-  public:
-      int DEBUG_LEVEL = 0;
-      MachineState _executeBasedOnState(MachineState ms);
-      virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) = 0;
-      virtual MachineState _updatePowerComponentsOff() = 0 ;
-      virtual MachineState _updatePowerComponentsWarmup() = 0;
-      virtual MachineState _updatePowerComponentsIdle() = 0;
-      virtual MachineState _updatePowerComponentsCooldown() = 0;
-      virtual MachineState _updatePowerComponentsCritialFault() = 0;
-      virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
-      virtual MachineState _updatePowerComponentsOffUserAck() = 0;
-
-    // These code in theory be made static
-      float  computeFanSpeed(float t);
-      float  computeAmperage(float t);
-      float  computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms);
-      float  computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
-
-      bool _run() override;
-  };
-
     class CogTask : public StateMachineManager
     {
     public:
       int PERIOD_MS = 10000;
-      TempRefreshTask* tempRefreshTask;
-      HeaterPIDTask* heaterPIDTask;
       int DEBUG_LEVEL = 0;
+
+
       // TODO: This should probably be done dynamically, not here...
 
       // There are really several senosrs, but they are indexed!
-      const static int NUM_TEMPERATURE_SENSORS = 3;
-      const static int NUM_TEMPERATURE_INDICES = 2;
+      const static int NUM_TEMP_SENSORS = 3;
+      const static int NUM_TEMP_INDICES = 2;
       const static int NUM_FANS = 1;
-      const static int NUM_STACKS = 1;
 
-      // WARNING! This is a fragile; I believe a rate based algorithm is better.
-      unsigned long begin_down_time = 0;
+     float getTemperatureReading();
+     COG_HAL* getHAL();
 
-      AbstractPS* _stacks[NUM_STACKS];
 
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
@@ -92,7 +66,6 @@ namespace OxApp
       void _updateFanSpeed(float percentage);
       void _updateStackVoltage(float voltage);
       void _updateStackAmperage(float amperage);
-
 
 
        MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;

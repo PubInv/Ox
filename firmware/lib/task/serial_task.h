@@ -1,15 +1,12 @@
 #ifndef SERIAL_TASK_H
 #define SERIAL_TASK_H
 
-#ifdef ARDUINO
 #include <Arduino.h>
-#else // Native
-#include <iostream>
-#endif
-
 #include <core.h>
-
+#include <debug.h>
+#include <PIRCS.h>
 #include <machine.h>
+#include <stage2_hal.h>
 
 #define SERIAL_BAUD_RATE 19200
 // #define SERIAL_BAUD_RATE 9600
@@ -33,6 +30,7 @@ namespace OxApp
     char input_buffer[INPUT_BUFFER_SIZE];
     bool _init() override;
     bool _run() override;
+    int DEBUG_LEVEL = 0;
 
     virtual int clear_buffers(char buffer[]);
     virtual bool listen(char buffer[], int length);
@@ -45,12 +43,9 @@ namespace OxApp
     bool _run() override;
   };
 
-  class Stage2SerialTask : public AbstractSerialTask {
-  public:
-    bool one_char_command_found(int num_read, char buffer[], int k) override;
-    bool _init() override;
-    bool _run() override;
-  };
+  // WARNING! This is duplciated code. It should be moved into
+  // the abstract class when that is created.
+  void render_set_command_raw(SetCommand* m);
 
 }
 

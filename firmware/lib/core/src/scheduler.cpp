@@ -77,8 +77,11 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
         }
     }
   if (DEBUG_SCHEDULER > 1) {
-    Serial.println("nexTask");
-    Serial.println(nextTask->_properties.name);
+    if (nextTask == nullptr) {
+    } else {
+      Serial.println("nexTask");
+      Serial.println(nextTask->_properties.name);
+    }
   }
 
     if (nextTask == nullptr) {

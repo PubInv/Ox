@@ -1,5 +1,5 @@
 /*
-  stage2_config -- configuration specifically for the Stage2 heaters of the high-oxygen experiment
+  stage2_hal.h -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
 
   Copyright 2023, Robert L. Read
 
@@ -17,18 +17,18 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef STAGE2_CONFIG_H
-#define STAGE2_CONFIG_H
+#ifndef STAGE2_HAL_H
+#define STAGE2_HAL_H
 
-#include <machine_core_defs.h>
+#include <machine.h>
 
-
-/* struct Stage2StatusReport { */
-/*   MachineState ms[NUM_STAGE2_HEATERS]; */
-/*   float target_temp_C[NUM_STAGE2_HEATERS]; */
-/*   float temp_C[NUM_STAGE2_HEATERS]; */
-/*   float heater_duty_cycle[NUM_STAGE2_HEATERS]; */
-/* }; */
-
+class Stage2HAL : public MachineHAL {
+public:
+  bool init() override;
+  Stage2Heater s2heaterToControl = Int1;
+  const int NUM_HEATERS = 3;
+  const int HEATER_PINS[3] = {51,50,49};
+  float getTemperatureReading(Stage2Heater s2h,MachineConfig *mc);
+};
 
 #endif

@@ -14,14 +14,22 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+// Program information
+#define COMPANY_NAME "pubinv.org "
+#define PROG_NAME "main.cpp"
+#define VERSION "; Rev: 0.3.0"  //
+#define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
+#define LICENSE "GNU Affero General Public License, version 3 "
+
+
 #ifdef ARDUINO
 #include <Arduino.h>
 //#include <display.h>
-#else // Native
 //
 #endif
 
 #include <core.h>
+#include <cog_hal.h>
 
 #include <retrieve_script_UDP_task.h>
 #include <cog_task.h>
@@ -59,47 +67,45 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-//#define ETHERNET_BOARD_PRESENT 1
-#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+
+
+// This is to allow a code idiom compatible with the way
+// the machine config is found  inside the Tasks
+MachineConfig *getConfig() {
+  return &machineConfig;
+}
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer
 void setup()
 {
   OxCore::serialBegin(115200UL);
-  Debug<const char *>("Starting Ox...\n");
+  delay(500);
 
+  Debug<const char *>("Starting Ox...\n");
+  delay(100);
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
       // TODO: Output error message
       //return EXIT_FAILURE;
       return;
   }
+  Debug<const char *>("Core booted...\n");
+  delay(100);
 
-  //  Eventually we will migrate all hardware to the MachineHAL..
-  machineConfig.hal = new MachineHAL();
+  machineConfig.init();
+  //  Eventually we will migrate all hardware to the COG_HAL..
+  machineConfig.hal = new COG_HAL();
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
     abort();
   }
 
-
-  //TODO: This needs to be placed inthe task init feature!
-  //#if BUILD_ENV_NAME == due_ribbonfish
-#ifdef RIBBONFISH
-  // TODO: I am not sure where to put this; and it is
-  // probably only valid on Due...nonetheless it is
-  // absolutely needed byt the TF800A12K.cpp/SL_PS class...
-  // it really should be there...
-      pinMode(MAX31850_DATA_PIN, INPUT);
-      pinMode(RF_FAN, OUTPUT);
-      pinMode(RF_HEATER, OUTPUT);
-      pinMode(RF_STACK, OUTPUT);
-#endif
-
-      // Now we will set the machine state to "Off"
-      machineConfig.ms = Off;
+  // Now we will set the machine state to "Off"
+  getConfig()->ms = Off;
 
   /***** Configure and add your tasks here *****/
 
@@ -126,7 +132,6 @@ void setup()
     OxCore::Debug<const char *>("serialReport Task add failed\n");
     abort();
   }
-
   OxCore::TaskProperties cogProperties;
   cogProperties.name = "cog";
   cogProperties.id = 21;
@@ -139,7 +144,9 @@ void setup()
     abort();
   }
 
+  getConfig()->ms = Off;
   cogTask.heaterPIDTask = &heaterPIDTask;
+
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "serial";
@@ -147,7 +154,7 @@ void setup()
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) &machineConfig;
-  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+   bool serialAdd = core.AddTask(&serialTask, &serialProperties);
   if (!serialAdd) {
     OxCore::Debug<const char *>("SerialProperties add failed\n");
     abort();
@@ -184,7 +191,7 @@ void setup()
     }
   }
 
-  heaterPIDTask.dutyCycleTask = &dutyCycleTask;
+  dutyCycleTask.whichHeater = (Stage2Heater) 0;
 
   OxCore::Debug<const char *>("Duty Cycle Setup\n");
   OxCore::TaskProperties dutyCycleProperties;
@@ -198,6 +205,7 @@ void setup()
     OxCore::Debug<const char *>("dutyCycleAdd Failed\n");
     abort();
   }
+  dutyCycleTask.one_pin_heater = getConfig()->hal->_ac_heaters[0];
 
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
@@ -212,9 +220,19 @@ void setup()
     abort();
   }
 
-  heaterPIDTask.DEBUG_PID = 1;
+  heaterPIDTask.whichHeater = (Stage2Heater) 0;
 
-  OxCore::Debug<const char *>("Added tasks\n");
+  heaterPIDTask.dutyCycleTask = &dutyCycleTask;
+
+  cogTask.heaterPIDTask = &heaterPIDTask;
+  cogTask.tempRefreshTask = &tempRefreshTask;
+
+  heaterPIDTask.DEBUG_PID = 0;
+  cogTask.DEBUG_LEVEL = 0;
+  retrieveScriptUDPTask.DEBUG_UDP = 0;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
+
+   OxCore::Debug<const char *>("Added tasks\n");
 
   /*********************************************/
 }
@@ -228,14 +246,18 @@ void loop() {
       OxCore::ErrorHandler::Log(OxCore::ErrorLevel::Critical, OxCore::ErrorCode::CoreFailedToRun);
 #ifdef ARDUINO
       // make sure we print anything needed!
+      Serial.println("Critical error!");
       delay(100);
       // Loop endlessly to stop the program from running
-      while (true) {
-        Serial.println("INTERNAL ERROR!");
-        delay(100);
-      }
+      Serial.println("INTERNAL ERROR (CORE RETURNED)!");
+      delay(1000);
+      abort();
 #endif
       return;
+  } else {
+    Serial.println("INTERNAL ERROR (CORE DID NOT START)!");
+    delay(300000);
+    abort();
   }
 }
 

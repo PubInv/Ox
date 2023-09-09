@@ -29,10 +29,11 @@
   {
   public:
     TempRefreshTask();
-    int DEBUG_TEMP_REFRESH = 1;
+    int DEBUG_TEMP_REFRESH = 0;
     const int PERIOD_MS = 5*60*1000;
     unsigned long time_of_last_refresh = 0;
     // In this case, we need a public ability to run the task
+    void computeRefreshedTargetTemp(float t,MachineState ms,float temp_refresh_limit);
     bool run();
   private:
     bool _init() override;
