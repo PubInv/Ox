@@ -56,21 +56,17 @@ initFlashConfiguration() {
 
 void
 writeFlashConfiguration() {
-  byte* b = dfs.readAddress(4); 
-  Configuration tempconfig;
-  memcpy(&tempconfig, b, sizeof(Configuration));
+  byte *b = dfs.readAddress(4); 
   uint8_t needupdate = 0;
+  byte b2[sizeof(Configuration)];
+  memcpy(b2, &configuration, sizeof(Configuration));
   for (uint8_t i = 0; i < sizeof(Configuration); i++) {
-    if (tempconfig[i] != configuration[i]) {
+    if (b[i] != b2[i]) {
       needupdate++;
       break;
     }
   }
-  if (needupdate) {
-    byte b2[sizeof(Configuration)];
-    memcpy(b2, &configuration, sizeof(Configuration));
-    dfs.write(4, b2, sizeof(Configuration));
-  }
+  if (needupdate) dfs.write(4, b2, sizeof(Configuration));
 }
 
 uint32_t
@@ -117,7 +113,7 @@ void watchdogSetup() {
 void setup() {
   Serial.begin(BAUDRATE);
   //CAUTION This delay was important for correct read of flash.
-  saveDelay(3000);
+  safeDelay(3000);
 
   //Print out the reset reason
   char *resetTypes[] = { "general", "backup", "watchdog", "software", "user" };
@@ -146,6 +142,6 @@ void loop() {
 
   while(1) {
     watchdogReset();
-    mydelay(1000);
+    safeDelay(1000);
   }
 }
