@@ -31,9 +31,16 @@
 //Calculates the RPM based on the timestamps of the last 2 interrupts. Can be called at any time.
 //namespace tach_data {
 
+
+// This can be used to add time to the interrupt for testing;
+// so far I have not seen that that creates a problem
+//unsigned long temporary_test_variable;
+
   void tachISR(uint8_t i) {
     tach_data_cnt[i]++;
-    //    refresh_tach_data(i);
+    //    for(int i = 0; i < 1000; i++) {
+    //      temporary_test_variable  = (temporary_test_variable * 2 ) % 37;
+    //    }
   }
   void tachISR0() {
     tachISR(0);
