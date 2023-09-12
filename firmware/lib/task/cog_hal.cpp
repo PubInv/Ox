@@ -62,6 +62,6 @@ bool COG_HAL::init() {
 // but this is genertic.
 void COG_HAL::_updateFanPWM(float unitInterval) {
   for (int i = 0; i < NUM_FANS; i++) {
-    _fans[i].update(unitInterval);
+     _fans[i].update(unitInterval);
   }
 }

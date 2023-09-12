@@ -107,9 +107,7 @@ void ReadTempsTask::updateTemperatures() {
 
   // These are added just to test if reading quickly causes an error,
   // which might induce us to add power to the Dallas One-Wire board, for example.
-  float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
-  float postStackTemp = _temperatureSensors[0].GetTemperature(1);
-  float postGetterTemp = _temperatureSensors[0].GetTemperature(2);
+  float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);;
   // Sometimes we get a data read error, that comes across
   // as -127.00. In that case, we will leave the
   // value unchanged from the last read.
@@ -120,6 +118,8 @@ void ReadTempsTask::updateTemperatures() {
     OxCore::Debug<const char *>("Bad post_heater_C\n");
     bad_temp_reads++;
   }
+
+  float postGetterTemp = _temperatureSensors[0].GetTemperature(2);
   if (postGetterTemp > -100.0) {
     getConfig()->report->post_getter_C = postGetterTemp;
     good_temp_reads++;
@@ -127,6 +127,8 @@ void ReadTempsTask::updateTemperatures() {
     OxCore::Debug<const char *>("Bad post_getter_C\n");
     bad_temp_reads++;
   }
+
+  float postStackTemp = _temperatureSensors[0].GetTemperature(1);
   if (postStackTemp > -100.0) {
     getConfig()->report->post_stack_C = postStackTemp;
     good_temp_reads++;
@@ -185,6 +187,8 @@ void ReadTempsTask::_readTemperatureSensors() {
       OxCore::Debug<const char *>(": ");
       OxCore::DebugLn<float>(temperature);
     }
+    // TODO: We should investigate a delay hear to make sure the
+    // OneWire system is ready
   }
   if (DEBUG_READ_TEMPS > 1) {
     dumpQueue();
