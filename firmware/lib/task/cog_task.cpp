@@ -217,13 +217,13 @@ namespace OxApp
   // TODO: This would go better on the HAL
   void CogTask::_updateStackVoltage(float voltage) {
     for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
-      //      getHAL()->_stacks[i]->updateVoltage(voltage,getConfig());
+      getHAL()->_stacks[i]->updateVoltage(voltage,getConfig());
     }
   }
 
   void CogTask::_updateStackAmperage(float amperage) {
     for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
-      //      getHAL()->_stacks[i]->updateAmperage(amperage,getConfig());
+      getHAL()->_stacks[i]->updateAmperage(amperage,getConfig());
       }
   }
 
