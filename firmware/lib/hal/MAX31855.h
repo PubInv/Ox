@@ -21,17 +21,12 @@
 
 #ifdef ARDUINO
 #include <Arduino.h>
-
 #else
 #include <cstdint>
 #endif
 
 #include "abstract_temperature.h"
-
-
 #include <Adafruit_MAX31855.h>
-
-
 #include <machine.h>
 
 
@@ -59,7 +54,5 @@ namespace Temperature {
   };
 
 }
-
-#endif
 
 #endif

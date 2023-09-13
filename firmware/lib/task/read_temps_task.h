@@ -24,9 +24,13 @@
 #include <core_defines.h>
 #include <core.h>
 
+
+// TODO: This reference should be moved to the HAL
 #ifdef USE_MAX31850_THERMOCOUPLES
 #include <MAX31850.h>
-#else
+#elif USE_MAX31855_THERMOCOUPLES
+#include <MAX31855.h>
+#elif USE_DS18B20_THERMOCOUPLES
 #include <DS18B20_temperature.h>
 #endif
 

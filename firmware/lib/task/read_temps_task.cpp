@@ -173,6 +173,7 @@ void stage2_ReadTempsTask::updateTemperatures() {
 }
 // I don't fully understand this!
 void ReadTempsTask::_configTemperatureSensors() {
+  // TODO: this should probably be moved to the HAL
   _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31850Temperature[1];
   _temperatureSensors[0]._config = config[0];
 }
