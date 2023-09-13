@@ -227,9 +227,9 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
   cogTask.tempRefreshTask = &tempRefreshTask;
 
-  core.DEBUG_CORE = 2;
-  core._scheduler.DEBUG_SCHEDULER = 2;
-  dutyCycleTask.DEBUG_DUTY_CYCLE = 2;
+  core.DEBUG_CORE = 0;
+  core._scheduler.DEBUG_SCHEDULER = 0;
+  dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   retrieveScriptUDPTask.DEBUG_UDP = 0;

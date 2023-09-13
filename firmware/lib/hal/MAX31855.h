@@ -36,19 +36,15 @@ namespace Temperature {
   private:
     SensorConfig _config;
     float _temperature;
-	// Initialize the Thermocouple pinout  _sclk,  _cs,  _miso
-    //	Adafruit_MAX31855 ext1_thermocouple(MAXCLK, EXT1_MAXCS, MAXDO);
-    //	Adafruit_MAX31855 ext2_thermocouple(MAXCLK, EXT2_MAXCS, MAXDO);
-    //	Adafruit_MAX31855 int1_thermocouple(MAXCLK, INT1_MAXCS, MAXDO);
     Adafruit_MAX31855* sensors[3];
   public:
-    MAX31855Temperature(OxApp::Model& m,SensorConfig &config);
-    MAX31855Temperature(SensorConfig &config);
+    //    MAX31855Temperature(OxApp::Model& m,SensorConfig &config);
+    MAX31855Temperature();
 
 	// function to print a device address
     //    void printAddress(DeviceAddress deviceAddress);
     void Config(SensorConfig &config);
-    float ReadTemperature();
+    float ReadTemperature() override;
     float GetTemperature();
     float GetTemperature(int idx);
     SensorConfig GetConfig() const;
