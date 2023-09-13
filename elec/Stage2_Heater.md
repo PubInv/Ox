@@ -7,16 +7,16 @@ This document describes the pinouts for the Stage 2 heater
 |---|---|---|---|---|
 | A0 |	FAN1_FG | Input | Blower 1 Tachometer
 | D4 |	TEMP1	| BIDirect |	Dallas One-Wire connection to Thermocouple Breakouts |	Daisy chain connection to temprature probes. Address of ??? and conflicts with D4: SD card chip select on Ethernet sheild 
-| D9 | nFAN1_PWM | Output | Blower PWM | This output will be inverted
+| DAC1 | nFAN1_PWM | Output | Blower PWM | This output will be inverted
 | D18 |	TX1 | Output |	Digital Power Supply TF800 Pin 23 | This is Serial1 TX for (power supply)[https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf]
 | D19 | RX1 |Input | Digital Power Supply TF800 Pin 24 | This is Serial1 RX for (power supply) [https://assets.alliedelec.com/v1560852133/Datasheets/1d230174086e96b6e4801d1c963649f3.pdf]
 | D22 | BLOWER_ENABLE |Output |	Blower Enable 
 | D32 | GPAD_nCS | Output |	 External SPI inverted select (for the GPAD)
 | D44 |LPBK0 |Output |	Varying loopback signal
 | D45 |LPBK1 |Input |	Read of digital loopback signal
-| D51 |HEAT1 |Output |	Positive SSR signal for Internal Heater
-| D50 |HEAT2 |Output |	Positive SSR signal for External Heater 1
-| D49 |HEAT3 |Output |	Positive SSR signal for External Heater 2
+| D49 |Ext1 |Output |	Positive SSR signal for External Heater 1
+| D51 |Ext2 |Output |	Positive SSR signal for External Heater 2
+| D50 |Int1 |Output |	Positive SSR signal for Internal Heater
 | 3.3V | Pull up rail of blower board| Source | This is the small perfboard I soldered to gether with pullup/pulldown reistors and then glued onto the DB25 PCB.
 | GND |	Pull down rail and GND of blower board |Sink|	Please see the Fritzing Diagram of this breakout board: https://github.com/PubInv/NASA-COG/blob/develop/fancontroller/SanyoAceBreakout.fzz
 | GND | | Sink | |			Digital Power Supply TF800 Pin 22
