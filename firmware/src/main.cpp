@@ -17,7 +17,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // Program information
 #define COMPANY_NAME "pubinv.org "
 #define PROG_NAME "main.cpp"
-#define VERSION "; Rev: 0.3.0"  //
+#define VERSION "; Rev: 0.3.1"  //
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -230,7 +230,7 @@ void setup()
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   retrieveScriptUDPTask.DEBUG_UDP = 0;
-  readTempsTask.DEBUG_READ_TEMPS = 0;
+  readTempsTask.DEBUG_READ_TEMPS = 2;
 
    OxCore::Debug<const char *>("Added tasks\n");
 

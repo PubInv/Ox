@@ -25,12 +25,12 @@ void MachineConfig::outputStage2Report(
                                        Stage2Heater s2h,MachineStatusReport *msr,
                                        float target_temp,float measured_temp,float duty_cycle) {
   OxCore::Debug<const char *>("Stage2Heater: ");
-  delay(100);
+
   OxCore::DebugLn<const char *>(MachineConfig::HeaterNames[s2h]);
-  delay(100);
+
   OxCore::Debug<const char *>("Machine State: ");
   OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
-  delay(100);
+
   OxCore::Debug<const char *>("Target      C: ");
   OxCore::DebugLn<float>(target_temp);
   OxCore::Debug<const char *>("Temp C       : ");
@@ -38,7 +38,7 @@ void MachineConfig::outputStage2Report(
   OxCore::DebugLn<float>(measured_temp);
   OxCore::Debug<const char *>("Heater DC    : ");
   Serial.println(duty_cycle,4);
-  delay(100);
+
 }
 
 void MachineConfig::createStage2JSONReport(Stage2Heater s2h,MachineStatusReport* msr, char *buffer) {

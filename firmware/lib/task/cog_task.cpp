@@ -1,16 +1,16 @@
 /*
-This program includes free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+  This program includes free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
 
-See the GNU Affero General Public License for more details.
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  See the GNU Affero General Public License for more details.
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "cog_task.h"
@@ -26,14 +26,14 @@ namespace OxApp
 
 
   // TODO: Most of this should be moved into the machine definition
-    bool CogTask::_init()
-    {
-        OxCore::Debug<const char *>("CogTask init\n");
+  bool CogTask::_init()
+  {
+    OxCore::Debug<const char *>("CogTask init\n");
 
-        getConfig()->fanDutyCycle = 0.0;
+    getConfig()->fanDutyCycle = 0.0;
 
-        return true;
-    }
+    return true;
+  }
 
   COG_HAL* CogTask::getHAL() {
     return (COG_HAL *) (getConfig()->hal);
@@ -42,13 +42,13 @@ namespace OxApp
   float CogTask::getTemperatureReading() {
     return getConfig()->report->post_heater_C;
   }
-    bool CogTask::_run()
-    {
-      // Report fan speed
-      getConfig()->report->fan_rpm =
-        getHAL()->_fans[0]._calcRPM(0);
-      this->StateMachineManager::run_generic();
-    }
+  bool CogTask::_run()
+  {
+    // Report fan speed
+    getConfig()->report->fan_rpm =
+      getHAL()->_fans[0]._calcRPM(0);
+    this->StateMachineManager::run_generic();
+  }
 
   MachineState CogTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
@@ -181,7 +181,7 @@ namespace OxApp
     //   getConfig()->BEGIN_DN_TIME_MS = millis();
     // } else
 
-      {
+    {
       getConfig()->TARGET_TEMP = tt;
       heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     }
@@ -215,20 +215,21 @@ namespace OxApp
     return new_ms;
   }
   // TODO: This would go better on the HAL
-   void CogTask::_updateStackVoltage(float voltage) {
-     for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
-       getHAL()->_stacks[i]->updateVoltage(voltage,getConfig());
-     }
-   }
-
-   void CogTask::_updateStackAmperage(float amperage) {
-        for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
-          getHAL()->_stacks[i]->updateAmperage(amperage,getConfig());
-        }
+  void CogTask::_updateStackVoltage(float voltage) {
+    for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
+      getHAL()->_stacks[i]->updateVoltage(voltage,getConfig());
     }
+  }
 
-   MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
-     MachineState new_ms = NormalOperation;
+  void CogTask::_updateStackAmperage(float amperage) {
+    for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
+      getHAL()->_stacks[i]->updateAmperage(amperage,getConfig());
+      }
+  }
+
+
+  MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
+    MachineState new_ms = NormalOperation;
 
     float t = getTemperatureReading();;
     float fs = computeFanSpeed(t);
@@ -252,6 +253,6 @@ namespace OxApp
     heaterPIDTask->HeaterSetPoint_C = tt;
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
-     return new_ms;
-   }
+    return new_ms;
+  }
 }
