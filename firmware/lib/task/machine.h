@@ -58,6 +58,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // WARNING! These values are obsolete.
 // There is probably no real dependence on these.
 // They should be hunted down and removed.
+#define MAX31850_DATA_PIN 5
 #define RF_FAN 2
 #define RF_STACK DAC0
 #define RF_MOSTPLUS_FLOW_PIN A0

@@ -25,6 +25,7 @@
 #include <cstdint>
 #endif
 
+#include <SPI.h>
 #include "abstract_temperature.h"
 #include <Adafruit_MAX31855.h>
 #include <machine.h>
@@ -45,7 +46,7 @@ namespace Temperature {
     MAX31855Temperature(SensorConfig &config);
 
 	// function to print a device address
-    void printAddress(DeviceAddress deviceAddress);
+    //    void printAddress(DeviceAddress deviceAddress);
     void Config(SensorConfig &config);
     float ReadTemperature();
     float GetTemperature();

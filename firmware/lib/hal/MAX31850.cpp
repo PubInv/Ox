@@ -22,6 +22,7 @@
 #include <MAX31850.h>
 
 #include <core.h>
+#include <machine.h>
 
 
 #define TEMPERATURE_PRECISION 9

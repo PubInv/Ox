@@ -17,10 +17,6 @@
 #ifndef MAX31850_TEMPERATURE
 #define MAX31850_TEMPERATURE
 
-// Put guard for Arduino here
-
-#ifdef ARDUINO
-
 #ifdef ARDUINO
 #include <Arduino.h>
 #else
@@ -29,14 +25,12 @@
 
 #include "abstract_temperature.h"
 
-#ifdef USE_MAX31850_THERMOCOUPLES
+// WARNING! Until we can figure out how to get
+// pio to not compile classes with no dependency,
+// we need to incude this.
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#elif USE_MAX31855_THERMOCOUPLES
-#include <MAX31855.h>
-#elif USE_DS18B20_THERMOCOUPLES
-#include <DS18B20_temperature.h>
-#endif
+
 
 
 #include <machine.h>
@@ -73,7 +67,5 @@ namespace Temperature {
   };
 
 }
-
-#endif
 
 #endif
