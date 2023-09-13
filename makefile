@@ -107,8 +107,12 @@ run_monitor:
 	cd firmware \
 	&& pio device monitor --filter=direct --baud=115200
 
-
 oedcs:
 	cd firmware \
 	&& pio run -e due_ribbonfish -t upload \
+	&& pio device monitor --filter=direct --baud=115200
+
+stage2:
+	cd firmware \
+	&& pio run -e due_stage2_heater -t upload \
 	&& pio device monitor --filter=direct --baud=115200
