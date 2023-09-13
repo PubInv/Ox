@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <OnePinHeater.h>
 
 #include <machine_script.h>
-#include <stage2_config.h>
+
 
 
 #define HAND_TEST 1
@@ -36,9 +36,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
    DAC0 - the stack
    D4 - MAX31850_DATA_PIN
 */
-
+#ifdef ARDUINO
 #include <Arduino.h>
-
+#endif
 
 #ifdef RIBBONFISH
 #define RF_FAN 2
@@ -58,6 +58,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 #include <machine_core_defs.h>
+
+#ifdef STAGE2_HEATER
+#include <stage2_config.h>
+#endif
 
 
 class MachineHAL {
@@ -207,7 +211,7 @@ public:
 
   // This is a range from 0.0 to 1.0!
   // However, when used in the Arduino it has to be mapped
-  // onto a an integer (usuall 0-255) but this should be
+  // onto a an integer (usually 0-255) but this should be
   // the last step.
   float fanDutyCycle = 0.0;
 
