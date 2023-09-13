@@ -43,7 +43,7 @@ public:
   // This card is currently burned out
 
   // TODO: we should remove these second CHANNEL
-  int CHANNEL_0_PIN = 51;
+  int CHANNEL_0_PIN ;
   int channel_pins[NUM_CHANNELS] = {CHANNEL_0_PIN};
   void init();
 
