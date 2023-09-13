@@ -29,8 +29,15 @@
 
 #include "abstract_temperature.h"
 
+#ifdef USE_MAX31850_THERMOCOUPLES
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#elif USE_MAX31855_THERMOCOUPLES
+#include <MAX31855.h>
+#elif USE_DS18B20_THERMOCOUPLES
+#include <DS18B20_temperature.h>
+#endif
+
 
 #include <machine.h>
 // Note: In a real solution, we need to know the addresses for the temperature sensors

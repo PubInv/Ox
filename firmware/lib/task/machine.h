@@ -48,11 +48,20 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // #define RF_FAN_TACH 5
 #define RF_MOSTPLUS_FLOW_PIN A0
 #define RF_MOSTPLUS_FLOW_LOW_CUTOFF_VOLTAGE 1.75
-
 // This is the order in which the thermocouples are wired;
 // in a perfect world we might use device address
 #define POST_STACK_0_IDX 0
 #define POST_HEATER_0_IDX 1
+
+#elif STAGE2_HEATER
+
+// WARNING! These values are obsolete.
+// There is probably no real dependence on these.
+// They should be hunted down and removed.
+#define RF_FAN 2
+#define RF_STACK DAC0
+#define RF_MOSTPLUS_FLOW_PIN A0
+#define RF_MOSTPLUS_FLOW_LOW_CUTOFF_VOLTAGE 1.75
 
 #endif
 

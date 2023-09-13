@@ -16,7 +16,7 @@
 
 #ifdef ARDUINO
 #include <Arduino.h>
-#endif 
+#endif
 
 #include <SPI.h>
 
@@ -37,7 +37,7 @@ namespace Temperature {
   int8_t  postStackThermometer  = 0;
 
   MAX31855Temperature::MAX31855Temperature(SensorConfig &config) {
-	
+
     thermocouple.begin();
     // Pass our oneWire reference to Dallas Temperature.
 
@@ -101,29 +101,11 @@ namespace Temperature {
   printAddress(postStackThermometer);
   Serial.println();
 
-  // set the resolution to 9 bit
-  sensors.setResolution(postHeaterThermometer, TEMPERATURE_PRECISION);
-  sensors.setResolution(postGetterThermometer, TEMPERATURE_PRECISION);
-  sensors.setResolution(postStackThermometer, TEMPERATURE_PRECISION);
-
-  Serial.print("Device 0 Resolution: ");
-  Serial.print(sensors.getResolution(postHeaterThermometer), DEC);
-  Serial.println();
-
-  Serial.print("Device 1 Resolution: ");
-  Serial.print(sensors.getResolution(postGetterThermometer), DEC);
-  Serial.println();
-
-  Serial.print("Device 2 Resolution: ");
-  Serial.print(sensors.getResolution(postStackThermometer), DEC);
-  Serial.println();
   }
 
   MAX31855Temperature::MAX31855Temperature(SensorConfig &config) {
-	  
-	// Initialize the Thermocouple
-	Adafruit_MAX31855 thermocouple(MAXCLK, config->pin, MAXDO);
-    
+        //	// Initialize the Thermocouple
+        //	AdafruitMAX31855 thermocouple(MAXCLK, config->pin, MAXDO);
   }
 
 
@@ -140,27 +122,36 @@ namespace Temperature {
   }
 
   float MAX31855Temperature::ReadTemperature() {
-    this->sensors.requestTemperatures(); // Send the command to get temperatures
     return GetTemperature(0);
   }
   float MAX31855Temperature::GetTemperature() {
     return GetTemperature(0);
   }
   float MAX31855Temperature::GetTemperature(int idx) {
-    float tempC = this->sensors.getTempCByIndex(idx);
 
-    if (tempC != DEVICE_DISCONNECTED_C)
-      {
-      }
-    else
-      {
-        Serial.print(F("Error: Could not read temperature data: "));
-        Serial.println(idx);
-      }
+    // TODO: check error here.
+    //    float tempC = this->sensors[idx]->readError();
+
+    float tempC = this->sensors[idx]->readCelcius();
+
+    // if (tempC != DEVICE_DISCONNECTED_C)
+    //   {
+    //   }
+    // else
+    //   {
+    //     Serial.print(F("Error: Could not read temperature data: "));
+    //     Serial.println(idx);
+    //   }
     return tempC;
 
   }
   SensorConfig MAX31855Temperature::GetConfig() const {
+
+    // TODO: Either put these in the _config, or
+    // remove the usage of _config entirely
+	sensors[0] =  new Adafruit_MAX31855(MAXCLK, INT1_MAXCS, MAXDO);
+	sensors[1] =  new Adafruit_MAX31855(MAXCLK, EXT1_MAXCS, MAXDO);
+	sensors[2] =  new Adafruit_MAX31855(MAXCLK, EXT2_MAXCS, MAXDO);
     return _config;
   }
 }
