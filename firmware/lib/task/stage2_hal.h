@@ -48,7 +48,7 @@
 #define BEEPER_PIN 37 // buzzer pin
 //#define U8_MISO 50
 //#define U8_MOSI 51
-//#define U8_SCK  52
+//#define U8_SCK  8
 //#define SDSS   53 //sd card ss select
 //#define CD     49  //sd card card detect
 //GPIO Defines
@@ -80,29 +80,35 @@ D49 HEAT3			Output		Positive SSR signal for heater PID
 
 // Example creating a thermocouple instance with software SPI on any three
 // digital IO pins.
-#define MAXDO   3
-#define EXT1_MAXCS   13
-#define EXT2_MAXCS   11
-#define INT1_MAXCS   12
-#define MAXCLK  5
+#define MAXDO   2
+#define EXT1_MAXCS   3
+#define EXT2_MAXCS   29
+#define INT1_MAXCS   28
+#define MAXCLK  8
 
-#define EXT1_OUTPUT_PIN 51
-#define EXT2_OUTPUT_PIN 50
-#define INT1_OUTPUT_PIN 49
+#define EXT1_OUTPUT_PIN 49
+#define EXT2_OUTPUT_PIN 51
+#define INT1_OUTPUT_PIN 50
 
 
 // in a perfect world we might use device address
 //#define POST_STACK_0_IDX 0
 //#define POST_HEATER_0_IDX 1
+ // constexpr inline static char const *HeaterNames[3] = {
+    // "Int1",
+    // "Ext1",
+    // "Ext2"
+  // };
+
 
 class Stage2HAL : public MachineHAL {
 public:
   bool init() override;
   Stage2Heater s2heaterToControl = Int1;
   const int NUM_HEATERS = 3;
-  const int HEATER_PINS[3] = {EXT1_OUTPUT_PIN,EXT2_OUTPUT_PIN,INT1_OUTPUT_PIN}; // Ext1, Ext2, Int1
+  const int HEATER_PINS[3] = {INT1_OUTPUT_PIN,EXT1_OUTPUT_PIN,EXT2_OUTPUT_PIN}; //  Int1,Ext1, Ext2
   const int NUM_THERMOCOUPLES = 3;
-  const int THERMOCOUPLE_PINS[3] = {EXT1_MAXCS,EXT2_MAXCS,INT1_MAXCS};  // Ext1, Ext2, Int1
+  const int THERMOCOUPLE_PINS[3] = {INT1_MAXCS,EXT1_MAXCS,EXT2_MAXCS};  // Int1, Ext1, Ext2
   float getTemperatureReading(Stage2Heater s2h,MachineConfig *mc);
 };
 

@@ -22,7 +22,7 @@
 #include <DS18B20_temperature.h>
 
 #include <core.h>
-
+#include <machine.h>
 
 namespace Temperature {
   DS18B20Temperature::DS18B20Temperature() {
