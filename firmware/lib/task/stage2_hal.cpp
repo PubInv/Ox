@@ -1,7 +1,7 @@
 /*
   stage2_hal.cpp -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
 
-  Copyright 2023, Robert L. Read
+  Copyright 2023, Robert L. Read, Lawrence Kincheloe
 
   This program includes free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
