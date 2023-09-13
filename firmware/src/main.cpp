@@ -67,8 +67,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 1
-// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+// #define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -227,6 +227,9 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
   cogTask.tempRefreshTask = &tempRefreshTask;
 
+  core.DEBUG_CORE = 2;
+  core._scheduler.DEBUG_SCHEDULER = 2;
+  dutyCycleTask.DEBUG_DUTY_CYCLE = 2;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   retrieveScriptUDPTask.DEBUG_UDP = 0;
