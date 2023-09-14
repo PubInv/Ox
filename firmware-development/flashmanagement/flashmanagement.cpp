@@ -21,6 +21,7 @@ Configuration configuration;
 
 void
 safeDelay(uint16_t timeout) {
+  watchdogReset();
   if (timeout >= WATCH_DOG_TIME) {
     for (uint8_t i = 0; i < timeout / (WATCH_DOG_TIME / 2); i++) {
       watchdogReset();
