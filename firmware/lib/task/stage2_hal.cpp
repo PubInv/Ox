@@ -33,7 +33,7 @@ bool Stage2HAL::init() {
   _ac_heaters = new OnePinHeater*[NUM_HEATERS];
   for(int i = 0; i < NUM_HEATERS; i++) {
     _ac_heaters[i] = new OnePinHeater();
-    _ac_heaters[i]->CHANNEL_0_PIN = HEATER_PINS[i];
+    _ac_heaters[i]->heater_pin = HEATER_PINS[i];
     _ac_heaters[i]->init();
   }
 

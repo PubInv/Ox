@@ -91,16 +91,6 @@ D49 HEAT3			Output		Positive SSR signal for heater PID
 #define INT1_OUTPUT_PIN 50
 
 
-// in a perfect world we might use device address
-//#define POST_STACK_0_IDX 0
-//#define POST_HEATER_0_IDX 1
- // constexpr inline static char const *HeaterNames[3] = {
-    // "Int1",
-    // "Ext1",
-    // "Ext2"
-  // };
-
-
 class Stage2HAL : public MachineHAL {
 public:
   bool init() override;

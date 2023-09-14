@@ -40,15 +40,11 @@ namespace Temperature {
     sensors[Ext1] =  new Adafruit_MAX31855(MAXCLK, EXT1_MAXCS, MAXDO);
     sensors[Ext2] =  new Adafruit_MAX31855(MAXCLK, EXT2_MAXCS, MAXDO);
     for (int i = 0; i < 3; i++) {
-      OxCore::Debug<const char*>("pointer to MAX31855\n");
-      Serial.println((unsigned long) this->sensors[i]);
       sensors[i]->begin();
     }
   }
 
   float MAX31855Temperature::ReadTemperature() {
-    Serial.println("ReadTemperature on MAX31855 called!");
-    delay(50);
     return GetTemperature(0);
   }
   float MAX31855Temperature::GetTemperature() {
@@ -58,14 +54,6 @@ namespace Temperature {
 
     // TODO: check error here.
     //    float tempC = this->sensors[idx]->readError();
-
-    OxCore::Debug<const char *>("CCC\n");
-    OxCore::Debug<int>(idx);
-    delay(50);
-    OxCore::Debug<const char *>("DDD\n");
-    Serial.println((unsigned long) this->sensors[idx]);
-    OxCore::Debug<const char *>("EEE\n");
-    delay(50);
     float tempC = this->sensors[idx]->readCelsius();
 
     // if (tempC != DEVICE_DISCONNECTED_C)

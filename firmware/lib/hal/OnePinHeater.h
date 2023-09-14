@@ -38,13 +38,7 @@
 class OnePinHeater {
 public:
   OnePinHeater();
-  const static int NUM_CHANNELS = 1;
-  // NOTE: GPIO PIN 53 on my DUE appears to be stuck HIGH!
-  // This card is currently burned out
-
-  // TODO: we should remove these second CHANNEL
-  int CHANNEL_0_PIN ;
-  int channel_pins[NUM_CHANNELS] = {CHANNEL_0_PIN};
+  int heater_pin;
   void init();
 
   bool setHeater(int heaterNum, bool onIfTrue);

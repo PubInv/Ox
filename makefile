@@ -101,7 +101,7 @@ test_heater_ramp:
 
 stage2_heater:
 	cd firmware \
-	&& pio test -v -e due_ribbonfish -f "test_stage2_heater"
+	&& pio test -v -e due_stage2_heater -f "test_stage2_heater"
 
 run_monitor:
 	cd firmware \
@@ -112,7 +112,7 @@ oedcs:
 	&& pio run -e due_ribbonfish -t upload \
 	&& pio device monitor --filter=direct --baud=115200
 
+## NOTE! After this, break it and do "make run_monitor" of you characters will be discarded
 stage2:
 	cd firmware \
-	&& pio run -e due_stage2_heater -t upload \
-	&& pio device monitor --filter=direct --baud=115200
+	&& pio test -v -e due_stage2_heater -f "test_stage2_heater"

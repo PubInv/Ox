@@ -98,10 +98,14 @@ void setup()
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
   machineConfig.hal = new COG_HAL();
+  machineConfig.hal->DEBUG_HAL = 2;
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
+    delay(50);
     abort();
+  } else {
+    Serial.println("Successful init of Hardware Abastraction Layer!");
   }
 
   // Now we will set the machine state to "Off"
