@@ -15,8 +15,8 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef OEDCS_NETWORK_TASK_H
-#define OEDCS_NETWORK_TASK_H
+#ifndef STAGE2_NETWORK_TASK_H
+#define STAGE2_NETWORK_TASK_H
 
 #include <Arduino.h>
 
@@ -27,11 +27,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxApp
 {
-  class OEDCSNetworkTask : public NetworkTask {
+  class Stage2NetworkTask : public NetworkTask {
+  private:
   public:
     bool _run() override;
   };
-
 }
 
 #endif

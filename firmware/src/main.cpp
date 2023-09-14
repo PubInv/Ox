@@ -31,7 +31,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include <cog_hal.h>
 
-#include <retrieve_script_UDP_task.h>
+#include <network_task.h>
 #include <cog_task.h>
 #include <serial_task.h>
 #include <fault_task.h>

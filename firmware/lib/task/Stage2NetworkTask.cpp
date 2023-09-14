@@ -31,7 +31,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
 #include "utility/w5100.h"
 #include <network_udp.h>
-#include <OEDCSNetworkTask.h>
+#include <Stage2NetworkTask.h>
 
 
 // This is defined in network_udp.h. It is true global;
@@ -46,34 +46,22 @@ using namespace OxCore;
 
 namespace OxApp
 {
-  bool OEDCSNetworkTask::_run()  {
+  bool Stage2NetworkTask::_run()  {
+    if (DEBUG_UDP > 1) {
+      DebugLn<const char *>("Stage2NetworkTask was run\n");
+    }
     NetworkTask::_run();
 
-    // This is the (currently unused) retrieval of scripts to set parameters
-    bool new_packet = NetworkTask::net_udp.getPacket();
-    if (new_packet) {
-      // This would be better done with a static member
-      MachineScript *old = getConfig()->script;
-      MachineScript *ms = old->parse_buffer_into_new_script((char *) packetBuffer);
-      getConfig()->script = ms;
-      delete old;
-    }
-
-    // This is a preliminary data loggging test. There is no reason
-    // that the datalogging should be done at the frequency as checking
-    // for a new script, but for now we will keep here rather than
-    // creating a new task that we could schedule separately.
-    getConfig()->outputReport(getConfig()->report);
     char buffer[1024];
     // we need to make sure we start with a null string...
     buffer[0] = 0;
-    getConfig()->createJSONReport(getConfig()->report,buffer);
+    getConfig()->createStage2JSONReport(getConfig()->s2heater,getConfig()->report,buffer);
     if (DEBUG_UDP > 0) {
       Debug<const char *>("Sending buffer:");
       DebugLn<const char *>(buffer);
     }
     unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
+    // have to add a timeout here!
     net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
   }
-
 }

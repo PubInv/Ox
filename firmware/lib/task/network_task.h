@@ -42,13 +42,6 @@ namespace OxApp
     bool _init() override;
     bool _run() override;
   };
-
-
-  class Stage2NetworkTask : public NetworkTask {
-  private:
-  public:
-    bool _run() override;
-  };
 }
 
 #endif

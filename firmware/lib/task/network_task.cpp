@@ -20,7 +20,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 
 #include <debug.h>
-#include <retrieve_script_UDP_task.h>
+#include <network_task.h>
 #include <stdio.h>
 #include <string.h>
 #include <PIRCS.h>
@@ -86,25 +86,4 @@ namespace OxApp
       break;
     }
   }
-
-  bool Stage2NetworkTask::_run()  {
-    if (DEBUG_UDP > 1) {
-      DebugLn<const char *>("Stage2NetworkTask was run\n");
-    }
-    NetworkTask::_run();
-
-    char buffer[1024];
-    // we need to make sure we start with a null string...
-    buffer[0] = 0;
-    getConfig()->createStage2JSONReport(getConfig()->s2heater,getConfig()->report,buffer);
-    if (DEBUG_UDP > 0) {
-      Debug<const char *>("Sending buffer:");
-      DebugLn<const char *>(buffer);
-    }
-    unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
-    // have to add a timeout here!
-    net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
-  }
-
-
 }
