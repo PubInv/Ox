@@ -23,9 +23,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 #include <core.h>
 #include "heater.h"
-#include "stack.h"
 #include "abstract_ps.h"
-// #include "mostplus_flow.h"
 #include <machine_core_defs.h>
 #include <machine.h>
 #include <cog_hal.h>

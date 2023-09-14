@@ -27,6 +27,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 
 #include <machine.h>
+#include <network_udp.h>
 
 namespace OxApp
 {
@@ -37,22 +38,16 @@ namespace OxApp
     // DEBUG_UDP == 1 means debug logging,
     // DEBUG_UDP == 2 means debug script retreival
     int DEBUG_UDP = 0;
+    NetworkUDP net_udp;
+
+
+    char cmd[1024];
+    int lastnonce = 0;
+
+
     bool _init() override;
     bool _run() override;
-    void printPacketInfo(int packetsize);
-    void printTime(unsigned long time);
 
-// send an NTP request to the time server at the given address
-    unsigned long getTime();
-    void sendData(char *data,unsigned long time_epoch);
-    // returns true if we are reading a packet
-    bool getPacket();
-
-char cmd[1024];
-int lastnonce = 0;
-
-    int getcontrol();
-    void printNet();
   };
 }
 

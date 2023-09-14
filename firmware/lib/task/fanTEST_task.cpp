@@ -15,7 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #include "fanTEST_task.h"
 #include <core.h>
-
+#include <machine.h>
 
 
 using namespace std;

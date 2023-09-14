@@ -98,5 +98,6 @@ bool MachineConfig::init() {
   assert(TEMP_TO_BEGIN_FAN_SLOW_DOWN < OPERATING_TEMP);
   assert(OPERATING_TEMP < END_FAN_SLOW_DOWN);
   Serial.println("ALL CLEAR!!");
-
+  delay(50);
+  return true;
 }

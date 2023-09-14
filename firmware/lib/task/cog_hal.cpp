@@ -44,9 +44,14 @@ bool COG_HAL::init() {
   _ac_heaters = new OnePinHeater*[NUM_HEATERS];
   for(int i = 0; i < NUM_HEATERS; i++) {
     _ac_heaters[i] = new OnePinHeater();
-    _ac_heaters[i]->CHANNEL_0_PIN = HEATER_PINS[i];
+    _ac_heaters[i]->heater_pin = HEATER_PINS[i];
     _ac_heaters[i]->init();
   }
+  if (DEBUG_HAL > 0) {
+      Serial.println("HEATERS_INITIALIZED");
+      delay(100);
+  }
+
 
   _stacks[0] = new SL_PS("FIRST_STACK",0);
   _stacks[0]->init();
