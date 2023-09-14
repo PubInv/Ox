@@ -51,7 +51,7 @@ static Core core;
 
 /***** Declare your tasks here *****/
 
-OxApp::RetrieveScriptUDPTask retrieveScriptUDPTask;
+OxApp::OEDCSNetworkTask OEDCSNetworkTask;
 OxApp::CogTask cogTask;
 OxApp::SerialTask serialTask;
 OxApp::FaultTask faultTask;
@@ -188,15 +188,15 @@ void setup()
 
 
   if (ETHERNET_BOARD_PRESENT) {
-    OxCore::TaskProperties retrieveScriptUDPProperties;
-    retrieveScriptUDPProperties.name = "retrieveScriptUDP";
-    retrieveScriptUDPProperties.id = 24;
-    retrieveScriptUDPProperties.period = 5000;
-    retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
-    retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
+    OxCore::TaskProperties OEDCSNetworkProperties;
+    OEDCSNetworkProperties.name = "OEDCSNetwork";
+    OEDCSNetworkProperties.id = 24;
+    OEDCSNetworkProperties.period = 5000;
+    OEDCSNetworkProperties.priority = OxCore::TaskPriority::High;
+    OEDCSNetworkProperties.state_and_config = (void *) &machineConfig;
 
-    bool retrieveScriptUDP = core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
-    if (!retrieveScriptUDP) {
+    bool OEDCSNetwork = core.AddTask(&OEDCSNetworkTask, &OEDCSNetworkProperties);
+    if (!OEDCSNetwork) {
       OxCore::Debug<const char *>("Retrieve Script UDP\n");
       abort();
     }
@@ -243,7 +243,7 @@ void setup()
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
-  retrieveScriptUDPTask.DEBUG_UDP = 0;
+  OEDCSNetworkTask.DEBUG_UDP = 0;
   readTempsTask.DEBUG_READ_TEMPS = 2;
 
    OxCore::Debug<const char *>("Added tasks\n");

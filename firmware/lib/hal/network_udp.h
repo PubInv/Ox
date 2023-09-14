@@ -48,7 +48,6 @@ class NetworkUDP  {
     uint8_t networkStart();
     unsigned long getTime(uint16_t timeout);
     bool getParams(uint16_t timeout);
-    int getcontrol();
     void printNet();
 };
 

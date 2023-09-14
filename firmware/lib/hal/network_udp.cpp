@@ -360,27 +360,6 @@ EthernetUDP Udp;
     }
   }
 
-//  char cmd[1024];
-//  int lastnonce = 0;
-
-// TODO: Ask Geoff if this should be included, because
-// it is currently unused.
-  int NetworkUDP::getcontrol() {
-    unsigned long startMs = millis();
-    while (!Udp.available() && (millis() - startMs) < UDP_TIMEOUT) {}
-
-    // if there's data available, read a packet
-    int packetSize = Udp.parsePacket();
-    if (packetSize) {
-      //    printPacketInfo(packetSize);
-      // Changing on a supposition that this line is an error - rlr
-      // Udp.read(buffer, packetSize);
-      Udp.read(packetBuffer, packetSize);
-    }
-    return 1;
-  }
-
-
   void
   NetworkUDP::printNet() {
     //  Ethernet.MACAddress(mac);

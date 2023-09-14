@@ -72,6 +72,11 @@ TempRefreshTask tempRefreshTask[3];
 
 Stage2SerialTask stage2SerialTask;
 
+
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+
+
 MachineConfig *getConfig(int i) {
   return machineConfig[i];
 }

@@ -36,29 +36,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // hopefully it is only referenced here.
 extern byte packetBuffer[buffMax];
 
-// char timeServer[] = "time.nist.gov";
-// char mcogs[] = "mcogs.coslabs.com";
-
-// // #define serverPort 2390
-// #define serverPort 57573
-
-
-
-// #define UDP_TIMEOUT 2000
-
-// #define FLASH_ACCESS_MODE_128    EFC_ACCESS_MODE_128
-// #define FLASH_ACCESS_MODE_64     EFC_ACCESS_MODE_64
-
-
-
-// Enter a MAC address and IP address for your controller below.
-// The IP address will be dependent on your local network:
-// This is the mac for ROB READs Due in Austin TX! Change if you are installing elsewhere
-// until we can get dynamic mac addresss solved.
-//byte mac[] = {
-//   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
-//};
-
 using namespace OxCore;
 
 // TODO: Move this on to the network_udp object
@@ -68,7 +45,7 @@ uint8_t networkDown = 1;
 namespace OxApp
 {
 
-  bool RetrieveScriptUDPTask::_init() {
+  bool NetworkTask::_init() {
 
     for (uint8_t i = 0; i < 10 && networkDown; i++) {
       switch(net_udp.networkStart()) {
@@ -100,9 +77,9 @@ namespace OxApp
     Serial.println();
     return true;
   }
-  bool RetrieveScriptUDPTask::_run()  {
+  bool NetworkTask::_run()  {
     if (DEBUG_UDP > 1) {
-      DebugLn<const char *>("The RetrieveScriptUDPTask was run\n");
+      DebugLn<const char *>("The NetworkUDPTask was run\n");
     }
 
     switch(net_udp.networkCheck()) {
@@ -112,6 +89,10 @@ namespace OxApp
     case 100: networkDown = 0;
       break;
     }
+  }
+
+  bool OEDCSNetworkTask::_run()  {
+    NetworkTask::_run();
 
     // This is the (currently unused) retrieval of scripts to set parameters
     bool new_packet = net_udp.getPacket();
@@ -133,6 +114,25 @@ namespace OxApp
     // we need to make sure we start with a null string...
     buffer[0] = 0;
     getConfig()->createJSONReport(getConfig()->report,buffer);
+    if (DEBUG_UDP > 0) {
+      Debug<const char *>("Sending buffer:");
+      DebugLn<const char *>(buffer);
+    }
+    unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
+    // have to add a timeout here!
+    net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
+  }
+
+  bool Stage2NetworkTask::_run()  {
+    if (DEBUG_UDP > 1) {
+      DebugLn<const char *>("Stage2NetworkTask was run\n");
+    }
+    NetworkTask::_run();
+
+    char buffer[1024];
+    // we need to make sure we start with a null string...
+    buffer[0] = 0;
+    getConfig()->createStage2JSONReport(getConfig()->s2heater,getConfig()->report,buffer);
     if (DEBUG_UDP > 0) {
       Debug<const char *>("Sending buffer:");
       DebugLn<const char *>(buffer);
