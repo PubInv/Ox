@@ -67,8 +67,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-// #define ETHERNET_BOARD_PRESENT 1
-#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -83,6 +83,13 @@ void setup()
 {
   OxCore::serialBegin(115200UL);
   delay(500);
+
+  // TODO: consider doing this....
+    // Serial.begin(BAUDRATE);
+    // while (!Serial) {
+    //   watchdogReset();
+    // }
+    // Serial.println(F("starting"));
 
   Debug<const char *>("Starting Ox...\n");
   delay(100);
