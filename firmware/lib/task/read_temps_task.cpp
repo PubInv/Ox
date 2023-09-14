@@ -103,7 +103,19 @@ void ReadTempsTask::calculateDdelta() {
 }
 
 void ReadTempsTask::updateTemperatures() {
+
+    if (DEBUG_READ_TEMPS > 0) {
+      OxCore::Debug<const char *>("About to _readTemperatureSensors");
+      delay(30);
+    }
+
   _readTemperatureSensors();
+
+    if (DEBUG_READ_TEMPS > 0) {
+      OxCore::Debug<const char *>("Done with _readTemperatureSensors");
+      delay(30);
+    }
+
 
   // These are added just to test if reading quickly causes an error,
   // which might induce us to add power to the Dallas One-Wire board, for example.
@@ -171,15 +183,34 @@ void stage2_ReadTempsTask::updateTemperatures() {
   }
 
 }
-// I don't fully understand this!
 void ReadTempsTask::_configTemperatureSensors() {
+
+#ifdef USE_MAX31850_THERMOCOUPLES
   _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31850Temperature[1];
+#elif USE_MAX31855_THERMOCOUPLES
+  _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31855Temperature[1];
+#else
+  Serial.println("MAJOR INTERNAL ERROR, THERMOCOUPLE PREPROCESSOR DIRECTIVES NOT DEFINED!");
+#endif
+
   _temperatureSensors[0]._config = config[0];
+  if (DEBUG_READ_TEMPS > 0) {
+    OxCore::Debug<const char *>("Read Temp Configuration done!");
+    delay(50);
+  }
 }
 
 void ReadTempsTask::_readTemperatureSensors() {
   for (int i = 0; i < NUM_TEMP_INDICES; i++) {
+    if (DEBUG_READ_TEMPS > 0) {
+      OxCore::Debug<const char *>("QQQ\n");
+      delay(50);
+    }
     _temperatureSensors[i].ReadTemperature();
+    if (DEBUG_READ_TEMPS > 0) {
+      OxCore::Debug<const char *>("BBB\n");
+      delay(50);
+    }
     float temperature = _temperatureSensors[0].GetTemperature(i);
     if (DEBUG_READ_TEMPS > 0) {
       OxCore::Debug<const char *>("Temp : ");

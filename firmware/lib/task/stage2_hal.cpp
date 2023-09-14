@@ -1,7 +1,7 @@
 /*
   stage2_hal.cpp -- configuration specifically for the Stage2 HAL of the high-oxygen experiment
 
-  Copyright 2023, Robert L. Read
+  Copyright 2023, Robert L. Read, Lawrence Kincheloe
 
   This program includes free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -33,7 +33,7 @@ bool Stage2HAL::init() {
   _ac_heaters = new OnePinHeater*[NUM_HEATERS];
   for(int i = 0; i < NUM_HEATERS; i++) {
     _ac_heaters[i] = new OnePinHeater();
-    _ac_heaters[i]->CHANNEL_0_PIN = HEATER_PINS[i];
+    _ac_heaters[i]->heater_pin = HEATER_PINS[i];
     _ac_heaters[i]->init();
   }
 

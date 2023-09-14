@@ -67,8 +67,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 1
-// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+// #define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -98,10 +98,14 @@ void setup()
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
   machineConfig.hal = new COG_HAL();
+  machineConfig.hal->DEBUG_HAL = 2;
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
+    delay(50);
     abort();
+  } else {
+    Serial.println("Successful init of Hardware Abastraction Layer!");
   }
 
   // Now we will set the machine state to "Off"
@@ -227,6 +231,9 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
   cogTask.tempRefreshTask = &tempRefreshTask;
 
+  core.DEBUG_CORE = 0;
+  core._scheduler.DEBUG_SCHEDULER = 0;
+  dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   retrieveScriptUDPTask.DEBUG_UDP = 0;

@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <OnePinHeater.h>
 
 #include <machine_script.h>
-#include <stage2_config.h>
+
 
 
 #define HAND_TEST 1
@@ -36,9 +36,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
    DAC0 - the stack
    D4 - MAX31850_DATA_PIN
 */
-
+#ifdef ARDUINO
 #include <Arduino.h>
-
+#endif
 
 #ifdef RIBBONFISH
 #define RF_FAN 2
@@ -46,18 +46,37 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define RF_STACK DAC0
 #define MAX31850_DATA_PIN 5
 // #define RF_FAN_TACH 5
+// This is obsolete
+#define THERMOCOUPLE_PIN MAX31850_DATA_PIN //DIFFERENT FOR STAGE2_HEATER
+
 #define RF_MOSTPLUS_FLOW_PIN A0
 #define RF_MOSTPLUS_FLOW_LOW_CUTOFF_VOLTAGE 1.75
-
 // This is the order in which the thermocouples are wired;
 // in a perfect world we might use device address
 #define POST_STACK_0_IDX 0
 #define POST_HEATER_0_IDX 1
 
+#elif STAGE2_HEATER
+
+// WARNING! These values are obsolete.
+// There is probably no real dependence on these.
+// They should be hunted down and removed.
+#define MAX31850_DATA_PIN 5
+// This is obsolete
+#define THERMOCOUPLE_PIN MAX31850_DATA_PIN //DIFFERENT FOR STAGE2_HEATER
+#define RF_FAN DAC1 //DIFFERENT FOR STAGE2_HEATER
+#define RF_STACK DAC0
+#define RF_MOSTPLUS_FLOW_PIN A0
+#define RF_MOSTPLUS_FLOW_LOW_CUTOFF_VOLTAGE 1.75
+
 #endif
 
 
 #include <machine_core_defs.h>
+
+#ifdef STAGE2_HEATER
+#include <stage2_config.h>
+#endif
 
 
 class MachineHAL {
@@ -207,7 +226,7 @@ public:
 
   // This is a range from 0.0 to 1.0!
   // However, when used in the Arduino it has to be mapped
-  // onto a an integer (usuall 0-255) but this should be
+  // onto a an integer (usually 0-255) but this should be
   // the last step.
   float fanDutyCycle = 0.0;
 

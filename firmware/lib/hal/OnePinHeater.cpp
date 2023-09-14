@@ -28,14 +28,12 @@
 #define DEBUG_FLOW_SENSOR 0
 
 OnePinHeater::OnePinHeater() {
-  init();
 }
 
 void OnePinHeater::init() {
-  pinMode(channel_pins[0], OUTPUT);
-  digitalWrite(channel_pins[0],LOW);
+  pinMode(heater_pin, OUTPUT);
+  digitalWrite(heater_pin,LOW);
 }
 bool OnePinHeater::setHeater(int channelNum, bool onIfTrue) {
-  if (channelNum < NUM_CHANNELS)
-    digitalWrite(channel_pins[channelNum],onIfTrue ? HIGH : LOW);
+  digitalWrite(heater_pin,onIfTrue ? HIGH : LOW);
 }

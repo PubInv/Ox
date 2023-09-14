@@ -17,10 +17,6 @@
 #ifndef MAX31850_TEMPERATURE
 #define MAX31850_TEMPERATURE
 
-// Put guard for Arduino here
-
-#ifdef ARDUINO
-
 #ifdef ARDUINO
 #include <Arduino.h>
 #else
@@ -29,8 +25,13 @@
 
 #include "abstract_temperature.h"
 
+// WARNING! Until we can figure out how to get
+// pio to not compile classes with no dependency,
+// we need to incude this.
 #include <OneWire.h>
 #include <DallasTemperature.h>
+
+
 
 #include <machine.h>
 // Note: In a real solution, we need to know the addresses for the temperature sensors
@@ -40,7 +41,6 @@
 // This is a quick-and-dirty approach for the "RibbonFish" POC.
 // #define POST_STACK_0_IDX 0
 //#define POST_HEATER_0_IDX 1
-// #define MAX31850_DATA_PIN 2
 
 namespace Temperature {
   class MAX31850Temperature : public AbstractTemperature {
@@ -66,7 +66,5 @@ namespace Temperature {
   };
 
 }
-
-#endif
 
 #endif
