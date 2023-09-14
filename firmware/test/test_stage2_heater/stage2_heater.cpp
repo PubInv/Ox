@@ -44,6 +44,7 @@ using namespace OxCore;
 // #include <serial_task.h>
 #include <stage2_serial_task.h>
 #include <temp_refresh_task.h>
+#include <retrieve_script_UDP_task.h>
 
 using namespace OxCore;
 static Core core;
@@ -69,6 +70,7 @@ Stage2HeaterTask stage2HeaterTask[3];
 
 Stage2SerialReportTask stage2SerialReportTask[3];
 TempRefreshTask tempRefreshTask[3];
+Stage2NetworkTask stage2NetworkTask[3];
 
 Stage2SerialTask stage2SerialTask;
 
@@ -199,6 +201,19 @@ void setup() {
       abort();
     }
     stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
+
+    OxCore::TaskProperties Stage2NetworkProperties;
+    Stage2NetworkProperties.name = "Stage2Network";
+    Stage2NetworkProperties.id = 36+i;
+    Stage2NetworkProperties.period = tempRefreshTask[i].PERIOD_MS;
+    Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
+    Stage2NetworkProperties.state_and_config = (void *) getConfig(i);
+    bool stage2Network = core.AddTask(&stage2NetworkTask[i], &Stage2NetworkProperties);
+    if (!stage2Network) {
+      OxCore::Debug<const char *>("Stage2Network add failed\n");
+      delay(100);
+      abort();
+    }
   }
 
   // Let's put our DEBUG_LEVELS here...
@@ -207,6 +222,7 @@ void setup() {
     stage2HeaterTask[i].DEBUG_LEVEL = 0;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
     tempRefreshTask[i].DEBUG = 0;
+    stage2NetworkTask[i].DEBUG = 0;
   }
 
     core.DEBUG_CORE = 0;

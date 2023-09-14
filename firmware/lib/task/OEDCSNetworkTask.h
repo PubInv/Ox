@@ -15,40 +15,23 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef RETRIEVE_SCRIPT_UDP_TASK_H
-#define RETRIEVE_SCRIPT_UDP_TASK_H
+#ifndef OEDCS_NETWORK_TASK_H
+#define OEDCS_NETWORK_TASK_H
 
-#ifdef ARDUINO
 #include <Arduino.h>
-#else // Native
-#include <iostream>
-#endif
 
 #include <core.h>
-
 #include <machine.h>
 #include <network_udp.h>
+#include <retrieve_script_UDP_task.h>
 
 namespace OxApp
 {
-  // Note this class is really a virtual; it makes not sense to
-  // instantiated it directly, though it would give you network functionality
-  class NetworkTask : public OxCore::Task {
-  public:
-    // DEBUG_UDP == 1 means debug logging,
-    // DEBUG_UDP == 2 means debug script retreival
-    int DEBUG_UDP = 0;
-    NetworkUDP net_udp;
-    bool _init() override;
-    bool _run() override;
-  };
-
-
-  class Stage2NetworkTask : public NetworkTask {
-  private:
+  class OEDCSNetworkTask : public NetworkTask {
   public:
     bool _run() override;
   };
+
 }
 
 #endif

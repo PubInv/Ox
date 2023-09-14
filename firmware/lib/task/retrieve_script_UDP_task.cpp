@@ -38,18 +38,14 @@ extern byte packetBuffer[buffMax];
 
 using namespace OxCore;
 
-// TODO: Move this on to the network_udp object
-uint8_t networkDown = 1;
-
-
 namespace OxApp
 {
 
   bool NetworkTask::_init() {
 
-    for (uint8_t i = 0; i < 10 && networkDown; i++) {
+    for (uint8_t i = 0; i < 10 && net_udp.networkDown; i++) {
       switch(net_udp.networkStart()) {
-      case 0: networkDown = 0; break;
+      case 0: net_udp.networkDown = 0; break;
       case 1: Serial.println("W5xx init failed"); break;
       case 2: Serial.println("No ethernet boad"); break;
       case 3: Serial.println("No link"); break;
@@ -57,7 +53,7 @@ namespace OxApp
       }
     }
 
-    if (networkDown) {
+    if (net_udp.networkDown) {
       // Be sure to call safeDelay or watchdogReset
       while(1) {
         Serial.println("CRITICAL ERROR! CONFIGURED FOR ETHERNET, BUT NONE FOUND!");
@@ -84,43 +80,11 @@ namespace OxApp
 
     switch(net_udp.networkCheck()) {
     case 1:
-    case 2: Serial.println("Lost network link"); networkDown++; break;
-    case 3: Serial.println("Lost IP address"); networkDown++; break;
-    case 100: networkDown = 0;
+    case 2: Serial.println("Lost network link"); net_udp.networkDown++; break;
+    case 3: Serial.println("Lost IP address"); net_udp.networkDown++; break;
+    case 100: net_udp.networkDown = 0;
       break;
     }
-  }
-
-  bool OEDCSNetworkTask::_run()  {
-    NetworkTask::_run();
-
-    // This is the (currently unused) retrieval of scripts to set parameters
-    bool new_packet = net_udp.getPacket();
-    if (new_packet) {
-      // This would be better done with a static member
-      MachineScript *old = getConfig()->script;
-      MachineScript *ms = old->parse_buffer_into_new_script((char *) packetBuffer);
-      getConfig()->script = ms;
-      delete old;
-    }
-
-
-    // This is a preliminary data loggging test. There is no reason
-    // that the datalogging should be done at the frequency as checking
-    // for a new script, but for now we will keep here rather than
-    // creating a new task that we could schedule separately.
-    getConfig()->outputReport(getConfig()->report);
-    char buffer[1024];
-    // we need to make sure we start with a null string...
-    buffer[0] = 0;
-    getConfig()->createJSONReport(getConfig()->report,buffer);
-    if (DEBUG_UDP > 0) {
-      Debug<const char *>("Sending buffer:");
-      DebugLn<const char *>(buffer);
-    }
-    unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
-    // have to add a timeout here!
-    net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
   }
 
   bool Stage2NetworkTask::_run()  {

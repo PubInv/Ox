@@ -40,6 +40,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <read_temps_task.h>
 #include <temp_refresh_task.h>
 #include <serialReportTask.h>
+#include <OEDCSNetworkTask.h>
 
 // #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
