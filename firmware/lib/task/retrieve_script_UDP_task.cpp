@@ -61,7 +61,7 @@ extern byte packetBuffer[buffMax];
 
 using namespace OxCore;
 
-
+// TODO: Move this on to the network_udp object
 uint8_t networkDown = 1;
 
 
@@ -70,7 +70,6 @@ namespace OxApp
 
   bool RetrieveScriptUDPTask::_init() {
 
-    networkDown = 1;
     for (uint8_t i = 0; i < 10 && networkDown; i++) {
       switch(net_udp.networkStart()) {
       case 0: networkDown = 0; break;
@@ -82,15 +81,18 @@ namespace OxApp
     }
 
     if (networkDown) {
-      Serial.println("CRITICAL ERROR! CONFIGURED FOR ETHERNET, BUT NONE FOUND!");
-      Serial.println("RESET BEING PERFORMED!");
-      delay(5000);
+      // Be sure to call safeDelay or watchdogReset
+      while(1) {
+        Serial.println("CRITICAL ERROR! CONFIGURED FOR ETHERNET, BUT NONE FOUND!");
+        watchdogReset();
+        delay(5000);
       // WARNING --- there is a danger that this
       // prevents the system from coming up at all
       // if we have not connectivity...that might not be
       // the best behavior, but by our current understanding
       // it is safe.
-      REQUEST_EXTERNAL_RESET ; //this will reset processor
+      // REQUEST_EXTERNAL_RESET ; //this will reset processor
+      }
     }
 
     Serial.println("Network started");
@@ -103,6 +105,13 @@ namespace OxApp
       DebugLn<const char *>("The RetrieveScriptUDPTask was run\n");
     }
 
+    switch(net_udp.networkCheck()) {
+    case 1:
+    case 2: Serial.println("Lost network link"); networkDown++; break;
+    case 3: Serial.println("Lost IP address"); networkDown++; break;
+    case 100: networkDown = 0;
+      break;
+    }
 
     // This is the (currently unused) retrieval of scripts to set parameters
     bool new_packet = net_udp.getPacket();
