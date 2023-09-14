@@ -126,7 +126,7 @@ getTime(uint16_t timeout) {
   ntpBuffer[13]  = 0x4E;
   ntpBuffer[14]  = 49;
   ntpBuffer[15]  = 52;
-  
+
   // all NTP fields have been given values, now
   // you can send a packet requesting a timestamp:
   if (!Udp.beginPacket(timeServer, 123)) { //NTP requests are to port 123
@@ -141,7 +141,7 @@ getTime(uint16_t timeout) {
   // Note: This is a hard loop --- UDP_TIMEOUT blocks the machine for that time.
   unsigned long startMs = millis();
   int packetSize = 0;
-  while ((packetSize = Udp.parsePacket()) == 0 && (millis() - startMs) < timeout) { 
+  while ((packetSize = Udp.parsePacket()) == 0 && (millis() - startMs) < timeout) {
     delay(100);
     watchdogReset();
   }
@@ -150,7 +150,7 @@ getTime(uint16_t timeout) {
     if (DEBUG_UDP > 2) Serial.println("No time data returned");
     return 0;
   }
-  
+
   if (DEBUG_UDP > 1) printPacketInfo(packetSize);
 
   Udp.read(ntpBuffer, NTP_PACKET_SIZE);
@@ -159,11 +159,11 @@ getTime(uint16_t timeout) {
   // or two words, long. First, esxtract the two words:
   unsigned long highWord = word(ntpBuffer[40], ntpBuffer[41]);
   unsigned long lowWord = word(ntpBuffer[42], ntpBuffer[43]);
-  
+
   // combine the four bytes (two words) into a long integer
   // this is NTP time (seconds since Jan 1 1900):
   unsigned long secsSince1900 = highWord << 16 | lowWord;
-  
+
   // now convert NTP time into everyday time:
   // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
   const unsigned long seventyYears = 2208988800UL;
@@ -207,7 +207,7 @@ getParams(uint16_t timeout) {
     if (DEBUG_UDP > 2) Serial.println("can't send request");
     return false;
   }
-  
+
   unsigned long startMs = millis();
   int packetSize = 0;
   while ((packetSize = Udp.parsePacket()) == 0 && (millis() - startMs) < timeout) {
@@ -219,7 +219,7 @@ getParams(uint16_t timeout) {
     if (DEBUG_UDP > 2) Serial.println("no params returned");
     return false;
   }
-  
+
   if (DEBUG_UDP > 1) {
     Serial.print(F("UDP Packet received, size "));
     Serial.println(packetSize);
@@ -231,10 +231,10 @@ getParams(uint16_t timeout) {
     Serial.print(F(", port "));
     Serial.println(Udp.remotePort());
   }
-    
+
   Udp.read(packetBuffer, packetSize);
   packetBuffer[packetSize] = '\0';
-    
+
   String config = String((char *)packetBuffer);
   if (DEBUG_UDP > 1) {
     Serial.println(config);
@@ -268,10 +268,10 @@ sendData(char *data, unsigned long current_time, uint16_t timeout) {
     if (DEBUG_UDP > 2) Serial.println("Can't send data");
     return false;
   }
-  
+
   unsigned long startMs = millis();
   int packetSize = 0;
-  while ((packetSize = Udp.parsePacket()) == 0 && (millis() - startMs) < timeout) { 
+  while ((packetSize = Udp.parsePacket()) == 0 && (millis() - startMs) < timeout) {
     delay(100);
     watchdogReset();
   }
@@ -307,7 +307,7 @@ setGlobalMacAddress() {
   hash32 ^= uid_buf[1];
   hash32 ^= uid_buf[2];
   hash32 ^= uid_buf[3];
-  
+
   mac[0] = 0xFE;
   mac[1] = 0xED;
   mac[2] = (hash32>>24) & 0xFF;
@@ -327,7 +327,7 @@ networkStart() {
   Ethernet.init(10);
 
   if (W5100.init() == 0) return 1;
-  
+
   if (!Ethernet.hardwareStatus()) return 2;
 
   SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
@@ -335,7 +335,7 @@ networkStart() {
   uint32_t add = 0;
   W5100.setIPAddress((uint8_t *) &add);
   SPI.endTransaction();
-  
+
   uint32_t startMs = millis();
   while (W5100.getLinkStatus() != LINK_ON && (millis() - startMs) < 3000) {
     delay(100);
@@ -343,7 +343,7 @@ networkStart() {
   }
 
   if (W5100.getLinkStatus() != LINK_ON) return 3;
-  
+
   if (setGlobalMacAddress()) {
     mac[0] = 0xFE;
     mac[1] = 0xED;
@@ -368,10 +368,10 @@ networkStart() {
   printTime(epoch);
 
   sendData("\"HELLO\": 1", epoch, 2000);
-  
+
   return 0;
 }
-  
+
 void setup() {
   Serial.begin(BAUDRATE);
   while (!Serial) {
@@ -395,7 +395,7 @@ void setup() {
   Serial.println("Network started");
   Serial.println();
   Serial.println();
-  
+
   return;
 }
 
@@ -405,12 +405,12 @@ void loop() {
   printTime(epoch);
 
   switch(networkCheck()) {
-  case 1: 
+  case 1:
   case 2: Serial.println("Lost network link"); networkDown++; break;
   case 3: Serial.println("Lost IP address"); networkDown++; break;
   case 100: networkDown = 0; break;
   }
-  
+
   if (networkDown >= 10) REQUEST_EXTERNAL_RESET ; //this will reset processor
 
   if (epoch > 0 && epoch % 15 == 0) {
