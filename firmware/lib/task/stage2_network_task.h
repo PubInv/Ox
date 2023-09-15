@@ -28,8 +28,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxApp
 {
   class Stage2NetworkTask : public NetworkTask {
-  private:
   public:
+    int PERIOD_MS =  20*1000;
     bool _run() override;
   };
 }
