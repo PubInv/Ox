@@ -44,7 +44,7 @@ namespace OxApp
     for (uint8_t i = 0; i < 10 && net_udp.networkDown; i++) {
       switch(net_udp.networkStart()) {
       case 0: net_udp.networkDown = 0; break;
-      case 1: Serial.println(F("W5xx init failed")); break;
+      case 1: Serial.println(F("W5x00 init failed")); break;
       case 2: Serial.println(F("No ethernet boad")); break;
       case 3: Serial.println(F("No link")); break;
       case 4: Serial.println(F("No DHCP")); break;
