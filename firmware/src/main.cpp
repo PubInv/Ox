@@ -17,7 +17,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // Program information
 #define COMPANY_NAME "pubinv.org "
 #define PROG_NAME "main.cpp"
-#define VERSION "; Rev: 0.3.1"  //
+#define VERSION "; Rev: 0.3.2"  //
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -97,7 +97,7 @@ void setup()
   case 3: Serial.println("software"); break;
   case 4: Serial.println("user"); break;
   }                                                                              Serial.println("=================");
- 
+
   // TODO: consider doing this....
     // Serial.begin(BAUDRATE);
     // while (!Serial) {
