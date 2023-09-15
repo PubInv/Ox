@@ -15,8 +15,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-
-
 #include <Arduino.h>
 
 #include <debug.h>
@@ -43,14 +41,13 @@ using namespace OxCore;
 // TODO: Move this on to the network_udp object
 // uint8_t networkDown = 1;
 
-
 namespace OxApp
 {
   bool OEDCSNetworkTask::_run()  {
     NetworkTask::_run();
 
     // This is the (currently unused) retrieval of scripts to set parameters
-    bool new_packet = NetworkTask::net_udp.getPacket();
+    bool new_packet = NetworkTask::net_udp.getParams(3000);
     if (new_packet) {
       // This would be better done with a static member
       MachineScript *old = getConfig()->script;

@@ -31,7 +31,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <network_udp.h>
 #include <stage2_network_task.h>
 
-
 // This is defined in network_udp.h. It is true global;
 // hopefully it is only referenced here.
 extern byte packetBuffer[buffMax];
@@ -56,7 +55,7 @@ namespace OxApp
     }
     unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
     // have to add a timeout here!
-    net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
+    net_udp.sendData(buffer, current_epoch_time, UDP_TIMEOUT);
 
     Serial.println("AAA");
   }

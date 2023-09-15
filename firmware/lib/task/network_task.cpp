@@ -15,8 +15,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-
-
 #include <Arduino.h>
 
 #include <debug.h>
@@ -46,17 +44,17 @@ namespace OxApp
     for (uint8_t i = 0; i < 10 && net_udp.networkDown; i++) {
       switch(net_udp.networkStart()) {
       case 0: net_udp.networkDown = 0; break;
-      case 1: Serial.println("W5xx init failed"); break;
-      case 2: Serial.println("No ethernet boad"); break;
-      case 3: Serial.println("No link"); break;
-      case 4: Serial.println("No DHCP"); break;
+      case 1: Serial.println(F("W5xx init failed")); break;
+      case 2: Serial.println(F("No ethernet boad")); break;
+      case 3: Serial.println(F("No link")); break;
+      case 4: Serial.println(F("No DHCP")); break;
       }
     }
 
     if (net_udp.networkDown) {
       // Be sure to call safeDelay or watchdogReset
       while(1) {
-        Serial.println("CRITICAL ERROR! CONFIGURED FOR ETHERNET, BUT NONE FOUND!");
+        Serial.println(F("CRITICAL ERROR! CONFIGURED FOR ETHERNET, BUT NONE FOUND!"));
         watchdogReset();
         delay(5000);
       // WARNING --- there is a danger that this
@@ -68,11 +66,12 @@ namespace OxApp
       }
     }
 
-    Serial.println("Network started");
+    Serial.println(F("Network started"));
     Serial.println();
     Serial.println();
     return true;
   }
+
   bool NetworkTask::_run()  {
     if (DEBUG_UDP > 1) {
       DebugLn<const char *>("The NetworkUDPTask was run\n");
@@ -80,8 +79,14 @@ namespace OxApp
 
     switch(net_udp.networkCheck()) {
     case 1:
-    case 2: Serial.println("Lost network link"); net_udp.networkDown++; break;
-    case 3: Serial.println("Lost IP address"); net_udp.networkDown++; break;
+    case 2:
+      Serial.println(F("Lost network link"));
+      net_udp.networkDown++;
+      break;
+    case 3:
+      Serial.println("Lost IP address");
+      net_udp.networkDown++;
+      break;
     case 100: net_udp.networkDown = 0;
       break;
     }
