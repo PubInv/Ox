@@ -42,6 +42,8 @@
     double HeaterSetPoint_C = 25.0;
     double Input_temperature_C = 25.0;
     DutyCycleTask *dutyCycleTask;
+
+    void shutHeaterDown();
   private:
     bool _init() override;
     bool _run() override;

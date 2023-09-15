@@ -23,7 +23,10 @@ using namespace std;
 
 namespace OxApp
 {
-
+  // TODO: This class should probably be rewritten with specific state transition functions.
+  // This would allow us to log transition events elegantly. As it is, we have to be idempotent...
+  // in the "off" state we have to keep turning everything off because we don't know if we were
+  // just turned off or have been off for 24 hours.
 
   // TODO: Most of this should be moved into the machine definition
   bool CogTask::_init()
@@ -58,6 +61,9 @@ namespace OxApp
     getHAL()->_updateFanPWM(fs);
     getConfig()->report->fan_pwm = fs;
     _updateStackVoltage(getConfig()->MIN_OPERATING_STACK_VOLTAGE);
+    // Although after a minute this should turn off, we want
+    // to do it immediately
+    heaterPIDTask->shutHeaterDown();
     return new_ms;
   }
 
