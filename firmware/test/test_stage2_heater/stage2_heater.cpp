@@ -35,16 +35,14 @@ using namespace OxCore;
 
 #include <Arduino.h>
 
-// #include <MAX31850.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
 #include <stage2SerialReportTask.h>
-// #include <serial_task.h>
 #include <stage2_serial_task.h>
 #include <temp_refresh_task.h>
-#include <retrieve_script_UDP_task.h>
+#include <stage2_network_task.h>
 
 using namespace OxCore;
 static Core core;
@@ -205,7 +203,7 @@ void setup() {
     OxCore::TaskProperties Stage2NetworkProperties;
     Stage2NetworkProperties.name = "Stage2Network";
     Stage2NetworkProperties.id = 36+i;
-    Stage2NetworkProperties.period = tempRefreshTask[i].PERIOD_MS;
+    Stage2NetworkProperties.period = stage2NetworkTask[i].PERIOD_MS;
     Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
     Stage2NetworkProperties.state_and_config = (void *) getConfig(i);
     bool stage2Network = core.AddTask(&stage2NetworkTask[i], &Stage2NetworkProperties);
@@ -222,7 +220,7 @@ void setup() {
     stage2HeaterTask[i].DEBUG_LEVEL = 0;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
     tempRefreshTask[i].DEBUG = 0;
-    stage2NetworkTask[i].DEBUG = 0;
+    stage2NetworkTask[i].DEBUG_UDP = 0;
   }
 
     core.DEBUG_CORE = 0;

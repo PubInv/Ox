@@ -15,8 +15,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-
-
 #include <Arduino.h>
 
 #include <debug.h>
@@ -31,7 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
 #include "utility/w5100.h"
 #include <network_udp.h>
-#include <Stage2NetworkTask.h>
+#include <stage2_network_task.h>
 
 
 // This is defined in network_udp.h. It is true global;
@@ -39,10 +37,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 extern byte packetBuffer[buffMax];
 
 using namespace OxCore;
-
-// TODO: Move this on to the network_udp object
-// uint8_t networkDown = 1;
-
 
 namespace OxApp
 {
@@ -63,5 +57,7 @@ namespace OxApp
     unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
     // have to add a timeout here!
     net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
+
+    Serial.println("AAA");
   }
 }
