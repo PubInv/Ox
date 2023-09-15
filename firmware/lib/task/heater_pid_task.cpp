@@ -62,7 +62,11 @@ HeaterPIDTask::HeaterPIDTask() {
     OxCore::Debug<const char *>("HeaterPIDTask init\n");
     return true;
   }
-
+ void HeaterPIDTask::shutHeaterDown() {
+   this->HeaterSetPoint_C = 25.0;
+   getConfig()->report->heater_duty_cycle = 0.0;
+   dutyCycleTask->dutyCycle = 0.0;
+ }
   bool HeaterPIDTask::_run()
   {
     if (DEBUG_PID > 0) {
@@ -74,13 +78,13 @@ HeaterPIDTask::HeaterPIDTask() {
       OxCore::Debug<const char *>("AAA\n");
     }
 
-    // I'm considering checking the state here...
     MachineState ms = getConfig()->ms;
     if ((ms == Off) || (ms == EmergencyShutdown) || (ms == OffUserAck)) {
       // in this case, we do nothing...but we will put the set point
       // to room temperature.
       this->HeaterSetPoint_C = 25.0;
       getConfig()->report->heater_duty_cycle = 0.0;
+      dutyCycleTask->dutyCycle = 0.0;
       return true;
     }
 
