@@ -15,8 +15,8 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef RETRIEVE_SCRIPT_UDP_TASK_H
-#define RETRIEVE_SCRIPT_UDP_TASK_H
+#ifndef NETWORK_TASK_H
+#define NETWORK_TASK_H
 
 #ifdef ARDUINO
 #include <Arduino.h>
@@ -31,7 +31,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxApp
 {
-  // Note this class is really a virtual; it makes not sense to
+  // Note this class is really a virtual; it makes no sense to
   // instantiated it directly, though it would give you network functionality
   class NetworkTask : public OxCore::Task {
   public:

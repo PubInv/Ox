@@ -31,6 +31,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include <cog_hal.h>
 
+#include <flash.h>
 #include <network_task.h>
 #include <cog_task.h>
 #include <serial_task.h>
@@ -80,11 +81,23 @@ MachineConfig *getConfig() {
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer
+
 void setup()
 {
   OxCore::serialBegin(115200UL);
   delay(500);
 
+  //Print out the reset reason
+  Serial.println("=================");
+  Serial.print("ResetCause: ");
+  switch(getResetCause()) {
+  case 0: Serial.println("general"); break;
+  case 1: Serial.println("backup"); break;
+  case 2: Serial.println("watchdog"); break;
+  case 3: Serial.println("software"); break;
+  case 4: Serial.println("user"); break;
+  }                                                                              Serial.println("=================");
+ 
   // TODO: consider doing this....
     // Serial.begin(BAUDRATE);
     // while (!Serial) {

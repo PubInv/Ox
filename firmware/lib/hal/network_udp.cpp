@@ -19,7 +19,7 @@
 #include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
 #include "utility/w5100.h"
 #include <network_udp.h>
-
+#include <flash.h>
 
 // TODO: all of this should be moved to a more accessible configuration file.
 char timeServer[] = "time.nist.gov";
@@ -29,17 +29,6 @@ byte packetBuffer[buffMax]; //buffer to hold incoming packet,
 
 #define localPort 2390
 #define serverPort 57573
-
-#define FLASH_ACCESS_MODE_128    EFC_ACCESS_MODE_128
-#define FLASH_ACCESS_MODE_64     EFC_ACCESS_MODE_64
-
-#ifdef RIBBONFISH
-byte mac[6] = { 0xFE, 0xED, 0x03, 0x04, 0x05, 0x06 };
-#else
-byte mac[6] = { 0xFE, 0xED, 0x04, 0x05, 0x06, 0x07 };
-#endif
-
-char macString[20];
 
 // An EthernetUDP instance to let us send and receive packets over UDP
 EthernetUDP Udp;
@@ -212,40 +201,6 @@ NetworkUDP::sendData(char *data, unsigned long current_time, uint16_t timeout) {
   if (strncmp((char *)packetBuffer, "posted", 6)) return false;
   if (DEBUG_UDP > 2) Serial.println((char *)packetBuffer);
   return true;
-}
-
-uint32_t
-NetworkUDP::setGlobalMacAddress() {
-  uint32_t rv = efc_init((Efc *) EFC0, FLASH_ACCESS_MODE_128, 4);
-  if (rv != EFC_RC_OK) return rv;
-
-  uint32_t uid_buf[4];
-  rv = efc_perform_read_sequence((Efc *)EFC0, EFC_FCMD_STUI, EFC_FCMD_SPUI, uid_buf, 4);
-  if (rv != EFC_RC_OK) return EFC_RC_ERROR;
-
-  //  Serial.print(F(" ID = "));
-  //  Serial.print(uid_buf[0]);Serial.print(F(","));
-  //  Serial.print(uid_buf[1]);Serial.print(F(","));
-  //  Serial.print(uid_buf[2]);Serial.print(F(","));
-  //  Serial.println(uid_buf[3]);
-
-  uint32_t hash32 = uid_buf[0];
-  hash32 ^= uid_buf[1];
-  hash32 ^= uid_buf[2];
-  hash32 ^= uid_buf[3];
-
-  mac[0] = 0xFE;
-  mac[1] = 0xED;
-  mac[2] = (hash32>>24) & 0xFF;
-  mac[3] = (hash32>>16) & 0xFF;
-  mac[4] = (hash32>>8) & 0xFF;
-  mac[5] = (hash32>>0) & 0xFF;
-
-  sprintf(macString, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-
-  Serial.print(F("MAC Address: "));
-  Serial.println(macString);
-  return 0;
 }
 
 bool

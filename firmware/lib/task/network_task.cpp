@@ -29,6 +29,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
 #include "utility/w5100.h"
 #include <network_udp.h>
+#include <flash.h>
 
 // This is defined in network_udp.h. It is true global;
 // hopefully it is only referenced here.
@@ -69,6 +70,19 @@ namespace OxApp
     Serial.println(F("Network started"));
     Serial.println();
     Serial.println();
+
+    unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
+    char buffer[1024];
+    strcpy(buffer, "\"MachineStart\": ");
+    switch(getResetCause()) {
+    case 0: strcat(buffer, "\"GENERAL\""); break;
+    case 1: strcat(buffer, "\"BACKUP\""); break;
+    case 2: strcat(buffer, "\"WATCHDOG\""); break;
+    case 3: strcat(buffer, "\"SOFTWARE\""); break;
+    case 4: strcat(buffer, "\"USER\""); break;
+    }
+    net_udp.sendData(buffer, current_epoch_time, 2000);
+
     return true;
   }
 

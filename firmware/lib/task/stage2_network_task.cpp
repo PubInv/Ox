@@ -55,8 +55,9 @@ namespace OxApp
     }
     unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
     // have to add a timeout here!
-    net_udp.sendData(buffer, current_epoch_time, UDP_TIMEOUT);
+    net_udp.sendData(buffer, current_epoch_time, 2000);
 
     Serial.println("AAA");
+    return true;
   }
 }

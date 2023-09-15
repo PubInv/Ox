@@ -70,7 +70,8 @@ namespace OxApp
       DebugLn<const char *>(buffer);
     }
     unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
-    net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
+    net_udp.sendData(buffer,current_epoch_time, 2000);
+    return true;
   }
 
 }
