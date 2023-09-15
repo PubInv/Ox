@@ -36,6 +36,7 @@ class NetworkUDP  {
  public:
     int DEBUG_UDP = 0;
     unsigned long epoch = 0;
+    uint8_t networkDown = 1;
 
     bool sendData(char *data, unsigned long current_time, uint16_t timeout);
     // returns true if we are reading a packet
@@ -48,7 +49,6 @@ class NetworkUDP  {
     uint8_t networkStart();
     unsigned long getTime(uint16_t timeout);
     bool getParams(uint16_t timeout);
-    int getcontrol();
     void printNet();
 };
 

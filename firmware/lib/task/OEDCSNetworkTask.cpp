@@ -20,7 +20,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <Arduino.h>
 
 #include <debug.h>
-#include <retrieve_script_UDP_task.h>
+#include <network_task.h>
 #include <stdio.h>
 #include <string.h>
 #include <PIRCS.h>
@@ -31,81 +31,26 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
 #include "utility/w5100.h"
 #include <network_udp.h>
+#include <OEDCSNetworkTask.h>
+
 
 // This is defined in network_udp.h. It is true global;
 // hopefully it is only referenced here.
 extern byte packetBuffer[buffMax];
 
-// char timeServer[] = "time.nist.gov";
-// char mcogs[] = "mcogs.coslabs.com";
-
-// // #define serverPort 2390
-// #define serverPort 57573
-
-
-
-// #define UDP_TIMEOUT 2000
-
-// #define FLASH_ACCESS_MODE_128    EFC_ACCESS_MODE_128
-// #define FLASH_ACCESS_MODE_64     EFC_ACCESS_MODE_64
-
-
-
-// Enter a MAC address and IP address for your controller below.
-// The IP address will be dependent on your local network:
-// This is the mac for ROB READs Due in Austin TX! Change if you are installing elsewhere
-// until we can get dynamic mac addresss solved.
-//byte mac[] = {
-//   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
-//};
-
 using namespace OxCore;
 
-
-uint8_t networkDown = 1;
+// TODO: Move this on to the network_udp object
+// uint8_t networkDown = 1;
 
 
 namespace OxApp
 {
-
-  bool RetrieveScriptUDPTask::_init() {
-
-    networkDown = 1;
-    for (uint8_t i = 0; i < 10 && networkDown; i++) {
-      switch(net_udp.networkStart()) {
-      case 0: networkDown = 0; break;
-      case 1: Serial.println("W5xx init failed"); break;
-      case 2: Serial.println("No ethernet boad"); break;
-      case 3: Serial.println("No link"); break;
-      case 4: Serial.println("No DHCP"); break;
-      }
-    }
-
-    if (networkDown) {
-      Serial.println("CRITICAL ERROR! CONFIGURED FOR ETHERNET, BUT NONE FOUND!");
-      Serial.println("RESET BEING PERFORMED!");
-      delay(5000);
-      // WARNING --- there is a danger that this
-      // prevents the system from coming up at all
-      // if we have not connectivity...that might not be
-      // the best behavior, but by our current understanding
-      // it is safe.
-      REQUEST_EXTERNAL_RESET ; //this will reset processor
-    }
-
-    Serial.println("Network started");
-    Serial.println();
-    Serial.println();
-    return true;
-  }
-  bool RetrieveScriptUDPTask::_run()  {
-    if (DEBUG_UDP > 1) {
-      DebugLn<const char *>("The RetrieveScriptUDPTask was run\n");
-    }
-
+  bool OEDCSNetworkTask::_run()  {
+    NetworkTask::_run();
 
     // This is the (currently unused) retrieval of scripts to set parameters
-    bool new_packet = net_udp.getPacket();
+    bool new_packet = NetworkTask::net_udp.getPacket();
     if (new_packet) {
       // This would be better done with a static member
       MachineScript *old = getConfig()->script;
@@ -113,7 +58,6 @@ namespace OxApp
       getConfig()->script = ms;
       delete old;
     }
-
 
     // This is a preliminary data loggging test. There is no reason
     // that the datalogging should be done at the frequency as checking
@@ -129,9 +73,7 @@ namespace OxApp
       DebugLn<const char *>(buffer);
     }
     unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
-    // have to add a timeout here!
     net_udp.sendData(buffer,current_epoch_time, UDP_TIMEOUT);
   }
-
 
 }
