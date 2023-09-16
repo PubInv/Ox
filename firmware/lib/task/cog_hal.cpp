@@ -27,11 +27,10 @@ bool COG_HAL::init() {
   }
 
   pinMode(MAX31850_DATA_PIN, INPUT);
-  pinMode(RF_FAN, OUTPUT);
   pinMode(RF_STACK, OUTPUT);
 
 
-  _fans[0] = SanyoAceB97("FIRST_FAN",0,RF_FAN,1.0);
+  _fans[0] = SanyoAceB97("FIRST_FAN",0);
   _fans[0]._init();
 
   // TODO: This block of code appears in cog_hal.cpp

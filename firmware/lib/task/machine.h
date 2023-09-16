@@ -29,19 +29,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 #define HAND_TEST 1
 
-/* Connections:
-   RibbonFish
-   D2 - the fan
-   D3 - the heater
-   DAC0 - the stack
-   D4 - MAX31850_DATA_PIN
-*/
 #ifdef ARDUINO
 #include <Arduino.h>
 #endif
 
 #ifdef RIBBONFISH
-#define RF_FAN 2
+// #define RF_FAN 2
 #define RF_HEATER 3
 #define RF_STACK DAC0
 #define MAX31850_DATA_PIN 5
@@ -64,7 +57,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define MAX31850_DATA_PIN 5
 // This is obsolete
 #define THERMOCOUPLE_PIN MAX31850_DATA_PIN //DIFFERENT FOR STAGE2_HEATER
-#define RF_FAN DAC1 //DIFFERENT FOR STAGE2_HEATER
+// #define RF_FAN DAC1 //DIFFERENT FOR STAGE2_HEATER
 #define RF_STACK DAC0
 #define RF_MOSTPLUS_FLOW_PIN A0
 #define RF_MOSTPLUS_FLOW_LOW_CUTOFF_VOLTAGE 1.75
@@ -102,14 +95,27 @@ public:
   // Edit these directly and re-upload to run a different test.
   // This test is designed to abort the processeor when done.
 
-  float RAMP_UP_TARGET_D_MIN = 0.5; // degrees C per minute
-  float RAMP_DN_TARGET_D_MIN = -0.5; // degrees C per minute
+
+  // These are the so called "5 knob" parameters that
+  // can be dynamically changed through the serial port.
+
+  // I am going to have these two move together as one.
+  // There is only one Ramp parameter, even though we use
+  // two numbers
+  float RAMP_UP_TARGET_D_MIN = 0.5; // R (degrees C per minute)
+  float RAMP_DN_TARGET_D_MIN = -0.5; // R (degrees C per minute)
+  void change_ramp(float ramp);
+  float TARGET_TEMP = 30.0; // H (degrees C)
+  float MAX_AMPERAGE = 7.0; // A (Amperes)
+  float MAX_STACK_WATTAGE = 20.0; // W (Wattage)
+  float FAN_SPEED = 0.6; // F (fraction between 0.0 and 1.0)
+
   unsigned long BEGIN_DN_TIME_MS = 0;
   unsigned long BEGIN_UP_TIME_MS = 0;
 
-  // This is the overall target_temp, which changes over time.
 
-  // These can be adjusted at run time.
+  // WARNING! These are currently inoperable under the "5 knob" protocol
+  // BEGIN UNUSED
   float YELLOW_TEMP = 760.0;
   float RED_TEMP = 780.0;
   float OPERATING_TEMP = 740.0;
@@ -121,10 +127,10 @@ public:
   static constexpr float TEMP_REFRESH_LIMIT = 40.0;
 
   static constexpr float HIGH_TEMP_FAN_SLOW_DOWN_LIMIT = 400.0;
+  // ENED UNUSED
 
   float COOL_DOWN_BEGIN_TEMP;
 
-  float TARGET_TEMP = 30.0;
 
   // TODO: This would better be attached to the statemanager
   // class, as it is used in those task---but also in the
@@ -137,8 +143,6 @@ public:
   static const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
   static constexpr float STARTING_DUTY_CYCLE_FRACTION = 0.0;
 
-  // AMPERAGE CONTROL
-  static constexpr float MAX_AMPERAGE = 60.0;
   float STACK_VOLTAGE = 12.0;
   static constexpr float IDLE_STACK_VOLTAGE = 1.0;
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
@@ -257,6 +261,10 @@ public:
                           float heater_duty_cycle);
   void createStage2JSONReport(Stage2Heater s2h,MachineStatusReport *msr, char *buffer);
 
+
+  // This is currently not in use; we expect to need it
+  // when we are making the system more automatic.
+  void runComplexAlgolAssertions();
 };
 
 

@@ -108,6 +108,7 @@ namespace OxApp
     return new_ms;
   }
 
+  // TODO: under the 5knob protocol, these will not be used.
 
   float StateMachineManager::computeFanSpeed(float t) {
     float f;
@@ -128,10 +129,10 @@ namespace OxApp
     return f;
   }
   float StateMachineManager::computeAmperage(float t) {
-    return MachineConfig::MAX_AMPERAGE *
+    return getConfig()->MAX_AMPERAGE *
       ((t < getConfig()->YELLOW_TEMP)
        ?  1.0
-       : MachineConfig::MAX_AMPERAGE * max(0,getConfig()->RED_TEMP - t) /
+       : getConfig()->MAX_AMPERAGE * max(0,getConfig()->RED_TEMP - t) /
        (getConfig()->RED_TEMP - getConfig()->YELLOW_TEMP));
   }
 

@@ -73,8 +73,8 @@ Stage2NetworkTask stage2NetworkTask[3];
 Stage2SerialTask stage2SerialTask;
 
 
-#define ETHERNET_BOARD_PRESENT 1
-// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+//#define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 MachineConfig *getConfig(int i) {
@@ -200,17 +200,19 @@ void setup() {
     }
     stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
 
-    OxCore::TaskProperties Stage2NetworkProperties;
-    Stage2NetworkProperties.name = "Stage2Network";
-    Stage2NetworkProperties.id = 36+i;
-    Stage2NetworkProperties.period = stage2NetworkTask[i].PERIOD_MS;
-    Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
-    Stage2NetworkProperties.state_and_config = (void *) getConfig(i);
-    bool stage2Network = core.AddTask(&stage2NetworkTask[i], &Stage2NetworkProperties);
-    if (!stage2Network) {
-      OxCore::Debug<const char *>("Stage2Network add failed\n");
-      delay(100);
-      abort();
+    if (ETHERNET_BOARD_PRESENT) {
+      OxCore::TaskProperties Stage2NetworkProperties;
+      Stage2NetworkProperties.name = "Stage2Network";
+      Stage2NetworkProperties.id = 36+i;
+      Stage2NetworkProperties.period = stage2NetworkTask[i].PERIOD_MS;
+      Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
+      Stage2NetworkProperties.state_and_config = (void *) getConfig(i);
+      bool stage2Network = core.AddTask(&stage2NetworkTask[i], &Stage2NetworkProperties);
+      if (!stage2Network) {
+        OxCore::Debug<const char *>("Stage2Network add failed\n");
+        delay(100);
+        abort();
+      }
     }
   }
 

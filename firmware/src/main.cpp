@@ -258,7 +258,7 @@ void setup()
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
-  readTempsTask.DEBUG_READ_TEMPS = 2;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
 
    OxCore::Debug<const char *>("Added tasks\n");
 

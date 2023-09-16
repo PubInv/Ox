@@ -59,19 +59,23 @@ enum Stage2Heater {
 
 struct MachineStatusReport {
   MachineState ms;
+  // These targets are the "5knob" targets;
   float target_temp_C;
+  float max_stack_amps_A;
+  float max_stack_watts_W;
+  float target_ramp_C;
+  float fan_pwm;
+
   float post_heater_C;
   float post_stack_C;
   float post_getter_C;
-  float heater_voltage;
   float stack_voltage;
   float stack_amps;
   float stack_ohms;
+  float stack_watts;
   float fan_rpm;
-  float fan_pwm;
-  float flow_ml_per_s;
   float heater_duty_cycle;
-  bool air_flow_sufficient;
+
 };
 
 #endif

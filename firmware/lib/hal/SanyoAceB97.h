@@ -86,11 +86,10 @@ public:
   SanyoAceB97() {
     _init();
   };
-  SanyoAceB97(const char * name, uint8_t id, uint8_t pin, float pwm_ratio){
+  SanyoAceB97(const char * name, uint8_t id){
     _init();
     this->name = name;
     this->id = id;
-    this->pin = pin;
   };
   ~SanyoAceB97(){};
 
