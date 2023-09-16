@@ -1,6 +1,21 @@
 # OEDCS
 Oxygen Engine Digital Control System, enclosure for.
 
+## Notes on Unit Fabrication
+* Serial number 1  
+MAC Address: 
+* Serial number 2  
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/655e3bbb-fb48-4e31-902a-e10b74c27fa8)  
+MAC Address:  
+
+* Stage II controler  
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/a146b12b-d7b1-4ecf-a571-1e2d6c8f414f)  
+ MAC Address: 
+
+* Mockup Of Maryville
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/63be5e1f-a040-488d-ab4e-60636bda7cb7)  
+MAC Address: FE:ED:16:6B:72:67
+
 ## Mechanical Files
 
 * The "frontpanel" folder has FreeCAD drawing which generate the DXF and other files for fabrication of the frontpanel, bottompanel and rear panel.
