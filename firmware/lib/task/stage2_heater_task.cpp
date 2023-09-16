@@ -46,6 +46,20 @@ namespace OxApp
       this->run_generic();
     }
 
+
+  void Stage2HeaterTask::printOffWarnings(MachineState ms) {
+    // If we are in the off state there is nothing to do!
+    if (ms == OffUserAck) {
+      OxCore::DebugLn<const char *>("AN ERROR OCCURED. WILL NOT ENTER OFF STATE ");
+      OxCore::DebugLn<const char *>("UNTIL ACKNOWLEDGED. ENTER A SINGLE 'a' TO ACKNOWLEDGE:");
+    }
+    if (ms == Off) {
+      OxCore::Debug<const char *>("Machine : ");
+      OxCore::Debug<const char *>(MachineConfig::HeaterNames[getConfig()->s2heater]);
+      OxCore::DebugLn<const char *>(" Currrently Off. Enter a single 'w' to warmup: ");
+    }
+  }
+
   MachineState Stage2HeaterTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
     return new_ms;

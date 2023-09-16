@@ -50,7 +50,7 @@ namespace OxApp
       virtual float getTemperatureReading() = 0;
       bool run_generic();
 
-    void printOffWarnings(MachineState ms);
+      virtual void printOffWarnings(MachineState ms);
     // These code in theory be made static
       float  computeFanSpeed(float t);
       float  computeAmperage(float t);
