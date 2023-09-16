@@ -73,8 +73,8 @@ Stage2NetworkTask stage2NetworkTask;
 Stage2SerialTask stage2SerialTask;
 
 
-//#define ETHERNET_BOARD_PRESENT 1
-#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 MachineConfig *getConfig(int i) {
@@ -152,7 +152,7 @@ void setup() {
     for (int i = 0; i < 3; i++) {
       stage2NetworkTask.mcs[i] = getConfig(i);
     }
-    stage2NetworkTask.DEBUG_UDP = 2;
+    stage2NetworkTask.DEBUG_UDP = 0;
   }
 
   for(int i = 0; i < 3; i++) {
@@ -272,7 +272,7 @@ void setup() {
     delay(100);
     abort();
   }
-  stage2SerialTask.DEBUG_LEVEL = 2;
+  stage2SerialTask.DEBUG_LEVEL = 0;
   stage2SerialTask.hal = s2hal;
 
   for(int i = 0; i < 3; i++) {
@@ -281,7 +281,7 @@ void setup() {
 
   s2hal->s2heaterToControl = Int1;
 
-  core.DEBUG_CORE = 2;
+  core.DEBUG_CORE = 0;
 
   OxCore::Debug<const char *>("Added tasks\n");
 }
