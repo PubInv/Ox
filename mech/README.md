@@ -11,7 +11,7 @@ MAC Address:
 
 * Stage II controler  
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/a146b12b-d7b1-4ecf-a571-1e2d6c8f414f)  
-MAC Address: FE:ED:14:71:02:77
+MAC Address: FE:ED:14:71:02:77  
 ID = 1361064480,1313945940,842021169,959459378
 
 
