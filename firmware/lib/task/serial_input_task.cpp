@@ -32,21 +32,7 @@ using namespace OxCore;
 
 namespace OxApp
 {
-
-
-  const byte numChars = 32;
-  char receivedChars[numChars];
-  char tempChars[numChars];        // temporary array for use when parsing
-
-  // variables to hold the parsed data
-  char messageFromPC[numChars] = {0};
-  int integerFromPC = 0;
-  float floatFromPC = 0.0;
-
-  boolean newData = false;
-
-
-  void recvWithEndMarker() {
+  void SerialInputTask::recvWithEndMarker() {
     static byte ndx = 0;
     char endMarker = '\n';
     char rc;
@@ -64,24 +50,24 @@ namespace OxApp
         }
       }
       else {
-        receivedChars[ndx] = '\0'; // terminate the string
+        receivedChars[ndx] = '\0';
         ndx = 0;
         newData = true;
       }
     }
   }
 
-  InputCommand parseCommandLine() {      // split the data into its parts
+  InputCommand SerialInputTask::parseCommandLine() {
     InputCommand ic;
 
-    char * strtokIndx; // this is used by strtok() as an index
+    char * strtokIndx;
 
-    strtokIndx = strtok(tempChars,":");      // get the first part - the string
-    strcpy(messageFromPC, strtokIndx); // copy it to messageFromPC
+    strtokIndx = strtok(tempChars,":");
+    strcpy(messageFromPC, strtokIndx);
     ic.com_c = tempChars[0];
 
     strtokIndx = strtok(NULL, ":");
-    floatFromPC = atof(strtokIndx);     // convert this part to a float
+    floatFromPC = atof(strtokIndx);
     ic.value_f = floatFromPC;
     return ic;
   }
@@ -92,22 +78,6 @@ namespace OxApp
     Serial.print("Number ");
     Serial.println(ic.value_f);
   }
-
-
-  bool SerialInputTask::_init() {
-    input_buffer[0] = '\0';
-    return true;
-  } // Setup communication channel
-
-
-  bool OEDCSSerialTask::_init() {
-    if (DEBUG_SERIAL > 1) {
-      Serial.println("OEDSCSerialTask Inited");
-    }
-
-    input_buffer[0] = '\0';
-    return true;
-  } // Setup communication channel
 
   // true if a new command found
   bool SerialInputTask::listen(InputCommand &ic) {
@@ -121,13 +91,30 @@ namespace OxApp
       //   because strtok() used in parseData() replaces the commas with \0
       InputCommand ic = parseCommandLine();
       showParsedData(ic);
+      executeCommand(ic);
       newData = false;
       return true;
     }
     return false;
   }
 
-  bool OEDCSSerialTask::executeCommand(InputCommand ic) {
+  bool SerialInputTask::_init() {
+    input_buffer[0] = '\0';
+    return true;
+  }
+
+
+  bool OEDCSSerialInputTask::_init() {
+    if (DEBUG_SERIAL > 1) {
+      Serial.println("OEDSCSerialTask Inited");
+    }
+
+    input_buffer[0] = '\0';
+    return true;
+  } // Setup communication channel
+
+
+  bool OEDCSSerialInputTask::executeCommand(InputCommand ic) {
     MachineConfig *cogConfig = getConfig();
     if (DEBUG_SERIAL > 1) {
       Serial.println("executeCommand");
@@ -143,10 +130,38 @@ namespace OxApp
     };
   }
 
-  bool OEDCSSerialTask::_run()
+  bool OEDCSSerialInputTask::_run()
   {
     if (DEBUG_SERIAL > 1) {
       Serial.println("executeCommand");
+    }
+    InputCommand ic;
+    if (listen(ic)) {
+      executeCommand(ic);
+    }
+  }
+
+
+  bool Stage2SerialInputTask::executeCommand(InputCommand ic) {
+    MachineConfig *cogConfig = getConfig();
+    if (DEBUG_SERIAL > 1) {
+      Serial.println("executeCommand");
+    }
+
+    switch(ic.com_c) {
+    case 's':
+      break;
+    case 'h':
+      break;
+    case 'r':
+      break;
+    };
+  }
+
+  bool Stage2SerialInputTask::_run()
+  {
+    if (DEBUG_SERIAL > 1) {
+      Serial.println("Stage2SerialInputTask run");
     }
     InputCommand ic;
     if (listen(ic)) {

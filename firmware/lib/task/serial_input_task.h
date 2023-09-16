@@ -43,6 +43,16 @@ namespace OxApp
   };
 
   class SerialInputTask : public OxCore::Task {
+  private:
+    static const byte numChars = 32;
+    char receivedChars[numChars];
+    char tempChars[numChars];
+    char messageFromPC[numChars] = {0};
+    int integerFromPC = 0;
+    float floatFromPC = 0.0;
+    boolean newData = false;
+    void recvWithEndMarker();
+    InputCommand parseCommandLine();
   public:
     int DEBUG_SERIAL = 2;
     char input_buffer[INPUT_BUFFER_SIZE];
@@ -50,12 +60,23 @@ namespace OxApp
     bool _run() override;
     int DEBUG_LEVEL = 0;
     virtual bool listen(InputCommand &ic);
+    virtual bool executeCommand(InputCommand ic);
   };
 
-  class OEDCSSerialTask : public SerialInputTask {
+  class OEDCSSerialInputTask : public SerialInputTask {
   public:
+    int DEBUG_SERIAL = 2;
     int PERIOD_MS = 250;
-    bool executeCommand(InputCommand ic);
+    bool executeCommand(InputCommand ic) override;
+    bool _init() override;
+    bool _run() override;
+  };
+
+  class Stage2SerialInputTask : public SerialInputTask {
+  public:
+    int DEBUG_SERIAL = 2;
+    int PERIOD_MS = 250;
+    bool executeCommand(InputCommand ic) override;
     bool _init() override;
     bool _run() override;
   };

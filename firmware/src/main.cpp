@@ -57,7 +57,7 @@ static Core core;
 OxApp::OEDCSNetworkTask OEDCSNetworkTask;
 OxApp::CogTask cogTask;
 // OxApp::SerialTask serialTask;
-OxApp::OEDCSSerialTask oedcsSerialTask;
+OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 HeaterPIDTask heaterPIDTask;
@@ -190,10 +190,10 @@ void setup()
   OxCore::TaskProperties oedcsSerialProperties;
   oedcsSerialProperties.name = "oedcsSerial";
   oedcsSerialProperties.id = 22;
-  oedcsSerialProperties.period = oedcsSerialTask.PERIOD_MS;
+  oedcsSerialProperties.period = oedcsSerialInputTask.PERIOD_MS;
   oedcsSerialProperties.priority = OxCore::TaskPriority::High;
   oedcsSerialProperties.state_and_config = (void *) &machineConfig;
-   bool oedcsSerialAdd = core.AddTask(&oedcsSerialTask, &oedcsSerialProperties);
+   bool oedcsSerialAdd = core.AddTask(&oedcsSerialInputTask, &oedcsSerialProperties);
   if (!oedcsSerialAdd) {
     OxCore::Debug<const char *>("SerialInputProperties add failed\n");
     abort();
@@ -273,7 +273,7 @@ void setup()
   cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   readTempsTask.DEBUG_READ_TEMPS = 0;
-  oedcsSerialTask.DEBUG_SERIAL = 1;
+  oedcsSerialInputTask.DEBUG_SERIAL = 1;
 
    OxCore::Debug<const char *>("Added tasks\n");
 
