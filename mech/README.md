@@ -3,14 +3,17 @@ Oxygen Engine Digital Control System, enclosure for.
 
 ## Notes on Unit Fabrication
 * Serial number 1  
-MAC Address: 
+MAC Address: FE:ED:1B:70:08:77
+
 * Serial number 2  
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/655e3bbb-fb48-4e31-902a-e10b74c27fa8)  
 MAC Address:  
 
 * Stage II controler  
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/a146b12b-d7b1-4ecf-a571-1e2d6c8f414f)  
- MAC Address: 
+MAC Address: FE:ED:14:71:02:77
+ID = 1361064480,1313945940,842021169,959459378
+
 
 * Mockup Of Maryville
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/63be5e1f-a040-488d-ab4e-60636bda7cb7)  
