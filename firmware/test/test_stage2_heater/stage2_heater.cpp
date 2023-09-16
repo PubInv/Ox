@@ -40,7 +40,8 @@ using namespace OxCore;
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
 #include <stage2SerialReportTask.h>
-#include <stage2_serial_task.h>
+// #include <stage2_serial_task.h>
+#include <serial_input_task.h>
 #include <temp_refresh_task.h>
 #include <stage2_network_task.h>
 
@@ -70,7 +71,9 @@ Stage2SerialReportTask stage2SerialReportTask[3];
 TempRefreshTask tempRefreshTask[3];
 Stage2NetworkTask stage2NetworkTask[3];
 
-Stage2SerialTask stage2SerialTask;
+// Stage2SerialTask stage2SerialTask;
+
+Stage2SerialInputTask stage2SerialInputTask;
 
 
 //#define ETHERNET_BOARD_PRESENT 1
@@ -254,20 +257,37 @@ void setup() {
     getConfig(i)->IS_STAGE2_HEATER_CONFIG = true;
   }
 
+  // OxCore::TaskProperties serialProperties;
+  // serialProperties.name = "serial";
+  // serialProperties.id = 36;
+  // serialProperties.period = 250;
+  // serialProperties.priority = OxCore::TaskPriority::High;
+  // serialProperties.state_and_config = (void *) getConfig(0);
+  // bool serialAdd = core.AddTask(&stage2SerialTask, &serialProperties);
+  // if (!serialAdd) {
+  //   OxCore::Debug<const char *>("SerialProperties add failed\n");
+  //   delay(100);
+  //   abort();
+  // }
+  // stage2SerialTask.DEBUG_LEVEL = 2;
+  // stage2SerialTask.hal = s2hal;
+
+
   OxCore::TaskProperties serialProperties;
-  serialProperties.name = "serial";
+  serialProperties.name = "stage2SerialInput";
   serialProperties.id = 36;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) getConfig(0);
-  bool serialAdd = core.AddTask(&stage2SerialTask, &serialProperties);
+  bool serialAdd = core.AddTask(&stage2SerialInputTask, &serialProperties);
   if (!serialAdd) {
-    OxCore::Debug<const char *>("SerialProperties add failed\n");
+    OxCore::Debug<const char *>("stage2SerialInputTask add failed\n");
     delay(100);
     abort();
   }
-  stage2SerialTask.DEBUG_LEVEL = 2;
-  stage2SerialTask.hal = s2hal;
+  stage2SerialInputTask.DEBUG_LEVEL = 2;
+  stage2SerialInputTask.hal = s2hal;
+
 
   for(int i = 0; i < 3; i++) {
     stage2SerialTask.machineConfigs[i] = getConfig(i);

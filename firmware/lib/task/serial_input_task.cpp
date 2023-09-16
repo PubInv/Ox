@@ -67,28 +67,35 @@ namespace OxApp
     ic.com_c = tempChars[0];
 
     strtokIndx = strtok(NULL, ":");
-    floatFromPC = atof(strtokIndx);
-    ic.value_f = floatFromPC;
+    if (ic.com_c == 's') {
+      ic.value_c = strtokIndx[0];
+    } else {
+      floatFromPC = atof(strtokIndx);
+      ic.value_f = floatFromPC;
+    }
     return ic;
   }
 
   void showParsedData(InputCommand ic) {
     Serial.print("Command ");
     Serial.println(ic.com_c);
-    Serial.print("Number ");
-    Serial.println(ic.value_f);
+    if (ic.com_c == 's') {
+      Serial.print("State ");
+      Serial.println(ic.value_c);
+    } else {
+      Serial.print("Value ");
+      Serial.println(ic.value_f);
+    }
   }
 
   // true if a new command found
   bool SerialInputTask::listen(InputCommand &ic) {
-    if (DEBUG_SERIAL > 1) {
-      Serial.println("listining...");
+    if (DEBUG_SERIAL > 2) {
+      Serial.println("listening...");
     }
     recvWithEndMarker();
     if (newData == true) {
       strcpy(tempChars, receivedChars);
-      // this temporary copy is necessary to protect the original data
-      //   because strtok() used in parseData() replaces the commas with \0
       InputCommand ic = parseCommandLine();
       showParsedData(ic);
       executeCommand(ic);
@@ -103,7 +110,6 @@ namespace OxApp
     return true;
   }
 
-
   bool OEDCSSerialInputTask::_init() {
     if (DEBUG_SERIAL > 1) {
       Serial.println("OEDSCSerialTask Inited");
@@ -111,8 +117,30 @@ namespace OxApp
 
     input_buffer[0] = '\0';
     return true;
-  } // Setup communication channel
+  }
 
+  void SerialInputTask::processStateChange(InputCommand ic) {
+    Serial.println("processStateChange called");
+  }
+
+  bool SerialInputTask::executeCommand(InputCommand ic) {
+    MachineConfig *cogConfig = getConfig();
+    if (DEBUG_SERIAL > 1) {
+      Serial.println("Serial Input Task executeCommand");
+    }
+
+    switch(ic.com_c) {
+    case 's': // set state based on the next character
+      processStateChange(ic);
+      break;
+    case 'h':
+      getConfig()->TARGET_TEMP = ic.value_f;
+      break;
+    case 'r':
+      getConfig()->change_ramp(ic.value_f);
+      break;
+    }
+  }
 
   bool OEDCSSerialInputTask::executeCommand(InputCommand ic) {
     MachineConfig *cogConfig = getConfig();
@@ -120,14 +148,18 @@ namespace OxApp
       Serial.println("executeCommand");
     }
 
-    switch(ic.com_c) {
-    case 's':
-      break;
-    case 'h':
-      break;
-    case 'r':
-      break;
-    };
+    if (ic.com_c == 's' ||  ic.com_c == 'h' || ic.com_c == 'r') {
+      processStateChange(ic);
+    } else {
+      switch(ic.com_c) {
+      case 'a':
+        getConfig()->MAX_AMPERAGE = ic.value_f;
+        break;
+      case 'w':
+        getConfig()->MAX_STACK_WATTAGE = ic.value_f;
+        break;
+      };
+    }
   }
 
   bool OEDCSSerialInputTask::_run()
@@ -148,14 +180,27 @@ namespace OxApp
       Serial.println("executeCommand");
     }
 
-    switch(ic.com_c) {
-    case 's':
-      break;
-    case 'h':
-      break;
-    case 'r':
-      break;
-    };
+    if (ic.com_c == 's' ||  ic.com_c == 'h' || ic.com_c == 'r') {
+      processStateChange(ic);
+    } else {
+      switch(ic.com_c) {
+      case '1':
+        hal->s2heaterToControl = Int1;
+        DebugLn<const char *>("Switching to controlling the Int1 Heater!\n");
+        return false;
+        break;
+      case '2':
+        hal->s2heaterToControl = Ext1;
+        DebugLn<const char *>("Switching to controlling the Ext1 Heater!\n");
+        return false;
+        break;
+      case '3':
+        hal->s2heaterToControl = Ext2;
+        DebugLn<const char *>("Switching to controlling the Ext2 Heater!\n");
+        return false;
+        break;
+      }
+    }
   }
 
   bool Stage2SerialInputTask::_run()

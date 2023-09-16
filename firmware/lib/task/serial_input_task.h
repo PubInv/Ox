@@ -39,6 +39,7 @@ namespace OxApp
 
   struct InputCommand {
     char com_c;
+    char value_c;
     float value_f;
   };
 
@@ -61,6 +62,7 @@ namespace OxApp
     int DEBUG_LEVEL = 0;
     virtual bool listen(InputCommand &ic);
     virtual bool executeCommand(InputCommand ic);
+    void processStateChange(InputCommand ic);
   };
 
   class OEDCSSerialInputTask : public SerialInputTask {
@@ -76,6 +78,7 @@ namespace OxApp
   public:
     int DEBUG_SERIAL = 2;
     int PERIOD_MS = 250;
+    Stage2HAL *hal;
     bool executeCommand(InputCommand ic) override;
     bool _init() override;
     bool _run() override;
