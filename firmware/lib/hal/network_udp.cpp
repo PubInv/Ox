@@ -223,6 +223,10 @@ NetworkUDP::getParams(uint16_t timeout) {
   int packetSize = 0;
   while (!packetSize && (millis() - startMs) < timeout) {
     delay(10);
+    if (DEBUG_UDP > 2) {
+      Serial.println(F("Calling parse packet (should loop)"));
+      Serial.println((millis() - startMs));
+    }
     packetSize = Udp.parsePacket();
     watchdogReset();
   }

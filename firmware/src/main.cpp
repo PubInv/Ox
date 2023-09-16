@@ -267,13 +267,14 @@ void setup()
   cogTask.tempRefreshTask = &tempRefreshTask;
 
   core.DEBUG_CORE = 0;
-  core._scheduler.DEBUG_SCHEDULER = 0;
+  core._scheduler.DEBUG_SCHEDULER = 2;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
-  OEDCSNetworkTask.DEBUG_UDP = 0;
+  OEDCSNetworkTask.DEBUG_UDP = 2;
+  OEDCSNetworkTask.net_udp.DEBUG_UDP = 2;
   readTempsTask.DEBUG_READ_TEMPS = 0;
-  oedcsSerialInputTask.DEBUG_SERIAL = 1;
+  oedcsSerialInputTask.DEBUG_SERIAL = 2;
 
    OxCore::Debug<const char *>("Added tasks\n");
 

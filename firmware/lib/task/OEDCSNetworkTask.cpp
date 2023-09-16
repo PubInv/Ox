@@ -47,8 +47,20 @@ namespace OxApp
     NetworkTask::_run();
 
     // This is the (currently unused) retrieval of scripts to set parameters
+    if (DEBUG_UDP > 1) {
+      Serial.println("Seeking Params");
+      delay(50);
+    }
     bool new_packet = NetworkTask::net_udp.getParams(3000);
+    if (DEBUG_UDP > 1) {
+      Serial.println("Done with Params!");
+      delay(50);
+    }
     if (new_packet) {
+      if (DEBUG_UDP > 1) {
+        Serial.println("Got a Param Packet!");
+      delay(50);
+      }
       // This would be better done with a static member
       MachineScript *old = getConfig()->script;
       MachineScript *ms = old->parse_buffer_into_new_script((char *) packetBuffer);
@@ -68,9 +80,18 @@ namespace OxApp
     if (DEBUG_UDP > 0) {
       Debug<const char *>("Sending buffer:");
       DebugLn<const char *>(buffer);
+      delay(50);
     }
     unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
+    if (DEBUG_UDP > 1) {
+      Serial.println("About to Send Data!");
+      delay(50);
+    }
     net_udp.sendData(buffer,current_epoch_time, 2000);
+    if (DEBUG_UDP > 1) {
+      Serial.println("Data Sent!");
+      delay(50);
+    }
     return true;
   }
 

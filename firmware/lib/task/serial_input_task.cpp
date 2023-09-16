@@ -121,10 +121,36 @@ namespace OxApp
 
   void SerialInputTask::processStateChange(InputCommand ic) {
     Serial.println("processStateChange called");
+      if (ic.value_c == 'W') {
+        if (getConfig()->ms == Off) {
+          getConfig()->ms = Warmup;
+          Debug<const char *>("New State: Warmup!");
+        }
+      } else if (ic.value_c == 'C') {
+        if (getConfig()->ms != Off) {
+          getConfig()->ms = Cooldown;
+          Debug<const char *>("New State: Cooldown!");
+        }
+      } else if (ic.value_c == 'E') {
+        if (getConfig()->ms != Off) {
+          getConfig()->ms = EmergencyShutdown;
+          Debug<const char *>("New State: Emergency Shutdown!");
+        }
+      } else if (ic.value_c == 'A') {
+        if (getConfig()->ms == OffUserAck) {
+          getConfig()->ms = Off;
+          Debug<const char *>("New State: Off!");
+        }
+      } else if (ic.value_c == 'I') {
+        getConfig()->idleOrOperate = Idle;
+        Debug<const char *>("New SubState: Idle!");
+      } else if (ic.value_c == 'O') {
+        getConfig()->idleOrOperate = Operate;
+        Debug<const char *>("New SubState: Operate");
+      }
   }
 
   bool SerialInputTask::executeCommand(InputCommand ic) {
-    MachineConfig *cogConfig = getConfig();
     if (DEBUG_SERIAL > 1) {
       Serial.println("Serial Input Task executeCommand");
     }
@@ -135,9 +161,12 @@ namespace OxApp
       break;
     case 'h':
       getConfig()->TARGET_TEMP = ic.value_f;
+      getConfig()->report->target_temp_C =
+        getConfig()->TARGET_TEMP;
       break;
     case 'r':
       getConfig()->change_ramp(ic.value_f);
+      getConfig()->report->target_ramp_C = ic.value_f;
       break;
     }
   }
@@ -154,9 +183,17 @@ namespace OxApp
       switch(ic.com_c) {
       case 'a':
         getConfig()->MAX_AMPERAGE = ic.value_f;
+        getConfig()->report->max_stack_amps_A =
+          getConfig()->MAX_AMPERAGE;
         break;
       case 'w':
         getConfig()->MAX_STACK_WATTAGE = ic.value_f;
+        getConfig()->report->max_stack_watts_W =
+          getConfig()->MAX_STACK_WATTAGE;
+      case 'f':
+        getConfig()->FAN_SPEED = ic.value_f;
+        getConfig()->report->fan_pwm =
+          getConfig()->FAN_SPEED;
         break;
       };
     }
@@ -164,8 +201,8 @@ namespace OxApp
 
   bool OEDCSSerialInputTask::_run()
   {
-    if (DEBUG_SERIAL > 1) {
-      Serial.println("executeCommand");
+    if (DEBUG_SERIAL > 2) {
+      Serial.println("OEDCS SerialInput Taske Run");
     }
     InputCommand ic;
     if (listen(ic)) {
@@ -175,7 +212,6 @@ namespace OxApp
 
 
   bool Stage2SerialInputTask::executeCommand(InputCommand ic) {
-    MachineConfig *cogConfig = getConfig();
     if (DEBUG_SERIAL > 1) {
       Serial.println("executeCommand");
     }
