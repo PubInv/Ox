@@ -17,7 +17,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // Program information
 #define COMPANY_NAME "pubinv.org "
 #define PROG_NAME "main.cpp"
-#define VERSION "; Rev: 0.3.2"  //
+#define VERSION "; Rev: 0.3.3"  //
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -34,7 +34,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <flash.h>
 #include <network_task.h>
 #include <cog_task.h>
-#include <serial_task.h>
+// #include <serial_task.h>
+#include <serial_input_task.h>
 #include <fault_task.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
@@ -55,7 +56,8 @@ static Core core;
 
 OxApp::OEDCSNetworkTask OEDCSNetworkTask;
 OxApp::CogTask cogTask;
-OxApp::SerialTask serialTask;
+// OxApp::SerialTask serialTask;
+OxApp::OEDCSSerialTask oedcsSerialTask;
 OxApp::FaultTask faultTask;
 
 HeaterPIDTask heaterPIDTask;
@@ -173,15 +175,27 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
 
 
-  OxCore::TaskProperties serialProperties;
-  serialProperties.name = "serial";
-  serialProperties.id = 22;
-  serialProperties.period = 250;
-  serialProperties.priority = OxCore::TaskPriority::High;
-  serialProperties.state_and_config = (void *) &machineConfig;
-   bool serialAdd = core.AddTask(&serialTask, &serialProperties);
-  if (!serialAdd) {
-    OxCore::Debug<const char *>("SerialProperties add failed\n");
+  // OxCore::TaskProperties serialProperties;
+  // serialProperties.name = "serial";
+  // serialProperties.id = 22;
+  // serialProperties.period = 250;
+  // serialProperties.priority = OxCore::TaskPriority::High;
+  // serialProperties.state_and_config = (void *) &machineConfig;
+  //  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+  // if (!serialAdd) {
+  //   OxCore::Debug<const char *>("SerialProperties add failed\n");
+  //   abort();
+  // }
+
+  OxCore::TaskProperties oedcsSerialProperties;
+  oedcsSerialProperties.name = "oedcsSerial";
+  oedcsSerialProperties.id = 22;
+  oedcsSerialProperties.period = oedcsSerialTask.PERIOD_MS;
+  oedcsSerialProperties.priority = OxCore::TaskPriority::High;
+  oedcsSerialProperties.state_and_config = (void *) &machineConfig;
+   bool oedcsSerialAdd = core.AddTask(&oedcsSerialTask, &oedcsSerialProperties);
+  if (!oedcsSerialAdd) {
+    OxCore::Debug<const char *>("SerialInputProperties add failed\n");
     abort();
   }
 
@@ -259,6 +273,7 @@ void setup()
   cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   readTempsTask.DEBUG_READ_TEMPS = 0;
+  oedcsSerialTask.DEBUG_SERIAL = 1;
 
    OxCore::Debug<const char *>("Added tasks\n");
 

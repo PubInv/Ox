@@ -52,18 +52,15 @@ namespace OxApp
   }
 
   bool AbstractSerialTask::_init() {
-
-    initialization_success = false;
     input_buffer[0] = '\0';
-    return initialization_success = true;
+    return true;
   } // Setup communication channel
 
 
   bool SerialTask::_init() {
 
-    initialization_success = false;
     input_buffer[0] = '\0';
-    return initialization_success = true;
+    return true;
   } // Setup communication channel
 
   bool AbstractSerialTask::listen(char buffer[], int length) {
