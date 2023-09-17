@@ -93,7 +93,7 @@ namespace OxApp
     // that the datalogging should be done at the frequency as checking
     // for a new script, but for now we will keep here rather than
     // creating a new task that we could schedule separately.
-    getConfig()->outputReport(getConfig()->report);
+    //    getConfig()->outputReport(getConfig()->report);
 
     if (DEBUG_UDP > 1) {
       Serial.println("outputReport");

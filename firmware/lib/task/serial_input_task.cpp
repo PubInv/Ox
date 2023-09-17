@@ -76,7 +76,7 @@ namespace OxApp
     return ic;
   }
 
-  void showParsedData(InputCommand ic) {
+  void SerialInputTask::showParsedData(InputCommand ic) {
     Serial.print("Command ");
     Serial.println(ic.com_c);
     if (ic.com_c == 'S') {
@@ -106,7 +106,6 @@ namespace OxApp
   }
 
   bool SerialInputTask::_init() {
-    input_buffer[0] = '\0';
     return true;
   }
 
@@ -114,8 +113,12 @@ namespace OxApp
     if (DEBUG_SERIAL > 1) {
       Serial.println("OEDSCSerialTask Inited");
     }
-
-    input_buffer[0] = '\0';
+    return true;
+  }
+  bool Stage2SerialInputTask::_init() {
+    if (DEBUG_SERIAL > 1) {
+      Serial.println("OEDSCSerialTask Inited");
+    }
     return true;
   }
 
@@ -156,18 +159,28 @@ namespace OxApp
     }
 
     switch(ic.com_c) {
-    case 's': // set state based on the next character
+    case 'S': // set state based on the next character
       processStateChange(ic);
       break;
-    case 'h':
-      getConfig()->TARGET_TEMP = ic.value_f;
-      getConfig()->report->target_temp_C =
-        getConfig()->TARGET_TEMP;
+    case 'H':
+      {
+        float t = min(getConfig()->BOUND_MAX_TEMP,ic.value_f);
+        t = max(getConfig()->BOUND_MIN_TEMP,t);
+        getConfig()->TARGET_TEMP = t;
+        getConfig()->report->target_temp_C =
+          getConfig()->TARGET_TEMP;
+      }
       break;
-    case 'r':
-      getConfig()->change_ramp(ic.value_f);
-      getConfig()->report->target_ramp_C = ic.value_f;
+    case 'R':
+      {
+        float r = min(getConfig()->BOUND_MAX_RAMP,ic.value_f);
+        r = max(0.0,r);
+        getConfig()->change_ramp(r);
+        getConfig()->report->target_ramp_C = r;
+      }
       break;
+    default:
+      Serial.println("Internal Error!");
     }
   }
 
@@ -178,22 +191,34 @@ namespace OxApp
     }
 
     if (ic.com_c == 'S' ||  ic.com_c == 'H' || ic.com_c == 'R') {
-      processStateChange(ic);
+      SerialInputTask::executeCommand(ic);
     } else {
       switch(ic.com_c) {
       case 'A':
-        getConfig()->MAX_AMPERAGE = ic.value_f;
-        getConfig()->report->max_stack_amps_A =
-          getConfig()->MAX_AMPERAGE;
+        {
+          float a = min(getConfig()->BOUND_MAX_AMPERAGE_SETTING,ic.value_f);
+          a = max(0,a);
+          getConfig()->MAX_AMPERAGE = a;
+          getConfig()->report->max_stack_amps_A =
+            getConfig()->MAX_AMPERAGE;
+        }
         break;
       case 'W':
-        getConfig()->MAX_STACK_WATTAGE = ic.value_f;
-        getConfig()->report->max_stack_watts_W =
-          getConfig()->MAX_STACK_WATTAGE;
+        {
+          float w = min(getConfig()->BOUND_MAX_WATTAGE,ic.value_f);
+          w = max(0,w);
+          getConfig()->MAX_STACK_WATTAGE = w;
+          getConfig()->report->max_stack_watts_W =
+            getConfig()->MAX_STACK_WATTAGE;
+        }
       case 'F':
-        getConfig()->FAN_SPEED = ic.value_f;
-        getConfig()->report->fan_pwm =
-          getConfig()->FAN_SPEED;
+        {
+          float f = min(1.0,ic.value_f);
+          f =  max(0,f);
+          getConfig()->FAN_SPEED = f;
+          getConfig()->report->fan_pwm =
+            getConfig()->FAN_SPEED;
+        }
         break;
       };
     }
@@ -235,6 +260,8 @@ namespace OxApp
         DebugLn<const char *>("Switching to controlling the Ext2 Heater!\n");
         return false;
         break;
+      default:
+        Serial.println("unknown command");
       }
     }
   }

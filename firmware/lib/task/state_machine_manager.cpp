@@ -22,6 +22,8 @@ namespace OxApp
     }
     printOffWarnings(ms);
 
+    printGenericInstructions();
+
     MachineState new_state = _executeBasedOnState(ms);
     if (DEBUG_LEVEL > 0) {
       OxCore::DebugLn<const char *>("finished execute");
@@ -46,8 +48,6 @@ namespace OxApp
       OxCore::DebugLn<const char *>("Currrently Off. Enter a single 'w' to warmup: ");
     }
   }
-
-
 
   // There is significant COG dependent logic here.
   // At the expense of extra lines of code, I'm
@@ -138,7 +138,7 @@ namespace OxApp
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_UP = (ms - begin_up_time_ms) / (60 * 1000);
     float tt = recent_t + MINUTES_RAMPING_UP * getConfig()->RAMP_UP_TARGET_D_MIN;
-    tt = min(tt,getConfig()->MAX_TEMP);
+    tt = min(tt,getConfig()->BOUND_MAX_TEMP);
     return tt;
   }
   float StateMachineManager::computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
@@ -146,8 +146,8 @@ namespace OxApp
     const unsigned long MINUTES_RAMPING_DN = (ms - begin_dn_time_ms) / (60 * 1000);
 
     float tt =
-      recent_t - MINUTES_RAMPING_DN * getConfig()->RAMP_DN_TARGET_D_MIN;
-    tt = max(tt,getConfig()->MIN_TEMP);
+      recent_t + MINUTES_RAMPING_DN * getConfig()->RAMP_DN_TARGET_D_MIN;
+    tt = max(tt,getConfig()->BOUND_MIN_TEMP);
     return t;
   }
 }

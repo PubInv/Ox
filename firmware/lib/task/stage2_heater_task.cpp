@@ -32,6 +32,14 @@ namespace OxApp
     return true;
   }
 
+  void Stage2HeaterTask::printGenericInstructions() {
+    // to avoid this being printed too often, we will only run it for the int1 machine.
+    if (getConfig()->s2heater == Int1) {
+      Serial.println("Enter 1, 2, or 3 to switch the machine your commands change.");
+      Serial.println("Use h:700 to set target temp; use r:0.3 to set ramp rate.");
+    }
+  }
+
   float Stage2HeaterTask::getTemperatureReading() {
     Stage2HAL* s2h = (Stage2HAL *)(getConfig()->hal);
     return s2h->
@@ -39,10 +47,13 @@ namespace OxApp
                             getConfig());
   }
 
+  // We override this here, because it is too annyoing to have
+  // it printed in triplicate.
+  void Stage2HeaterTask::printOffWarnings(MachineState ms) {
+  }
   // There has to be a better way to do this in C++
   bool Stage2HeaterTask::_run()
     {
-      Serial.println("running");
       this->run_generic();
     }
 

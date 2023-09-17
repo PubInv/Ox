@@ -45,7 +45,8 @@ namespace OxApp
       //      void tempRefresh(float t,float RECENT_TEMP,MachineState ms);
 
       void turnOff();
-
+      void printGenericInstructions() override;
+      void printOffWarnings(MachineState ms) override;
 
       float getTemperatureReading();
       void _updatePowerComponentsVoltage(float voltage);

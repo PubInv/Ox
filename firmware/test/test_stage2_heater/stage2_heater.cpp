@@ -232,21 +232,6 @@ void setup() {
     core._scheduler.DEBUG_SCHEDULER = 0;
     stage2_readTempsTask.DEBUG_READ_TEMPS = 0;
 
-  // Now set the temperatures until we can document how to edit through the interface...
-  // This sets up a very basic experiment
-  //
-  for(int i = 0; i < 3; i++) {
-    getConfig(i)->OPERATING_TEMP = 50;
-    getConfig(i)->YELLOW_TEMP = 60;
-    getConfig(i)->RED_TEMP = 70;
-    getConfig(i)->STOP_TEMP = 30;
-    // Note, there is no fan in the Stage 2 system, but we need this until we
-    // make good classes separating the configurations due to assertions
-    // in the system.
-    getConfig(i)->TEMP_TO_BEGIN_FAN_SLOW_DOWN = 40;
-  }
-
-
   // This is used to determine which machine will
   // be set by keyboard commands; you switch between them
   // with simple commands
@@ -285,13 +270,13 @@ void setup() {
     delay(100);
     abort();
   }
-  stage2SerialInputTask.DEBUG_LEVEL = 2;
+  stage2SerialInputTask.DEBUG_SERIAL = 0;
   stage2SerialInputTask.hal = s2hal;
 
 
-  for(int i = 0; i < 3; i++) {
-    stage2SerialTask.machineConfigs[i] = getConfig(i);
-  }
+  // for(int i = 0; i < 3; i++) {
+  //   stage2SerialInputTask.machineConfigs[i] = getConfig(i);
+  // }
 
   s2hal->s2heaterToControl = Int1;
 

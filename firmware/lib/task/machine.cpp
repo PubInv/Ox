@@ -96,6 +96,7 @@ void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
 void MachineConfig::change_ramp(float ramp) {
   RAMP_UP_TARGET_D_MIN = ramp;
   RAMP_DN_TARGET_D_MIN = -ramp;
+  report->target_ramp_C = ramp;
 }
 
 bool MachineHAL::init() {

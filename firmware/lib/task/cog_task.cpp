@@ -38,6 +38,12 @@ namespace OxApp
     return true;
   }
 
+  void CogTask::printGenericInstructions() {
+    Serial.println("Enter s:w to Warmup, s:c to cooldown, s:o to turn off.");
+    Serial.println("Enter a:XX.X to set (a)mperage, (w)attage, (f)an speed (h)eater temp, and (r)amp rate.");
+
+  }
+
   COG_HAL* CogTask::getHAL() {
     return (COG_HAL *) (getConfig()->hal);
   }
@@ -86,6 +92,16 @@ namespace OxApp
     //   new_ms = NormalOperation;
     //   return new_ms;
     // }
+
+
+    if (getConfig()->previous_ms != Warmup) {
+
+      // Although this is wise, I think it is will add confusion to the
+      // user, so I am removing it for now.
+      //   getConfig()->GLOBAL_RECENT_TEMP = t;
+
+      getConfig()->BEGIN_UP_TIME_MS = millis();
+    }
 
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
@@ -140,8 +156,16 @@ namespace OxApp
     }
 
     float t = getTemperatureReading();
+
+          // This would be better done in a transition function!
     if (getConfig()->previous_ms != Cooldown) {
-      getConfig()->GLOBAL_RECENT_TEMP = t;
+
+      // Although this is wise, I think it is will add confusion to the
+      // user, so I am removing it for now.
+      //   getConfig()->GLOBAL_RECENT_TEMP = t;
+
+
+      getConfig()->BEGIN_DN_TIME_MS = millis();
     }
 
     // I believe this is obsolete in the "5 knobs" protocol

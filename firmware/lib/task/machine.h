@@ -108,16 +108,19 @@ public:
   float TARGET_TEMP = 30.0; // H (degrees C)
   float MAX_AMPERAGE = 7.0; // A (Amperes)
   float MAX_STACK_WATTAGE = 20.0; // W (Wattage)
-  float FAN_SPEED = 0.6; // F (fraction between 0.0 and 1.0)
+  float FAN_SPEED = 0.0; // F (fraction between 0.0 and 1.0)
 
   unsigned long BEGIN_DN_TIME_MS = 0;
   unsigned long BEGIN_UP_TIME_MS = 0;
 
 
-  // These are bounds; we will never drive the heaters temp
-  // above the max or below the min
-  const float MAX_TEMP = 750.0;
-  const float MIN_TEMP = 25.0;
+  // These are bounds; we won't let values go outside these.
+  // They can only be changed here and forcing a recompilation.
+  const float BOUND_MAX_TEMP = 750.0;
+  const float BOUND_MIN_TEMP = 25.0;
+  const float BOUND_MAX_AMPERAGE_SETTING = 60.0;
+  const float BOUND_MAX_WATTAGE = 300.0;
+  const float BOUND_MAX_RAMP = 1.0;
   // WARNING! These are currently inoperable under the "5 knob" protocol
   // BEGIN UNUSED
   // float YELLOW_TEMP = 760.0;
@@ -127,7 +130,6 @@ public:
   // float OPERATING_TEMP_OVERTARGET_DELTA = 10.0;
   // float STOP_TEMP = 27.0;
   // float MAX_CROSS_STACK_TEMP = 40.0;
-
   static constexpr float TEMP_REFRESH_LIMIT = 40.0;
 
   static constexpr float HIGH_TEMP_FAN_SLOW_DOWN_LIMIT = 400.0;

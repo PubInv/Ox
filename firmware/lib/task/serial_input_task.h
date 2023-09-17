@@ -56,10 +56,11 @@ namespace OxApp
     InputCommand parseCommandLine();
   public:
     int DEBUG_SERIAL = 2;
-    char input_buffer[INPUT_BUFFER_SIZE];
+    //    char input_buffer[INPUT_BUFFER_SIZE];
     bool _init() override;
     bool _run() override;
     int DEBUG_LEVEL = 0;
+    void showParsedData(InputCommand ic);
     virtual bool listen(InputCommand &ic);
     virtual bool executeCommand(InputCommand ic);
     void processStateChange(InputCommand ic);

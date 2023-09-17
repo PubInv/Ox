@@ -56,6 +56,8 @@ namespace OxApp
 
     void turnOff();
 
+    void printGenericInstructions() override;
+
 
     void _updatePowerComponentsVoltage(float voltage);
     void _configTemperatureSensors();

@@ -121,7 +121,7 @@ void setup()
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
   machineConfig.hal = new COG_HAL();
-  machineConfig.hal->DEBUG_HAL = 2;
+  machineConfig.hal->DEBUG_HAL = 0;
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
@@ -272,11 +272,11 @@ void setup()
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
-  OEDCSNetworkTask.DEBUG_UDP = 2;
-  OEDCSNetworkTask.net_udp.DEBUG_UDP = 2;
+  OEDCSNetworkTask.DEBUG_UDP = 0;
+  OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
   readTempsTask.DEBUG_READ_TEMPS = 0;
-  oedcsSerialInputTask.DEBUG_SERIAL = 2;
-  getConfig()->script->DEBUG_MS = 2;
+  oedcsSerialInputTask.DEBUG_SERIAL = 0;
+  getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");
 
   /*********************************************/
