@@ -35,6 +35,8 @@ namespace OxApp
   void Stage2HeaterTask::printGenericInstructions() {
     // to avoid this being printed too often, we will only run it for the int1 machine.
     if (getConfig()->s2heater == Int1) {
+      Serial.print("Current Heater to command:");
+      Serial.println(MachineConfig::HeaterNames[getConfig()->hal->s2heaterToControl]);
       Serial.println("Enter 1, 2, or 3 to switch the machine your commands change.");
       Serial.println("Use h:700 to set target temp; use r:0.3 to set ramp rate.");
     }

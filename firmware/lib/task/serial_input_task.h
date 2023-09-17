@@ -62,15 +62,15 @@ namespace OxApp
     int DEBUG_LEVEL = 0;
     void showParsedData(InputCommand ic);
     virtual bool listen(InputCommand &ic);
-    virtual bool executeCommand(InputCommand ic);
-    void processStateChange(InputCommand ic);
+    virtual bool executeCommand(InputCommand ic,MachineConfig* mc);
+    void processStateChange(InputCommand ic,MachineConfig *mc);
   };
 
   class OEDCSSerialInputTask : public SerialInputTask {
   public:
     int DEBUG_SERIAL = 2;
     int PERIOD_MS = 250;
-    bool executeCommand(InputCommand ic) override;
+    bool executeCommand(InputCommand ic,MachineConfig* mc) override;
     bool _init() override;
     bool _run() override;
   };
@@ -79,8 +79,8 @@ namespace OxApp
   public:
     int DEBUG_SERIAL = 2;
     int PERIOD_MS = 250;
-    Stage2HAL *hal;
-    bool executeCommand(InputCommand ic) override;
+    MachineConfig *mcs[3];
+    bool executeCommand(InputCommand ic,MachineConfig* mc) override;
     bool _init() override;
     bool _run() override;
   };

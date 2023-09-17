@@ -260,7 +260,7 @@ void setup() {
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "stage2SerialInput";
-  serialProperties.id = 36;
+  serialProperties.id = 39;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) getConfig(0);
@@ -271,12 +271,10 @@ void setup() {
     abort();
   }
   stage2SerialInputTask.DEBUG_SERIAL = 0;
-  stage2SerialInputTask.hal = s2hal;
+  for (int i = 0; i < 3; i++) {
+    stage2SerialInputTask.mcs[i] = getConfig(i);
+  }
 
-
-  // for(int i = 0; i < 3; i++) {
-  //   stage2SerialInputTask.machineConfigs[i] = getConfig(i);
-  // }
 
   s2hal->s2heaterToControl = Int1;
 
