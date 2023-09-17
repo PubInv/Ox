@@ -127,7 +127,6 @@ namespace OxApp
   }
 
   void SerialInputTask::processStateChange(InputCommand ic,MachineConfig *mc) {
-    Serial.println("processStateChange called");
       if (ic.value_c == 'W') {
         if (mc->ms == Off) {
           mc->ms = Warmup;
@@ -191,7 +190,6 @@ namespace OxApp
   bool OEDCSSerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc) {
     if (DEBUG_SERIAL > 1) {
       Serial.println("executeCommand");
-
     }
 
     if (ic.com_c == 'S' ||  ic.com_c == 'H' || ic.com_c == 'R') {
@@ -245,10 +243,11 @@ namespace OxApp
       Serial.println("executeCommand");
     }
 
-    Serial.println("AAA");
     showParsedData(ic);
-    if ((ic.com_c == 'S') ||  (ic.com_c == 'H') || (ic.com_c == 'R')) {
+    if ((ic.com_c == 'S') ) {
       processStateChange(ic,mc);
+    } else if ((ic.com_c == 'H') || (ic.com_c == 'R')) {
+      SerialInputTask::executeCommand(ic,mc);
     } else {
       switch(ic.com_c) {
       case '1':

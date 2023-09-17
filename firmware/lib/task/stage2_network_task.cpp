@@ -57,7 +57,10 @@ namespace OxApp
     // have to add a timeout here!
     net_udp.sendData(buffer, current_epoch_time, 2000);
 
-    Serial.println("AAA");
+    if (DEBUG_UDP > 1) {
+      DebugLn<const char *>("Stage2NetworkTask completed\n");
+    }
+
     return true;
   }
 }

@@ -264,7 +264,8 @@ public:
   void outputStage2Report(Stage2Heater s2h,MachineStatusReport *msr,
                           float target_temp,
                           float measured_temp,
-                          float heater_duty_cycle);
+                          float heater_duty_cycle,
+                          float ramp_C_per_min);
   void createStage2JSONReport(Stage2Heater s2h,MachineStatusReport *msr, char *buffer);
 
 

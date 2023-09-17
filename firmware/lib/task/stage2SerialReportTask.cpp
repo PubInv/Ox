@@ -27,18 +27,20 @@ bool Stage2SerialReportTask::_run()
   if (DEBUG_SERIAL_REPORT > 0) {
     OxCore::Debug<const char *>("Running Stage2SerialReport Task\n");
   }
-  float target_temp = getConfig()->report->target_temp_C;
+  float target_temp = getConfig()->TARGET_TEMP;
   Stage2HAL* hal = (Stage2HAL *)(getConfig()->hal);
   float measured_temp = hal->getTemperatureReading(
                                                    getConfig()->s2heater,
                                                    getConfig());
 
   float duty_cycle = getConfig()->report->heater_duty_cycle;
+  float ramp_C_per_min = getConfig()->RAMP_UP_TARGET_D_MIN;
   getConfig()->outputStage2Report(getConfig()->s2heater,
                                   getConfig()->report,
                                   target_temp,
                                   measured_temp,
-                                  duty_cycle);
+                                  duty_cycle,
+                                  ramp_C_per_min);
 }
 bool Stage2SerialReportTask::_init()
 {
