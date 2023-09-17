@@ -46,6 +46,10 @@ namespace OxApp
       this->run_generic();
     }
 
+    void Stage2HeaterTask::turnOff() {
+      heaterPIDTask->shutHeaterDown();
+    }
+
   MachineState Stage2HeaterTask::_updatePowerComponentsOff() {
     MachineState new_ms = Off;
     return new_ms;
@@ -62,9 +66,11 @@ namespace OxApp
 
     // if we've reached operating temperature, we switch
     // states
-    if (t >= getConfig()->OPERATING_TEMP) {
-      return NormalOperation;
-    }
+    // We believe this is now obsolete in the "5 knob"
+    // protocol...
+    //    if (t >= getConfig()->OPERATING_TEMP) {
+    //      return NormalOperation;
+    //    }
 
     // These also are dependent on which heater we are using
     float tt = computeRampUpTargetTemp(t,
@@ -153,9 +159,8 @@ namespace OxApp
   MachineState Stage2HeaterTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
     MachineState new_ms = NormalOperation;
 
-    float tt = getConfig()->OPERATING_TEMP;
-    getConfig()->TARGET_TEMP = tt;
-    heaterPIDTask->HeaterSetPoint_C = tt;
+    getConfig()->TARGET_TEMP;
+    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
     return new_ms;
   }
 }

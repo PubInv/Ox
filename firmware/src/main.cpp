@@ -40,7 +40,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
-#include <temp_refresh_task.h>
+// #include <temp_refresh_task.h>
 #include <serialReportTask.h>
 #include <OEDCSNetworkTask.h>
 
@@ -63,7 +63,7 @@ OxApp::FaultTask faultTask;
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
 ReadTempsTask readTempsTask;
-TempRefreshTask tempRefreshTask;
+//TempRefreshTask tempRefreshTask;
 SerialReportTask serialReportTask;
 
 #include <machine.h>
@@ -200,19 +200,20 @@ void setup()
   }
 
 
-  OxCore::TaskProperties TempRefreshProperties;
-  TempRefreshProperties.name = "TempRefresh";
-  TempRefreshProperties.id = 23;
-  TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
-  TempRefreshProperties.priority = OxCore::TaskPriority::Low;
-  TempRefreshProperties.state_and_config = (void *) &machineConfig;
-  bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
-  if (!tempRefresh) {
-    OxCore::Debug<const char *>("Temp Refresh add failed\n");
-    abort();
-  }
+  // WARNING! the 5-knobs protocol does not use this.
+  // OxCore::TaskProperties TempRefreshProperties;
+  // TempRefreshProperties.name = "TempRefresh";
+  // TempRefreshProperties.id = 23;
+  // TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
+  // TempRefreshProperties.priority = OxCore::TaskPriority::Low;
+  // TempRefreshProperties.state_and_config = (void *) &machineConfig;
+  // bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
+  // if (!tempRefresh) {
+  //   OxCore::Debug<const char *>("Temp Refresh add failed\n");
+  //   abort();
+  // }
 
-  cogTask.tempRefreshTask = &tempRefreshTask;
+  // cogTask.tempRefreshTask = &tempRefreshTask;
 
 
   if (ETHERNET_BOARD_PRESENT) {
@@ -264,10 +265,10 @@ void setup()
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
   cogTask.heaterPIDTask = &heaterPIDTask;
-  cogTask.tempRefreshTask = &tempRefreshTask;
+  //  cogTask.tempRefreshTask = &tempRefreshTask;
 
   core.DEBUG_CORE = 0;
-  core._scheduler.DEBUG_SCHEDULER = 2;
+  core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
@@ -275,8 +276,8 @@ void setup()
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 2;
   readTempsTask.DEBUG_READ_TEMPS = 0;
   oedcsSerialInputTask.DEBUG_SERIAL = 2;
-
-   OxCore::Debug<const char *>("Added tasks\n");
+  getConfig()->script->DEBUG_MS = 2;
+  OxCore::Debug<const char *>("Added tasks\n");
 
   /*********************************************/
 }

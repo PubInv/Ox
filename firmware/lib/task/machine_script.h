@@ -114,7 +114,7 @@ class MachineScript {
   MachinePhase *phasesInState[8];
   bool AppendPhase(MachinePhase p);
   void DeleteAllPhases();
-  MachineScript *parse_buffer_into_new_script(char *buffer);
+  MachineScript *parse_buffer_into_new_script(char *buffer,int debug);
 };
 
 

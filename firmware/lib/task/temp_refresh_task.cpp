@@ -21,7 +21,8 @@
 #include <temp_refresh_task.h>
 #include <stage2_hal.h>
 
-
+// WARNING ! This class is NOT used in the "5 knob"
+// protocol.
 TempRefreshTask::TempRefreshTask() {
 
   }
@@ -37,24 +38,25 @@ bool TempRefreshTask::run() {
   _run();
 }
 
+// This is moot while we are doing the "5 knob" algorithm
 void TempRefreshTask::computeRefreshedTargetTemp(float tmeasured,MachineState ms,float temp_refresh_limit) {
-  float absolute_max_t =getConfig()->OPERATING_TEMP+getConfig()->OPERATING_TEMP_OVERTARGET_DELTA;
-  float t_up = min(tmeasured,absolute_max_t);
-  float t_dn = min(tmeasured,getConfig()->OPERATING_TEMP);
+  // float absolute_max_t =getConfig()->OPERATING_TEMP+getConfig()->OPERATING_TEMP_OVERTARGET_DELTA;
+  // float t_up = min(tmeasured,absolute_max_t);
+  // float t_dn = min(tmeasured,getConfig()->OPERATING_TEMP);
 
-  if (getConfig()->ms == Warmup) {
-    if (abs(t_up - getConfig()->GLOBAL_RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
-      getConfig()->BEGIN_UP_TIME_MS = millis();
-      getConfig()->GLOBAL_RECENT_TEMP = t_up;
-      getConfig()->TARGET_TEMP = t_up;
-    }
-  } else if (getConfig()->ms == Cooldown) {
-    if (abs(t_dn - getConfig()->GLOBAL_RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
-      getConfig()->BEGIN_DN_TIME_MS = millis();
-      getConfig()->GLOBAL_RECENT_TEMP = t_dn;
-      getConfig()->TARGET_TEMP = t_dn;
-    }
-  }
+  // if (getConfig()->ms == Warmup) {
+  //   if (abs(t_up - getConfig()->GLOBAL_RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
+  //     getConfig()->BEGIN_UP_TIME_MS = millis();
+  //     getConfig()->GLOBAL_RECENT_TEMP = t_up;
+  //     getConfig()->TARGET_TEMP = t_up;
+  //   }
+  // } else if (getConfig()->ms == Cooldown) {
+  //   if (abs(t_dn - getConfig()->GLOBAL_RECENT_TEMP) > getConfig()->TEMP_REFRESH_LIMIT) {
+  //     getConfig()->BEGIN_DN_TIME_MS = millis();
+  //     getConfig()->GLOBAL_RECENT_TEMP = t_dn;
+  //     getConfig()->TARGET_TEMP = t_dn;
+  //   }
+  // }
 }
 bool TempRefreshTask::_run()
 {

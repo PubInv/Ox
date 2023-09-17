@@ -64,11 +64,11 @@ namespace OxApp
 
     strtokIndx = strtok(tempChars,":");
     strcpy(messageFromPC, strtokIndx);
-    ic.com_c = tempChars[0];
+    ic.com_c = toupper ( tempChars[0] );
 
     strtokIndx = strtok(NULL, ":");
-    if (ic.com_c == 's') {
-      ic.value_c = strtokIndx[0];
+    if (ic.com_c == 'S') {
+      ic.value_c = toupper( strtokIndx[0]) ;
     } else {
       floatFromPC = atof(strtokIndx);
       ic.value_f = floatFromPC;
@@ -79,7 +79,7 @@ namespace OxApp
   void showParsedData(InputCommand ic) {
     Serial.print("Command ");
     Serial.println(ic.com_c);
-    if (ic.com_c == 's') {
+    if (ic.com_c == 'S') {
       Serial.print("State ");
       Serial.println(ic.value_c);
     } else {
@@ -177,20 +177,20 @@ namespace OxApp
       Serial.println("executeCommand");
     }
 
-    if (ic.com_c == 's' ||  ic.com_c == 'h' || ic.com_c == 'r') {
+    if (ic.com_c == 'S' ||  ic.com_c == 'H' || ic.com_c == 'R') {
       processStateChange(ic);
     } else {
       switch(ic.com_c) {
-      case 'a':
+      case 'A':
         getConfig()->MAX_AMPERAGE = ic.value_f;
         getConfig()->report->max_stack_amps_A =
           getConfig()->MAX_AMPERAGE;
         break;
-      case 'w':
+      case 'W':
         getConfig()->MAX_STACK_WATTAGE = ic.value_f;
         getConfig()->report->max_stack_watts_W =
           getConfig()->MAX_STACK_WATTAGE;
-      case 'f':
+      case 'F':
         getConfig()->FAN_SPEED = ic.value_f;
         getConfig()->report->fan_pwm =
           getConfig()->FAN_SPEED;
@@ -216,7 +216,7 @@ namespace OxApp
       Serial.println("executeCommand");
     }
 
-    if (ic.com_c == 's' ||  ic.com_c == 'h' || ic.com_c == 'r') {
+    if (ic.com_c == 'S' ||  ic.com_c == 'H' || ic.com_c == 'R') {
       processStateChange(ic);
     } else {
       switch(ic.com_c) {

@@ -53,9 +53,7 @@ namespace OxApp
     this->StateMachineManager::run_generic();
   }
 
-  MachineState CogTask::_updatePowerComponentsOff() {
-    MachineState new_ms = Off;
-
+  void CogTask::turnOff() {
     float fs = 0.0;
     getConfig()->fanDutyCycle = fs;
     getHAL()->_updateFanPWM(fs);
@@ -64,6 +62,11 @@ namespace OxApp
     // Although after a minute this should turn off, we want
     // to do it immediately
     heaterPIDTask->shutHeaterDown();
+  }
+
+  MachineState CogTask::_updatePowerComponentsOff() {
+    MachineState new_ms = Off;
+    turnOff();
     return new_ms;
   }
 
@@ -78,14 +81,11 @@ namespace OxApp
 
     // if we've reached operating temperature, we switch
     // states
-    if (t >= getConfig()->OPERATING_TEMP) {
-      return NormalOperation;
-    }
-
-    if (t > getConfig()->OPERATING_TEMP) {
-      new_ms = NormalOperation;
-      return new_ms;
-    }
+    // This is now obsolete in the "5 knob" protocol
+    // if (t > getConfig()->OPERATING_TEMP) {
+    //   new_ms = NormalOperation;
+    //   return new_ms;
+    // }
 
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
@@ -109,22 +109,23 @@ namespace OxApp
     // This will be used by the HeaterPID task.
     float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
 
-    if (cross_stack_temp > getConfig()->MAX_CROSS_STACK_TEMP) {
-      OxCore::Debug<const char *>("PAUSING INCREASED DUE TO CROSS STACK TEMP: ");
-      OxCore::DebugLn<float>(cross_stack_temp);
-      // here now we will not change the TARGET_TEMP.
-      // in order to be prepared when this condition is
-      // releived, we need to recent the time and temp
-      // so that we can smoothly been operating.
-      getConfig()->GLOBAL_RECENT_TEMP = t;
-      getConfig()->BEGIN_UP_TIME_MS = millis();
-    } else {
+    // This action is taken out in the "5 knob" protocoln
+    // if (cross_stack_temp > getConfig()->MAX_CROSS_STACK_TEMP) {
+    //   OxCore::Debug<const char *>("PAUSING INCREASED DUE TO CROSS STACK TEMP: ");
+    //   OxCore::DebugLn<float>(cross_stack_temp);
+    //   // here now we will not change the TARGET_TEMP.
+    //   // in order to be prepared when this condition is
+    //   // releived, we need to recent the time and temp
+    //   // so that we can smoothly been operating.
+    //   getConfig()->GLOBAL_RECENT_TEMP = t;
+    //   getConfig()->BEGIN_UP_TIME_MS = millis();
+    // } else {
       getConfig()->TARGET_TEMP = tt;
       // now we will set the setPoint in the heater_pid_task...
       // this requires a dependence on that task, but is
       // better than creating a deeper global dependence.
       heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    }
+      //    }
 
     _updateStackVoltage(getConfig()->STACK_VOLTAGE);
 
@@ -143,10 +144,11 @@ namespace OxApp
       getConfig()->GLOBAL_RECENT_TEMP = t;
     }
 
-    if (t <= getConfig()->COOLDOWN_TARGET_C) {
-      new_ms = Off;
-      return new_ms;
-    }
+    // I believe this is obsolete in the "5 knobs" protocol
+    // if (t <= getConfig()->COOLDOWN_TARGET_C) {
+    //   new_ms = Off;
+    //   return new_ms;
+    // }
 
 
     float fs = computeFanSpeed(t);
@@ -240,7 +242,7 @@ namespace OxApp
     float t = getTemperatureReading();;
     float fs = computeFanSpeed(t);
     float a = computeAmperage(t);
-    float tt = getConfig()->OPERATING_TEMP;
+    float tt = getConfig()->TARGET_TEMP;
 
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("fan speed, amperage, tt\n");
@@ -255,6 +257,7 @@ namespace OxApp
     getConfig()->report->fan_pwm = fs;
 
     _updateStackAmperage(a);
+
     getConfig()->TARGET_TEMP = tt;
     heaterPIDTask->HeaterSetPoint_C = tt;
 

@@ -171,8 +171,9 @@ bool MachineScript::AppendPhase(MachinePhase p) {
 }
 
 // Beginning hacking of this...
-MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer) {
+MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer,int debug) {
   MachineScript *ms = new MachineScript();
+  ms->DEBUG_MS = debug;
   if (DEBUG_MS > 1) {
     DebugLn<const char *>("BUFFER BEGIN");
     DebugLn<const char *>(packetBuffer);

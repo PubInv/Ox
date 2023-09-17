@@ -11,22 +11,10 @@ namespace OxApp
     if (DEBUG_LEVEL > 0) {
       OxCore::DebugLn<const char *>("starting run generic");
     }
-    // To make sure startup has now wild surges,
-    // if we have a valid temperature we will make sure the
-    // TempRefreshTask has been run...
+
     float t = getTemperatureReading();
 
     MachineState ms = getConfig()->ms;
-    // This is only run once, to handle a reset without waiting
-    // 5 minutes.
-    if ((ms == Warmup) || (ms == Cooldown)) {
-      if ((abs(getConfig()->TARGET_TEMP - t) > 40.0) ||
-          ((tempRefreshTask->time_of_last_refresh == 0) &&
-           (t > 0.0))) {
-        tempRefreshTask->run();
-        heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-      }
-    }
 
     if (DEBUG_LEVEL > 0) {
       OxCore::DebugLn<const char *>("ms");
@@ -110,38 +98,47 @@ namespace OxApp
 
   // TODO: under the 5knob protocol, these will not be used.
 
-  float StateMachineManager::computeFanSpeed(float t) {
-    float f;
-    float p = getConfig()->FULL_POWER_FOR_FAN;
-    float s = getConfig()->FAN_SPEED_AT_OPERATING_TEMP;
-    float d = getConfig()->TEMP_TO_BEGIN_FAN_SLOW_DOWN;
-    float e = getConfig()->END_FAN_SLOW_DOWN;
-    float h = getConfig()->OPERATING_TEMP;
-    float r = getConfig()->RED_TEMP;
-    float y = getConfig()->YELLOW_TEMP;
-    if (t < d) {
-      f = p;
-    } else if (t >= d && t < y) {
-      f = p - (p - s) * ((t - d) / (h - d));
-    } else  { // t > y
-      f = s + ((t - y) / (r - y)) * (1.0 - s);
-    }
-    return f;
-  }
-  float StateMachineManager::computeAmperage(float t) {
-    return getConfig()->MAX_AMPERAGE *
-      ((t < getConfig()->YELLOW_TEMP)
-       ?  1.0
-       : getConfig()->MAX_AMPERAGE * max(0,getConfig()->RED_TEMP - t) /
-       (getConfig()->RED_TEMP - getConfig()->YELLOW_TEMP));
-  }
+  // float StateMachineManager::computeFanSpeed(float t) {
+  //   float f;
+  //   float p = getConfig()->FULL_POWER_FOR_FAN;
+  //   float s = getConfig()->FAN_SPEED_AT_OPERATING_TEMP;
+  //   float d = getConfig()->TEMP_TO_BEGIN_FAN_SLOW_DOWN;
+  //   float e = getConfig()->END_FAN_SLOW_DOWN;
+  //   float h = getConfig()->OPERATING_TEMP;
+  //   float r = getConfig()->RED_TEMP;
+  //   float y = getConfig()->YELLOW_TEMP;
+  //   if (t < d) {
+  //     f = p;
+  //   } else if (t >= d && t < y) {
+  //     f = p - (p - s) * ((t - d) / (h - d));
+  //   } else  { // t > y
+  //     f = s + ((t - y) / (r - y)) * (1.0 - s);
+  //   }
+  //   return f;
+  // }
 
+  // We believe someday an automatic algorithm will be needed here.
+  float StateMachineManager::computeFanSpeed(float t) {
+    return getConfig()->FAN_SPEED;
+  }
+  // float StateMachineManager::computeAmperage(float t) {
+  //   return getConfig()->MAX_AMPERAGE *
+  //     ((t < getConfig()->YELLOW_TEMP)
+  //      ?  1.0
+  //      : getConfig()->MAX_AMPERAGE * max(0,getConfig()->RED_TEMP - t) /
+  //      (getConfig()->RED_TEMP - getConfig()->YELLOW_TEMP));
+  // }
+
+  // We believe someday a more complicated algorithm will be needed here.
+  float StateMachineManager::computeAmperage(float t) {
+    return getConfig()->MAX_AMPERAGE;
+  }
 
   float StateMachineManager::computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms) {
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_UP = (ms - begin_up_time_ms) / (60 * 1000);
     float tt = recent_t + MINUTES_RAMPING_UP * getConfig()->RAMP_UP_TARGET_D_MIN;
-    tt = min(tt,getConfig()->OPERATING_TEMP);
+    tt = min(tt,getConfig()->MAX_TEMP);
     return tt;
   }
   float StateMachineManager::computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
@@ -150,7 +147,7 @@ namespace OxApp
 
     float tt =
       recent_t - MINUTES_RAMPING_DN * getConfig()->RAMP_DN_TARGET_D_MIN;
-    tt = max(tt,getConfig()->STOP_TEMP);
+    tt = max(tt,getConfig()->MIN_TEMP);
     return t;
   }
 }

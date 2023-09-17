@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <machine_core_defs.h>
 #include <core.h>
 #include <heater_pid_task.h>
-#include <temp_refresh_task.h>
+// #include <temp_refresh_task.h>
 
 
 namespace OxApp
@@ -33,7 +33,7 @@ namespace OxApp
   class StateMachineManager : public OxCore::Task {
   public:
       int DEBUG_LEVEL = 0;
-      TempRefreshTask* tempRefreshTask;
+    //      TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
 
 

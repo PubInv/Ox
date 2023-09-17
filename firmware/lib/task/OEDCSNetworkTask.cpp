@@ -49,9 +49,15 @@ namespace OxApp
     // This is the (currently unused) retrieval of scripts to set parameters
     if (DEBUG_UDP > 1) {
       Serial.println("Seeking Params");
+      Serial.println("ms");
+      Serial.println(getConfig()->report->ms);
       delay(50);
     }
-    bool new_packet = NetworkTask::net_udp.getParams(3000);
+    // We are no longer using this, so it is safer to take it out.
+    // But I suspect it it causing a buffer overrun somewhere,
+    // so I am fully investigating it.
+    // bool new_packet = NetworkTask::net_udp.getParams(3000);
+    bool new_packet = false;
     if (DEBUG_UDP > 1) {
       Serial.println("Done with Params!");
       delay(50);
@@ -59,13 +65,28 @@ namespace OxApp
     if (new_packet) {
       if (DEBUG_UDP > 1) {
         Serial.println("Got a Param Packet!");
-      delay(50);
+        delay(50);
+      }
+      if (DEBUG_UDP > 1) {
+        Serial.println("ms");
+        Serial.println(getConfig()->report->ms);
+        delay(50);
       }
       // This would be better done with a static member
       MachineScript *old = getConfig()->script;
-      MachineScript *ms = old->parse_buffer_into_new_script((char *) packetBuffer);
+      MachineScript *ms = old->parse_buffer_into_new_script((char *) packetBuffer,old->DEBUG_MS);
+      if (DEBUG_UDP > 1) {
+        Serial.println("Done with parse_buffer_into_new_script");
+        Serial.println("ms");
+        Serial.println(getConfig()->report->ms);
+        delay(50);
+      }
       getConfig()->script = ms;
       delete old;
+      if (DEBUG_UDP > 1) {
+        Serial.println("old Script deleted.");
+        delay(50);
+      }
     }
 
     // This is a preliminary data loggging test. There is no reason
@@ -73,7 +94,12 @@ namespace OxApp
     // for a new script, but for now we will keep here rather than
     // creating a new task that we could schedule separately.
     getConfig()->outputReport(getConfig()->report);
-    char buffer[1024];
+
+    if (DEBUG_UDP > 1) {
+      Serial.println("outputReport");
+      delay(50);
+    }
+    char buffer[4096];
     // we need to make sure we start with a null string...
     buffer[0] = 0;
     getConfig()->createJSONReport(getConfig()->report,buffer);

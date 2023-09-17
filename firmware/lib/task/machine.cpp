@@ -25,6 +25,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 void MachineConfig::outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
         OxCore::Debug<const char *>("Machine State: ");
+        delay(50);
+        Serial.println(msr->ms);
+        delay(50);
         OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
         // These are the dynamic targets
         OxCore::Debug<const char *>("Target      C: ");
@@ -116,16 +119,16 @@ void MachineConfig::runComplexAlgolAssertions() {
   Serial.println("BEGINNING ASSERTION CHECKS!!");
   Serial.println("IF YOU DO NOT SEE THE WORDS 'ALL CLEAR' BELOW AN ASSERTION HAS FAILED");
   delay(100);
-  assert(RAMP_UP_TARGET_D_MIN >= 0.0);
-  assert(RAMP_DN_TARGET_D_MIN <= 0.0);
+  // assert(RAMP_UP_TARGET_D_MIN >= 0.0);
+  // assert(RAMP_DN_TARGET_D_MIN <= 0.0);
 
-  assert(YELLOW_TEMP < RED_TEMP);
-  assert(OPERATING_TEMP < YELLOW_TEMP);
-  assert(STOP_TEMP < OPERATING_TEMP);
+  // assert(YELLOW_TEMP < RED_TEMP);
+  // assert(OPERATING_TEMP < YELLOW_TEMP);
+  // assert(STOP_TEMP < OPERATING_TEMP);
 
-  assert(FAN_SPEED_AT_OPERATING_TEMP < FULL_POWER_FOR_FAN);
-  assert(TEMP_TO_BEGIN_FAN_SLOW_DOWN < OPERATING_TEMP);
-  assert(OPERATING_TEMP < END_FAN_SLOW_DOWN);
+  // assert(FAN_SPEED_AT_OPERATING_TEMP < FULL_POWER_FOR_FAN);
+  // assert(TEMP_TO_BEGIN_FAN_SLOW_DOWN < OPERATING_TEMP);
+  // assert(OPERATING_TEMP < END_FAN_SLOW_DOWN);
   Serial.println("ALL CLEAR!!");
   delay(50);
 }

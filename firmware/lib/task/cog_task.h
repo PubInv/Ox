@@ -33,53 +33,52 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <OnePinHeater.h>
 #include <MAX31850.h>
 
-#include <temp_refresh_task.h>
+// #include <temp_refresh_task.h>
 #include <heater_pid_task.h>
 #include <state_machine_manager.h>
 
 
 namespace OxApp
 {
-    class CogTask : public StateMachineManager
-    {
-    public:
-      int PERIOD_MS = 10000;
-      int DEBUG_LEVEL = 0;
+  class CogTask : public StateMachineManager
+  {
+  public:
+    int PERIOD_MS = 10000;
+    int DEBUG_LEVEL = 0;
+
+    // There are really several senosrs, but they are indexed!
+    const static int NUM_TEMP_SENSORS = 3;
+    const static int NUM_TEMP_INDICES = 2;
+    const static int NUM_FANS = 1;
+
+    float getTemperatureReading();
+    COG_HAL* getHAL();
+
+    void turnOff();
 
 
-      // TODO: This should probably be done dynamically, not here...
+    void _updatePowerComponentsVoltage(float voltage);
+    void _configTemperatureSensors();
 
-      // There are really several senosrs, but they are indexed!
-      const static int NUM_TEMP_SENSORS = 3;
-      const static int NUM_TEMP_INDICES = 2;
-      const static int NUM_FANS = 1;
-
-     float getTemperatureReading();
-     COG_HAL* getHAL();
+    void _updateFanSpeed(float percentage);
+    void _updateStackVoltage(float voltage);
+    void _updateStackAmperage(float amperage);
 
 
-      void _updatePowerComponentsVoltage(float voltage);
-      void _configTemperatureSensors();
+    MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
+    MachineState _updatePowerComponentsOff() override;
+    MachineState _updatePowerComponentsWarmup() override;
+    MachineState _updatePowerComponentsIdle() override;
+    MachineState _updatePowerComponentsCooldown() override;
+    MachineState _updatePowerComponentsCritialFault() override;
+    MachineState _updatePowerComponentsEmergencyShutdown() override;
+    MachineState _updatePowerComponentsOffUserAck() override;
 
-      void _updateFanSpeed(float percentage);
-      void _updateStackVoltage(float voltage);
-      void _updateStackAmperage(float amperage);
+  private:
+    bool _run() override;
+    bool _init() override;
 
-
-       MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
-       MachineState _updatePowerComponentsOff() override;
-       MachineState _updatePowerComponentsWarmup() override;
-       MachineState _updatePowerComponentsIdle() override;
-       MachineState _updatePowerComponentsCooldown() override;
-       MachineState _updatePowerComponentsCritialFault() override;
-       MachineState _updatePowerComponentsEmergencyShutdown() override;
-       MachineState _updatePowerComponentsOffUserAck() override;
-
-    private:
-      bool _run() override;
-      bool _init() override;
-
-    };
+  };
 
 
 }
