@@ -146,10 +146,8 @@ namespace OxApp
   float StateMachineManager::computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_DN = (ms - begin_dn_time_ms) / (60 * 1000);
-
-    float tt =
-      recent_t - MINUTES_RAMPING_DN * getConfig()->RAMP_DN_TARGET_D_MIN;
+    float tt = recent_t - MINUTES_RAMPING_DN * getConfig()->RAMP_DN_TARGET_D_MIN;
     tt = max(tt,getConfig()->STOP_TEMP);
-    return t;
+    return tt;
   }
 }
