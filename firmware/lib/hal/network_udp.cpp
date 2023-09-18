@@ -78,7 +78,7 @@ NetworkUDP::printTime(unsigned long time) {
   // print the hour, minute and second:
   Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
   // print the hour (86400 equals secs per day)
-  if ((time % 86400L) / 3600) Serial.print(F("0"));
+  if ((time % 86400L) / 3600 < 10) Serial.print(F("0"));
   Serial.print((time  % 86400L) / 3600);
   Serial.print(F(":"));
 
@@ -205,7 +205,7 @@ NetworkUDP::sendData(char *data, unsigned long current_time, uint16_t timeout) {
 
 bool
 NetworkUDP::getParams(uint16_t timeout) {
-  if (! Udp.beginPacket(mcogs, 57573)) {
+  if (! Udp.beginPacket(mcogs, serverPort)) {
     if (DEBUG_UDP > 2) Serial.println(F("can't resolve mcogs"));
     return false;
   }
@@ -262,24 +262,14 @@ NetworkUDP::getParams(uint16_t timeout) {
     Serial.println("About to construct config");
     delay(50);
   }
-  // WARNING!! Rob thinks this use of String is dangerous.
-  // String is a fine class in C++ but it is not safe on
-  // an Arudino!
-  //  String config = String((char *)packetBuffer);
+
   if (DEBUG_UDP > 1) {
     Serial.println("constructed config");
     delay(50);
-  }
-  if (DEBUG_UDP > 1) {
     Serial.println((char *)packetBuffer);
     delay(50);
-    Serial.println("here is the String:");
-    delay(50);
-    //    Serial.println(config);
-    Serial.println("Done with the String print");
-    delay(50);
-
   }
+
   // Now, at this point, we roughly have a new script.
   // so we will parse it and poke it into the machine script as
   // a single pointer switch.

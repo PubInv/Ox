@@ -89,6 +89,9 @@ void setup()
   OxCore::serialBegin(115200UL);
   delay(500);
 
+  // need 5 second delay for pio compiler it seems
+  delay(5000);
+
   //Print out the reset reason
   Serial.println("=================");
   Serial.print("ResetCause: ");
@@ -98,7 +101,8 @@ void setup()
   case 2: Serial.println("watchdog"); break;
   case 3: Serial.println("software"); break;
   case 4: Serial.println("user"); break;
-  }                                                                              Serial.println("=================");
+  }
+  Serial.println("=================");
 
   // TODO: consider doing this....
     // Serial.begin(BAUDRATE);
