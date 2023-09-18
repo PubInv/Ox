@@ -23,7 +23,10 @@ using namespace std;
 
 namespace OxApp
 {
-
+  // TODO: This class should probably be rewritten with specific state transition functions.
+  // This would allow us to log transition events elegantly. As it is, we have to be idempotent...
+  // in the "off" state we have to keep turning everything off because we don't know if we were
+  // just turned off or have been off for 24 hours.
 
   // TODO: Most of this should be moved into the machine definition
   bool CogTask::_init()
@@ -33,6 +36,12 @@ namespace OxApp
     getConfig()->fanDutyCycle = 0.0;
 
     return true;
+  }
+
+  void CogTask::printGenericInstructions() {
+    Serial.println("Enter s:1 to Turn On, s:0 to Turn Off.");
+    Serial.println("Enter a:XX.X to set (a)mperage, (w)attage, (f)an speed (h)eater set p., and (r)amp rate.");
+
   }
 
   COG_HAL* CogTask::getHAL() {
@@ -50,142 +59,54 @@ namespace OxApp
     this->StateMachineManager::run_generic();
   }
 
-  MachineState CogTask::_updatePowerComponentsOff() {
-    MachineState new_ms = Off;
-
+  void CogTask::turnOff() {
     float fs = 0.0;
     getConfig()->fanDutyCycle = fs;
     getHAL()->_updateFanPWM(fs);
     getConfig()->report->fan_pwm = fs;
     _updateStackVoltage(getConfig()->MIN_OPERATING_STACK_VOLTAGE);
-    return new_ms;
+    // Although after a minute this should turn off, we want
+    // to do it immediately
+    StateMachineManager::turnOff();
   }
 
+  MachineState CogTask::_updatePowerComponentsOff() {
+    turnOff();
+    return Off;
+  }
 
+  void CogTask::_updateCOGSpecificComponents() {
+      float t = getTemperatureReading();
+      float fs = computeFanSpeed(t);
+      float a = computeAmperage(t);
+
+      if (DEBUG_LEVEL > 0) {
+        OxCore::Debug<const char *>("fan speed, amperage\n");
+        OxCore::Debug<float>(fs);
+        OxCore::Debug<const char *>(" ");
+        OxCore::Debug<float>(a);
+      }
+
+      getHAL()->_updateFanPWM(fs);
+      getConfig()->report->fan_pwm = fs;
+      _updateStackAmperage(a);
+      _updateStackVoltage(getConfig()->STACK_VOLTAGE);
+  }
   MachineState CogTask::_updatePowerComponentsWarmup() {
     MachineState new_ms = Warmup;
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("Warmup Mode!\n");
+    new_ms = StateMachineManager::_updatePowerComponentsWarmup();
+    if (new_ms == Warmup) {
+      _updateCOGSpecificComponents();
     }
-
-    float t = getTemperatureReading();
-
-    // if we've reached operating temperature, we switch
-    // states
-    if (t >= getConfig()->OPERATING_TEMP) {
-      return NormalOperation;
-    }
-
-    if (t > getConfig()->OPERATING_TEMP) {
-      new_ms = NormalOperation;
-      return new_ms;
-    }
-
-    float fs = computeFanSpeed(t);
-    float a = computeAmperage(t);
-    float tt = computeRampUpTargetTemp(t,
-                                       getConfig()->GLOBAL_RECENT_TEMP,
-                                       getConfig()->BEGIN_UP_TIME_MS);
-
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("fan speed, amperage, tt\n");
-      OxCore::Debug<float>(fs);
-      OxCore::Debug<const char *>(" ");
-      OxCore::Debug<float>(a);
-      OxCore::Debug<const char *>(" ");
-      OxCore::DebugLn<float>(tt);
-    }
-
-    getHAL()->_updateFanPWM(fs);
-    getConfig()->report->fan_pwm = fs;
-    _updateStackAmperage(a);
-
-    // This will be used by the HeaterPID task.
-    float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
-
-    if (cross_stack_temp > getConfig()->MAX_CROSS_STACK_TEMP) {
-      OxCore::Debug<const char *>("PAUSING INCREASED DUE TO CROSS STACK TEMP: ");
-      OxCore::DebugLn<float>(cross_stack_temp);
-      // here now we will not change the TARGET_TEMP.
-      // in order to be prepared when this condition is
-      // releived, we need to recent the time and temp
-      // so that we can smoothly been operating.
-      getConfig()->GLOBAL_RECENT_TEMP = t;
-      getConfig()->BEGIN_UP_TIME_MS = millis();
-    } else {
-      getConfig()->TARGET_TEMP = tt;
-      // now we will set the setPoint in the heater_pid_task...
-      // this requires a dependence on that task, but is
-      // better than creating a deeper global dependence.
-      heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    }
-
-    _updateStackVoltage(getConfig()->STACK_VOLTAGE);
-
     return new_ms;
   }
+
   MachineState CogTask::_updatePowerComponentsCooldown() {
     MachineState new_ms = Cooldown;
-
-    _updateStackVoltage(getConfig()->IDLE_STACK_VOLTAGE);
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("Cooldown Mode!\n");
+    new_ms = StateMachineManager::_updatePowerComponentsCooldown();
+    if (new_ms == Cooldown) {
+      _updateCOGSpecificComponents();
     }
-
-    float t = getTemperatureReading();
-    if (getConfig()->previous_ms != Cooldown) {
-      getConfig()->GLOBAL_RECENT_TEMP = t;
-    }
-
-    if (t <= getConfig()->COOLDOWN_TARGET_C) {
-      new_ms = Off;
-      return new_ms;
-    }
-
-
-    float fs = computeFanSpeed(t);
-    float a = computeAmperage(t);
-    float tt = computeRampDnTargetTemp(t,
-                                       getConfig()->COOL_DOWN_BEGIN_TEMP,
-                                       getConfig()->BEGIN_DN_TIME_MS);
-
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("fan speed, amperage, tt\n");
-      OxCore::Debug<float>(fs);
-      OxCore::Debug<const char *>(" ");
-      OxCore::Debug<float>(a);
-      OxCore::Debug<const char *>(" ");
-      OxCore::DebugLn<float>(tt);
-    }
-
-    getHAL()->_updateFanPWM(fs);
-    getConfig()->report->fan_pwm = fs;
-    _updateStackAmperage(a);
-
-    // Note that Tom Taylor said not to do this check
-    // when cooling down, because it might let the system
-    // get stuck cooling. I'm leaving it commented here
-    // to be symmetric with warmp - rlr
-    // float cross_stack_temp =  abs(getConfig()->report->post_getter_C -  getConfig()->report->post_stack_C);
-
-    // if (cross_stack_temp > MachineConfig::MAX_CROSS_STACK_TEMP) {
-
-    //   if (DEBUG_LEVEL > 0) {
-    //   OxCore::Debug<const char *>("PAUSING DUE TO CROSS STACK TEMP\n");
-    //   }
-    //   // here now we will not change the TARGET_TEMP.
-    //   // in order to be prepared when this condition is
-    //   // releived, we need to recent the time and temp
-    //   // so that we can smoothly been operating.
-    //   getConfig()->COOL_DOWN_BEGIN_TEMP = t;
-    //   getConfig()->BEGIN_DN_TIME_MS = millis();
-    // } else
-
-    {
-      getConfig()->TARGET_TEMP = tt;
-      heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    }
-
     return new_ms;
   }
 
@@ -202,6 +123,7 @@ namespace OxApp
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
+    Serial.println("GOT EMERGENCY SHUTDOWN!");
     MachineState new_ms = OffUserAck;
     _updateStackVoltage(MachineConfig::MIN_OPERATING_STACK_VOLTAGE);
     // In an emergency shutdown, we do NOT run the fan!
@@ -224,35 +146,14 @@ namespace OxApp
   void CogTask::_updateStackAmperage(float amperage) {
     for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
       getHAL()->_stacks[i]->updateAmperage(amperage,getConfig());
-      }
+    }
   }
-
 
   MachineState CogTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
     MachineState new_ms = NormalOperation;
+    StateMachineManager::_updatePowerComponentsOperation(i_or_o);
+    _updateCOGSpecificComponents();
 
-    float t = getTemperatureReading();;
-    float fs = computeFanSpeed(t);
-    float a = computeAmperage(t);
-    float tt = getConfig()->OPERATING_TEMP;
-
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("fan speed, amperage, tt\n");
-      OxCore::Debug<float>(fs);
-      OxCore::Debug<const char *>(" ");
-      OxCore::Debug<float>(a);
-      OxCore::Debug<const char *>(" ");
-      OxCore::DebugLn<float>(tt);
-    }
-
-    getHAL()->_updateFanPWM(fs);
-    getConfig()->report->fan_pwm = fs;
-
-    _updateStackAmperage(a);
-    getConfig()->TARGET_TEMP = tt;
-    heaterPIDTask->HeaterSetPoint_C = tt;
-
-    _updateStackVoltage(getConfig()->STACK_VOLTAGE);
     return new_ms;
   }
 }

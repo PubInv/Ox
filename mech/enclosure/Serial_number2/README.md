@@ -8,6 +8,12 @@ Information capturing the build of Serial_number2 OEDCS
 Isometric view of FreeCad assembly drawing showing the Ethernet, Controller V1 and Due assembly off to the side.
 > ![image](https://github.com/PubInv/NASA-COG/assets/5836181/acfafbcd-7913-475d-9ad6-6f1f11418265)
 
+Serial number 2, Assembly on 20230914
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/ddf36d0f-b828-4666-9d21-01b977a775d9)
+
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/4c4c0f65-dee8-4c41-a483-dea0b79f8496)
+
+
 
 ### Parts
 Enclosure 2 parts and assembly stuff  

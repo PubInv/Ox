@@ -42,6 +42,8 @@ public:
   ReadTempsTask();
   int DEBUG_READ_TEMPS = 0;
 
+
+  float evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv);
   // These two fields are used to track the
   // missing stack
   unsigned long good_temp_reads = 0;

@@ -15,8 +15,8 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef RETRIEVE_SCRIPT_UDP_TASK_H
-#define RETRIEVE_SCRIPT_UDP_TASK_H
+#ifndef NETWORK_TASK_H
+#define NETWORK_TASK_H
 
 #ifdef ARDUINO
 #include <Arduino.h>
@@ -31,23 +31,16 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 namespace OxApp
 {
-
-  class RetrieveScriptUDPTask : public OxCore::Task {
-  private:
+  // Note this class is really a virtual; it makes no sense to
+  // instantiated it directly, though it would give you network functionality
+  class NetworkTask : public OxCore::Task {
   public:
     // DEBUG_UDP == 1 means debug logging,
     // DEBUG_UDP == 2 means debug script retreival
     int DEBUG_UDP = 0;
     NetworkUDP net_udp;
-
-
-    char cmd[1024];
-    int lastnonce = 0;
-
-
     bool _init() override;
     bool _run() override;
-
   };
 }
 

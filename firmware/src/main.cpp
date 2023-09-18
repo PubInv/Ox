@@ -17,7 +17,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // Program information
 #define COMPANY_NAME "pubinv.org "
 #define PROG_NAME "main.cpp"
-#define VERSION "; Rev: 0.3.1"  //
+#define VERSION "; Rev: 0.3.3"  //
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -31,15 +31,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include <cog_hal.h>
 
-#include <retrieve_script_UDP_task.h>
+#include <flash.h>
+#include <network_task.h>
 #include <cog_task.h>
-#include <serial_task.h>
+// #include <serial_task.h>
+#include <serial_input_task.h>
 #include <fault_task.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
-#include <temp_refresh_task.h>
+// #include <temp_refresh_task.h>
 #include <serialReportTask.h>
+#include <OEDCSNetworkTask.h>
 
 // #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
@@ -51,15 +54,16 @@ static Core core;
 
 /***** Declare your tasks here *****/
 
-OxApp::RetrieveScriptUDPTask retrieveScriptUDPTask;
+OxApp::OEDCSNetworkTask OEDCSNetworkTask;
 OxApp::CogTask cogTask;
-OxApp::SerialTask serialTask;
+// OxApp::SerialTask serialTask;
+OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
 ReadTempsTask readTempsTask;
-TempRefreshTask tempRefreshTask;
+//TempRefreshTask tempRefreshTask;
 SerialReportTask serialReportTask;
 
 #include <machine.h>
@@ -79,10 +83,22 @@ MachineConfig *getConfig() {
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer
+
 void setup()
 {
   OxCore::serialBegin(115200UL);
   delay(500);
+
+  //Print out the reset reason
+  Serial.println("=================");
+  Serial.print("ResetCause: ");
+  switch(getResetCause()) {
+  case 0: Serial.println("general"); break;
+  case 1: Serial.println("backup"); break;
+  case 2: Serial.println("watchdog"); break;
+  case 3: Serial.println("software"); break;
+  case 4: Serial.println("user"); break;
+  }                                                                              Serial.println("=================");
 
   // TODO: consider doing this....
     // Serial.begin(BAUDRATE);
@@ -105,7 +121,7 @@ void setup()
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
   machineConfig.hal = new COG_HAL();
-  machineConfig.hal->DEBUG_HAL = 2;
+  machineConfig.hal->DEBUG_HAL = 0;
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
@@ -159,44 +175,58 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
 
 
-  OxCore::TaskProperties serialProperties;
-  serialProperties.name = "serial";
-  serialProperties.id = 22;
-  serialProperties.period = 250;
-  serialProperties.priority = OxCore::TaskPriority::High;
-  serialProperties.state_and_config = (void *) &machineConfig;
-   bool serialAdd = core.AddTask(&serialTask, &serialProperties);
-  if (!serialAdd) {
-    OxCore::Debug<const char *>("SerialProperties add failed\n");
+  // OxCore::TaskProperties serialProperties;
+  // serialProperties.name = "serial";
+  // serialProperties.id = 22;
+  // serialProperties.period = 250;
+  // serialProperties.priority = OxCore::TaskPriority::High;
+  // serialProperties.state_and_config = (void *) &machineConfig;
+  //  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+  // if (!serialAdd) {
+  //   OxCore::Debug<const char *>("SerialProperties add failed\n");
+  //   abort();
+  // }
+
+  OxCore::TaskProperties oedcsSerialProperties;
+  oedcsSerialProperties.name = "oedcsSerial";
+  oedcsSerialProperties.id = 22;
+  oedcsSerialProperties.period = oedcsSerialInputTask.PERIOD_MS;
+  oedcsSerialProperties.priority = OxCore::TaskPriority::High;
+  oedcsSerialProperties.state_and_config = (void *) &machineConfig;
+   bool oedcsSerialAdd = core.AddTask(&oedcsSerialInputTask, &oedcsSerialProperties);
+  if (!oedcsSerialAdd) {
+    OxCore::Debug<const char *>("SerialInputProperties add failed\n");
     abort();
   }
+  oedcsSerialInputTask.cogTask = &cogTask;
 
 
-  OxCore::TaskProperties TempRefreshProperties;
-  TempRefreshProperties.name = "TempRefresh";
-  TempRefreshProperties.id = 23;
-  TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
-  TempRefreshProperties.priority = OxCore::TaskPriority::Low;
-  TempRefreshProperties.state_and_config = (void *) &machineConfig;
-  bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
-  if (!tempRefresh) {
-    OxCore::Debug<const char *>("Temp Refresh add failed\n");
-    abort();
-  }
+  // WARNING! the 5-knobs protocol does not use this.
+  // OxCore::TaskProperties TempRefreshProperties;
+  // TempRefreshProperties.name = "TempRefresh";
+  // TempRefreshProperties.id = 23;
+  // TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
+  // TempRefreshProperties.priority = OxCore::TaskPriority::Low;
+  // TempRefreshProperties.state_and_config = (void *) &machineConfig;
+  // bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
+  // if (!tempRefresh) {
+  //   OxCore::Debug<const char *>("Temp Refresh add failed\n");
+  //   abort();
+  // }
 
-  cogTask.tempRefreshTask = &tempRefreshTask;
+  // cogTask.tempRefreshTask = &tempRefreshTask;
 
 
   if (ETHERNET_BOARD_PRESENT) {
-    OxCore::TaskProperties retrieveScriptUDPProperties;
-    retrieveScriptUDPProperties.name = "retrieveScriptUDP";
-    retrieveScriptUDPProperties.id = 24;
-    retrieveScriptUDPProperties.period = 5000;
-    retrieveScriptUDPProperties.priority = OxCore::TaskPriority::High;
-    retrieveScriptUDPProperties.state_and_config = (void *) &machineConfig;
+    OxCore::TaskProperties OEDCSNetworkProperties;
+    OEDCSNetworkProperties.name = "OEDCSNetwork";
+    OEDCSNetworkProperties.id = 24;
+    OEDCSNetworkProperties.period = 5000;
+    OEDCSNetworkProperties.priority = OxCore::TaskPriority::High;
+    OEDCSNetworkProperties.state_and_config = (void *) &machineConfig;
 
-    bool retrieveScriptUDP = core.AddTask(&retrieveScriptUDPTask, &retrieveScriptUDPProperties);
-    if (!retrieveScriptUDP) {
+    bool OEDCSNetwork = core.AddTask(&OEDCSNetworkTask, &OEDCSNetworkProperties);
+    if (!OEDCSNetwork) {
       OxCore::Debug<const char *>("Retrieve Script UDP\n");
       abort();
     }
@@ -236,17 +266,19 @@ void setup()
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
   cogTask.heaterPIDTask = &heaterPIDTask;
-  cogTask.tempRefreshTask = &tempRefreshTask;
+  //  cogTask.tempRefreshTask = &tempRefreshTask;
 
   core.DEBUG_CORE = 0;
   core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
-  retrieveScriptUDPTask.DEBUG_UDP = 0;
-  readTempsTask.DEBUG_READ_TEMPS = 2;
-
-   OxCore::Debug<const char *>("Added tasks\n");
+  OEDCSNetworkTask.DEBUG_UDP = 0;
+  OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
+  oedcsSerialInputTask.DEBUG_SERIAL = 0;
+  getConfig()->script->DEBUG_MS = 0;
+  OxCore::Debug<const char *>("Added tasks\n");
 
   /*********************************************/
 }
