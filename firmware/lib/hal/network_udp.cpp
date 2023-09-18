@@ -247,8 +247,8 @@ NetworkUDP::getParams(uint16_t timeout) {
   Udp.read(packetBuffer, packetSize);
   packetBuffer[packetSize] = '\0';
 
-  String config = String((char *)packetBuffer);
   if (DEBUG_UDP > 1) {
+    String config = String((char *)packetBuffer);
     Serial.println(config);
   }
   // Now, at this point, we roughly have a new script.
