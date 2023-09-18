@@ -123,6 +123,7 @@ namespace OxApp
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
+    Serial.println("GOT EMERGENCY SHUTDOWN!");
     MachineState new_ms = OffUserAck;
     _updateStackVoltage(MachineConfig::MIN_OPERATING_STACK_VOLTAGE);
     // In an emergency shutdown, we do NOT run the fan!

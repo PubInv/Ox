@@ -49,6 +49,20 @@ namespace OxApp
     }
   }
 
+  MachineState StateMachineManager::checkCriticalFaults(MachineState ms) {
+    unsigned long now = millis();
+    for(int i = 0; i < NUM_CRITICAL_ERROR_DEFINITIONS; i++) {
+      if (getConfig()->errors[i].fault_present) {
+        if ((now - getConfig()->errors[i].begin_condition_ms)
+            > getConfig()->errors[i].toleration_ms) {
+          if (getConfig()->errors[i].response_state == EmergencyShutdown) {
+            return EmergencyShutdown;
+          }
+        }
+      }
+    }
+    return ms;
+  }
   // There is significant COG dependent logic here.
   // At the expense of extra lines of code, I'm
   // going to keep this mostly simple by making it look
@@ -62,7 +76,10 @@ namespace OxApp
       OxCore::Debug<const char *>(" : ");
       OxCore::DebugLn<const char *>(getConfig()->MachineSubStateNames[getConfig()->idleOrOperate]);
     }
-    switch(ms) {
+
+    new_ms = checkCriticalFaults(ms);
+
+    switch(new_ms) {
     case Off:
       new_ms = _updatePowerComponentsOff();
       break;

@@ -83,11 +83,26 @@ public:
   virtual bool init() = 0;
 };
 
+#define NUM_CRITICAL_ERROR_DEFINITIONS 3
+enum CriticalErrorCondition {
+  POST_HEATER_TC_BAD,
+  POST_GETTER_TC_BAD,
+  POST_STACK_TC_BAD
+};
 
+class CriticalError {
+public:
+  bool fault_present;
+  unsigned long begin_condition_ms;
+  unsigned long toleration_ms;
+  MachineState response_state;
+};
 
 class MachineConfig {
 public:
   MachineConfig();
+
+  CriticalError errors[NUM_CRITICAL_ERROR_DEFINITIONS];
 
   // TEST CONFIGURATION PARAMETERS
   // ALL OF THESE COULD BE CONFIGURABLE, BUT FOR THIS TEST
@@ -209,7 +224,6 @@ public:
   // the last step.
   float fanDutyCycle = 0.0;
 
-  char const* errors[10];
   // Until we have a good machine model here,
   // we need to separately identify pre- and post-
   // element temperature sensor indices
@@ -242,6 +256,7 @@ public:
   // This is currently not in use; we expect to need it
   // when we are making the system more automatic.
   void runComplexAlgolAssertions();
+  void clearErrors();
 };
 
 

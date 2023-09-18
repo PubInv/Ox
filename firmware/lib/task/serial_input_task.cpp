@@ -130,6 +130,7 @@ namespace OxApp
     if (ic.value_c == '1') {
       if (mc->ms == Off) {
         mc->ms = Warmup;
+        mc->clearErrors();
         Debug<const char *>("Turning on: New State: Warmup!");
       } else {
         Debug<const char *>("Already On.");

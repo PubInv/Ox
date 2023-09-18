@@ -101,14 +101,30 @@ void MachineConfig::change_ramp(float ramp) {
 
 bool MachineHAL::init() {
   init_heaters();
-
 }
 
 
 MachineConfig::MachineConfig() {
  script = new MachineScript();
  report = new MachineStatusReport();
+ clearErrors();
+ }
 
+void MachineConfig::clearErrors() {
+// here we init the errors...
+ // If we lose a thermocouple for more than 10 seconds
+ // we have to go into emergency shutdown.
+ errors[POST_HEATER_TC_BAD].fault_present = false;
+ errors[POST_GETTER_TC_BAD].fault_present = false;
+ errors[POST_STACK_TC_BAD].fault_present  = false;
+
+ errors[POST_HEATER_TC_BAD].toleration_ms = 10 * 1000;
+ errors[POST_GETTER_TC_BAD].toleration_ms = 10 * 1000;
+ errors[POST_STACK_TC_BAD].toleration_ms  = 10 * 1000;
+
+ errors[POST_HEATER_TC_BAD].response_state = EmergencyShutdown;
+ errors[POST_GETTER_TC_BAD].response_state = EmergencyShutdown;
+ errors[POST_STACK_TC_BAD].response_state  = EmergencyShutdown;
 }
 
 // This code is currently not invoked.
