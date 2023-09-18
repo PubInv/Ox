@@ -18,6 +18,28 @@
 #include <abstract_temperature.h>
 #include <TF800A12K.h>
 
+// from: https://learn.adafruit.com/memories-of-an-arduino/measuring-free-memory
+// This should be made into a separte task,
+// this is just for debugging...
+#ifdef __arm__
+// should use uinstd.h to define sbrk but Due causes a conflict
+extern "C" char* sbrk(int incr);
+#else  // __ARM__
+extern char *__brkval;
+#endif  // __arm__
+
+int freeMemory() {
+  char top;
+#ifdef __arm__
+  return &top - reinterpret_cast<char*>(sbrk(0));
+#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
+  return &top - __brkval;
+#else  // __arm__
+  return __brkval ? &top - __brkval : &top - __malloc_heap_start;
+#endif  // __arm__
+}
+
+
 using namespace std;
 
 
@@ -57,6 +79,9 @@ namespace OxApp
     getConfig()->report->fan_rpm =
       getHAL()->_fans[0]._calcRPM(0);
     this->StateMachineManager::run_generic();
+
+    Serial.print("Free Memory: ");
+    Serial.println(freeMemory());
   }
 
   void CogTask::turnOff() {

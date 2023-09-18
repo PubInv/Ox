@@ -119,7 +119,7 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
   }
 
   return temp;
-#elif
+#else
   // probably the SPI based MAX31855_THERMOCOUPLES
 #endif
 }

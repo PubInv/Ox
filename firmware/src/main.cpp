@@ -272,7 +272,7 @@ void setup()
   core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
-  cogTask.DEBUG_LEVEL = 0;
+  cogTask.DEBUG_LEVEL = 1;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
   readTempsTask.DEBUG_READ_TEMPS = 0;
