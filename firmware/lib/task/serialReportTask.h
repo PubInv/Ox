@@ -32,6 +32,7 @@ public:
   SerialReportTask();
   int DEBUG_SERIAL_REPORT = 1;
   int PERIOD_MS = 10000;
+
 private:
   bool _init() override;
   bool _run() override;

@@ -49,6 +49,10 @@ namespace OxApp
     // we need to make sure we start with a null string...
     // This needs to change to send all three buffers
 
+    if (DEBUG_UDP > 1) {
+      DebugLn<const char *>("Stage2NetworkTask completed\n");
+    }
+
     for (int i = 0; i < 3; i++) {
       buffer[0] = 0;
       mcs[i]->createStage2JSONReport(mcs[i]->s2heater,mcs[i]->report,buffer);

@@ -17,7 +17,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // Program information
 #define COMPANY_NAME "pubinv.org "
 #define PROG_NAME "main.cpp"
-#define VERSION "; Rev: 0.3.2"  //
+#define VERSION "; Rev: 0.3.3"  //
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -34,12 +34,13 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <flash.h>
 #include <network_task.h>
 #include <cog_task.h>
-#include <serial_task.h>
+// #include <serial_task.h>
+#include <serial_input_task.h>
 #include <fault_task.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
-#include <temp_refresh_task.h>
+// #include <temp_refresh_task.h>
 #include <serialReportTask.h>
 #include <OEDCSNetworkTask.h>
 
@@ -55,13 +56,14 @@ static Core core;
 
 OxApp::OEDCSNetworkTask OEDCSNetworkTask;
 OxApp::CogTask cogTask;
-OxApp::SerialTask serialTask;
+// OxApp::SerialTask serialTask;
+OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
 ReadTempsTask readTempsTask;
-TempRefreshTask tempRefreshTask;
+//TempRefreshTask tempRefreshTask;
 SerialReportTask serialReportTask;
 
 #include <machine.h>
@@ -119,7 +121,7 @@ void setup()
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
   machineConfig.hal = new COG_HAL();
-  machineConfig.hal->DEBUG_HAL = 2;
+  machineConfig.hal->DEBUG_HAL = 0;
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
@@ -173,32 +175,46 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
 
 
-  OxCore::TaskProperties serialProperties;
-  serialProperties.name = "serial";
-  serialProperties.id = 22;
-  serialProperties.period = 250;
-  serialProperties.priority = OxCore::TaskPriority::High;
-  serialProperties.state_and_config = (void *) &machineConfig;
-   bool serialAdd = core.AddTask(&serialTask, &serialProperties);
-  if (!serialAdd) {
-    OxCore::Debug<const char *>("SerialProperties add failed\n");
+  // OxCore::TaskProperties serialProperties;
+  // serialProperties.name = "serial";
+  // serialProperties.id = 22;
+  // serialProperties.period = 250;
+  // serialProperties.priority = OxCore::TaskPriority::High;
+  // serialProperties.state_and_config = (void *) &machineConfig;
+  //  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
+  // if (!serialAdd) {
+  //   OxCore::Debug<const char *>("SerialProperties add failed\n");
+  //   abort();
+  // }
+
+  OxCore::TaskProperties oedcsSerialProperties;
+  oedcsSerialProperties.name = "oedcsSerial";
+  oedcsSerialProperties.id = 22;
+  oedcsSerialProperties.period = oedcsSerialInputTask.PERIOD_MS;
+  oedcsSerialProperties.priority = OxCore::TaskPriority::High;
+  oedcsSerialProperties.state_and_config = (void *) &machineConfig;
+   bool oedcsSerialAdd = core.AddTask(&oedcsSerialInputTask, &oedcsSerialProperties);
+  if (!oedcsSerialAdd) {
+    OxCore::Debug<const char *>("SerialInputProperties add failed\n");
     abort();
   }
+  oedcsSerialInputTask.cogTask = &cogTask;
 
 
-  OxCore::TaskProperties TempRefreshProperties;
-  TempRefreshProperties.name = "TempRefresh";
-  TempRefreshProperties.id = 23;
-  TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
-  TempRefreshProperties.priority = OxCore::TaskPriority::Low;
-  TempRefreshProperties.state_and_config = (void *) &machineConfig;
-  bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
-  if (!tempRefresh) {
-    OxCore::Debug<const char *>("Temp Refresh add failed\n");
-    abort();
-  }
+  // WARNING! the 5-knobs protocol does not use this.
+  // OxCore::TaskProperties TempRefreshProperties;
+  // TempRefreshProperties.name = "TempRefresh";
+  // TempRefreshProperties.id = 23;
+  // TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
+  // TempRefreshProperties.priority = OxCore::TaskPriority::Low;
+  // TempRefreshProperties.state_and_config = (void *) &machineConfig;
+  // bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
+  // if (!tempRefresh) {
+  //   OxCore::Debug<const char *>("Temp Refresh add failed\n");
+  //   abort();
+  // }
 
-  cogTask.tempRefreshTask = &tempRefreshTask;
+  // cogTask.tempRefreshTask = &tempRefreshTask;
 
 
   if (ETHERNET_BOARD_PRESENT) {
@@ -250,7 +266,7 @@ void setup()
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
   cogTask.heaterPIDTask = &heaterPIDTask;
-  cogTask.tempRefreshTask = &tempRefreshTask;
+  //  cogTask.tempRefreshTask = &tempRefreshTask;
 
   core.DEBUG_CORE = 0;
   core._scheduler.DEBUG_SCHEDULER = 0;
@@ -258,9 +274,11 @@ void setup()
   heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
-  readTempsTask.DEBUG_READ_TEMPS = 2;
-
-   OxCore::Debug<const char *>("Added tasks\n");
+  OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
+  oedcsSerialInputTask.DEBUG_SERIAL = 0;
+  getConfig()->script->DEBUG_MS = 0;
+  OxCore::Debug<const char *>("Added tasks\n");
 
   /*********************************************/
 }

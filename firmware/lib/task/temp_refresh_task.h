@@ -24,7 +24,10 @@
 #include <core_defines.h>
 #include <core.h>
 
-// Runs the Pressure Swing Adsorption cycle
+
+// WARNING: This class is not used in the
+// "5 knobs" protocol.
+
   class TempRefreshTask : public OxCore::Task
   {
   public:

@@ -37,12 +37,15 @@ namespace OxApp
 
       // This is used for us to choose a thermocuple
       Stage2Heater whichHeater;
-      TempRefreshTask* tempRefreshTask;
+
       HeaterPIDTask* heaterPIDTask;
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
 
+      void turnOff();
+      void printGenericInstructions() override;
       void printOffWarnings(MachineState ms) override;
+
       float getTemperatureReading();
       void _updatePowerComponentsVoltage(float voltage);
       void _configTemperatureSensors();
@@ -50,7 +53,7 @@ namespace OxApp
 
       MachineState _executeBasedOnState(MachineState ms);
 
-       MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
+      //       MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
        MachineState _updatePowerComponentsOff() override;
        MachineState _updatePowerComponentsWarmup() override;
        MachineState _updatePowerComponentsIdle() override;

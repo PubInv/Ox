@@ -113,8 +113,9 @@ class MachineScript {
   // require extracting the machine.h enumeration to a new file
   MachinePhase *phasesInState[8];
   bool AppendPhase(MachinePhase p);
+  void DeleteAllPhases();
+  MachineScript *parse_buffer_into_new_script(char *buffer,int debug);
   void DeleteAllPhases(struct phase_t *p);
-  MachineScript *parse_buffer_into_new_script(char *buffer);
 };
 
 

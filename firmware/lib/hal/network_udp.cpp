@@ -223,6 +223,10 @@ NetworkUDP::getParams(uint16_t timeout) {
   int packetSize = 0;
   while (!packetSize && (millis() - startMs) < timeout) {
     delay(10);
+    if (DEBUG_UDP > 2) {
+      Serial.println(F("Calling parse packet (should loop)"));
+      Serial.println((millis() - startMs));
+    }
     packetSize = Udp.parsePacket();
     watchdogReset();
   }
@@ -235,21 +239,46 @@ NetworkUDP::getParams(uint16_t timeout) {
   if (DEBUG_UDP > 1) {
     Serial.print(F("UDP Packet received, size "));
     Serial.println(packetSize);
+    delay(50);
     Serial.print(F("From "));
+    delay(50);
   }
   IPAddress remoteIp = Udp.remoteIP();
   if (DEBUG_UDP > 1) {
     Serial.print(remoteIp);
     Serial.print(F(", port "));
     Serial.println(Udp.remotePort());
+    delay(50);
   }
 
   Udp.read(packetBuffer, packetSize);
+  if (DEBUG_UDP > 1) {
+    Serial.println(packetSize);
+    delay(50);
+  }
   packetBuffer[packetSize] = '\0';
 
   if (DEBUG_UDP > 1) {
-    String config = String((char *)packetBuffer);
-    Serial.println(config);
+    Serial.println("About to construct config");
+    delay(50);
+  }
+  // WARNING!! Rob thinks this use of String is dangerous.
+  // String is a fine class in C++ but it is not safe on
+  // an Arudino!
+  //  String config = String((char *)packetBuffer);
+  if (DEBUG_UDP > 1) {
+    Serial.println("constructed config");
+    delay(50);
+  }
+  if (DEBUG_UDP > 1) {
+    Serial.println((char *)packetBuffer);
+    delay(50);
+    Serial.println("here is the String:");
+    delay(50);
+    //    Serial.println(config);
+    Serial.println("Done with the String print");
+    delay(50);
+
   }
   // Now, at this point, we roughly have a new script.
   // so we will parse it and poke it into the machine script as
