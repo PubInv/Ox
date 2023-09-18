@@ -49,6 +49,7 @@ namespace OxApp
       case 2: Serial.println(F("No ethernet boad")); break;
       case 3: Serial.println(F("No link")); break;
       case 4: Serial.println(F("No DHCP")); break;
+      case 5: Serial.println(F("UDP failed on port")); break;
       }
     }
 

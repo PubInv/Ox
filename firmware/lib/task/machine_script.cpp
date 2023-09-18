@@ -24,7 +24,7 @@ using namespace OxCore;
 
 int
 parse_param(char *buffer, const char *value, char **rvalue) {
-  if (!buffer || *value) return 0;
+  if (!buffer || !value) return 0;
   char *item = strstr(buffer, value);
   if (!item) return 0;
 
@@ -211,7 +211,11 @@ MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer,in
     return NULL;
   }
 
-  if (tempnonce <= gNonce) exit(1);
+  if (tempnonce <= gNonce) {
+    Debug<const char *>("SAME NONCE \n");
+    Debug<const char *>("Dont Parse \n");
+    return NULL;
+  }
   gNonce = tempnonce;
 
   if (parse_param(packetBuffer, "Name", &gName) == 0) {
@@ -225,65 +229,63 @@ MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer,in
   if (parse_param(packetBuffer, "DryRun", &gDryRun) == 0) {
     gDryRun = 0;
   }
-  if (parse_param(packetBuffer, "MaxRampUp", &gMaxRampUp) == 0) {
-    Debug<const char *>("No MaxRampUp \n");
-    return NULL;
-  }
-  if (parse_param(packetBuffer, "MaxRampDown", &gMaxRampDown) == 0) {
-    Debug<const char *>("No MaxRampDown \n");
-    return NULL;
-  }
+  if (parse_param(packetBuffer, "MaxRampUp", &gMaxRampUp) == 0) Debug<const char *>("No MaxRampUp \n");
+  if (parse_param(packetBuffer, "MaxRampDown", &gMaxRampDown) == 0) Debug<const char *>("No MaxRampDown \n");
 
-  if (parse_param_state(packetBuffer, "Warmup", &gWarmUp) == 0) {
-    Debug<const char *>("No Warmup Phase \n");
-  }
-  if (parse_param_state(packetBuffer, "Cooldown", &gCooldown) == 0) {
-    Debug<const char *>("No Cooldown Phase \n");
-  };
-  if (parse_param_state(packetBuffer, "EmergencyShutdown", &gEmShutdown) == 0) {
-    Debug<const char *>("No EmergencyShutdown Phase \n");
-  }
-  if (parse_param_state(packetBuffer, "Operation", &gOperation) == 0) {
-    Debug<const char *>("No Operation Phase \n");
-  }
+  if (parse_param_state(packetBuffer, "Warmup", &gWarmUp) == 0) Debug<const char *>("No Warmup Phase \n");
+  if (parse_param_state(packetBuffer, "Cooldown", &gCooldown) == 0) Debug<const char *>("No Cooldown Phase \n");
+  if (parse_param_state(packetBuffer, "EmergencyShutdown", &gEmShutdown) == 0) Debug<const char *>("No EmergencyShutdown Phase \n");
+  if (parse_param_state(packetBuffer, "Operation", &gOperation) == 0) Debug<const char *>("No Operation Phase \n");
 
   if (DEBUG_MS > 1) {
-    DebugLn<const char *>("Name is \n");
+    Debug<const char *>("Name is ");
     DebugLn<const char *>(gName);
-    DebugLn<const char *>("Timestamp is \n");
+    Debug<const char *>("Timestamp is ");
     DebugLn<const char *>(gTimestamp);
-    DebugLn<const char *>("Dryrun is \n");
+    Debug<const char *>("Dryrun is ");
     DebugLn<const char *>( gDryRun ? "True" : "False");
-    DebugLn<const char *>("Nonce is n");
+    Debug<const char *>("Nonce is ");
     DebugLn<int>(gNonce);
-    DebugLn<const char *>("Max UP is %d\n");
+    Debug<const char *>("Max RampUP is ");
     DebugLn<int>(gMaxRampUp);
-    DebugLn<const char *>("Max DOWN is n");
+    Debug<const char *>("Max RampDOWN is ");
     DebugLn<int>(gMaxRampDown);
-    DebugLn<const char *>("Warmup Script:\n");
+    Debug<const char *>("\n----\n");
+    Debug<const char *>("Warmup Script:\n");
     if (gWarmUp) DebugLn<const char *>(gWarmUp);
     else DebugLn<const char *>("None");
-    DebugLn<const char *>("\n----\n");
-    DebugLn<const char *>("Cooldown Script:\n");
-    DebugLn<const char *>("\n----\n");
+    Debug<const char *>("\n----\n");
+    Debug<const char *>("Cooldown Script:\n");
     if (gCooldown) DebugLn<const char *>(gCooldown);
     else DebugLn<const char *>("None");
-    DebugLn<const char *>("Emergency Script:\n");
-    DebugLn<const char *>("\n----\n");
+    Debug<const char *>("\n----\n");
+    Debug<const char *>("Emergency Script:\n");
     if (gEmShutdown) DebugLn<const char *>(gEmShutdown);
     else DebugLn<const char *>("None");
-    DebugLn<const char *>("Operation Script:\n");
-    DebugLn<const char *>("\n----\n");
+    Debug<const char *>("\n----\n");
+    Debug<const char *>("Operation Script:\n");
     if (gOperation) DebugLn<const char *>(gOperation);
     else DebugLn<const char *>("None");
     DebugLn<const char *>("\n----\n");
   }
 
   if (DEBUG_MS > 0) {
-    if (gWarmUp) parse_phases_from_state_script(MachineState::Warmup, gWarmUp, ms);
-    if (gCooldown) parse_phases_from_state_script(MachineState::Cooldown, gCooldown, ms);
-    if (gEmShutdown) parse_phases_from_state_script(MachineState::EmergencyShutdown, gEmShutdown, ms);
-    if (gOperation) parse_phases_from_state_script(MachineState::NormalOperation, gOperation, ms);
+    if (gWarmUp) {
+      Debug<const char *>("Warmup Phase\n");
+      parse_phases_from_state_script(MachineState::Warmup, gWarmUp, ms);
+    }
+    if (gCooldown) {
+      Debug<const char *>("Cooldown Phase\n");
+      parse_phases_from_state_script(MachineState::Cooldown, gCooldown, ms);
+    }
+    if (gEmShutdown) {
+      Debug<const char *>("Emergency Phase\n");
+      parse_phases_from_state_script(MachineState::EmergencyShutdown, gEmShutdown, ms);
+    }
+    if (gOperation) {
+      Debug<const char *>("Operation Phase\n");
+      parse_phases_from_state_script(MachineState::NormalOperation, gOperation, ms);
+    }
   }
   return ms;
 }
@@ -302,18 +304,18 @@ parse_phases_from_state_script(MachineState m_state, char *script, MachineScript
   }
 
   Debug<const char *>("This state has ");
-  Debug<int>(phasecnt);
+  Debug<int>(phasecnt + 1);
   DebugLn<const char *>(" phases:");
-  for (int x = 0; x < phasecnt; x++) {
-    Debug<const char *>("Phase :\n");
+  for (int x = 0; x <= phasecnt; x++) {
+    Debug<const char *>("Phase: ");
     DebugLn<int>(x);
-    Debug<const char *>("  Duration \n");
+    Debug<const char *>("  Duration ");
     DebugLn<int>(p[x].duration);
-    Debug<const char *>("  preheat temp \n");
+    Debug<const char *>("  preheat temp ");
     DebugLn<int>(p[x].preheat_temp);
-    Debug<const char *>("  stack temp \n");
+    Debug<const char *>("  stack temp ");
     DebugLn<int>(p[x].stack_temp);
-    Debug<const char *>("  stack ramp \n");
+    Debug<const char *>("  stack ramp ");
     DebugLn<int>(p[x].stack_ramp);
   }
 }

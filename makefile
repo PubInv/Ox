@@ -58,7 +58,7 @@ pio-run-mega:
 # Build and run on Arduino Due
 pio-run-due:
 	cd firmware \
-	&& pio run -e due -t upload \
+	&& pio run -e due_ribbonfish -t upload \
 	&& pio device monitor
 
 
