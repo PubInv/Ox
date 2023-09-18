@@ -22,11 +22,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 using namespace OxCore;
 
-
-
-
 int
 parse_param(char *buffer, const char *value, char **rvalue) {
+  if (!buffer || *value) return 0;
   char *item = strstr(buffer, value);
   if (!item) return 0;
 
@@ -35,7 +33,7 @@ parse_param(char *buffer, const char *value, char **rvalue) {
   item += strlen(value);
   while (*item == ' ' || *item == '.') item++;
   char *end = strchr(item, '\n');
-  *end = '\0';
+  if (end) *end = '\0';
   *rvalue = (char *)malloc(strlen(item) + 1);
   strcpy(*rvalue, item);
   *end = '\n';
@@ -44,13 +42,14 @@ parse_param(char *buffer, const char *value, char **rvalue) {
 
 int
 parse_param(char *buffer, const char *value, int *rvalue) {
+  if (!buffer || !value) return 0;
   char *item = strstr(buffer, value);
   if (!item) return 0;
 
   item += strlen(value);
   while (*item == ' ' || *item == '.') item++;
   char *end = strchr(item, '\n');
-  *end = '\0';
+  if (end) *end = '\0';
   if (strncasecmp(item, "On", 2) == 0) *rvalue = 1;
   else if (strncasecmp(item, "Yes", 3) == 0) *rvalue = 1;
   else if (strncasecmp(item, "True", 4) == 0) *rvalue = 1;
@@ -62,7 +61,9 @@ parse_param(char *buffer, const char *value, int *rvalue) {
   return 1;
 }
 
-int parse_param_state(char *buffer, const char *value, char **rvalue) {
+int
+parse_param_state(char *buffer, const char *value, char **rvalue) {
+  if (!buffer || !value) return 0;
   char str[strlen(value) + 9];
   sprintf(str, "[[ Name. %s", value);
   char *item = strcasestr(buffer, str);
@@ -74,7 +75,7 @@ int parse_param_state(char *buffer, const char *value, char **rvalue) {
   while (*item == ' ' || *item == '\n') item++;
 
   char *end = strstr(item, "[[");
-  if (end) *--end = '\0';
+  if (end) *(--end) = '\0';
   else {
     end = strrchr(item, '\n');
     *end = '\0';
@@ -85,7 +86,8 @@ int parse_param_state(char *buffer, const char *value, char **rvalue) {
   return 1;
 }
 
-int parse_state(char *state, struct phase_t *phase_list[]) {
+int
+parse_state_phases(char *state, struct phase_t *phase_list[]) {
   if (state == NULL || strlen(state) == 0) return 0;
   char *ptr  = NULL;
 
@@ -157,9 +159,10 @@ int parse_state(char *state, struct phase_t *phase_list[]) {
   return phasecnt;
 }
 
-void MachineScript::DeleteAllPhases() {
-  numPhases = 0;
+void DeleteAllPhases(struct phase_t *p) {
+  if (p) free(p);
 }
+
 bool MachineScript::AppendPhase(MachinePhase p) {
   if (numPhases < (MAX_NUM_PHASES-1)) {
     //    phase[[numPhases++] = p;
@@ -171,43 +174,78 @@ bool MachineScript::AppendPhase(MachinePhase p) {
 }
 
 // Beginning hacking of this...
-MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer) {
+MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer,int debug) {
   MachineScript *ms = new MachineScript();
+
+  ms->DEBUG_MS = debug;
+
+  if (!packetBuffer || strlen(packetBuffer) == 0) {
+    DebugLn<const char *>("No script");
+    return NULL;
+  }
+  
   if (DEBUG_MS > 1) {
     DebugLn<const char *>("BUFFER BEGIN");
     DebugLn<const char *>(packetBuffer);
     DebugLn<const char *>("BUFFER END");
   }
-  char *gName = NULL;
-  char *gTimestamp = NULL;
-  int gDryRun = 1;
-  int gNonce = -1;
-  int gMaxRampUp = 1;
-  int gMaxRampDown = 2;
-  char *gWarmUp = NULL;
-  char *gCooldown = NULL;
-  char *gEmShutdown = NULL;
-  char *gOperation = NULL;
+
+  static char *gName = NULL;
+  static char *gTimestamp = NULL;
+  static int gDryRun = 1;
+  static int gNonce = -1;
+  static int gMaxRampUp = 1;
+  static int gMaxRampDown = 2;
+  static char *gWarmUp = NULL;
+  static char *gCooldown = NULL;
+  static char *gEmShutdown = NULL;
+  static char *gOperation = NULL;
   int tempnonce;
 
   if (DEBUG_MS > 1) {
     Debug<const char *>("PARSING SCRIPT \n");
   }
 
-  parse_param(packetBuffer, "Nonce", &tempnonce);
+  if (parse_param(packetBuffer, "Nonce", &tempnonce) == 0) {
+    Debug<const char *>("No NONCE \n");
+    return NULL;
+  }
+
   if (tempnonce <= gNonce) exit(1);
   gNonce = tempnonce;
 
-  parse_param(packetBuffer, "Name", &gName);
-  parse_param(packetBuffer, "TimeStamp", &gTimestamp);
-  parse_param(packetBuffer, "DryRun", &gDryRun);
-  parse_param(packetBuffer, "MaxRampUp", &gMaxRampUp);
-  parse_param(packetBuffer, "MaxRampDown", &gMaxRampDown);
+  if (parse_param(packetBuffer, "Name", &gName) == 0) {
+    Debug<const char *>("No name \n");
+    return NULL;
+  }
+  if (parse_param(packetBuffer, "TimeStamp", &gTimestamp) == 0) {
+    Debug<const char *>("No Timestamp \n");
+    return NULL;
+  }
+  if (parse_param(packetBuffer, "DryRun", &gDryRun) == 0) {
+    gDryRun = 0;
+  }
+  if (parse_param(packetBuffer, "MaxRampUp", &gMaxRampUp) == 0) {
+    Debug<const char *>("No MaxRampUp \n");
+    return NULL;
+  }
+  if (parse_param(packetBuffer, "MaxRampDown", &gMaxRampDown) == 0) {
+    Debug<const char *>("No MaxRampDown \n");
+    return NULL;
+  }
 
-  parse_param_state(packetBuffer, "Warmup", &gWarmUp);
-  parse_param_state(packetBuffer, "Cooldown", &gCooldown);
-  parse_param_state(packetBuffer, "EmergencyShutdown", &gEmShutdown);
-  parse_param_state(packetBuffer, "Operation", &gOperation);
+  if (parse_param_state(packetBuffer, "Warmup", &gWarmUp) == 0) {
+    Debug<const char *>("No Warmup Phase \n");
+  }
+  if (parse_param_state(packetBuffer, "Cooldown", &gCooldown) == 0) {
+    Debug<const char *>("No Cooldown Phase \n");
+  };
+  if (parse_param_state(packetBuffer, "EmergencyShutdown", &gEmShutdown) == 0) {
+    Debug<const char *>("No EmergencyShutdown Phase \n");
+  }
+  if (parse_param_state(packetBuffer, "Operation", &gOperation) == 0) {
+    Debug<const char *>("No Operation Phase \n");
+  }
 
   if (DEBUG_MS > 1) {
     DebugLn<const char *>("Name is \n");
@@ -223,36 +261,50 @@ MachineScript *MachineScript::parse_buffer_into_new_script(char *packetBuffer) {
     DebugLn<const char *>("Max DOWN is n");
     DebugLn<int>(gMaxRampDown);
     DebugLn<const char *>("Warmup Script:\n");
-    DebugLn<const char *>(gWarmUp);
+    if (gWarmUp) DebugLn<const char *>(gWarmUp);
+    else DebugLn<const char *>("None");
     DebugLn<const char *>("\n----\n");
     DebugLn<const char *>("Cooldown Script:\n");
     DebugLn<const char *>("\n----\n");
-    DebugLn<const char *>(gCooldown);
+    if (gCooldown) DebugLn<const char *>(gCooldown);
+    else DebugLn<const char *>("None");
     DebugLn<const char *>("Emergency Script:\n");
     DebugLn<const char *>("\n----\n");
-    DebugLn<const char *>(gEmShutdown);
+    if (gEmShutdown) DebugLn<const char *>(gEmShutdown);
+    else DebugLn<const char *>("None");
     DebugLn<const char *>("Operation Script:\n");
     DebugLn<const char *>("\n----\n");
-    DebugLn<const char *>(gOperation);
+    if (gOperation) DebugLn<const char *>(gOperation);
+    else DebugLn<const char *>("None");
     DebugLn<const char *>("\n----\n");
   }
 
   if (DEBUG_MS > 0) {
-    parse_phases_from_state_script(MachineState::Warmup,gWarmUp,ms);
-    parse_phases_from_state_script(MachineState::Cooldown,gCooldown,ms);
-    parse_phases_from_state_script(MachineState::EmergencyShutdown,gEmShutdown,ms);
-    parse_phases_from_state_script(MachineState::NormalOperation,gOperation,ms);
+    if (gWarmUp) parse_phases_from_state_script(MachineState::Warmup, gWarmUp, ms);
+    if (gCooldown) parse_phases_from_state_script(MachineState::Cooldown, gCooldown, ms);
+    if (gEmShutdown) parse_phases_from_state_script(MachineState::EmergencyShutdown, gEmShutdown, ms);
+    if (gOperation) parse_phases_from_state_script(MachineState::NormalOperation, gOperation, ms);
   }
   return ms;
 }
 
-void parse_phases_from_state_script(MachineState m_state,char *script,MachineScript *ms) {
-  struct phase_t *p;
-  int c = parse_state(script, &p);
+void
+parse_phases_from_state_script(MachineState m_state, char *script, MachineScript *ms) {
+  static struct phase_t *p = NULL;
+  static int phasecnt = 0;
+  if (p) DeleteAllPhases(p);
 
-  Debug<const char *>("This state hadN phases: ");
-  DebugLn<int>(c);
-  for (int x = 0; x < c; x++) {
+  if (!script || strlen(script) == 0) return;
+  phasecnt = parse_state_phases(script, &p);
+  if (!phasecnt) {
+    DebugLn<const char *>("No Phases");
+    return;
+  }
+
+  Debug<const char *>("This state has ");
+  Debug<int>(phasecnt);
+  DebugLn<const char *>(" phases:");
+  for (int x = 0; x < phasecnt; x++) {
     Debug<const char *>("Phase :\n");
     DebugLn<int>(x);
     Debug<const char *>("  Duration \n");

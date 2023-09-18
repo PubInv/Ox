@@ -24,7 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <machine_core_defs.h>
 #include <core.h>
 #include <heater_pid_task.h>
-#include <temp_refresh_task.h>
+// #include <temp_refresh_task.h>
 
 
 namespace OxApp
@@ -33,13 +33,10 @@ namespace OxApp
   class StateMachineManager : public OxCore::Task {
   public:
       int DEBUG_LEVEL = 0;
-      TempRefreshTask* tempRefreshTask;
       HeaterPIDTask* heaterPIDTask;
 
-
-
       MachineState _executeBasedOnState(MachineState ms);
-      virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) = 0;
+      virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o);
       virtual MachineState _updatePowerComponentsOff() = 0 ;
       virtual MachineState _updatePowerComponentsWarmup() = 0;
       virtual MachineState _updatePowerComponentsIdle() = 0;
@@ -50,12 +47,19 @@ namespace OxApp
       virtual float getTemperatureReading() = 0;
       bool run_generic();
 
-    void printOffWarnings(MachineState ms);
+    void transitionToWarmup(float tt);
+    void transitionToCooldown(float tt);
+    void changeTargetTemp(float t);
+    virtual void turnOff();
+    virtual void printGenericInstructions();
+    virtual void printOffWarnings(MachineState ms);
+
+
     // These code in theory be made static
       float  computeFanSpeed(float t);
       float  computeAmperage(float t);
-      float  computeRampUpTargetTemp(float t,float recent_t,unsigned long begin_up_time_ms);
-      float  computeRampDnTargetTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
+      float  computeRampUpSetpointTemp(float t,float recent_t,unsigned long begin_up_time_ms);
+      float  computeRampDnSetpointTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
 
       bool _run() override;
   };

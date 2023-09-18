@@ -350,6 +350,7 @@ void SL_PS::updateAmperage(float amperage, MachineConfig *config) {
   msr->stack_voltage = out_voltage / 100.0;
   msr->stack_amps = out_current / 100.0;
   msr->stack_ohms = msr->stack_voltage/ msr->stack_amps;
+  msr->stack_watts = msr->stack_voltage * msr->stack_amps;
   if (DEBUG_SL_PS > 0) {
     printFullStatus(this->address);
   }

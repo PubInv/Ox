@@ -47,17 +47,23 @@ namespace OxApp
 
     char buffer[1024];
     // we need to make sure we start with a null string...
-    buffer[0] = 0;
-    getConfig()->createStage2JSONReport(getConfig()->s2heater,getConfig()->report,buffer);
-    if (DEBUG_UDP > 0) {
-      Debug<const char *>("Sending buffer:");
-      DebugLn<const char *>(buffer);
-    }
-    unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
-    // have to add a timeout here!
-    net_udp.sendData(buffer, current_epoch_time, 2000);
+    // This needs to change to send all three buffers
 
-    Serial.println("AAA");
+    if (DEBUG_UDP > 1) {
+      DebugLn<const char *>("Stage2NetworkTask completed\n");
+    }
+
+    for (int i = 0; i < 3; i++) {
+      buffer[0] = 0;
+      mcs[i]->createStage2JSONReport(mcs[i]->s2heater,mcs[i]->report,buffer);
+      if (DEBUG_UDP > 0) {
+        Debug<const char *>("Sending buffer:");
+        DebugLn<const char *>(buffer);
+      }
+      unsigned long current_epoch_time = net_udp.epoch + millis() / 1000;
+      // have to add a timeout here!
+      net_udp.sendData(buffer, current_epoch_time, 2000);
+    }
     return true;
   }
 }
