@@ -16,8 +16,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 // Program information
 #define COMPANY_NAME "pubinv.org "
-#define PROG_NAME "main.cpp"
-#define VERSION "; Rev: 0.3.3"  //
+//#define PROG_NAME "main.cpp"
+#define PROG_NAME "OEDCS"
+#define VERSION "; Rev: 0.3.4"  //
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -89,6 +90,23 @@ void setup()
   OxCore::serialBegin(115200UL);
   delay(500);
 
+  // TODO: consider doing this....
+    // Serial.begin(BAUDRATE);
+    // while (!Serial) {
+    //   watchdogReset();
+    // }
+    // Serial.println(F("starting"));
+
+  //Debug<const char *>("Starting Ox...\n");
+  Debug<const char *>("Starting ");
+  Debug<const char *>(PROG_NAME); 
+  Debug<const char *>(VERSION);
+  Debug<const char *>("\n");
+
+  Debug<const char *>("Build: ");
+  Debug<const char *>((__DATE__ " " __TIME__)); 
+  Debug<const char *>("\n");
+  
   //Print out the reset reason
   Serial.println("=================");
   Serial.print("ResetCause: ");
@@ -98,16 +116,9 @@ void setup()
   case 2: Serial.println("watchdog"); break;
   case 3: Serial.println("software"); break;
   case 4: Serial.println("user"); break;
-  }                                                                              Serial.println("=================");
+  }                                                                              
+  Serial.println("=================");
 
-  // TODO: consider doing this....
-    // Serial.begin(BAUDRATE);
-    // while (!Serial) {
-    //   watchdogReset();
-    // }
-    // Serial.println(F("starting"));
-
-  Debug<const char *>("Starting Ox...\n");
   delay(100);
   if (core.Boot() == false) {
       ErrorHandler::Log(ErrorLevel::Critical, ErrorCode::CoreFailedToBoot);
@@ -275,7 +286,8 @@ void setup()
   cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
-  readTempsTask.DEBUG_READ_TEMPS = 0;
+//  readTempsTask.DEBUG_READ_TEMPS = 0;  //FLE 20230918
+  readTempsTask.DEBUG_READ_TEMPS = 1;
   oedcsSerialInputTask.DEBUG_SERIAL = 0;
   getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");
