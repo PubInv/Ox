@@ -39,7 +39,7 @@ namespace OxApp
   }
 
   void CogTask::printGenericInstructions() {
-    Serial.println("Enter s:w to Warmup, s:c to cooldown, s:o to turn off.");
+    Serial.println("Enter s:1 to Turn On, s:0 to Turn Off.");
     Serial.println("Enter a:XX.X to set (a)mperage, (w)attage, (f)an speed (h)eater set p., and (r)amp rate.");
 
   }

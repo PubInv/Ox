@@ -224,20 +224,20 @@ void setup() {
     // }
     // stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
 
-    if (ETHERNET_BOARD_PRESENT) {
-      OxCore::TaskProperties Stage2NetworkProperties;
-      Stage2NetworkProperties.name = "Stage2Network";
-      Stage2NetworkProperties.id = 36+i;
-      Stage2NetworkProperties.period = stage2NetworkTask[i].PERIOD_MS;
-      Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
-      Stage2NetworkProperties.state_and_config = (void *) getConfig(i);
-      bool stage2Network = core.AddTask(&stage2NetworkTask[i], &Stage2NetworkProperties);
-      if (!stage2Network) {
-        OxCore::Debug<const char *>("Stage2Network add failed\n");
-        delay(100);
-        abort();
-      }
-    }
+    // if (ETHERNET_BOARD_PRESENT) {
+    //   OxCore::TaskProperties Stage2NetworkProperties;
+    //   Stage2NetworkProperties.name = "Stage2Network";
+    //   Stage2NetworkProperties.id = 36+i;
+    //   Stage2NetworkProperties.period = stage2NetworkTask[i].PERIOD_MS;
+    //   Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
+    //   Stage2NetworkProperties.state_and_config = (void *) getConfig(i);
+    //   bool stage2Network = core.AddTask(&stage2NetworkTask[i], &Stage2NetworkProperties);
+    //   if (!stage2Network) {
+    //     OxCore::Debug<const char *>("Stage2Network add failed\n");
+    //     delay(100);
+    //     abort();
+    //   }
+    // }
   }
 
   // Let's put our DEBUG_LEVELS here...
@@ -246,8 +246,8 @@ void setup() {
     stage2HeaterTask[i].DEBUG_LEVEL = 0;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
     //    tempRefreshTask[i].DEBUG = 0;
-    stage2NetworkTask[i].DEBUG_UDP = 0;
   }
+    stage2NetworkTask.DEBUG_UDP = 0;
 
     core.DEBUG_CORE = 0;
     core._scheduler.DEBUG_SCHEDULER = 0;
