@@ -30,6 +30,8 @@ namespace OxApp
   class Stage2NetworkTask : public NetworkTask {
   public:
     int PERIOD_MS =  20*1000;
+    // We need all three configs to be able to report on all of them
+    MachineConfig *mcs[3];
     bool _run() override;
   };
 }

@@ -47,13 +47,13 @@ namespace OxApp
       virtual float getTemperatureReading() = 0;
       bool run_generic();
 
-
     void transitionToWarmup(float tt);
     void transitionToCooldown(float tt);
     void changeTargetTemp(float t);
     virtual void turnOff();
     virtual void printGenericInstructions();
     virtual void printOffWarnings(MachineState ms);
+
 
     // These code in theory be made static
       float  computeFanSpeed(float t);

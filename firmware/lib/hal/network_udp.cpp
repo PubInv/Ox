@@ -257,6 +257,7 @@ NetworkUDP::getParams(uint16_t timeout) {
     delay(50);
   }
   packetBuffer[packetSize] = '\0';
+
   if (DEBUG_UDP > 1) {
     Serial.println("About to construct config");
     delay(50);
@@ -277,6 +278,7 @@ NetworkUDP::getParams(uint16_t timeout) {
     //    Serial.println(config);
     Serial.println("Done with the String print");
     delay(50);
+
   }
   // Now, at this point, we roughly have a new script.
   // so we will parse it and poke it into the machine script as

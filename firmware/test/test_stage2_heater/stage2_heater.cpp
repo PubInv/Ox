@@ -69,7 +69,7 @@ Stage2HeaterTask stage2HeaterTask[3];
 
 Stage2SerialReportTask stage2SerialReportTask[3];
 TempRefreshTask tempRefreshTask[3];
-Stage2NetworkTask stage2NetworkTask[3];
+Stage2NetworkTask stage2NetworkTask;
 
 // Stage2SerialTask stage2SerialTask;
 
@@ -124,7 +124,7 @@ void setup() {
 
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
-  readTempsProperties.id = 20;
+  readTempsProperties.id = 19;
   readTempsProperties.period = stage2_readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
   readTempsProperties.state_and_config = (void *) getConfig(0);
@@ -135,6 +135,27 @@ void setup() {
   // the temperatures in them
   for (int i = 0; i < 3; i++) {
     stage2_readTempsTask.mcs[i] = getConfig(i);
+  }
+
+  if (ETHERNET_BOARD_PRESENT) {
+    OxCore::TaskProperties Stage2NetworkProperties;
+    Stage2NetworkProperties.name = "Stage2Network";
+    Stage2NetworkProperties.id = 20;
+    Stage2NetworkProperties.period = stage2NetworkTask.PERIOD_MS;
+    Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
+    // note we must be cautious here, since there is only one Network interface
+    Stage2NetworkProperties.state_and_config = (void *) getConfig(0);
+    bool stage2Network = core.AddTask(&stage2NetworkTask, &Stage2NetworkProperties);
+    if (!stage2Network) {
+      OxCore::Debug<const char *>("Stage2Network add failed\n");
+      delay(100);
+      abort();
+    }
+
+    for (int i = 0; i < 3; i++) {
+      stage2NetworkTask.mcs[i] = getConfig(i);
+    }
+    stage2NetworkTask.DEBUG_UDP = 0;
   }
 
   for(int i = 0; i < 3; i++) {

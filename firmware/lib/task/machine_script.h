@@ -115,6 +115,7 @@ class MachineScript {
   bool AppendPhase(MachinePhase p);
   void DeleteAllPhases();
   MachineScript *parse_buffer_into_new_script(char *buffer,int debug);
+  void DeleteAllPhases(struct phase_t *p);
 };
 
 
