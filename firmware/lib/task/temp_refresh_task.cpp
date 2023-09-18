@@ -60,24 +60,24 @@ void TempRefreshTask::computeRefreshedTargetTemp(float tmeasured,MachineState ms
 }
 bool TempRefreshTask::_run()
 {
-  if (DEBUG_TEMP_REFRESH > 0) {
-    OxCore::Debug<const char *>("TempRefreshTask run\n");
-    OxCore::Debug<int>(getConfig()->s2heater);
-  }
-  float t;
-  if (!getConfig()->IS_STAGE2_HEATER_CONFIG) {
-    // Whether this should be the max temperature is debatable.
-    t = max(max(getConfig()->report->post_heater_C,
-                      getConfig()->report->post_getter_C),
-                  getConfig()->report->post_stack_C);
-  } else {
-    Stage2HAL* s2h = (Stage2HAL *)(getConfig()->hal);
-    t =  s2h->
-      getTemperatureReading(getConfig()->s2heater,
-                            getConfig());
-  }
+  // if (DEBUG_TEMP_REFRESH > 0) {
+  //   OxCore::Debug<const char *>("TempRefreshTask run\n");
+  //   OxCore::Debug<int>(getConfig()->s2heater);
+  // }
+  // float t;
+  // if (!getConfig()->IS_STAGE2_HEATER_CONFIG) {
+  //   // Whether this should be the max temperature is debatable.
+  //   t = max(max(getConfig()->report->post_heater_C,
+  //                     getConfig()->report->post_getter_C),
+  //                 getConfig()->report->post_stack_C);
+  // } else {
+  //   Stage2HAL* s2h = (Stage2HAL *)(getConfig()->hal);
+  //   t =  s2h->
+  //     getTemperatureReading(getConfig()->s2heater,
+  //                           getConfig());
+  // }
 
-  computeRefreshedTargetTemp(t,getConfig()->ms,getConfig()->TEMP_REFRESH_LIMIT);
+  // computeRefreshedTargetTemp(t,getConfig()->ms,getConfig()->TEMP_REFRESH_LIMIT);
 
   return true;
 }

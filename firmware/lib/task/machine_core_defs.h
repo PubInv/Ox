@@ -60,6 +60,7 @@ enum Stage2Heater {
 struct MachineStatusReport {
   MachineState ms;
   // These targets are the "5knob" targets;
+  float setpoint_temp_C;
   float target_temp_C;
   float max_stack_amps_A;
   float max_stack_watts_W;

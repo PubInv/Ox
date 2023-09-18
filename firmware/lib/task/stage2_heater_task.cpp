@@ -31,6 +31,11 @@ namespace OxApp
     OxCore::Debug<const char *>("Stage2HeaterTask init\n");
     return true;
   }
+  // There has to be a better way to do this in C++
+  bool Stage2HeaterTask::_run()
+    {
+      this->run_generic();
+    }
 
   void Stage2HeaterTask::printGenericInstructions() {
     // to avoid this being printed too often, we will only run it for the int1 machine.
@@ -42,6 +47,11 @@ namespace OxApp
     }
   }
 
+  // We override this here, because it is too annyoing to have
+  // it printed in triplicate.
+  void Stage2HeaterTask::printOffWarnings(MachineState ms) {
+  }
+
   float Stage2HeaterTask::getTemperatureReading() {
     Stage2HAL* s2h = (Stage2HAL *)(getConfig()->hal);
     return s2h->
@@ -49,108 +59,18 @@ namespace OxApp
                             getConfig());
   }
 
-  // We override this here, because it is too annyoing to have
-  // it printed in triplicate.
-  void Stage2HeaterTask::printOffWarnings(MachineState ms) {
-  }
-  // There has to be a better way to do this in C++
-  bool Stage2HeaterTask::_run()
-    {
-      this->run_generic();
-    }
-
-    void Stage2HeaterTask::turnOff() {
-      heaterPIDTask->shutHeaterDown();
-    }
-
   MachineState Stage2HeaterTask::_updatePowerComponentsOff() {
-    MachineState new_ms = Off;
-    return new_ms;
+    return Off;
   }
   MachineState Stage2HeaterTask::_updatePowerComponentsWarmup() {
-    MachineState new_ms = Warmup;
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("Warmup Mode!\n");
-    }
-
-    // This needs to be made dendent on which one we are!
-    // probably should use and enum and a switch here.
-    float t = getTemperatureReading();
-
-    // if we've reached operating temperature, we switch
-    // states
-    // We believe this is now obsolete in the "5 knob"
-    // protocol...
-    //    if (t >= getConfig()->OPERATING_TEMP) {
-    //      return NormalOperation;
-    //    }
-
-    // These also are dependent on which heater we are using
-    float tt = computeRampUpTargetTemp(t,
-                                       getConfig()->GLOBAL_RECENT_TEMP,
-                                       getConfig()->BEGIN_UP_TIME_MS);
-
-    if (!isnormal(tt)) {
-      OxCore::Debug<const char *>("XXXXXXXXXXX non-normal target value tt\n");
-      OxCore::DebugLn<float>(tt);
-      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
-      OxCore::DebugLn<int>(getConfig()->s2heater);
-
-    }
-
-     getConfig()->GLOBAL_RECENT_TEMP = t;
-     //     getConfig()->BEGIN_UP_TIME_MS = millis();
-
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("Warmup tt for :");
-      Serial.println(getConfig()->s2heater);
-      OxCore::DebugLn<float>(tt);
-      OxCore::Debug<const char *>("Global Recent temp\n");
-      OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
-      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
-
-    }
-
-    getConfig()->TARGET_TEMP = tt;
-    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-
-    return new_ms;
+    return StateMachineManager::_updatePowerComponentsWarmup();
   }
   MachineState Stage2HeaterTask::_updatePowerComponentsCooldown() {
-    MachineState new_ms = Cooldown;
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("Cooldown Mode!\n");
-    }
-    float t = getTemperatureReading();
-
-    if (getConfig()->previous_ms != Cooldown) {
-      getConfig()->COOL_DOWN_BEGIN_TEMP = t;
-    }
-
-    if (t <= getConfig()->COOLDOWN_TARGET_C) {
-      new_ms = Off;
-      return new_ms;
-    }
-
-    float tt = computeRampDnTargetTemp(t,
-                                       getConfig()->COOL_DOWN_BEGIN_TEMP,
-                                       getConfig()->BEGIN_DN_TIME_MS);
-
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("CoolDown tt for :");
-      Serial.println((unsigned long) heaterPIDTask);
-      OxCore::DebugLn<float>(tt);
-      OxCore::Debug<const char *>("Global Recent temp\n");
-      OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
-      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
-    }
-
-    getConfig()->TARGET_TEMP = tt;
-    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-
-    return new_ms;
+    return StateMachineManager::_updatePowerComponentsCooldown();
   }
 
+  // Warning!! these states are essentially unused in the
+  // 5-knob protocol
   MachineState Stage2HeaterTask::_updatePowerComponentsIdle() {
     OxCore::Debug<const char *>("IN IDLE FUNCTION ");
     MachineState new_ms = NormalOperation;
@@ -169,11 +89,7 @@ namespace OxApp
     MachineState new_ms = CriticalFault;
     return new_ms;
   }
-  MachineState Stage2HeaterTask::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
-    MachineState new_ms = NormalOperation;
-
-    getConfig()->TARGET_TEMP;
-    heaterPIDTask->HeaterSetPoint_C = getConfig()->TARGET_TEMP;
-    return new_ms;
+  void Stage2HeaterTask::turnOff() {
+    StateMachineManager::turnOff();
   }
 }

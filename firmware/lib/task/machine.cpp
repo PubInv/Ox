@@ -25,13 +25,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 void MachineConfig::outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
         OxCore::Debug<const char *>("Machine State: ");
-        delay(50);
-        Serial.println(msr->ms);
-        delay(50);
         OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
         // These are the dynamic targets
-        OxCore::Debug<const char *>("Target      C: ");
+        OxCore::Debug<const char *>("Target     C: ");
         OxCore::DebugLn<float>(msr->target_temp_C);
+        OxCore::Debug<const char *>("Setpoint   C: ");
+        OxCore::DebugLn<float>(msr->setpoint_temp_C);
         OxCore::Debug<const char *>("Target Ramp C: ");
         OxCore::DebugLn<float>(msr->target_ramp_C);
         OxCore::Debug<const char *>("Max Stack   A: ");
@@ -70,6 +69,7 @@ void MachineConfig::outputReport(MachineStatusReport *msr) {
 void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
   sprintf(buffer+strlen(buffer), "\"MachineState\": %d,\n",msr->ms);
   sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f,\n",msr->target_temp_C);
+  sprintf(buffer+strlen(buffer), "\"SetpointC\": %.2f,\n",msr->setpoint_temp_C);
   sprintf(buffer+strlen(buffer), "\"RampC\": %.2f,\n",msr->target_ramp_C);
   sprintf(buffer+strlen(buffer), "\"MaxStackA\": %.2f,\n",msr->max_stack_amps_A);
   sprintf(buffer+strlen(buffer), "\"MaxStackW\": %.2f,\n",msr->max_stack_watts_W);

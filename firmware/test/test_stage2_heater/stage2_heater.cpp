@@ -42,7 +42,7 @@ using namespace OxCore;
 #include <stage2SerialReportTask.h>
 // #include <stage2_serial_task.h>
 #include <serial_input_task.h>
-#include <temp_refresh_task.h>
+// #include <temp_refresh_task.h>
 #include <stage2_network_task.h>
 
 using namespace OxCore;
@@ -189,19 +189,19 @@ void setup() {
 
     heaterPIDTask[i].dutyCycleTask = &dutyCycleTask[i];
 
-    OxCore::TaskProperties TempRefreshProperties;
-    TempRefreshProperties.name = "TempRefresh";
-    TempRefreshProperties.id = 33+i;
-    TempRefreshProperties.period = tempRefreshTask[i].PERIOD_MS;
-    TempRefreshProperties.priority = OxCore::TaskPriority::Low;
-    TempRefreshProperties.state_and_config = (void *) getConfig(i);
-      bool tempRefresh = core.AddTask(&tempRefreshTask[i], &TempRefreshProperties);
-    if (!tempRefresh) {
-      OxCore::Debug<const char *>("Temp Refresh add failed\n");
-      delay(100);
-      abort();
-    }
-    stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
+    // OxCore::TaskProperties TempRefreshProperties;
+    // TempRefreshProperties.name = "TempRefresh";
+    // TempRefreshProperties.id = 33+i;
+    // TempRefreshProperties.period = tempRefreshTask[i].PERIOD_MS;
+    // TempRefreshProperties.priority = OxCore::TaskPriority::Low;
+    // TempRefreshProperties.state_and_config = (void *) getConfig(i);
+    //   bool tempRefresh = core.AddTask(&tempRefreshTask[i], &TempRefreshProperties);
+    // if (!tempRefresh) {
+    //   OxCore::Debug<const char *>("Temp Refresh add failed\n");
+    //   delay(100);
+    //   abort();
+    // }
+    // stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
 
     if (ETHERNET_BOARD_PRESENT) {
       OxCore::TaskProperties Stage2NetworkProperties;
@@ -224,7 +224,7 @@ void setup() {
     heaterPIDTask[i].DEBUG_PID = 0;
     stage2HeaterTask[i].DEBUG_LEVEL = 0;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
-    tempRefreshTask[i].DEBUG = 0;
+    //    tempRefreshTask[i].DEBUG = 0;
     stage2NetworkTask[i].DEBUG_UDP = 0;
   }
 
@@ -273,12 +273,12 @@ void setup() {
   stage2SerialInputTask.DEBUG_SERIAL = 0;
   for (int i = 0; i < 3; i++) {
     stage2SerialInputTask.mcs[i] = getConfig(i);
+    stage2SerialInputTask.stage2HeaterTasks[i] = &stage2HeaterTask[i];
   }
-
 
   s2hal->s2heaterToControl = Int1;
 
-  core.DEBUG_CORE = 2;
+  core.DEBUG_CORE = 0;
 
   OxCore::Debug<const char *>("Added tasks\n");
 }

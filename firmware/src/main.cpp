@@ -198,6 +198,7 @@ void setup()
     OxCore::Debug<const char *>("SerialInputProperties add failed\n");
     abort();
   }
+  oedcsSerialInputTask.cogTask = &cogTask;
 
 
   // WARNING! the 5-knobs protocol does not use this.

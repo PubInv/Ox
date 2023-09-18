@@ -151,12 +151,12 @@ void ReadTempsTask::updateTemperatures() {
 
   // WARNING! This needs to be done for all configs if we are
   // a 2-stage heater; this is handled by the subclass.
-  getConfig()->report->target_temp_C = getConfig()->TARGET_TEMP;
+  getConfig()->report->target_temp_C = getConfig()->TARGET_TEMP_C;
+  getConfig()->report->setpoint_temp_C = getConfig()->SETPOINT_TEMP_C;
+  getConfig()->report->target_ramp_C = getConfig()->RAMP_UP_TARGET_D_MIN;
 
   if (DEBUG_READ_TEMPS > 0) {
     getConfig()->outputReport(getConfig()->report);
-    OxCore::Debug<const char *>("Target Temp : ");
-    OxCore::DebugLn<float>(getConfig()->TARGET_TEMP);
   }
   // Notice we are keeping the queue only for the post_heater thermocouple,
   // which is what we are using as a control variable.
@@ -173,13 +173,16 @@ void ReadTempsTask::updateTemperatures() {
 }
 
 void stage2_ReadTempsTask::updateTemperatures() {
+
   ReadTempsTask::updateTemperatures();
+
   mcs[0]->report->post_heater_C = getConfig()->report->post_heater_C;
   mcs[1]->report->post_getter_C = getConfig()->report->post_getter_C;
   mcs[2]->report->post_stack_C = getConfig()->report->post_stack_C;
   // The TARGET_TEMP is not computed here, this is just a reporting function!
   for(int i = 0; i < 3; i++) {
-    mcs[i]->report->target_temp_C = mcs[i]->TARGET_TEMP;
+    mcs[i]->report->target_temp_C = mcs[i]->TARGET_TEMP_C;
+    mcs[i]->report->target_ramp_C = mcs[i]->RAMP_UP_TARGET_D_MIN;
   }
 
 }

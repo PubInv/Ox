@@ -54,11 +54,11 @@ namespace OxApp
     float getTemperatureReading();
     COG_HAL* getHAL();
 
-    void turnOff();
-
+    void turnOff() override;
     void printGenericInstructions() override;
 
 
+    void _updateCOGSpecificComponents();
     void _updatePowerComponentsVoltage(float voltage);
     void _configTemperatureSensors();
 

@@ -25,11 +25,8 @@
 #include <debug.h>
 #include <machine.h>
 #include <stage2_hal.h>
-
-#define SERIAL_BAUD_RATE 19200
-// #define SERIAL_BAUD_RATE 9600
-#define SERIAL_DELAY 1000
-#define SERIAL_TIMEOUT_MAX 10000
+#include <stage2_heater_task.h>
+#include <cog_task.h>
 
 #define INPUT_BUFFER_SIZE 256
 
@@ -56,31 +53,32 @@ namespace OxApp
     InputCommand parseCommandLine();
   public:
     int DEBUG_SERIAL = 2;
-    //    char input_buffer[INPUT_BUFFER_SIZE];
     bool _init() override;
     bool _run() override;
     int DEBUG_LEVEL = 0;
     void showParsedData(InputCommand ic);
     virtual bool listen(InputCommand &ic);
-    virtual bool executeCommand(InputCommand ic,MachineConfig* mc);
+    virtual bool executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm);
     void processStateChange(InputCommand ic,MachineConfig *mc);
   };
 
   class OEDCSSerialInputTask : public SerialInputTask {
   public:
+    CogTask* cogTask;
     int DEBUG_SERIAL = 2;
     int PERIOD_MS = 250;
-    bool executeCommand(InputCommand ic,MachineConfig* mc) override;
+    bool executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm) override;
     bool _init() override;
     bool _run() override;
   };
 
   class Stage2SerialInputTask : public SerialInputTask {
   public:
+    Stage2HeaterTask *stage2HeaterTasks[3];
     int DEBUG_SERIAL = 2;
     int PERIOD_MS = 250;
     MachineConfig *mcs[3];
-    bool executeCommand(InputCommand ic,MachineConfig* mc) override;
+    bool executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm) override;
     bool _init() override;
     bool _run() override;
   };

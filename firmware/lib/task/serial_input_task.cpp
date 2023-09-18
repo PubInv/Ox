@@ -127,36 +127,53 @@ namespace OxApp
   }
 
   void SerialInputTask::processStateChange(InputCommand ic,MachineConfig *mc) {
-      if (ic.value_c == 'W') {
-        if (mc->ms == Off) {
-          mc->ms = Warmup;
-          Debug<const char *>("New State: Warmup!");
-        }
-      } else if (ic.value_c == 'C') {
-        if (mc->ms != Off) {
-          mc->ms = Cooldown;
-          Debug<const char *>("New State: Cooldown!");
-        }
-      } else if (ic.value_c == 'E') {
-        if (mc->ms != Off) {
-          mc->ms = EmergencyShutdown;
-          Debug<const char *>("New State: Emergency Shutdown!");
-        }
-      } else if (ic.value_c == 'A') {
-        if (mc->ms == OffUserAck) {
-          mc->ms = Off;
-          Debug<const char *>("New State: Off!");
-        }
-      } else if (ic.value_c == 'I') {
-        mc->idleOrOperate = Idle;
-        Debug<const char *>("New SubState: Idle!");
-      } else if (ic.value_c == 'O') {
-        mc->idleOrOperate = Operate;
-        Debug<const char *>("New SubState: Operate");
+    if (ic.value_c == '1') {
+      if (mc->ms == Off) {
+        mc->ms = Warmup;
+        Debug<const char *>("Turning on: New State: Warmup!");
+      } else {
+        Debug<const char *>("Already On.");
       }
+    } else if (ic.value_c == '0') {
+      if (mc->ms != Off) {
+        mc->ms = Off;
+        Debug<const char *>("New State: Off.");
+      } else {
+        Debug<const char *>("Already Off.");
+      }
+    } else {
+    }
+
+    // if (ic.value_c == 'W') {
+    //   if (mc->ms == Off) {
+    //     mc->ms = Warmup;
+    //     Debug<const char *>("New State: Warmup!");
+    //   }
+    // } else if (ic.value_c == 'C') {
+    //   if (mc->ms != Off) {
+    //     mc->ms = Cooldown;
+    //     Debug<const char *>("New State: Cooldown!");
+    //   }
+    // } else if (ic.value_c == 'E') {
+    //   if (mc->ms != Off) {
+    //     mc->ms = EmergencyShutdown;
+    //     Debug<const char *>("New State: Emergency Shutdown!");
+    //   }
+    // } else if (ic.value_c == 'A') {
+    //   if (mc->ms == OffUserAck) {
+    //     mc->ms = Off;
+    //     Debug<const char *>("New State: Off!");
+    //   }
+    // } else if (ic.value_c == 'I') {
+    //   mc->idleOrOperate = Idle;
+    //   Debug<const char *>("New SubState: Idle!");
+    // } else if (ic.value_c == 'O') {
+    //   mc->idleOrOperate = Operate;
+    //   Debug<const char *>("New SubState: Operate");
+    // }
   }
 
-  bool SerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc) {
+  bool SerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm) {
     if (DEBUG_SERIAL > 1) {
       Serial.println("Serial Input Task executeCommand");
     }
@@ -167,11 +184,11 @@ namespace OxApp
       break;
     case 'H':
       {
-        float t = min(mc->BOUND_MAX_TEMP,ic.value_f);
-        t = max(mc->BOUND_MIN_TEMP,t);
-        mc->TARGET_TEMP = t;
-        mc->report->target_temp_C =
-          mc->TARGET_TEMP;
+        smm->changeTargetTemp(ic.value_f);
+        Serial.print("Target Temp changed to: ");
+        Serial.println(ic.value_f);
+        Serial.print("New state is: ");
+        Serial.println(MachineConfig::MachineStateNames[mc->ms]);
       }
       break;
     case 'R':
@@ -180,6 +197,8 @@ namespace OxApp
         r = max(0.0,r);
         mc->change_ramp(r);
         mc->report->target_ramp_C = r;
+        Serial.print("Ramp changed to: ");
+        Serial.println(r);
       }
       break;
     default:
@@ -187,13 +206,13 @@ namespace OxApp
     }
   }
 
-  bool OEDCSSerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc) {
+  bool OEDCSSerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm) {
     if (DEBUG_SERIAL > 1) {
       Serial.println("executeCommand");
     }
 
     if (ic.com_c == 'S' ||  ic.com_c == 'H' || ic.com_c == 'R') {
-      SerialInputTask::executeCommand(ic,mc);
+      SerialInputTask::executeCommand(ic,mc,smm);
     } else {
       switch(ic.com_c) {
       case 'A':
@@ -203,6 +222,8 @@ namespace OxApp
           mc->MAX_AMPERAGE = a;
           mc->report->max_stack_amps_A =
             mc->MAX_AMPERAGE;
+        Serial.print("Maximum amperage changed to: ");
+        Serial.println(a);
         }
         break;
       case 'W':
@@ -212,6 +233,8 @@ namespace OxApp
           mc->MAX_STACK_WATTAGE = w;
           mc->report->max_stack_watts_W =
             mc->MAX_STACK_WATTAGE;
+          Serial.print("Wattage changed to: ");
+          Serial.println(w);
         }
       case 'F':
         {
@@ -220,7 +243,12 @@ namespace OxApp
           mc->FAN_SPEED = f;
           mc->report->fan_pwm =
             mc->FAN_SPEED;
+          Serial.print("Fan Speed changed to: ");
+          Serial.println(f);
         }
+        break;
+      default:
+          Serial.print("Unknown command.");
         break;
       };
     }
@@ -233,12 +261,11 @@ namespace OxApp
     }
     InputCommand ic;
     if (listen(ic)) {
-      executeCommand(ic,getConfig());
+      executeCommand(ic,getConfig(),cogTask);
     }
   }
 
-
-  bool Stage2SerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc) {
+  bool Stage2SerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm) {
     if (DEBUG_SERIAL > 1) {
       Serial.println("executeCommand");
     }
@@ -247,7 +274,7 @@ namespace OxApp
     if ((ic.com_c == 'S') ) {
       processStateChange(ic,mc);
     } else if ((ic.com_c == 'H') || (ic.com_c == 'R')) {
-      SerialInputTask::executeCommand(ic,mc);
+      SerialInputTask::executeCommand(ic,mc,smm);
     } else {
       switch(ic.com_c) {
       case '1':
@@ -290,7 +317,9 @@ namespace OxApp
         Serial.println("Got command");
         showParsedData(ic);
       }
-      executeCommand(ic,mcs[getConfig()->hal->s2heaterToControl]);
+      executeCommand(ic,
+                     mcs[getConfig()->hal->s2heaterToControl],
+                     stage2HeaterTasks[getConfig()->hal->s2heaterToControl]);
     }
   }
 }
