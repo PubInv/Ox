@@ -123,6 +123,7 @@ void ReadTempsTask::updateTemperatures() {
   // Sometimes we get a data read error, that comes across
   // as -127.00. In that case, we will leave the
   // value unchanged from the last read.
+
   if (postHeaterTemp > -100.0) {
     getConfig()->report->post_heater_C = postHeaterTemp;
     good_temp_reads++;

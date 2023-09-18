@@ -129,9 +129,16 @@ namespace OxApp
   //      (getConfig()->RED_TEMP - getConfig()->YELLOW_TEMP));
   // }
 
-  // We believe someday a more complicated algorithm will be needed here.
+  // Here is where we attempt to bring in both the amperage
+  // and the wattage limitation (but amperage is the "plant"
+  // variable that we can control.
   float StateMachineManager::computeAmperage(float t) {
-    return getConfig()->MAX_AMPERAGE;
+    float max_a_from_raw = getConfig()->MAX_AMPERAGE;
+    float max_a_from_wattage =
+      sqrt(
+           getConfig()->MAX_STACK_WATTAGE /
+           getConfig()->report->stack_ohms);
+    return min(max_a_from_raw,max_a_from_wattage);
   }
 
   float StateMachineManager::computeRampUpSetpointTemp(float t,float recent_t,unsigned long begin_up_time_ms) {
