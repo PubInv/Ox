@@ -284,22 +284,22 @@ namespace OxApp
           mc->hal->s2heaterToControl = Int1;
           DebugLn<const char *>("Switching to controlling the Int1 Heater!\n");
           return false;
+          break;
         }
-        break;
       case '2':
         {
           mc->hal->s2heaterToControl = Ext1;
           DebugLn<const char *>("Switching to controlling the Ext1 Heater!\n");
           return false;
+          break;
         }
-        break;
       case '3':
         {
           mc->hal->s2heaterToControl = Ext2;
           DebugLn<const char *>("Switching to controlling the Ext2 Heater!\n");
           return false;
+          break;
         }
-        break;
       default: {
         Serial.print("unknown command: ");
         Serial.println(ic.com_c);

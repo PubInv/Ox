@@ -72,8 +72,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 1
-// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+// #define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -89,7 +89,7 @@ void setup()
 {
   OxCore::serialBegin(115200UL);
   delay(500);
-  
+
    // WARNING! need 5 second delay for pio compiler it seems
   // DO NOT REMOVE THIS STATEMENT!
   delay(5000);
@@ -103,14 +103,14 @@ void setup()
 
   //Debug<const char *>("Starting Ox...\n");
   Debug<const char *>("Starting ");
-  Debug<const char *>(PROG_NAME); 
+  Debug<const char *>(PROG_NAME);
   Debug<const char *>(VERSION);
   Debug<const char *>("\n");
 
   Debug<const char *>("Build: ");
-  Debug<const char *>((__DATE__ " " __TIME__)); 
+  Debug<const char *>((__DATE__ " " __TIME__));
   Debug<const char *>("\n");
-  
+
    //Print out the reset reason
   Serial.println("=================");
   Serial.print("ResetCause: ");
@@ -120,7 +120,7 @@ void setup()
   case 2: Serial.println("watchdog"); break;
   case 3: Serial.println("software"); break;
   case 4: Serial.println("user"); break;
-  }                                                                              
+  }
   Serial.println("=================");
 
   // TODO: consider doing this....
