@@ -225,8 +225,8 @@ namespace OxApp
             mc->MAX_AMPERAGE;
         Serial.print("Maximum amperage changed to: ");
         Serial.println(a);
-        }
         break;
+        }
       case 'W':
         {
           float w = min(mc->BOUND_MAX_WATTAGE,ic.value_f);
@@ -236,6 +236,7 @@ namespace OxApp
             mc->MAX_STACK_WATTAGE;
           Serial.print("Wattage changed to: ");
           Serial.println(w);
+          break;
         }
       case 'F':
         {
@@ -246,8 +247,8 @@ namespace OxApp
             mc->FAN_SPEED;
           Serial.print("Fan Speed changed to: ");
           Serial.println(f);
+          break;
         }
-        break;
       default:
           Serial.print("Unknown command.");
         break;

@@ -1,3 +1,22 @@
+/*
+  state_machine_manager.cpp
+
+  Copyright 2023, Robert L. Read
+
+  This program includes free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  See the GNU Affero General Public License for more details.
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
 #include <state_machine_manager.h>
 
 using namespace std;
@@ -134,10 +153,6 @@ namespace OxApp
   //   return f;
   // }
 
-  // We believe someday an automatic algorithm will be needed here.
-  float StateMachineManager::computeFanSpeed(float t) {
-    return getConfig()->FAN_SPEED;
-  }
   // float StateMachineManager::computeAmperage(float t) {
   //   return getConfig()->MAX_AMPERAGE *
   //     ((t < getConfig()->YELLOW_TEMP)
@@ -146,17 +161,6 @@ namespace OxApp
   //      (getConfig()->RED_TEMP - getConfig()->YELLOW_TEMP));
   // }
 
-  // Here is where we attempt to bring in both the amperage
-  // and the wattage limitation (but amperage is the "plant"
-  // variable that we can control.
-  float StateMachineManager::computeAmperage(float t) {
-    float max_a_from_raw = getConfig()->MAX_AMPERAGE;
-    float max_a_from_wattage =
-      sqrt(
-           getConfig()->MAX_STACK_WATTAGE /
-           getConfig()->report->stack_ohms);
-    return min(max_a_from_raw,max_a_from_wattage);
-  }
 
   float StateMachineManager::computeRampUpSetpointTemp(float t,float recent_t,unsigned long begin_up_time_ms) {
     unsigned long ms = millis();

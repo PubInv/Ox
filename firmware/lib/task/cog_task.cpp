@@ -18,6 +18,28 @@
 #include <abstract_temperature.h>
 #include <TF800A12K.h>
 
+// from: https://learn.adafruit.com/memories-of-an-arduino/measuring-free-memory
+// This should be made into a separte task,
+// this is just for debugging...
+#ifdef __arm__
+// should use uinstd.h to define sbrk but Due causes a conflict
+extern "C" char* sbrk(int incr);
+#else  // __ARM__
+extern char *__brkval;
+#endif  // __arm__
+
+int freeMemory() {
+  char top;
+#ifdef __arm__
+  return &top - reinterpret_cast<char*>(sbrk(0));
+#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
+  return &top - __brkval;
+#else  // __arm__
+  return __brkval ? &top - __brkval : &top - __malloc_heap_start;
+#endif  // __arm__
+}
+
+
 using namespace std;
 
 
@@ -57,11 +79,35 @@ namespace OxApp
     getConfig()->report->fan_rpm =
       getHAL()->_fans[0]._calcRPM(0);
     this->StateMachineManager::run_generic();
+
+    Serial.print("Free Memory: ");
+    Serial.println(freeMemory());
   }
+
+  // We believe someday an automatic algorithm will be needed here.
+  float CogTask::computeFanSpeed(float t) {
+    Serial.print("returning fan speed: ");
+    Serial.println(getConfig()->FAN_SPEED);
+    return getConfig()->FAN_SPEED;
+  }
+
+  // Here is where we attempt to bring in both the amperage
+  // and the wattage limitation (but amperage is the "plant"
+  // variable that we can control.
+  float CogTask::computeAmperage(float t) {
+    float max_a_from_raw = getConfig()->MAX_AMPERAGE;
+    float max_a_from_wattage =
+      sqrt(
+           getConfig()->MAX_STACK_WATTAGE /
+           getConfig()->report->stack_ohms);
+    return min(max_a_from_raw,max_a_from_wattage);
+  }
+
 
   void CogTask::turnOff() {
     float fs = 0.0;
     getConfig()->fanDutyCycle = fs;
+    getConfig()->FAN_SPEED = 0.0;
     getHAL()->_updateFanPWM(fs);
     getConfig()->report->fan_pwm = fs;
     _updateStackVoltage(getConfig()->MIN_OPERATING_STACK_VOLTAGE);

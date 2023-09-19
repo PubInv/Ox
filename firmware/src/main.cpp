@@ -89,7 +89,8 @@ void setup()
   OxCore::serialBegin(115200UL);
   delay(500);
 
-  // need 5 second delay for pio compiler it seems
+  // WARNING! need 5 second delay for pio compiler it seems
+  // DO NOT REMOVE THIS STATEMENT!
   delay(5000);
 
   //Print out the reset reason
@@ -276,7 +277,7 @@ void setup()
   core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
-  cogTask.DEBUG_LEVEL = 0;
+  cogTask.DEBUG_LEVEL = 1;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
   readTempsTask.DEBUG_READ_TEMPS = 0;
