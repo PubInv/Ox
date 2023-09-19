@@ -220,8 +220,6 @@ OxCore::Debug<unsigned long>(good_temp_reads_stack);
 }
 
 void stage2_ReadTempsTask::updateTemperatures() {
-
-  Serial.println("YYYYYYYYYYYYYYY");
   ReadTempsTask::updateTemperatures();
 
   // note: This is confugsing; we are naming the temperatures
@@ -232,9 +230,6 @@ void stage2_ReadTempsTask::updateTemperatures() {
   mcs[2]->report->post_heater_C = getConfig()->report->post_stack_C;
   // The TARGET_TEMP is not computed here, this is just a reporting function!
   for(int i = 0; i < 3; i++) {
-    Serial.println((unsigned long) mcs[i]);
-    Serial.println((unsigned long) mcs[i]->report);
-
     mcs[i]->report->target_temp_C = mcs[i]->TARGET_TEMP_C;
     mcs[i]->report->target_ramp_C = mcs[i]->RAMP_UP_TARGET_D_MIN;
     mcs[i]->report->setpoint_temp_C = mcs[i]->SETPOINT_TEMP_C;
