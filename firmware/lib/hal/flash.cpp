@@ -63,6 +63,11 @@ setGlobalMacAddress() {
   hash32 ^= uid_buf[1];
   hash32 ^= uid_buf[2];
   hash32 ^= uid_buf[3];
+  hash32 &= 0xFFFE; // strip off last bit
+
+#ifndef RIBBONFISH
+  hash32 ^= 0x01;
+#endif
 
   mac[0] = 0xFE;
   mac[1] = 0xED;
