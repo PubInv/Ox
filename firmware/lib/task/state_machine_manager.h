@@ -56,8 +56,7 @@ namespace OxApp
     virtual void printOffWarnings(MachineState ms);
 
     // These code in theory be made static
-      float  computeFanSpeed(float t);
-      float  computeAmperage(float t);
+    //      float  computeFanSpeed(float t);
       float  computeRampUpSetpointTemp(float t,float recent_t,unsigned long begin_up_time_ms);
       float  computeRampDnSetpointTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
 

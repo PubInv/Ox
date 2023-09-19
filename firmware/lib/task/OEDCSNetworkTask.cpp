@@ -53,10 +53,12 @@ namespace OxApp
       Serial.println(getConfig()->report->ms);
       delay(50);
     }
-    // We are no longer using this, so it is safer to take it out.
-    // But I suspect it it causing a buffer overrun somewhere,
-    // so I am fully investigating it.
-    // bool new_packet = NetworkTask::net_udp.getParams(3000);
+
+    // We are currently not using this, due to changes in the
+    // control algorithm to the "5 knob" system.
+#ifdef RETREIVE_PARAMS_FOR_SCRIPTING
+    bool new_packet = NetworkTask::net_udp.getParams(3000);
+
     bool new_packet = false;
     if (DEBUG_UDP > 1) {
       Serial.println("Done with Params!");
@@ -88,6 +90,7 @@ namespace OxApp
         delay(50);
       }
     }
+#endif
 
     // This is a preliminary data loggging test. There is no reason
     // that the datalogging should be done at the frequency as checking

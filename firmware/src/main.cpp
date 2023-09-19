@@ -89,6 +89,10 @@ void setup()
 {
   OxCore::serialBegin(115200UL);
   delay(500);
+  
+   // WARNING! need 5 second delay for pio compiler it seems
+  // DO NOT REMOVE THIS STATEMENT!
+  delay(5000);
 
   // TODO: consider doing this....
     // Serial.begin(BAUDRATE);
@@ -107,7 +111,7 @@ void setup()
   Debug<const char *>((__DATE__ " " __TIME__)); 
   Debug<const char *>("\n");
   
-  //Print out the reset reason
+   //Print out the reset reason
   Serial.println("=================");
   Serial.print("ResetCause: ");
   switch(getResetCause()) {
@@ -118,6 +122,14 @@ void setup()
   case 4: Serial.println("user"); break;
   }                                                                              
   Serial.println("=================");
+
+  // TODO: consider doing this....
+    // Serial.begin(BAUDRATE);
+    // while (!Serial) {
+    //   watchdogReset();
+    // }
+    // Serial.println(F("starting"));
+
 
   delay(100);
   if (core.Boot() == false) {
@@ -283,7 +295,7 @@ void setup()
   core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
-  cogTask.DEBUG_LEVEL = 0;
+  cogTask.DEBUG_LEVEL = 1;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
 //  readTempsTask.DEBUG_READ_TEMPS = 0;  //FLE 20230918
