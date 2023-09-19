@@ -107,6 +107,7 @@ class stage2_ReadTempsTask : public ReadTempsTask
 public:
   MachineConfig* mcs[3];
   void updateTemperatures();
+  bool _run() override;
 };
 
 

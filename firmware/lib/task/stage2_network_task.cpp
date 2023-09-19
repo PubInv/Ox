@@ -54,6 +54,9 @@ namespace OxApp
     }
 
     for (int i = 0; i < 3; i++) {
+      Serial.print("nn :");
+      Serial.println((unsigned long) mcs[i]);
+
       buffer[0] = 0;
       mcs[i]->createStage2JSONReport(mcs[i]->s2heater,mcs[i]->report,buffer);
       if (DEBUG_UDP > 0) {

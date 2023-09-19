@@ -152,6 +152,8 @@ void setup() {
 
     for (int i = 0; i < 3; i++) {
       stage2NetworkTask.mcs[i] = getConfig(i);
+      Serial.print("xx :");
+      Serial.println((unsigned long) stage2NetworkTask.mcs[i]);
     }
     stage2NetworkTask.DEBUG_UDP = 0;
   }
