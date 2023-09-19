@@ -64,6 +64,8 @@ class Core {
   // make this public to allow debug to be set.
         Scheduler _scheduler;
 
+        void ResetHardwareWatchdog();
+
     private:
         uint32_t _elapsed;
         Timer _primaryTimer;
@@ -71,6 +73,7 @@ class Core {
         CoreState _state;
         void Tick();
         void CreateWatchdog(uint32_t timeoutMs);
+        void CreateHardwareWatchdog();
         bool ResetWatchdog();
         uint32_t GetElapsedTime();
 

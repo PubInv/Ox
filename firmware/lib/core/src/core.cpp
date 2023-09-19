@@ -24,6 +24,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // #include "HAL/posix/hal.h"
 #endif
 
+#define HARDWARE_WATCHDOG_TIMOUT_MS 16000
+void watchdogSetup() {
+  watchdogEnable(16000);
+}
+
+
 namespace OxCore {
 
 
@@ -39,6 +45,8 @@ namespace OxCore {
   // I'm configuring it to every 25 seconds
   // #define WATCHDOG_TIMEOUT_MS 250
 #define WATCHDOG_TIMEOUT_MS 250000
+  // This is the longest hardware watchdog timeout we are allowed
+
 bool Core::_criticalError = false;
 
 bool Core::Boot() {
@@ -52,6 +60,9 @@ bool Core::Boot() {
     properties.tickPeriodMs = TICK_PERIOD;
     _scheduler.SetProperties(properties);
     CreateWatchdog(WATCHDOG_TIMEOUT_MS);
+
+    // Note: This CANNOT take a parameter!!
+    CreateHardwareWatchdog();
 
     _state = CoreState::Configured;
 
@@ -112,7 +123,8 @@ bool Core::Run() {
           }
         }
         Tick();
-         bool reset = ResetWatchdog();
+        ResetHardwareWatchdog();
+        bool reset = ResetWatchdog();
         if (reset == false) {
           Serial.println("Ending Core Run due to internal Watchdog!");
           delay(100);
@@ -143,9 +155,23 @@ void Core::Tick() {
 #endif
 }
 
+  //
 void Core::CreateWatchdog(uint32_t timeoutMs) {
     Debug<const char*>("Create watchdog (todo)\n");
     _watchdogTimer.Init();
+}
+
+  // WARNING! DO NOT CHANGE THIS NAME OR INTERFACE
+  // This function is implemented with a weak reference in the core.
+  // it MUST be overridden exactly this way.
+
+void Core::CreateHardwareWatchdog() {
+    Debug<const char*>("Creating Hardware Watchdog\n");
+    watchdogSetup();
+}
+
+void Core::ResetHardwareWatchdog() {
+  watchdogReset();
 }
 
 bool Core::ResetWatchdog() {
