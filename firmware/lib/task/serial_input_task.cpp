@@ -144,34 +144,6 @@ namespace OxApp
       }
     } else {
     }
-
-    // if (ic.value_c == 'W') {
-    //   if (mc->ms == Off) {
-    //     mc->ms = Warmup;
-    //     Debug<const char *>("New State: Warmup!");
-    //   }
-    // } else if (ic.value_c == 'C') {
-    //   if (mc->ms != Off) {
-    //     mc->ms = Cooldown;
-    //     Debug<const char *>("New State: Cooldown!");
-    //   }
-    // } else if (ic.value_c == 'E') {
-    //   if (mc->ms != Off) {
-    //     mc->ms = EmergencyShutdown;
-    //     Debug<const char *>("New State: Emergency Shutdown!");
-    //   }
-    // } else if (ic.value_c == 'A') {
-    //   if (mc->ms == OffUserAck) {
-    //     mc->ms = Off;
-    //     Debug<const char *>("New State: Off!");
-    //   }
-    // } else if (ic.value_c == 'I') {
-    //   mc->idleOrOperate = Idle;
-    //   Debug<const char *>("New SubState: Idle!");
-    // } else if (ic.value_c == 'O') {
-    //   mc->idleOrOperate = Operate;
-    //   Debug<const char *>("New SubState: Operate");
-    // }
   }
 
   bool SerialInputTask::executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm) {

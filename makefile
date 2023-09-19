@@ -106,14 +106,14 @@ stage2_heater:
 
 run_monitor:
 	cd firmware \
-	&& pio device monitor --filter=direct --baud=115200
+	&& pio device monitor --filter=direct --baud=115200 2>&1 | tee -a logfile.txt
 
 # for more verbose output, use this...
 #	&& pio run -e due_ribbonfish -vvv -t upload
 oedcs:
 	cd firmware \
 	&& pio run -e due_ribbonfish -t upload  \
-	&& pio device monitor --filter=direct --baud=115200
+	&& pio device monitor --filter=direct --baud=115200 2>&1 | tee -a oedcs.logfile.txt
 
 ## NOTE! After this, break it and do "make run_monitor" of you characters will be discarded
 # for more verbose output, use this...
@@ -121,4 +121,4 @@ oedcs:
 
 stage2:
 	cd firmware \
-	&& pio test -v -e due_stage2_heater -f "test_stage2_heater"
+	&& pio test -v -e due_stage2_heater -f "test_stage2_heater" # 2>&1 | tee -a stage2.logfile.txt

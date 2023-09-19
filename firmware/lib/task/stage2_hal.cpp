@@ -46,19 +46,20 @@ bool Stage2HAL::init() {
 
 float Stage2HAL::getTemperatureReading(Stage2Heater s2heaterToControl,MachineConfig *mc) {
     float t;
-    switch (s2heaterToControl) {
-    case 0:
-      t = mc->report->post_heater_C;
-      break;
-    case 1:
-      t = mc->report->post_getter_C;
-      break;
-    case 2:
-      t = mc->report->post_stack_C;
-      break;
-    default:
-      Serial.println("s2heater_task HeaterControl not set!");
-      break;
-    }
+    t =  mc->report->post_heater_C;
+    // switch (s2heaterToControl) {
+    // case 0:
+    //   t = mc->report->post_heater_C;
+    //   break;
+    // case 1:
+    //   t = mc->report->post_getter_C;
+    //   break;
+    // case 2:
+    //   t = mc->report->post_stack_C;
+    //   break;
+    // default:
+    //   Serial.println("s2heater_task HeaterControl not set!");
+    //   break;
+    // }
     return t;
   }

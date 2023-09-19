@@ -220,16 +220,20 @@ OxCore::Debug<unsigned long>(good_temp_reads_stack);
 }
 
 void stage2_ReadTempsTask::updateTemperatures() {
-
   ReadTempsTask::updateTemperatures();
 
+  // note: This is confugsing; we are naming the temperatures
+  // wrongly on a Stage2 system, and then putting into individual
+  // machine_configs.
   mcs[0]->report->post_heater_C = getConfig()->report->post_heater_C;
-  mcs[1]->report->post_getter_C = getConfig()->report->post_getter_C;
-  mcs[2]->report->post_stack_C = getConfig()->report->post_stack_C;
+  mcs[1]->report->post_heater_C = getConfig()->report->post_getter_C;
+  mcs[2]->report->post_heater_C = getConfig()->report->post_stack_C;
   // The TARGET_TEMP is not computed here, this is just a reporting function!
   for(int i = 0; i < 3; i++) {
     mcs[i]->report->target_temp_C = mcs[i]->TARGET_TEMP_C;
     mcs[i]->report->target_ramp_C = mcs[i]->RAMP_UP_TARGET_D_MIN;
+    mcs[i]->report->setpoint_temp_C = mcs[i]->SETPOINT_TEMP_C;
+    mcs[i]->report->ms = mcs[i]->ms;
   }
 
 }
@@ -288,6 +292,15 @@ bool ReadTempsTask::_init()
 }
 
 bool ReadTempsTask::_run()
+{
+  if (DEBUG_READ_TEMPS > 1) {
+    OxCore::Debug<const char *>("Running ReadTemps\n");
+  }
+  updateTemperatures();
+}
+
+
+bool stage2_ReadTempsTask::_run()
 {
   if (DEBUG_READ_TEMPS > 1) {
     OxCore::Debug<const char *>("Running ReadTemps\n");
