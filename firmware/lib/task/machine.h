@@ -117,6 +117,8 @@ public:
   // I am going to have these two move together as one.
   // There is only one Ramp parameter, even though we use
   // two numbers
+  const float MIN_AMPERAGE = 1.0;
+  const float MIN_WATTAGE = 10.0;
   float RAMP_UP_TARGET_D_MIN = 0.5; // R (degrees C per minute)
   float RAMP_DN_TARGET_D_MIN = -0.5; // R (degrees C per minute)
   void change_ramp(float ramp);

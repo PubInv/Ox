@@ -84,9 +84,30 @@ namespace OxApp
     Serial.println(freeMemory());
   }
 
+  // We believe someday an automatic algorithm will be needed here.
+  float CogTask::computeFanSpeed(float t) {
+    Serial.print("returning fan speed: ");
+    Serial.println(getConfig()->FAN_SPEED);
+    return getConfig()->FAN_SPEED;
+  }
+
+  // Here is where we attempt to bring in both the amperage
+  // and the wattage limitation (but amperage is the "plant"
+  // variable that we can control.
+  float CogTask::computeAmperage(float t) {
+    float max_a_from_raw = getConfig()->MAX_AMPERAGE;
+    float max_a_from_wattage =
+      sqrt(
+           getConfig()->MAX_STACK_WATTAGE /
+           getConfig()->report->stack_ohms);
+    return min(max_a_from_raw,max_a_from_wattage);
+  }
+
+
   void CogTask::turnOff() {
     float fs = 0.0;
     getConfig()->fanDutyCycle = fs;
+    getConfig()->FAN_SPEED = 0.0;
     getHAL()->_updateFanPWM(fs);
     getConfig()->report->fan_pwm = fs;
     _updateStackVoltage(getConfig()->MIN_OPERATING_STACK_VOLTAGE);

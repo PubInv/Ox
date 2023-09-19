@@ -57,6 +57,8 @@ namespace OxApp
     void turnOff() override;
     void printGenericInstructions() override;
 
+    float computeFanSpeed(float t);
+    float computeAmperage(float t);
 
     void _updateCOGSpecificComponents();
     void _updatePowerComponentsVoltage(float voltage);
