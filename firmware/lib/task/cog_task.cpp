@@ -21,6 +21,7 @@
 // from: https://learn.adafruit.com/memories-of-an-arduino/measuring-free-memory
 // This should be made into a separte task,
 // this is just for debugging...
+// TODO: Move this into the core, and invoke it within a DEBUG_LEVEL guard.
 #ifdef __arm__
 // should use uinstd.h to define sbrk but Due causes a conflict
 extern "C" char* sbrk(int incr);

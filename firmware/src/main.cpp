@@ -72,8 +72,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-// #define ETHERNET_BOARD_PRESENT 1
-#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -84,6 +84,8 @@ MachineConfig *getConfig() {
 
 // TODO: we need to have setups for individual pieces
 // of the Hardware Abstraction Layer
+// I don't know why this didn't work inside the core.cpp file!!!
+
 
 void setup()
 {
@@ -93,6 +95,11 @@ void setup()
    // WARNING! need 5 second delay for pio compiler it seems
   // DO NOT REMOVE THIS STATEMENT!
   delay(5000);
+
+
+  // We're doing this here because the Core may not be initialized
+  watchdogReset();
+
 
   // TODO: consider doing this....
     // Serial.begin(BAUDRATE);
@@ -140,6 +147,8 @@ void setup()
   }
   Debug<const char *>("Core booted...\n");
   delay(100);
+
+  core.ResetHardwareWatchdog();
 
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
@@ -284,6 +293,9 @@ void setup()
     abort();
   }
 
+  core.ResetHardwareWatchdog();
+
+
   heaterPIDTask.whichHeater = (Stage2Heater) 0;
 
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
@@ -299,7 +311,7 @@ void setup()
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
 //  readTempsTask.DEBUG_READ_TEMPS = 0;  //FLE 20230918
-  readTempsTask.DEBUG_READ_TEMPS = 1;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
   oedcsSerialInputTask.DEBUG_SERIAL = 0;
   getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");

@@ -54,66 +54,88 @@ int SL_PS::init() {
   if (!strlen(manuf)) strcpy(manuf, "UNKWN");
   Serial.println(manuf);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Model(ADDRESS);
   Serial.print("Model: ");
   if (!strlen(model)) strcpy(manuf, "UNKWN");
   Serial.println(model);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_VoltageString(ADDRESS);
   Serial.print("VoltageSt: ");
   if (!strlen(voltage_string)) strcpy(manuf, "UNKWN");
   Serial.println(voltage_string);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Revision(ADDRESS);
   Serial.print("Rev: ");
   if (!strlen(revision)) strcpy(manuf, "UNKWN");
   Serial.println(revision);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_ManufDate(ADDRESS);
   Serial.print("ManufDate: ");
   if (!strlen(manuf_date)) strcpy(manuf, "UNKWN");
   Serial.println(manuf_date);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Serial(ADDRESS);
   Serial.print("Serial: ");
   if (!strlen(serial)) strcpy(manuf, "UNKWN");
   Serial.println(serial);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Country(ADDRESS);
   Serial.print("Country: ");
   if (!strlen(country)) strcpy(manuf, "UNKWN");
   Serial.println(country);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_RateVoltage(ADDRESS);
   Serial.print("RateVoltage: ");
   if (rate_voltage < 0) Serial.println("UNKWN");
   else Serial.println(rate_voltage);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_RateCurrent(ADDRESS);
   Serial.print("RateCurrent: ");
   if (rate_current < 0) Serial.println("UNKWN");
   else Serial.println(rate_current);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_MaxVoltage(ADDRESS);
   Serial.print("MaxVoltage: ");
   if (max_voltage < 0) Serial.println("UNKWN");
   else Serial.println(max_voltage);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_MaxCurrent(ADDRESS);
   Serial.print("MaxCurrent: ");
   if (max_current < 0) Serial.println("UNKWN");
   else Serial.println(max_current);
   delay(MYDELAY);
+   watchdogReset();
+
 
 //  snprintf(packetBuffer, sizeof packetBuffer, "{ \"Manufacturer\": \"%s\", \"Model\": \"%s\", \"VoltString\": \"%s\", \"Revision\": \"%s\", \"Serial\": \"%s\", \"VoltageRating\": %d, \"CurrentRating\": %d, \"MaxVoltage\": %d, \"MaxCurrent\": %d}", manuf, model, voltage_string, revision, serial, rate_voltage, rate_current, max_voltage, max_current);
 //  sendMsg(packetBuffer);
