@@ -40,14 +40,22 @@ class ReadTempsTask : public OxCore::Task
 {
 public:
   ReadTempsTask();
-  int DEBUG_READ_TEMPS = 0;
+  //int DEBUG_READ_TEMPS = 0;
+  int DEBUG_READ_TEMPS = 1;
 
 
   float evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv);
   // These two fields are used to track the
   // missing stack
-  unsigned long good_temp_reads = 0;
-  unsigned long bad_temp_reads = 0;
+//  unsigned long good_temp_reads = 0;
+  unsigned long good_temp_reads_heater = 0;
+  unsigned long good_temp_reads_getter = 0;
+  unsigned long good_temp_reads_stack = 0;
+
+  //unsigned long bad_temp_reads = 0;
+  unsigned long bad_temp_reads_heater = 0;
+  unsigned long bad_temp_reads_getter = 0;
+  unsigned long bad_temp_reads_stack = 0;
   static const int PERIOD_MS = MachineConfig::TEMP_READ_PERIOD_MS;
   // This is a ring buffer...
 

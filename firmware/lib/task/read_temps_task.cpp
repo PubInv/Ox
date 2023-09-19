@@ -150,30 +150,36 @@ void ReadTempsTask::updateTemperatures() {
   // to critical errors, we will leave this.
   if (postHeaterTemp > -100.0) {
     getConfig()->report->post_heater_C = postHeaterTemp;
-    good_temp_reads++;
+//    good_temp_reads++;
+    good_temp_reads_heater++;
   } else {
     OxCore::Debug<const char *>("Bad post_heater_C\n");
-    bad_temp_reads++;
+    //bad_temp_reads++;
+    bad_temp_reads_heater++;
   }
 
   float postGetterTemp = evaluateThermocoupleRead(2,POST_GETTER_TC_BAD,post_rv);
   //_temperatureSensors[0].GetTemperature(2);
   if (postGetterTemp > -100.0) {
     getConfig()->report->post_getter_C = postGetterTemp;
-    good_temp_reads++;
+//    good_temp_reads++;
+    good_temp_reads_getter++;
   } else {
     OxCore::Debug<const char *>("Bad post_getter_C\n");
-    bad_temp_reads++;
+    //bad_temp_reads++;
+    bad_temp_reads_getter++;
   }
 
   float postStackTemp = evaluateThermocoupleRead(1,POST_STACK_TC_BAD,post_rv);
   // _temperatureSensors[0].GetTemperature(1);
   if (postStackTemp > -100.0) {
     getConfig()->report->post_stack_C = postStackTemp;
-    good_temp_reads++;
+//    good_temp_reads++;
+    good_temp_reads_stack++;
   } else {
     OxCore::Debug<const char *>("Bad post_stack_C\n");
-    bad_temp_reads++;
+    //bad_temp_reads++;
+    bad_temp_reads_stack++;
   }
 
   // WARNING! This needs to be done for all configs if we are
@@ -191,10 +197,22 @@ void ReadTempsTask::updateTemperatures() {
   calculateDdelta();
   if (DEBUG_READ_TEMPS > 0) {
     OxCore::Debug<const char *>("Good Temp Reads:");
-    OxCore::Debug<unsigned long>(good_temp_reads);
+//    OxCore::Debug<unsigned long>(good_temp_reads);
+    OxCore::Debug<unsigned long>(good_temp_reads_heater);
+    OxCore::Debug<const char *>(", ");
+OxCore::Debug<unsigned long>(good_temp_reads_getter);
+    OxCore::Debug<const char *>(", ");
+OxCore::Debug<unsigned long>(good_temp_reads_stack);
     OxCore::DebugLn<const char *>("");
+
+
     OxCore::Debug<const char *>("Bad  Temp Reads:");
-    OxCore::Debug<unsigned long>(bad_temp_reads);
+//    OxCore::Debug<unsigned long>(bad_temp_reads);
+    OxCore::Debug<unsigned long>(bad_temp_reads_heater);
+    OxCore::Debug<const char *>(", ");
+    OxCore::Debug<unsigned long>(bad_temp_reads_getter);
+    OxCore::Debug<const char *>(", ");
+    OxCore::Debug<unsigned long>(bad_temp_reads_stack);
     OxCore::DebugLn<const char *>("");
   }
 }
