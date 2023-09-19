@@ -89,7 +89,8 @@ void setup()
   OxCore::serialBegin(115200UL);
   delay(500);
 
-  // need 5 second delay for pio compiler it seems
+  // WARNING! need 5 second delay for pio compiler it seems
+  // DO NOT REMOVE THIS STATEMENT!
   delay(5000);
 
   //Print out the reset reason

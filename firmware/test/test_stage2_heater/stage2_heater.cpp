@@ -76,8 +76,8 @@ Stage2NetworkTask stage2NetworkTask;
 Stage2SerialInputTask stage2SerialInputTask;
 
 
-//#define ETHERNET_BOARD_PRESENT 1
-#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 MachineConfig *getConfig(int i) {
