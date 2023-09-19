@@ -130,7 +130,7 @@ namespace OxApp
         OxCore::Debug<const char *>("fan speed, amperage\n");
         OxCore::Debug<float>(fs);
         OxCore::Debug<const char *>(" ");
-        OxCore::Debug<float>(a);
+        OxCore::DebugLn<float>(a);
       }
 
       getHAL()->_updateFanPWM(fs);

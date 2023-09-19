@@ -105,6 +105,7 @@ void ReadTempsTask::calculateDdelta() {
 float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv) {
   float temp = _temperatureSensors[0].GetTemperature(idx);
 
+#ifndef ALLOW_BAD_THERMOCOUPLES_FOR_TESTING
 #ifdef USE_MAX31850_THERMOCOUPLES
   // we'd like to use the corret sentinels, but they don't seem to work...
   //  if (temp == DEVICE_DISCONNECTED_C) {
@@ -121,6 +122,7 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
   return temp;
 #else
   // probably the SPI based MAX31855_THERMOCOUPLES
+#endif
 #endif
 }
 
