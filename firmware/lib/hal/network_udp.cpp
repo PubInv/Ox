@@ -28,7 +28,7 @@ char mcogs[] = "mcogs.coslabs.com";
 byte packetBuffer[buffMax]; //buffer to hold incoming packet,
 
 #define localPort 2390
-#define serverPort 57573
+#define serverPort 57575
 
 // An EthernetUDP instance to let us send and receive packets over UDP
 EthernetUDP Udp;
@@ -170,7 +170,7 @@ NetworkUDP::sendData(char *data, unsigned long current_time, uint16_t timeout) {
   Udp.write("/", 1);
   Udp.write(macString, 17);
 #ifdef RIBBONFISH
-  Udp.write("/ODECS", 6);
+  Udp.write("/OEDCS", 6);
 #else
   Udp.write("/Stage2", 7);
 #endif
