@@ -81,14 +81,14 @@ namespace OxApp
       getHAL()->_fans[0]._calcRPM(0);
     this->StateMachineManager::run_generic();
 
-    Serial.print("Free Memory: ");
-    Serial.println(freeMemory());
+    if (DEBUG_LEVEL > 0) {
+      Serial.print("Free Memory: ");
+      Serial.println(freeMemory());
+    }
   }
 
   // We believe someday an automatic algorithm will be needed here.
   float CogTask::computeFanSpeed(float t) {
-    Serial.print("returning fan speed: ");
-    Serial.println(getConfig()->FAN_SPEED);
     return getConfig()->FAN_SPEED;
   }
 

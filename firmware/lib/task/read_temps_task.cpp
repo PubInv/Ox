@@ -127,7 +127,6 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
 }
 
 void ReadTempsTask::updateTemperatures() {
-
     if (DEBUG_READ_TEMPS > 0) {
       OxCore::Debug<const char *>("About to _readTemperatureSensors");
       delay(30);

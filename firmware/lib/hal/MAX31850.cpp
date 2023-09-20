@@ -146,7 +146,13 @@ namespace Temperature {
     return GetTemperature(0);
   }
   float MAX31850Temperature::GetTemperature(int idx) {
-    float tempC = this->sensors.getTempCByIndex(idx);
+    float tempC;
+    if (idx == 0) {
+      tempC = this->sensors.getTempC(postHeaterThermometer);
+    } else {
+      tempC = this->sensors.getTempCByIndex(idx);
+    }
+
 
     if (tempC != DEVICE_DISCONNECTED_C)
       {
@@ -154,6 +160,7 @@ namespace Temperature {
     else
       {
         Serial.print(F("Error: Could not read temperature data: "));
+        Serial.print(F("This is a DIGITAL DEVICE DISCONNET "));
         Serial.println(idx);
       }
     return tempC;
