@@ -67,30 +67,43 @@ void MachineConfig::outputReport(MachineStatusReport *msr) {
 }
 
 void MachineConfig::createJSONReport(MachineStatusReport* msr, char *buffer) {
-  sprintf(buffer+strlen(buffer), "\"MachineState\": %d,\n",msr->ms);
-  sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f,\n",msr->target_temp_C);
-  sprintf(buffer+strlen(buffer), "\"SetpointC\": %.2f,\n",msr->setpoint_temp_C);
-  sprintf(buffer+strlen(buffer), "\"RampC\": %.2f,\n",msr->target_ramp_C);
-  sprintf(buffer+strlen(buffer), "\"MaxStackA\": %.2f,\n",msr->max_stack_amps_A);
-  sprintf(buffer+strlen(buffer), "\"MaxStackW\": %.2f,\n",msr->max_stack_watts_W);
-  sprintf(buffer+strlen(buffer), "\"FanPWM\": %.2f,\n",msr->fan_pwm);
-
-
-  sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f,\n",msr->post_heater_C);
-  sprintf(buffer+strlen(buffer), "\"StackC\": %.2f,\n",msr->post_stack_C);
-  sprintf(buffer+strlen(buffer), "\"GetterC\": %.2f,\n",msr->post_getter_C);
-
-  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": %.2f,\n",msr->heater_duty_cycle);
-  sprintf(buffer+strlen(buffer), "\"StackA\": %.2f,\n",msr->stack_amps);
-  sprintf(buffer+strlen(buffer), "\"StackW\": %.2f,\n",msr->stack_watts);
-  sprintf(buffer+strlen(buffer), "\"StackV\": %.2f,\n",msr->stack_voltage);
+  sprintf(buffer+strlen(buffer), "\"MachineState\": %d",msr->ms);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f",msr->target_temp_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"SetpointC\": %.2f",msr->setpoint_temp_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"RampC\": %.2f",msr->target_ramp_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"MaxStackA\": %.2f",msr->max_stack_amps_A);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"MaxStackW\": %.2f",msr->max_stack_watts_W);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"FanPWM\": %.2f",msr->fan_pwm);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f",msr->post_heater_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"StackC\": %.2f",msr->post_stack_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"GetterC\": %.2f",msr->post_getter_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": %.2f",msr->heater_duty_cycle);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"StackA\": %.2f",msr->stack_amps);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"StackW\": %.2f",msr->stack_watts);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"StackV\": %.2f",msr->stack_voltage);
+  strcat(buffer, ",\n");
   if (isnan(msr->stack_ohms) || isinf(msr->stack_ohms) || msr->stack_ohms < 0.0) {
-    sprintf(buffer+strlen(buffer), "\"StackOhms\": -1.0,\n");
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": -1.0");
+    strcat(buffer, ",\n");
   } else {
-    sprintf(buffer+strlen(buffer), "\"StackOhms\": %.2f,\n",msr->stack_ohms);
+    sprintf(buffer+strlen(buffer), "\"StackOhms\": %.2f",msr->stack_ohms);
+    strcat(buffer, ",\n");
   }
-
-  sprintf(buffer+strlen(buffer), "\"FanRPM\": %.2f\n",msr->fan_rpm);
+  sprintf(buffer+strlen(buffer), "\"FanRPM\": %.2f",msr->fan_rpm);
+  strcat(buffer, "\n");
 }
 
 void MachineConfig::change_ramp(float ramp) {

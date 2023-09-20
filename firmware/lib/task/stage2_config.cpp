@@ -46,12 +46,19 @@ void MachineConfig::outputStage2Report(
 }
 
 void MachineConfig::createStage2JSONReport(Stage2Heater s2h,MachineStatusReport* msr, char *buffer) {
-  sprintf(buffer+strlen(buffer), "\"Stage2Heater\": %d,\n",s2h);
-  sprintf(buffer+strlen(buffer), "\"MachineState\": %d,\n",msr->ms);
-  sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f,\n",msr->target_temp_C);
-  sprintf(buffer+strlen(buffer), "\"SetpointC\": %.2f,\n",msr->setpoint_temp_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f,\n",msr->post_heater_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": %.2f,\n",msr->heater_duty_cycle);
-  sprintf(buffer+strlen(buffer), "\"RampC\": %.2f,\n",msr->target_ramp_C);
+  sprintf(buffer+strlen(buffer), "\"Stage2Heater\": %d",s2h);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"MachineState\": %d",msr->ms);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f",msr->target_temp_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"SetpointC\": %.2f",msr->setpoint_temp_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f",msr->post_heater_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": %.2f",msr->heater_duty_cycle);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"RampC\": %.2f",msr->target_ramp_C);
+  strcat(buffer, "\n");
 
 }

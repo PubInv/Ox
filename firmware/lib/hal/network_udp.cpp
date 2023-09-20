@@ -169,8 +169,12 @@ NetworkUDP::sendData(char *data, unsigned long current_time, uint16_t timeout) {
   Udp.write("PUT ", 4);
   Udp.write("/", 1);
   Udp.write(macString, 17);
-  Udp.write("/", 1);
-  Udp.write("Data\n", 5);
+#ifdef RIBBONFISH
+  Udp.write("/ODECS", 6);
+#else
+  Udp.write("/Stage2", 7);
+#endif
+  Udp.write("/Data\n", 6);
   Udp.write("{ \"TimeStamp\": ", 15);
   char ts[15];
   sprintf(ts, "%ld", current_time);
@@ -213,6 +217,11 @@ NetworkUDP::getParams(uint16_t timeout) {
   Udp.write("/", 1);
   Udp.write(macString, 17);
   Udp.write("/", 1);
+#ifdef RIBBONFISH
+  Udp.write("OEDCS/", 6);
+#else
+  Udp.write("STAGE2/", 7);
+#endif  
   Udp.write("Params\n", 7);
   if (! Udp.endPacket()) {
     if (DEBUG_UDP > 2) Serial.println(F("can't send request"));
