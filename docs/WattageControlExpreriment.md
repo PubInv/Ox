@@ -1,3 +1,4 @@
+
 During a high temperature test on the mornign of Wednesday Sept. 20th, Rob collected the following data on the wattage and amperage settings to show that 
 the wattage control works.
 
