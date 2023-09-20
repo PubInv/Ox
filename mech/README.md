@@ -7,7 +7,7 @@ MAC Address: FE:ED:1B:70:08:77
 
 * Serial number 2  
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/655e3bbb-fb48-4e31-902a-e10b74c27fa8)  
-MAC Address:  
+MAC Address: FE:ED:10:69:73:70
 
 * Stage II controler  
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/a146b12b-d7b1-4ecf-a571-1e2d6c8f414f)  
