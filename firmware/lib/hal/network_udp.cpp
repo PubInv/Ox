@@ -170,9 +170,9 @@ NetworkUDP::sendData(char *data, unsigned long current_time, uint16_t timeout) {
   Udp.write("/", 1);
   Udp.write(macString, 17);
 #ifdef RIBBONFISH
-  //  Udp.write("/ODECS", 6);
+  Udp.write("/ODECS", 6);
 #else
-  //  Udp.write("/Stage2", 7);
+  Udp.write("/Stage2", 7);
 #endif
   Udp.write("/Data\n", 6);
   Udp.write("{ \"TimeStamp\": ", 15);
