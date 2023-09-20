@@ -31,7 +31,7 @@ namespace OxApp
       OxCore::DebugLn<const char *>("starting run generic");
     }
 
-    float t = getTemperatureReading();
+    //    float t = getTemperatureReading();
 
     MachineState ms = getConfig()->ms;
 
@@ -225,11 +225,6 @@ namespace OxApp
     float t = getTemperatureReading();
      getConfig()->GLOBAL_RECENT_TEMP = t;
 
-    // This would be better done in a transition function!
-    // if (getConfig()->previous_ms != Warmup) {
-    //   getConfig()->WARM_UP_BEGIN_TEMP = t;
-    //   getConfig()->BEGIN_UP_TIME_MS = millis();
-    // }
 
     // if we've reached operating temperature, we switch
     // states
@@ -265,11 +260,6 @@ namespace OxApp
     }
     float t = getTemperatureReading();
     getConfig()->GLOBAL_RECENT_TEMP = t;
-
-    // if (getConfig()->previous_ms != Cooldown) {
-    //   getConfig()->COOL_DOWN_BEGIN_TEMP = t;
-    //   getConfig()->BEGIN_DN_TIME_MS = millis();
-    // }
 
     if (t <= getConfig()->TARGET_TEMP_C) {
       new_ms = NormalOperation;
