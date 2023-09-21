@@ -26,17 +26,14 @@ namespace OxApp
 
   bool StateMachineManager::run_generic()
   {
-
     if (DEBUG_LEVEL > 0) {
-      OxCore::DebugLn<const char *>("starting run generic");
+      OxCore::Debug<const char *>("starting run generic: ");
     }
-
-    //    float t = getTemperatureReading();
 
     MachineState ms = getConfig()->ms;
 
     if (DEBUG_LEVEL > 0) {
-      OxCore::DebugLn<const char *>("ms");
+      OxCore::Debug<const char *>("ms : ");
       OxCore::DebugLn<int>(ms);
     }
     printOffWarnings(ms);
@@ -224,7 +221,6 @@ namespace OxApp
 
     float t = getTemperatureReading();
      getConfig()->GLOBAL_RECENT_TEMP = t;
-
 
     // if we've reached operating temperature, we switch
     // states

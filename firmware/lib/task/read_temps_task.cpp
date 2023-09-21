@@ -189,9 +189,6 @@ void ReadTempsTask::updateTemperatures() {
   getConfig()->report->setpoint_temp_C = getConfig()->SETPOINT_TEMP_C;
   getConfig()->report->target_ramp_C = getConfig()->RAMP_UP_TARGET_D_MIN;
 
-  if (DEBUG_READ_TEMPS > 0) {
-    getConfig()->outputReport(getConfig()->report);
-  }
   // Notice we are keeping the queue only for the post_heater thermocouple,
   // which is what we are using as a control variable.
   addTempToQueue(getConfig()->report->post_heater_C);
@@ -255,15 +252,8 @@ void ReadTempsTask::_configTemperatureSensors() {
 
 void ReadTempsTask::_readTemperatureSensors() {
   for (int i = 0; i < NUM_TEMP_INDICES; i++) {
-    if (DEBUG_READ_TEMPS > 0) {
-      OxCore::Debug<const char *>("QQQ\n");
-      delay(50);
-    }
     _temperatureSensors[i].ReadTemperature();
-    if (DEBUG_READ_TEMPS > 0) {
-      OxCore::Debug<const char *>("BBB\n");
-      delay(50);
-    }
+
     float temperature = _temperatureSensors[0].GetTemperature(i);
     if (DEBUG_READ_TEMPS > 0) {
       OxCore::Debug<const char *>("Temp : ");
@@ -274,9 +264,9 @@ void ReadTempsTask::_readTemperatureSensors() {
     // TODO: We should investigate a delay hear to make sure the
     // OneWire system is ready
   }
-  if (DEBUG_READ_TEMPS > 1) {
-    dumpQueue();
-  }
+  //  if (DEBUG_READ_TEMPS > 1) {
+  //    dumpQueue();
+  //  }
 }
 
 bool ReadTempsTask::_init()

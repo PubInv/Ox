@@ -40,23 +40,16 @@ using namespace OxCore;
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
 #include <stage2SerialReportTask.h>
-// #include <stage2_serial_task.h>
 #include <serial_input_task.h>
-// #include <temp_refresh_task.h>
 #include <stage2_network_task.h>
 
 using namespace OxCore;
 static Core core;
 
-const unsigned long REPORT_PERIOD_MS = 5000;
-TaskProperties _properties;
-unsigned long time_of_last_report = 0;
 MachineConfig *machineConfig[3];
 
 // This is a key parameter, which should perhaps be moved to a specific
 // default file to make it clearer!
-const float STAGE2_DEFAULT_TEMP = 25.0;
-const float STAGE2_OPERATING_TEMP = 750.0;
 using namespace std;
 
 
@@ -82,6 +75,7 @@ MachineConfig *getConfig(int i) {
   return machineConfig[i];
 }
 
+const int DEBUG_WITH_FAN_ON = 0;
 void setup() {
 
   OxCore::serialBegin(115200UL);
@@ -100,6 +94,13 @@ void setup() {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
   }
 
+  // WARNING!! THIS IS ONLY FOR TESTING THE THERMOCOUPLES
+  if (DEBUG_WITH_FAN_ON) {
+    const int FAN_PIN = 9;
+    pinMode(FAN_PIN, OUTPUT);
+    analogWrite(FAN_PIN, 255/2);
+  }
+
   for(int i = 0; i < 3; i++) {
     machineConfig[i] = new MachineConfig();
     getConfig(i)->hal = s2hal;
@@ -110,7 +111,6 @@ void setup() {
     getConfig(i)->ms = Off;
     getConfig(i)->ms = Off;
     getConfig(i)->ms = Off;
-
   }
 
   Serial.println("About to run test!");
