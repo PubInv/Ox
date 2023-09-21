@@ -26,14 +26,6 @@ namespace OxApp
 
   bool StateMachineManager::run_generic()
   {
-    if (DEBUG_LEVEL > 1) {
-      OxCore::Debug<const char *>("SPECIAL DEBUG AT RUN :");
-      Serial.print("which heater : ");
-      Serial.println(heaterPIDTask->whichHeater);
-      Serial.print("which heater (from Config) : ");
-      Serial.println(getConfig()->s2heater);
-    }
-
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("starting run generic: ");
     }
