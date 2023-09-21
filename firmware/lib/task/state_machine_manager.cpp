@@ -26,17 +26,22 @@ namespace OxApp
 
   bool StateMachineManager::run_generic()
   {
-
-    if (DEBUG_LEVEL > 0) {
-      OxCore::DebugLn<const char *>("starting run generic");
+    if (DEBUG_LEVEL > 1) {
+      OxCore::Debug<const char *>("SPECIAL DEBUG AT RUN :");
+      Serial.print("which heater : ");
+      Serial.println(heaterPIDTask->whichHeater);
+      Serial.print("which heater (from Config) : ");
+      Serial.println(getConfig()->s2heater);
     }
 
-    //    float t = getTemperatureReading();
+    if (DEBUG_LEVEL > 0) {
+      OxCore::Debug<const char *>("starting run generic: ");
+    }
 
     MachineState ms = getConfig()->ms;
 
     if (DEBUG_LEVEL > 0) {
-      OxCore::DebugLn<const char *>("ms");
+      OxCore::Debug<const char *>("ms : ");
       OxCore::DebugLn<int>(ms);
     }
     printOffWarnings(ms);
@@ -224,7 +229,6 @@ namespace OxApp
 
     float t = getTemperatureReading();
      getConfig()->GLOBAL_RECENT_TEMP = t;
-
 
     // if we've reached operating temperature, we switch
     // states

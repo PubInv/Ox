@@ -122,3 +122,7 @@ oedcs:
 stage2:
 	cd firmware \
 	&& pio test -v -e due_stage2_heater -f "test_stage2_heater" # 2>&1 | tee -a stage2.logfile.txt
+
+oedcs_as_stage2:
+	cd firmware \
+	&& pio test -v -e treat_OEDCS_as_stage2 -f "test_stage2_heater" # 2>&1 | tee -a stage2.logfile.txt

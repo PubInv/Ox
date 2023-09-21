@@ -38,7 +38,7 @@ namespace OxApp
       // This is used for us to choose a thermocuple
       Stage2Heater whichHeater;
 
-      HeaterPIDTask* heaterPIDTask;
+      //      HeaterPIDTask* heaterPIDTask;
       const static int NUM_TEMPERATURE_SENSORS = 3;
       const static int NUM_TEMPERATURE_INDICES = 2;
 
