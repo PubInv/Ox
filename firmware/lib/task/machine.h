@@ -146,6 +146,8 @@ public:
    float WARM_UP_BEGIN_TEMP;
 
 
+  const unsigned long THERMOCOUPLE_FAULT_TOLERATION_TIME_MS = 2 * 60 * 1000;
+
   // TODO: This would better be attached to the statemanager
   // class, as it is used in those task---but also in the
   // separate temp_refresh_task. Until I can refactor

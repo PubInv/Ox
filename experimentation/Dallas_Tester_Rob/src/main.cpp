@@ -29,12 +29,17 @@ DallasTemperature sensors(&oneWire);
 
 int numberOfDevices; // Number of temperature devices found
 
-DeviceAddress tempDeviceAddress; // We'll use this variable to store a found device address
+int numberToPrint = 1;
+
+DeviceAddress tempDeviceAddress[3]; // We'll use this variable to store a found device address
 
 
 // I suspect this is a major problem; my goal here is to have two programs that
 // demonstrate the difference of using the device id vs. the address
-const bool USE_INDEX = true;
+const bool USE_INDEX = false;
+
+unsigned long good_reads;
+unsigned long bad_reads;
 
 // function to print a device address
 void printAddress(DeviceAddress deviceAddress)
@@ -52,18 +57,23 @@ void setup(void)
   // start serial port
   Serial.begin(115200);
   delay(500);
-  Serial.print("TC0, TC1, TC2");
-  Serial.print(PROG_NAME);
-  Serial.println(VERSION);
+  Serial.print("TC0, TC1, TC2, Ratio");
+  //  Serial.print(PROG_NAME);
+  //  Serial.println(VERSION);
 
   pinMode(BLOWER_PWM_PIN, OUTPUT);
   analogWrite(BLOWER_PWM_PIN, 153);
+
+
 
   // Start up the library
   sensors.begin();
 
   // Grab a count of devices on the wire
   numberOfDevices = sensors.getDeviceCount();
+  sensors.getAddress(tempDeviceAddress[0], 0);
+  sensors.getAddress(tempDeviceAddress[1], 1);
+  sensors.getAddress(tempDeviceAddress[2], 2);
 
   //Print some status
   //  // locate devices on the bus
@@ -89,17 +99,17 @@ void setup(void)
           Serial.print("Found device ");
           Serial.print(i, DEC);
           Serial.print(" with address: ");
-          printAddress(tempDeviceAddress);
+          printAddress(tempDeviceAddress[i]);
           Serial.println();
 
           Serial.print("Setting resolution to ");
           Serial.println(TEMPERATURE_PRECISION, DEC);
 
           // set the resolution to TEMPERATURE_PRECISION bit (Each Dallas/Maxim device is capable of several different resolutions)
-          sensors.setResolution(tempDeviceAddress, TEMPERATURE_PRECISION);
+          sensors.setResolution(tempDeviceAddress[i], TEMPERATURE_PRECISION);
 
           Serial.print("Resolution actually set to: ");
-          Serial.print(sensors.getResolution(tempDeviceAddress), DEC);
+          Serial.print(sensors.getResolution(tempDeviceAddress[i]), DEC);
           Serial.println();
         } else {
         //      Serial.print("Found ghost device at ");
@@ -110,62 +120,49 @@ void setup(void)
 
 }
 
-// function to print the temperature for a device
-void printTemperature(DeviceAddress deviceAddress)
-{
-  // method 1 - slower
-  //Serial.print("Temp C: ");
-  //Serial.print(sensors.getTempC(deviceAddress));
-  //Serial.print(" Temp F: ");
-  //Serial.print(sensors.getTempF(deviceAddress)); // Makes a second call to getTempC and then converts to Fahrenheit
+// // function to print the temperature for a device
+// void printTemperature(DeviceAddress deviceAddress)
+// {
 
-  // method 2 - faster
-  float tempC = sensors.getTempC(deviceAddress);
-  if (tempC == DEVICE_DISCONNECTED_C)
-    {
-      Serial.println("Error: Could not read temperature data");
-      return;
-    }
-  //  Serial.print("Temp C: ");
-  Serial.print(tempC);
-  //  Serial.print(" Temp F: ");
-  //  Serial.println(DallasTemperature::toFahrenheit(tempC)); // Converts tempC to Fahrenheit
-}
+//   // method 2 - faster
+//   float tempC = sensors.getTempC(deviceAddress);
+//   if (tempC == DEVICE_DISCONNECTED_C)
+//     {
+//       //      Serial.println("Error: Could not read temperature data");
+//       return;
+//     }
+//   Serial.print(tempC);
+// }
 
-// function to print the temperature for a device
-void printTemperatureByIndex(int idx)
-{
-  // method 1 - slower
-  //Serial.print("Temp C: ");
-  //Serial.print(sensors.getTempC(deviceAddress));
-  //Serial.print(" Temp F: ");
-  //Serial.print(sensors.getTempF(deviceAddress)); // Makes a second call to getTempC and then converts to Fahrenheit
-
-  // method 2 - faster
-  // float tempC = sensors.getTempC(deviceAddress);
-  float tempC = sensors.getTempCByIndex(idx);
-  if (tempC == DEVICE_DISCONNECTED_C)
-    {
-      Serial.println("Error: Could not read temperature data");
-      return;
-    }
-  //  Serial.print("Temp C: ");
-  Serial.print(tempC);
-  //  Serial.print(" Temp F: ");
-  //  Serial.println(DallasTemperature::toFahrenheit(tempC)); // Converts tempC to Fahrenheit
-}
+// // function to print the temperature for a device
+// void printTemperatureByIndex(int idx)
+// {
+//   float tempC = sensors.getTempCByIndex(idx);
+//   if (tempC == DEVICE_DISCONNECTED_C)
+//     {
+//       //      Serial.println("Error: Could not read temperature data");
+//       return;
+//     }
+//   Serial.print(tempC);
+// }
 
 
 float GetTemperature(int idx) {
-  float tempC = sensors.getTempCByIndex(idx);
-
+  float tempC;
+  if (USE_INDEX) {
+    tempC = sensors.getTempCByIndex(idx);
+  } else {
+    tempC = sensors.getTempC(tempDeviceAddress[idx]);
+  }
   if (tempC != DEVICE_DISCONNECTED_C)
     {
+      good_reads++;
     }
   else
     {
-      Serial.print(F("Error: Could not read temperature data: "));
-      Serial.println(idx);
+      bad_reads++;
+      //      Serial.print(F("Error: Could not read temperature data: "));
+      //      Serial.println(idx);
     }
   return tempC;
 
@@ -188,29 +185,20 @@ void loop(void)
   ReadTemperature();
 
   // Loop through each device, print out temperature data
-  for (int i = 0; i < numberOfDevices; i++)
+  for (int i = 0; i < numberToPrint; i++)
     {
 
       if (USE_INDEX) {
-        // Search the wire for address
         float temp = GetTemperature(i);
         Serial.print(temp);
       } else {
-        if (sensors.getAddress(tempDeviceAddress, i))
-          {
-            // Output the device ID
-            //		Serial.print("Temperature for device: ");
-            //		Serial.print(i,DEC);
-
-            // It responds almost immediately. Let's print out the data
-            printTemperature(tempDeviceAddress); // Use a simple function to print out the data
-            Serial.print(", ");
-          } else {
-          Serial.println("fail");
-        }
+        float temp = GetTemperature(i);
+        Serial.print(temp);
       }
       Serial.print(", ");
     }
+  Serial.print(1000.0 * ((float) bad_reads/ (float) good_reads));
+               Serial.print(", ");
   //else ghost device! Check your power requirements and cabling
   Serial.println(); //end of line
 }//end loop()

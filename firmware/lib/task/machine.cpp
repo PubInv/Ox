@@ -131,9 +131,9 @@ void MachineConfig::clearErrors() {
  errors[POST_GETTER_TC_BAD].fault_present = false;
  errors[POST_STACK_TC_BAD].fault_present  = false;
 
- errors[POST_HEATER_TC_BAD].toleration_ms = 600 * 1000;
- errors[POST_GETTER_TC_BAD].toleration_ms = 600 * 1000;
- errors[POST_STACK_TC_BAD].toleration_ms  = 600 * 1000;
+ errors[POST_HEATER_TC_BAD].toleration_ms = THERMOCOUPLE_FAULT_TOLERATION_TIME_MS;
+ errors[POST_GETTER_TC_BAD].toleration_ms = THERMOCOUPLE_FAULT_TOLERATION_TIME_MS;
+ errors[POST_STACK_TC_BAD].toleration_ms  = THERMOCOUPLE_FAULT_TOLERATION_TIME_MS;
 
  errors[POST_HEATER_TC_BAD].response_state = EmergencyShutdown;
  errors[POST_GETTER_TC_BAD].response_state = EmergencyShutdown;

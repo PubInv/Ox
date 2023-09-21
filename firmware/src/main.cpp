@@ -307,11 +307,11 @@ void setup()
   core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
   heaterPIDTask.DEBUG_PID = 0;
-  cogTask.DEBUG_LEVEL = 1;
+  cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
 //  readTempsTask.DEBUG_READ_TEMPS = 0;  //FLE 20230918
-  readTempsTask.DEBUG_READ_TEMPS = 0;
+  readTempsTask.DEBUG_READ_TEMPS = 2;
   oedcsSerialInputTask.DEBUG_SERIAL = 0;
   getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");
