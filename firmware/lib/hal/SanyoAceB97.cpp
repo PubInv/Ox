@@ -18,7 +18,7 @@
 
 #include "SanyoAceB97.h"
 #include <math.h>
-
+#include <arduino.h>
 
 #define PERIOD 1000
 
@@ -99,12 +99,27 @@ void SanyoAceB97::printRPMS() {
 // is needed for some other purpose.
 void SanyoAceB97::fanSpeedPerCentage(int s)
 {
-  int q = map(s, SPEED_MIN, SPEED_MAX, 0, OPERATING_PWM_THROTTLE);
+ 
+#ifdef FAN_LOCKOUT
+	  int q = map(s, SPEED_MIN, SPEED_MAX, OPERATING_PWM_THROTTLE, 0);
+  //PWMC_ConfigureChannel(PWM_INTERFACE, g_APinDescription[PWM_PIN[0]].ulPWMChannel, PWM_CMR_CPRE_CLKA, 0, 1);
+  //PWMC_EnableChannel(PWM_INTERFACE,g_APinDescription[PWM_PIN[0]].ulPWMChannel);
+  #else
+	   int q = map(s, SPEED_MIN, SPEED_MAX, 0, OPERATING_PWM_THROTTLE);
+#endif
+
+
   if (DEBUG_FAN > 0 ) {
     Serial.print("Putting out speed to fan control board:");
     Serial.println(q);
   }
+  
   analogWrite(PWM_PIN[0], q);
+#ifdef FAN_LOCKOUT
+  //PWMC_ConfigureChannel(PWM_INTERFACE, g_APinDescription[PWM_PIN[0]].ulPWMChannel, PWM_CMR_CPRE_CLKA, 0, 1);
+  //PWMC_EnableChannel(PWM_INTERFACE,g_APinDescription[PWM_PIN[0]].ulPWMChannel);
+#endif
+ 
 }
 
 // This would be clearer in the the .h!!
@@ -112,6 +127,13 @@ void SanyoAceB97::_init() {
 
   PWM_PIN[0] = 9;
   TACH_PIN[0] = A0;
+  fan_Enable = 22;
+  
+  #ifdef FAN_LOCKOUT
+      pinMode(fan_Enable, OUTPUT);
+	  digitalWrite(fan_Enable, HIGH);   
+  #endif
+  
 
   for(int i = 0; i < NUMBER_OF_FANS; i++) {
     tach_data_ts[i] = 0;
@@ -124,6 +146,23 @@ void SanyoAceB97::_init() {
   attachInterrupt(digitalPinToInterrupt(TACH_PIN[0]),tachISR0,FALLING);
 }
 
+void SanyoAceB97::E_STOP() {
+#ifdef FAN_LOCKOUT
+	 digitalWrite(fan_Enable, LOW); 
+
+	 
+  for(int i = 0; i < NUMBER_OF_FANS; i++) {
+    pinMode(PWM_PIN[i], OUTPUT);
+		  digitalWrite(PWM_PIN[i], HIGH);
+  }
+  #else
+    for(int i = 0; i < NUMBER_OF_FANS; i++) {
+    pinMode(PWM_PIN[i], OUTPUT);
+		  digitalWrite(PWM_PIN[i], LOW);
+  }
+
+   #endif
+}
 
 
 // At present, we will use the same ratio for all fans;
