@@ -66,10 +66,12 @@ void tachISR0();
 
 
 class SanyoAceB97 {
-public:
+private:
   const char *name;
   uint8_t id;
   uint8_t pin;
+  uint8_t fan_Enable;
+  
   // This is a ration from 0.0 to 1.0
   float _pwm_ratio[NUMBER_OF_FANS] = {0.0};
 
@@ -79,19 +81,22 @@ public:
   int SPEED_MAX = 100;// in %
   int SPEED_MIN = 0;//in %
   int OPERATING_PWM_THROTTLE = 255;
-  int DEBUG_FAN = 0;
+  int DEBUG_FAN = 1;
 public:
   void _init();
   unsigned long _calcRPM(uint8_t i);
   SanyoAceB97() {
     _init();
   };
+  void E_STOP();
   SanyoAceB97(const char * name, uint8_t id){
     _init();
     this->name = name;
     this->id = id;
   };
-  ~SanyoAceB97(){};
+  ~SanyoAceB97(){
+	  
+  };
 
   void printRPMS();
   void fanSpeedPerCentage(int s);
