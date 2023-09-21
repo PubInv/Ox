@@ -170,7 +170,6 @@ namespace OxApp
   float StateMachineManager::computeRampDnSetpointTemp(float t,float recent_t,unsigned long begin_dn_time_ms) {
     unsigned long ms = millis();
     const unsigned long MINUTES_RAMPING_DN = (ms - begin_dn_time_ms) / (60 * 1000);
-
     float tt = recent_t + MINUTES_RAMPING_DN * getConfig()->RAMP_DN_TARGET_D_MIN;
     tt = max(tt,getConfig()->TARGET_TEMP_C);
     tt = max(tt,getConfig()->BOUND_MIN_TEMP);
@@ -199,17 +198,21 @@ namespace OxApp
 
   void StateMachineManager::changeTargetTemp(float t) {
     MachineConfig *mc = getConfig();
+
     float tt = min(mc->BOUND_MAX_TEMP,t);
     tt = max(mc->BOUND_MIN_TEMP,tt);
+
+    mc->TARGET_TEMP_C = tt;
+    mc->report->target_temp_C = tt;
     if (tt > mc->TARGET_TEMP_C) {
-      transitionToWarmup(tt);
-    } else if (t < getConfig()->TARGET_TEMP_C) {
-      transitionToCooldown(tt);
+      float t = mc->GLOBAL_RECENT_TEMP;
+      transitionToWarmup(t);
+    } else if (t < mc->TARGET_TEMP_C) {
+      float t = mc->GLOBAL_RECENT_TEMP;
+      transitionToCooldown(t);
     } else {
       // no change needed
     }
-    mc->TARGET_TEMP_C = tt;
-    mc->report->target_temp_C = tt;
   }
 
 
@@ -220,7 +223,7 @@ namespace OxApp
     }
 
     float t = getTemperatureReading();
-     getConfig()->GLOBAL_RECENT_TEMP = t;
+    getConfig()->GLOBAL_RECENT_TEMP = t;
 
     // if we've reached operating temperature, we switch
     // states

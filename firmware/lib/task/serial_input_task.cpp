@@ -67,7 +67,7 @@ namespace OxApp
     ic.com_c = toupper ( tempChars[0] );
 
     strtokIndx = strtok(NULL, ":");
-    if (ic.com_c == 'S') {
+   if (ic.com_c == 'S') {
       ic.value_c = toupper( strtokIndx[0]) ;
     } else {
       floatFromPC = atof(strtokIndx);

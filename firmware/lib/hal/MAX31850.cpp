@@ -145,24 +145,29 @@ namespace Temperature {
   float MAX31850Temperature::GetTemperature() {
     return GetTemperature(0);
   }
+
   float MAX31850Temperature::GetTemperature(int idx) {
     float tempC;
-    if (idx == 0) {
+
+#ifdef USE_ADRESS_BASED_RETRIEVAL
+    switch(idx) {
+    case 0:
       tempC = this->sensors.getTempC(postHeaterThermometer);
-    } else {
-      tempC = this->sensors.getTempCByIndex(idx);
+      break;
+    case 1:
+      tempC = this->sensors.getTempC(postGetterThermometer);
+      break;
+    case 2:
+      tempC = this->sensors.getTempC(postStackThermometer);
+      brak;
+    default: {
+      Serial.print("INTERNAL ERROR! BAD IDX FOR MAX31850: ");
+      Serial.println(idx);
     }
-
-
-    if (tempC != DEVICE_DISCONNECTED_C)
-      {
-      }
-    else
-      {
-        Serial.print(F("Error: Could not read temperature data: "));
-        Serial.print(F("This is a DIGITAL DEVICE DISCONNET "));
-        Serial.println(idx);
-      }
+    }
+#else
+    tempC = this->sensors.getTempCByIndex(idx);
+#endif
     return tempC;
 
   }

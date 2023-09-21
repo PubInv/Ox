@@ -108,14 +108,61 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
 #ifndef ALLOW_BAD_THERMOCOUPLES_FOR_TESTING
 #ifdef USE_MAX31850_THERMOCOUPLES
   // we'd like to use the corret sentinels, but they don't seem to work...
-  //  if (temp == DEVICE_DISCONNECTED_C) {
-  if (temp < 0.0) {
-    if (!getConfig()->errors[ec].fault_present) {
-      getConfig()->errors[ec].fault_present = true;
-      getConfig()->errors[ec].begin_condition_ms = millis();
-      Serial.println("THERMOCOUPLE DISCONNECTED!!!!!!!!!");
-    }
+  if (temp == DEVICE_DISCONNECTED_C) {
+      Serial.print("THERMOCOUPLE DIGITAL DISCONNECT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is allready present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == DEVICE_FAULT_OPEN_C) {
+      Serial.print("THERMOCOUPLE OPEN FAULT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is allready present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == DEVICE_FAULT_SHORTGND_C) {
+      Serial.print("THERMOCOUPLE GROUND SHORT FAULT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is allready present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == DEVICE_FAULT_SHORTVDD_C) {
+      Serial.print("THERMOCOUPLE VDD SHORT FAULT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is allready present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == -0.19) {
+      Serial.print("THERMOCOUPLE PROBABLE ANALOG DISCONNECT FOR :");
+      Serial.println(idx);
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp < 0.0) {
+      Serial.print("THERMOCOUPLE PROBABLE  FOR :");
+      Serial.println(idx);
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
   } else {
+    if (getConfig()->errors[ec].fault_present) {
+      Serial.println("THERMOCOUPLE FAULT REMVOED FOR : ");
+      Serial.println(idx);
+    }
     getConfig()->errors[ec].fault_present = false;
   }
 
@@ -139,6 +186,16 @@ void ReadTempsTask::updateTemperatures() {
       delay(30);
     }
 
+    for(int i = 0; i < 3; i++) {
+      if (getConfig()->errors[i].fault_present) {
+        Serial.print("THERMOCOUPLE FAULT PRESENT ON :");
+        Serial.println(i);
+        Serial.print("WILL AUTOMATICALLY SHUTDOWN IF NOT RESTORED IN ");
+        Serial.print((getConfig()->errors[i].toleration_ms - getConfig()->errors[i].begin_condition_ms) / 1000);
+        Serial.print(" SECONDS.!");
+      }
+    }
+
   // These are added just to test if reading quickly causes an error,
   // which might induce us to add power to the Dallas One-Wire board, for example.
     //  float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
@@ -149,7 +206,8 @@ void ReadTempsTask::updateTemperatures() {
   float postHeaterTemp = evaluateThermocoupleRead(0,POST_HEATER_TC_BAD,post_rv);
   // The sentinel values are all less than this, so in addtion
   // to critical errors, we will leave this.
-  if (postHeaterTemp > -100.0) {
+
+  if (postHeaterTemp > 0.0) {
     getConfig()->report->post_heater_C = postHeaterTemp;
 //    good_temp_reads++;
     good_temp_reads_heater++;
@@ -161,7 +219,7 @@ void ReadTempsTask::updateTemperatures() {
 
   float postGetterTemp = evaluateThermocoupleRead(2,POST_GETTER_TC_BAD,post_rv);
   //_temperatureSensors[0].GetTemperature(2);
-  if (postGetterTemp > -100.0) {
+  if (postGetterTemp > 0.0) {
     getConfig()->report->post_getter_C = postGetterTemp;
 //    good_temp_reads++;
     good_temp_reads_getter++;
@@ -173,7 +231,7 @@ void ReadTempsTask::updateTemperatures() {
 
   float postStackTemp = evaluateThermocoupleRead(1,POST_STACK_TC_BAD,post_rv);
   // _temperatureSensors[0].GetTemperature(1);
-  if (postStackTemp > -100.0) {
+  if (postStackTemp > 0.0) {
     getConfig()->report->post_stack_C = postStackTemp;
 //    good_temp_reads++;
     good_temp_reads_stack++;
