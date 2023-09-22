@@ -60,17 +60,14 @@ namespace OxApp
       OxCore::DebugLn<const char *>("AN ERROR OCCURED. WILL NOT ENTER OFF STATE ");
       OxCore::DebugLn<const char *>("UNTIL ACKNOWLEDGED. ENTER A SINGLE 'a' TO ACKNOWLEDGE:");
     }
-    if (ms == Off) {
-      OxCore::DebugLn<const char *>("Currrently Off. Enter a single 'w' to warmup: ");
-    }
   }
 
   MachineState StateMachineManager::checkCriticalFaults(MachineState ms) {
     unsigned long now = millis();
     for(int i = 0; i < NUM_CRITICAL_ERROR_DEFINITIONS; i++) {
       if (getConfig()->errors[i].fault_present) {
-        if ((now - getConfig()->errors[i].begin_condition_ms)
-            > getConfig()->errors[i].toleration_ms) {
+        if (((float) now - (float) getConfig()->errors[i].begin_condition_ms)
+            > (float) getConfig()->errors[i].toleration_ms) {
           if (getConfig()->errors[i].response_state == EmergencyShutdown) {
             return EmergencyShutdown;
           }
@@ -182,17 +179,19 @@ namespace OxApp
 
   // if we change the targetTemp, we will enter either
   // Warmup or Cooldown, with new values.
-  void StateMachineManager::transitionToWarmup(float tt) {
+  void StateMachineManager::transitionToWarmup(float recent) {
     getConfig()->previous_ms = getConfig()->ms;
-      getConfig()->ms = Warmup;
-      getConfig()->WARM_UP_BEGIN_TEMP = tt;
-      getConfig()->BEGIN_UP_TIME_MS = millis();
+    getConfig()->ms = Warmup;
+    getConfig()->WARM_UP_BEGIN_TEMP = recent;
+    getConfig()->SETPOINT_TEMP_C = recent;
+    getConfig()->BEGIN_UP_TIME_MS = millis();
   }
 
-  void StateMachineManager::transitionToCooldown(float tt) {
+  void StateMachineManager::transitionToCooldown(float recent) {
     getConfig()->previous_ms = getConfig()->ms;
     getConfig()->ms = Cooldown;
-    getConfig()->COOL_DOWN_BEGIN_TEMP = tt;
+    getConfig()->COOL_DOWN_BEGIN_TEMP = recent;
+    getConfig()->SETPOINT_TEMP_C = recent;
     getConfig()->BEGIN_DN_TIME_MS = millis();
   }
 
@@ -204,12 +203,11 @@ namespace OxApp
 
     mc->TARGET_TEMP_C = tt;
     mc->report->target_temp_C = tt;
-    if (tt > mc->TARGET_TEMP_C) {
-      float t = mc->GLOBAL_RECENT_TEMP;
-      transitionToWarmup(t);
-    } else if (t < mc->TARGET_TEMP_C) {
-      float t = mc->GLOBAL_RECENT_TEMP;
-      transitionToCooldown(t);
+    float current = mc->GLOBAL_RECENT_TEMP;
+    if (tt > current) {
+      transitionToWarmup(current);
+    } else if (tt < current) {
+      transitionToCooldown(current);
     } else {
       // no change needed
     }
@@ -234,9 +232,8 @@ namespace OxApp
 
     // These also are dependent on which heater we are using
     float tt = computeRampUpSetpointTemp(t,
-                                       getConfig()->GLOBAL_RECENT_TEMP,
+                                       getConfig()->WARM_UP_BEGIN_TEMP,
                                        getConfig()->BEGIN_UP_TIME_MS);
-
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Warmup tt for :");
       Serial.println(getConfig()->s2heater);

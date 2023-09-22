@@ -40,10 +40,7 @@ class ReadTempsTask : public OxCore::Task
 {
 public:
   ReadTempsTask();
-  //int DEBUG_READ_TEMPS = 0;
-  int DEBUG_READ_TEMPS = 1;
-
-
+  int DEBUG_READ_TEMPS = 0;
   float evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv);
   // These two fields are used to track the
   // missing stack
@@ -91,9 +88,10 @@ public:
   void calculateDdelta();
   void dumpQueue();
   int ringComputation(int n);
+  bool _run() override;
 private:
   bool _init() override;
-  bool _run() override;
+
 };
 
 

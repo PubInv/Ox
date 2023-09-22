@@ -300,6 +300,19 @@ void setup() {
   core.DEBUG_CORE = 0;
 
   OxCore::Debug<const char *>("Added tasks\n");
+ // We want to make sure we have run the temps before we start up.
+
+  // I turn three times to make sure we get a temp...
+  stage2_readTempsTask._run();
+  stage2_readTempsTask._run();
+  stage2_readTempsTask._run();
+  for (int i = 0; i < 3; i++) {
+    getConfig(i)->GLOBAL_RECENT_TEMP = getConfig(i)->report->post_heater_C;
+    Serial.print("starting temp is: ");
+    Serial.println(getConfig(i)->GLOBAL_RECENT_TEMP);
+  }
+  OxCore::Debug<const char *>("Starting\n");
+
 }
 
 void loop() {

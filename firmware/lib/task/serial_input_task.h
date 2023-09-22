@@ -58,8 +58,12 @@ namespace OxApp
     int DEBUG_LEVEL = 0;
     void showParsedData(InputCommand ic);
     virtual bool listen(InputCommand &ic);
-    virtual bool executeCommand(InputCommand ic,MachineConfig* mc,StateMachineManager *smm);
-    void processStateChange(InputCommand ic,MachineConfig *mc);
+    virtual bool executeCommand(InputCommand ic,
+                                MachineConfig* mc,
+                                StateMachineManager *smm);
+    void processStateChange(InputCommand ic,
+                            MachineConfig *mc,
+                            StateMachineManager *smm);
   };
 
   class OEDCSSerialInputTask : public SerialInputTask {
