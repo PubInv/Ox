@@ -24,7 +24,7 @@
 bool SerialReportTask::_run()
 {
   if (DEBUG_SERIAL_REPORT > 0) {
-    OxCore::Debug<const char *>("Running ReadTemps\n");
+    OxCore::Debug<const char *>("Running SerialReport\n");
   }
   getConfig()->outputReport(getConfig()->report);
 }
