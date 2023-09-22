@@ -202,8 +202,7 @@ namespace OxApp
     float tt = min(mc->BOUND_MAX_TEMP,t);
     tt = max(mc->BOUND_MIN_TEMP,tt);
 
-    mc->TARGET_TEMP_C = tt;
-    mc->report->target_temp_C = tt;
+    
     if (tt > mc->TARGET_TEMP_C) {
       float t = mc->GLOBAL_RECENT_TEMP;
       transitionToWarmup(t);
@@ -213,6 +212,8 @@ namespace OxApp
     } else {
       // no change needed
     }
+	mc->TARGET_TEMP_C = tt;
+    mc->report->target_temp_C = tt;
   }
 
 
