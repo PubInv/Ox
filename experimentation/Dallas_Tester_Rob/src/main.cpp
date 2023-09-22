@@ -29,7 +29,7 @@ DallasTemperature sensors(&oneWire);
 
 int numberOfDevices; // Number of temperature devices found
 
-int numberToPrint = 1;
+int numberToPrint = 3;
 
 DeviceAddress tempDeviceAddress[3]; // We'll use this variable to store a found device address
 

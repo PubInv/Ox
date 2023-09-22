@@ -126,11 +126,11 @@ namespace OxApp
     return true;
   }
 
-  void SerialInputTask::processStateChange(InputCommand ic,MachineConfig *mc) {
+  void SerialInputTask::processStateChange(InputCommand ic,MachineConfig *mc,StateMachineManager *smm) {
     if (ic.value_c == '1') {
       if (mc->ms == Off) {
-        mc->ms = Warmup;
         mc->clearErrors();
+        smm->changeTargetTemp(mc->TARGET_TEMP_C);
         Debug<const char *>("Turning on: New State: Warmup!");
       } else {
         Debug<const char *>("Already On.");
@@ -153,7 +153,7 @@ namespace OxApp
 
     switch(ic.com_c) {
     case 'S': // set state based on the next character
-      processStateChange(ic,mc);
+      processStateChange(ic,mc,smm);
       break;
     case 'H':
       {
@@ -246,7 +246,7 @@ namespace OxApp
 
     showParsedData(ic);
     if ((ic.com_c == 'S') ) {
-      processStateChange(ic,mc);
+      processStateChange(ic,mc,smm);
     } else if ((ic.com_c == 'H') || (ic.com_c == 'R')) {
       SerialInputTask::executeCommand(ic,mc,smm);
     } else {

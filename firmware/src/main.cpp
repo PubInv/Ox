@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define COMPANY_NAME "pubinv.org "
 //#define PROG_NAME "main.cpp"
 #define PROG_NAME "OEDCS"
-#define VERSION "; Rev: 0.3.4"  //
+#define VERSION "; Rev: 0.3.5"  // Pathfinder Relase Candidate
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -35,17 +35,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <flash.h>
 #include <network_task.h>
 #include <cog_task.h>
-// #include <serial_task.h>
 #include <serial_input_task.h>
 #include <fault_task.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
-// #include <temp_refresh_task.h>
 #include <serialReportTask.h>
 #include <OEDCSNetworkTask.h>
 
-// #include <fanPID_task.h>
 #ifdef TEST_FANS_ONLY
 #include <fanTEST_task.h>
 #endif
@@ -57,14 +54,12 @@ static Core core;
 
 OxApp::OEDCSNetworkTask OEDCSNetworkTask;
 OxApp::CogTask cogTask;
-// OxApp::SerialTask serialTask;
 OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
 ReadTempsTask readTempsTask;
-//TempRefreshTask tempRefreshTask;
 SerialReportTask serialReportTask;
 
 #include <machine.h>
@@ -207,18 +202,6 @@ void setup()
   cogTask.heaterPIDTask = &heaterPIDTask;
 
 
-  // OxCore::TaskProperties serialProperties;
-  // serialProperties.name = "serial";
-  // serialProperties.id = 22;
-  // serialProperties.period = 250;
-  // serialProperties.priority = OxCore::TaskPriority::High;
-  // serialProperties.state_and_config = (void *) &machineConfig;
-  //  bool serialAdd = core.AddTask(&serialTask, &serialProperties);
-  // if (!serialAdd) {
-  //   OxCore::Debug<const char *>("SerialProperties add failed\n");
-  //   abort();
-  // }
-
   OxCore::TaskProperties oedcsSerialProperties;
   oedcsSerialProperties.name = "oedcsSerial";
   oedcsSerialProperties.id = 22;
@@ -231,23 +214,6 @@ void setup()
     abort();
   }
   oedcsSerialInputTask.cogTask = &cogTask;
-
-
-  // WARNING! the 5-knobs protocol does not use this.
-  // OxCore::TaskProperties TempRefreshProperties;
-  // TempRefreshProperties.name = "TempRefresh";
-  // TempRefreshProperties.id = 23;
-  // TempRefreshProperties.period = tempRefreshTask.PERIOD_MS;
-  // TempRefreshProperties.priority = OxCore::TaskPriority::Low;
-  // TempRefreshProperties.state_and_config = (void *) &machineConfig;
-  // bool tempRefresh = core.AddTask(&tempRefreshTask, &TempRefreshProperties);
-  // if (!tempRefresh) {
-  //   OxCore::Debug<const char *>("Temp Refresh add failed\n");
-  //   abort();
-  // }
-
-  // cogTask.tempRefreshTask = &tempRefreshTask;
-
 
   if (ETHERNET_BOARD_PRESENT) {
     OxCore::TaskProperties OEDCSNetworkProperties;
@@ -301,7 +267,6 @@ void setup()
   heaterPIDTask.dutyCycleTask = &dutyCycleTask;
 
   cogTask.heaterPIDTask = &heaterPIDTask;
-  //  cogTask.tempRefreshTask = &tempRefreshTask;
 
   core.DEBUG_CORE = 0;
   core._scheduler.DEBUG_SCHEDULER = 0;
@@ -310,12 +275,20 @@ void setup()
   cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;
-//  readTempsTask.DEBUG_READ_TEMPS = 0;  //FLE 20230918
-  readTempsTask.DEBUG_READ_TEMPS = 2;
+  readTempsTask.DEBUG_READ_TEMPS = 0;
   oedcsSerialInputTask.DEBUG_SERIAL = 0;
   getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");
 
+  // We want to make sure we have run the temps before we start up.
+
+  readTempsTask._run();
+  readTempsTask._run();
+  readTempsTask._run();
+  getConfig()->GLOBAL_RECENT_TEMP = getConfig()->report->post_heater_C;
+  Serial.print("starting temp is: ");
+  Serial.println(getConfig()->GLOBAL_RECENT_TEMP);
+  OxCore::Debug<const char *>("Starting\n");
   /*********************************************/
 }
 

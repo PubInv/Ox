@@ -60,9 +60,6 @@ namespace OxApp
       OxCore::DebugLn<const char *>("AN ERROR OCCURED. WILL NOT ENTER OFF STATE ");
       OxCore::DebugLn<const char *>("UNTIL ACKNOWLEDGED. ENTER A SINGLE 'a' TO ACKNOWLEDGE:");
     }
-    if (ms == Off) {
-      OxCore::DebugLn<const char *>("Currrently Off. Enter a single 'w' to warmup: ");
-    }
   }
 
   MachineState StateMachineManager::checkCriticalFaults(MachineState ms) {
@@ -182,17 +179,19 @@ namespace OxApp
 
   // if we change the targetTemp, we will enter either
   // Warmup or Cooldown, with new values.
-  void StateMachineManager::transitionToWarmup(float tt) {
+  void StateMachineManager::transitionToWarmup(float recent) {
     getConfig()->previous_ms = getConfig()->ms;
-      getConfig()->ms = Warmup;
-      getConfig()->WARM_UP_BEGIN_TEMP = tt;
-      getConfig()->BEGIN_UP_TIME_MS = millis();
+    getConfig()->ms = Warmup;
+    getConfig()->WARM_UP_BEGIN_TEMP = recent;
+    getConfig()->SETPOINT_TEMP_C = recent;
+    getConfig()->BEGIN_UP_TIME_MS = millis();
   }
 
-  void StateMachineManager::transitionToCooldown(float tt) {
+  void StateMachineManager::transitionToCooldown(float recent) {
     getConfig()->previous_ms = getConfig()->ms;
     getConfig()->ms = Cooldown;
-    getConfig()->COOL_DOWN_BEGIN_TEMP = tt;
+    getConfig()->COOL_DOWN_BEGIN_TEMP = recent;
+    getConfig()->SETPOINT_TEMP_C = recent;
     getConfig()->BEGIN_DN_TIME_MS = millis();
   }
 
@@ -204,12 +203,14 @@ namespace OxApp
 
     mc->TARGET_TEMP_C = tt;
     mc->report->target_temp_C = tt;
-    if (tt > mc->TARGET_TEMP_C) {
-      float t = mc->GLOBAL_RECENT_TEMP;
-      transitionToWarmup(t);
-    } else if (t < mc->TARGET_TEMP_C) {
-      float t = mc->GLOBAL_RECENT_TEMP;
-      transitionToCooldown(t);
+    float grt = mc->GLOBAL_RECENT_TEMP;
+    Serial.println("grt, tt");
+    Serial.println(grt);
+    Serial.println(tt);
+    if (tt > grt) {
+      transitionToWarmup(grt);
+    } else if (tt < grt) {
+      transitionToCooldown(grt);
     } else {
       // no change needed
     }
