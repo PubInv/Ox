@@ -160,7 +160,7 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
       }
   } else {
     if (getConfig()->errors[ec].fault_present) {
-      Serial.println("THERMOCOUPLE FAULT REMVOED FOR : ");
+      Serial.print("THERMOCOUPLE FAULT REMVOED FOR : ");
       Serial.println(idx);
     }
     getConfig()->errors[ec].fault_present = false;
@@ -191,8 +191,8 @@ void ReadTempsTask::updateTemperatures() {
         Serial.print("THERMOCOUPLE FAULT PRESENT ON :");
         Serial.println(i);
         Serial.print("WILL AUTOMATICALLY SHUTDOWN IF NOT RESTORED IN ");
-        Serial.print((getConfig()->errors[i].toleration_ms - getConfig()->errors[i].begin_condition_ms) / 1000);
-        Serial.print(" SECONDS.!");
+        Serial.print(((float) getConfig()->errors[i].toleration_ms - (float) getConfig()->errors[i].begin_condition_ms) / (float) 1000);
+        Serial.println(" SECONDS.!");
       }
     }
 

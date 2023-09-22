@@ -66,8 +66,8 @@ namespace OxApp
     unsigned long now = millis();
     for(int i = 0; i < NUM_CRITICAL_ERROR_DEFINITIONS; i++) {
       if (getConfig()->errors[i].fault_present) {
-        if ((now - getConfig()->errors[i].begin_condition_ms)
-            > getConfig()->errors[i].toleration_ms) {
+        if (((float) now - (float) getConfig()->errors[i].begin_condition_ms)
+            > (float) getConfig()->errors[i].toleration_ms) {
           if (getConfig()->errors[i].response_state == EmergencyShutdown) {
             return EmergencyShutdown;
           }
@@ -203,14 +203,11 @@ namespace OxApp
 
     mc->TARGET_TEMP_C = tt;
     mc->report->target_temp_C = tt;
-    float grt = mc->GLOBAL_RECENT_TEMP;
-    Serial.println("grt, tt");
-    Serial.println(grt);
-    Serial.println(tt);
-    if (tt > grt) {
-      transitionToWarmup(grt);
-    } else if (tt < grt) {
-      transitionToCooldown(grt);
+    float current = mc->GLOBAL_RECENT_TEMP;
+    if (tt > current) {
+      transitionToWarmup(current);
+    } else if (tt < current) {
+      transitionToCooldown(current);
     } else {
       // no change needed
     }
@@ -235,9 +232,8 @@ namespace OxApp
 
     // These also are dependent on which heater we are using
     float tt = computeRampUpSetpointTemp(t,
-                                       getConfig()->GLOBAL_RECENT_TEMP,
+                                       getConfig()->WARM_UP_BEGIN_TEMP,
                                        getConfig()->BEGIN_UP_TIME_MS);
-
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Warmup tt for :");
       Serial.println(getConfig()->s2heater);
