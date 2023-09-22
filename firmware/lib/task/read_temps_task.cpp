@@ -103,7 +103,20 @@ void ReadTempsTask::calculateDdelta() {
 }
 
 float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv) {
-  float temp = _temperatureSensors[0].GetTemperature(idx);
+
+  float temp = -1.0;
+  for(int i = 0; i < 5 && (temp < 0.0); i++) {
+    _temperatureSensors[0].ReadTemperature();
+    temp = _temperatureSensors[0].GetTemperature(idx);
+    if (temp < 0.0) {
+      if (DEBUG_READ_TEMPS > 0) {
+        Serial.println("PERFORMING ADDITIONAL READ");
+        Serial.println(i);
+        Serial.println(temp);
+      }
+    }
+  }
+
 
 #ifndef ALLOW_BAD_THERMOCOUPLES_FOR_TESTING
 #ifdef USE_MAX31850_THERMOCOUPLES
@@ -182,7 +195,7 @@ void ReadTempsTask::updateTemperatures() {
   _readTemperatureSensors();
 
     if (DEBUG_READ_TEMPS > 0) {
-      OxCore::Debug<const char *>("Done with _readTemperatureSensors");
+      OxCore::DebugLn<const char *>("Done with _readTemperatureSensors");
       delay(30);
     }
 
