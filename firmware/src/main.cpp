@@ -280,6 +280,15 @@ void setup()
   getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");
 
+  // We want to make sure we have run the temps before we start up.
+
+  readTempsTask._run();
+  readTempsTask._run();
+  readTempsTask._run();
+  getConfig()->GLOBAL_RECENT_TEMP = getConfig()->report->post_heater_C;
+  Serial.print("starting temp is: ");
+  Serial.println(getConfig()->GLOBAL_RECENT_TEMP);
+  OxCore::Debug<const char *>("Starting\n");
   /*********************************************/
 }
 
