@@ -9,3 +9,4 @@ The wiring of the fan is:
 |  22 |  black | GND  |
 |  13 | brown  | PWM  |
 |  6 |  yellow |  Tachometer |
+
