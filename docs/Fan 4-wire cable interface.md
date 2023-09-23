@@ -1,3 +1,4 @@
+
 As of verion 0.3.5, the fan is a 24V 4-wire fan with PWM control and tachometer (a Sanyo ACE B97).
 
 The wiring case at the end of the DB25 cable uses screw clamp connectors as shown below.
