@@ -11,3 +11,4 @@ The wiring of the fan is:
 |  13 | brown  | PWM  |
 |  6 |  yellow |  Tachometer |
 
+![IMG_4324](https://github.com/PubInv/NASA-COG/assets/5296671/8ee584ef-fd01-4cc7-978d-29192e5faf28)
