@@ -101,11 +101,9 @@ void SanyoAceB97::fanSpeedPerCentage(int s)
 {
  
 #ifdef FAN_LOCKOUT
-	  int q = map(s, SPEED_MIN, SPEED_MAX, OPERATING_PWM_THROTTLE, 0);
-  //PWMC_ConfigureChannel(PWM_INTERFACE, g_APinDescription[PWM_PIN[0]].ulPWMChannel, PWM_CMR_CPRE_CLKA, 0, 1);
-  //PWMC_EnableChannel(PWM_INTERFACE,g_APinDescription[PWM_PIN[0]].ulPWMChannel);
-  #else
-	   int q = map(s, SPEED_MIN, SPEED_MAX, 0, OPERATING_PWM_THROTTLE);
+	int q = map(s, SPEED_MIN, SPEED_MAX, OPERATING_PWM_THROTTLE, 0); // inverted PWM for Control v1 pcb's
+#else
+	int q = map(s, SPEED_MIN, SPEED_MAX, 0, OPERATING_PWM_THROTTLE);
 #endif
 
 
@@ -115,14 +113,11 @@ void SanyoAceB97::fanSpeedPerCentage(int s)
   }
   
   analogWrite(PWM_PIN[0], q);
-#ifdef FAN_LOCKOUT
-  //PWMC_ConfigureChannel(PWM_INTERFACE, g_APinDescription[PWM_PIN[0]].ulPWMChannel, PWM_CMR_CPRE_CLKA, 0, 1);
-  //PWMC_EnableChannel(PWM_INTERFACE,g_APinDescription[PWM_PIN[0]].ulPWMChannel);
-#endif
+
  
 }
 
-// This would be clearer in the the .h!!
+// This would be clearer in the the .h!! or in the machine hal for the specific device
 void SanyoAceB97::_init() {
 
   PWM_PIN[0] = 9;
@@ -141,6 +136,11 @@ void SanyoAceB97::_init() {
     tach_data_ocnt[i] = 0;
     tach_data_duration[i] = 0;
     pinMode(PWM_PIN[i], OUTPUT);
+#ifdef FAN_LOCKOUT
+	digitalWrite(PWM_PIN[i], HIGH);   
+#else
+	digitalWrite(PWM_PIN[i], LOW);   
+#endif
     pinMode(TACH_PIN[i],INPUT_PULLUP);
   }
   attachInterrupt(digitalPinToInterrupt(TACH_PIN[0]),tachISR0,FALLING);
@@ -148,20 +148,20 @@ void SanyoAceB97::_init() {
 
 void SanyoAceB97::E_STOP() {
 #ifdef FAN_LOCKOUT
-	 digitalWrite(fan_Enable, LOW); 
+  digitalWrite(fan_Enable, LOW); 
 
 	 
   for(int i = 0; i < NUMBER_OF_FANS; i++) {
     pinMode(PWM_PIN[i], OUTPUT);
 		  digitalWrite(PWM_PIN[i], HIGH);
   }
-  #else
+#else
     for(int i = 0; i < NUMBER_OF_FANS; i++) {
     pinMode(PWM_PIN[i], OUTPUT);
 		  digitalWrite(PWM_PIN[i], LOW);
   }
 
-   #endif
+#endif
 }
 
 
