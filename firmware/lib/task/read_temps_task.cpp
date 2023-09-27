@@ -104,8 +104,10 @@ void ReadTempsTask::calculateDdelta() {
 
 float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv) {
 
-  float temp = -1.0;
-  for(int i = 0; i < 5 && (temp < 0.0); i++) {
+  float temp = _temperatureSensors[0].GetTemperature(idx);
+#ifndef ALLOW_BAD_THERMOCOUPLES_FOR_TESTING
+#ifdef USE_MAX31850_THERMOCOUPLES
+  for(int i = 0; (i < 5) && (temp < 0.0); i++) {
     _temperatureSensors[0].ReadTemperature();
     temp = _temperatureSensors[0].GetTemperature(idx);
     if (temp < 0.0) {
@@ -117,9 +119,6 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
     }
   }
 
-
-#ifndef ALLOW_BAD_THERMOCOUPLES_FOR_TESTING
-#ifdef USE_MAX31850_THERMOCOUPLES
   // we'd like to use the corret sentinels, but they don't seem to work...
   if (temp == DEVICE_DISCONNECTED_C) {
       Serial.print("THERMOCOUPLE DIGITAL DISCONNECT FOR : ");
