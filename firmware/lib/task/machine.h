@@ -138,7 +138,7 @@ public:
   const float BOUND_MIN_TEMP = 25.0;
   const float BOUND_MAX_AMPERAGE_SETTING = 60.0;
   const float BOUND_MAX_WATTAGE = 300.0;
-  const float BOUND_MAX_RAMP = 1.0;
+  const float BOUND_MAX_RAMP = 3.0;
 
   // The beginning temperature of the current warming
   // or cooling cycle.

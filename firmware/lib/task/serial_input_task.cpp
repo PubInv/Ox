@@ -84,7 +84,7 @@ namespace OxApp
       Serial.println(ic.value_c);
     } else {
       Serial.print("Value ");
-      Serial.println(ic.value_f);
+      Serial.println(ic.value_f,8);
     }
   }
 
