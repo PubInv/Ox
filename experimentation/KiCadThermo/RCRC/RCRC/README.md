@@ -1,7 +1,7 @@
 ## Ideas for simulating heat capacitance using SPICE
 
-Motivaded by ideas such as found at: https://lpsa.swarthmore.edu/Systems/Thermal/SysThermalModel.html#:~:text=To%20model%20this%20system%20with,to%20the%20thermal%20system%20above.
-Lee have made a circuit model using a current source as a heat source and some resistors and capacitors to represent the heat capacitance and possible intercoupeling of a PLANT for the load of the ODECS.
+Motivated by ideas such as found at: https://lpsa.swarthmore.edu/Systems/Thermal/SysThermalModel.html#:~:text=To%20model%20this%20system%20with,to%20the%20thermal%20system%20above.  
+Lee has made a circuit model using a current source as a heat source and some resistors and capacitors to represent the heat capacitance and possible intercoupeling of a PLANT for the load of the ODECS.
 
 ### Schematic Viewer
 Stale screen shot of schematic but with circuit blocks outlines.  
@@ -11,12 +11,15 @@ Stale screen shot of schematic but with circuit blocks outlines.
 Unfortunatly the KiCanvase view does not show the dashed outlines around circuit blocks.
 
 
-Notes 
-The resistors have units DegreeC/Watt  
-The thermo capicatance should be in J/kg-K and should be Farad, however for the schematic capacitors are in uF and we have to enter as very large numbers of uF.
-The current source are Watts 
-The V out is actualy Degrees C.
+**Notes**  
+* The resistors have units DegreeC/Watt   
+* The thermo capicatance should be in J/kg-K and should be Farad, however for the schematic capacitors are in uF and we have to enter as very large numbers of uF.  
+* The current source are Watts.  
+* The V out is actualy Degrees C.  
 
 ### Simulation results
 ![RiseTimes.png](RiseTimes.png)
 
+### Limitations / Errors in Approximations
+
+This simulation does not represent air flow. It is as if only thermoconducation through a solid was responsible for all heat flow.
