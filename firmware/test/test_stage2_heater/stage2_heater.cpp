@@ -311,6 +311,25 @@ void setup() {
     Serial.print("starting temp is: ");
     Serial.println(getConfig(i)->GLOBAL_RECENT_TEMP);
   }
+
+
+  // Now we will set the initial tunings for the heater_pid tasks
+  // This is a place where one could change the settings for
+  // one of the heaters but not another.
+
+  heaterPIDTask[INT1].SetTunings(s2hal->INIT_INT1_Kp,
+                                 s2hal->INIT_INT1_Ki,
+                                 s2hal->INIT_INT1_Kd);
+
+  heaterPIDTask[EXT1].SetTunings(s2hal->INIT_EXT1_Kp,
+                                 s2hal->INIT_EXT1_Ki,
+                                 s2hal->INIT_EXT1_Kd);
+
+  heaterPIDTask[EXT2].SetTunings(s2hal->INIT_EXT2_Kp,
+                                 s2hal->INIT_EXT2_Ki,
+                                 s2hal->INIT_EXT2_Kd);
+
+
   OxCore::Debug<const char *>("Starting\n");
 
 }

@@ -67,8 +67,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 1
-// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+//#define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -147,7 +147,9 @@ void setup()
 
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
-  machineConfig.hal = new COG_HAL();
+  COG_HAL* hal = new COG_HAL();
+  machineConfig.hal = hal;
+
   machineConfig.hal->DEBUG_HAL = 0;
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
@@ -279,6 +281,13 @@ void setup()
   oedcsSerialInputTask.DEBUG_SERIAL = 0;
   getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");
+
+  // Now we will set the initial tunings for the heater_pid tasks
+  // This is a place where one could change the settings for
+  // one of the heaters but not another.
+
+  heaterPIDTask.SetTunings(hal->INIT_Kp, hal->INIT_Ki, hal->INIT_Kd);
+
 
   // We want to make sure we have run the temps before we start up.
 
