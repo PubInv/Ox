@@ -169,13 +169,15 @@ public:
 
   // Temperature Read Period is how often we will update the
   // Temperature sensor.
-  static const int TEMP_READ_PERIOD_MS = 5000;
+  //  static const int TEMP_READ_PERIOD_MS = 5000;
+  static const int TEMP_READ_PERIOD_MS = 1000;
   // Duty Cycle Adjustment Period is how often we will adject
   const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
   // This is the number of periods around a point in time we will
   // average to produce a smooth temperature. (Our thermocouples have
   // only 0.25 C resolution, which is low for a 0.5C/minute control
   // situation!) These are always taken to be BACKWARD in time.
+  // This IS NOT USED in the current code.
   const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
   // Ddelta is the change in temperature in C per min
   float Ddelta_C_per_min = 0.0;

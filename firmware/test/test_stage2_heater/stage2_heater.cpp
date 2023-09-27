@@ -67,8 +67,8 @@ Stage2NetworkTask stage2NetworkTask;
 Stage2SerialInputTask stage2SerialInputTask;
 
 
-#define ETHERNET_BOARD_PRESENT 1
-// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+// #define ETHERNET_BOARD_PRESENT 1
+#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 MachineConfig *getConfig(int i) {
@@ -317,15 +317,15 @@ void setup() {
   // This is a place where one could change the settings for
   // one of the heaters but not another.
 
-  heaterPIDTask[INT1].SetTunings(s2hal->INIT_INT1_Kp,
+  heaterPIDTask[Int1].SetTunings(s2hal->INIT_INT1_Kp,
                                  s2hal->INIT_INT1_Ki,
                                  s2hal->INIT_INT1_Kd);
 
-  heaterPIDTask[EXT1].SetTunings(s2hal->INIT_EXT1_Kp,
+  heaterPIDTask[Ext1].SetTunings(s2hal->INIT_EXT1_Kp,
                                  s2hal->INIT_EXT1_Ki,
                                  s2hal->INIT_EXT1_Kd);
 
-  heaterPIDTask[EXT2].SetTunings(s2hal->INIT_EXT2_Kp,
+  heaterPIDTask[Ext2].SetTunings(s2hal->INIT_EXT2_Kp,
                                  s2hal->INIT_EXT2_Ki,
                                  s2hal->INIT_EXT2_Kd);
 

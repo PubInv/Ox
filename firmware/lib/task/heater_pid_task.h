@@ -49,6 +49,8 @@
     // This function sets the above parameters and
     // also sets them into the PID loop.
     void SetTunings(double, double, double);
+    void printTunings();
+
     double GetKp();
     double GetKi();
     double GetKd();

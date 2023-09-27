@@ -54,11 +54,26 @@ bool HeaterPIDTask::_init()
   return true;
 }
 
+void HeaterPIDTask::printTunings() {
+    Serial.print("Tunings for: ");
+    Serial.print(MachineConfig::HeaterNames[whichHeater]);
+    Serial.print(" ");
+    Serial.print(FKp,5);
+    Serial.print(", ");
+    Serial.print(FKi,5);
+    Serial.print(", ");
+    Serial.print(FKd,5);
+    Serial.println();
+}
+
 void HeaterPIDTask::SetTunings(double p, double i, double d) {
   FKp = p;
   FKi = i;
   FKd = d;
   this->pidControllerHeater->SetTunings(p,i,d);
+  if (DEBUG_PID > 0) {
+    printTunings();
+  }
 }
 
 double HeaterPIDTask::GetKp() {
@@ -78,7 +93,7 @@ void HeaterPIDTask::shutHeaterDown() {
 }
 bool HeaterPIDTask::_run()
 {
-  if (DEBUG_PID > 0) {
+  if (DEBUG_PID > 1) {
     OxCore::Debug<const char *>("HeaterPIDTask run\n");
     double test_spud = getConfig()->report->post_heater_C;
     OxCore::DebugLn<const char *>("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
@@ -117,7 +132,7 @@ bool HeaterPIDTask::_run()
 
   getConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
 
-  if (DEBUG_PID > 0) {
+  if (DEBUG_PID > 1) {
     OxCore::Debug<const char *>("Setpoint");
     Serial.println(this->HeaterSetPoint_C,2);
     OxCore::Debug<const char *>("previous input ");

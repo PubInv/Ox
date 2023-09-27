@@ -121,7 +121,7 @@ oedcs:
 
 oedcsSN2:
 	cd firmware \
-	&& pio run -e  due_ODECS2 -t upload  \
+	&& pio run -e  due_OEDCS2 -t upload  \
 	&& pio device monitor --filter=direct --baud=115200 2>&1 | tee -a oedcs.logfile.txt
 
 ## NOTE! After this, break it and do "make run_monitor" of you characters will be discarded
