@@ -22,34 +22,18 @@
 
 
 HeaterPIDTask::HeaterPIDTask() {
-
-
-  /* Setting the initial parameters is always weird for PID controller..
-   */
-
-  // These initial values are from Tom Taylor, scaled by the fact
-  // that I am using a plant variable of duty cycle on a [0.0..1.0] scale.
-  // double FKp = 0.03;
-  // double FKi = 0.003;
-  // double FKd = 0.0;
-
-  // Upon after testing, the parameters above, operating at a 60 second
-  // sample time, is entirely too high, and allowed an overshoot of 8 degree C
-  // in only one second!
-  //    const int SAMPLE_TIME_MS = PERIOD_MS;
   // dutyCycle is measured betwen 0.0 and 1.0 (and ends
   // up being a PWM duty cycle)
   this->pidControllerHeater =
     new PID(&(this->Input_temperature_C), &(this->dutyCycle_Output),
             &(this->HeaterSetPoint_C), FKp, FKi, FKd, DIRECT);
   this->pidControllerHeater->SetOutputLimits(-1.0, 1.0);
-  this->pidControllerHeater->SetSampleTime(PERIOD_MS);
+  this->pidControllerHeater->SetSampleTime(MachineConfig::INIT_PID_PERIOD_MS);
   this->pidControllerHeater->SetMode(AUTOMATIC);
 }
 
 bool HeaterPIDTask::_init()
 {
-
   OxCore::Debug<const char *>("HeaterPIDTask init\n");
   return true;
 }
@@ -136,11 +120,11 @@ bool HeaterPIDTask::_run()
     OxCore::Debug<const char *>("Setpoint");
     Serial.println(this->HeaterSetPoint_C,2);
     OxCore::Debug<const char *>("previous input ");
-    Serial.println(previousInput,2);
+    Serial.println(previousInput,5);
     OxCore::Debug<const char *>("Final dutyCycle_Output ");
-    Serial.println(this->dutyCycle_Output,2);
+    Serial.println(this->dutyCycle_Output,5);
     OxCore::Debug<const char *>("Final dutyCycle ");
-    Serial.println(this->final_dutyCycle,2);
+    Serial.println(this->final_dutyCycle,5);
   }
 
   return true;

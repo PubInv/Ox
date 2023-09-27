@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define COMPANY_NAME "pubinv.org "
 //#define PROG_NAME "main.cpp"
 #define PROG_NAME "OEDCS"
-#define VERSION "; Rev: 0.3.5"  // Pathfinder Relase Candidate
+#define VERSION "; Rev: 0.3.6"  // Pathfinder Relase Candidate (PID changes)
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -67,8 +67,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-//#define ETHERNET_BOARD_PRESENT 1
-#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -251,7 +251,7 @@ void setup()
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
   HeaterPIDProperties.id = 26;
-  HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
+  HeaterPIDProperties.period = MachineConfig::INIT_PID_PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) &machineConfig;
   bool heaterPIDAdd = core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
@@ -273,7 +273,7 @@ void setup()
   core.DEBUG_CORE = 0;
   core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;
-  heaterPIDTask.DEBUG_PID = 1;
+  heaterPIDTask.DEBUG_PID = 0;
   cogTask.DEBUG_LEVEL = 0;
   OEDCSNetworkTask.DEBUG_UDP = 0;
   OEDCSNetworkTask.net_udp.DEBUG_UDP = 0;

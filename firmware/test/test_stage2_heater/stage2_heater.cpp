@@ -67,8 +67,8 @@ Stage2NetworkTask stage2NetworkTask;
 Stage2SerialInputTask stage2SerialInputTask;
 
 
-// #define ETHERNET_BOARD_PRESENT 1
-#define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
 
 
 MachineConfig *getConfig(int i) {
@@ -181,7 +181,7 @@ void setup() {
     OxCore::TaskProperties HeaterPIDProperties;
     HeaterPIDProperties.name = "HeaterPID";
     HeaterPIDProperties.id = 27+i;
-    HeaterPIDProperties.period = heaterPIDTask[i].PERIOD_MS;
+    HeaterPIDProperties.period = MachineConfig::INIT_PID_PERIOD_MS;
     HeaterPIDProperties.priority = OxCore::TaskPriority::High;
     HeaterPIDProperties.state_and_config = (void *) getConfig(i);
     core.AddTask(&heaterPIDTask[i], &HeaterPIDProperties);
@@ -208,34 +208,6 @@ void setup() {
 
     heaterPIDTask[i].dutyCycleTask = &dutyCycleTask[i];
 
-    // OxCore::TaskProperties TempRefreshProperties;
-    // TempRefreshProperties.name = "TempRefresh";
-    // TempRefreshProperties.id = 33+i;
-    // TempRefreshProperties.period = tempRefreshTask[i].PERIOD_MS;
-    // TempRefreshProperties.priority = OxCore::TaskPriority::Low;
-    // TempRefreshProperties.state_and_config = (void *) getConfig(i);
-    //   bool tempRefresh = core.AddTask(&tempRefreshTask[i], &TempRefreshProperties);
-    // if (!tempRefresh) {
-    //   OxCore::Debug<const char *>("Temp Refresh add failed\n");
-    //   delay(100);
-    //   abort();
-    // }
-    // stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
-
-    // if (ETHERNET_BOARD_PRESENT) {
-    //   OxCore::TaskProperties Stage2NetworkProperties;
-    //   Stage2NetworkProperties.name = "Stage2Network";
-    //   Stage2NetworkProperties.id = 36+i;
-    //   Stage2NetworkProperties.period = stage2NetworkTask[i].PERIOD_MS;
-    //   Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
-    //   Stage2NetworkProperties.state_and_config = (void *) getConfig(i);
-    //   bool stage2Network = core.AddTask(&stage2NetworkTask[i], &Stage2NetworkProperties);
-    //   if (!stage2Network) {
-    //     OxCore::Debug<const char *>("Stage2Network add failed\n");
-    //     delay(100);
-    //     abort();
-    //   }
-    // }
   }
 
   // Let's put our DEBUG_LEVELS here...
@@ -260,22 +232,6 @@ void setup() {
   for(int i = 0; i < 3; i++) {
     getConfig(i)->IS_STAGE2_HEATER_CONFIG = true;
   }
-
-  // OxCore::TaskProperties serialProperties;
-  // serialProperties.name = "serial";
-  // serialProperties.id = 36;
-  // serialProperties.period = 250;
-  // serialProperties.priority = OxCore::TaskPriority::High;
-  // serialProperties.state_and_config = (void *) getConfig(0);
-  // bool serialAdd = core.AddTask(&stage2SerialTask, &serialProperties);
-  // if (!serialAdd) {
-  //   OxCore::Debug<const char *>("SerialProperties add failed\n");
-  //   delay(100);
-  //   abort();
-  // }
-  // stage2SerialTask.DEBUG_LEVEL = 2;
-  // stage2SerialTask.hal = s2hal;
-
 
   OxCore::TaskProperties serialProperties;
   serialProperties.name = "stage2SerialInput";

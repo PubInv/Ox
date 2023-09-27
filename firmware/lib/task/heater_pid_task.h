@@ -34,10 +34,9 @@
     Stage2Heater whichHeater;
     PID *pidControllerHeater;
     int DEBUG_PID = 0;
-    // If you change this, you probably want to change the
-    // PID constants, otherwise you are changing your gain.
-    // int PERIOD_MS = 60*1000;
-    int PERIOD_MS = 5*1000;
+    // This is intentionally unintialized here
+    // because it is configured from machine.h
+    //    int PERIOD_MS;
 
     // These are on a scale of 1.0;
     double dutyCycle_Output = 0.0;

@@ -170,7 +170,22 @@ public:
   // Temperature Read Period is how often we will update the
   // Temperature sensor.
   //  static const int TEMP_READ_PERIOD_MS = 5000;
-  static const int TEMP_READ_PERIOD_MS = 1000;
+  //
+  // Note: The MAX31850, OneWire system, and the MAX31855, both,
+  // can not read reliably faster than 100ms.
+  // We have tested the TEMP_READ_PERIOD_MS at 100,
+  // but see no reason for it to be that fast.
+  // At present the code does not really use or log readings
+  // that are faster than the heater PID task period, so
+  // there is no reason for it to be more than twice as fast as that.
+  // Please refer to the documentation here:
+  // https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31850-MAX31851.pdf
+  // https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31855.pdf
+  // Please make sure that the INIT_PID_PERIOD_MS is more than
+  // the TEMP_READ_PERIOD_MS.
+  static const int TEMP_READ_PERIOD_MS = 225; // this is intentionally a little less than half the PID PERIOD
+  static const int INIT_PID_PERIOD_MS = 500;
+
   // Duty Cycle Adjustment Period is how often we will adject
   const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
   // This is the number of periods around a point in time we will
