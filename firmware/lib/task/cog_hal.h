@@ -33,8 +33,14 @@ public:
   bool init() override;
   void _updateFanPWM(float unitInterval);
 
+
   static const int NUM_HEATERS = 1;
   const int HEATER_PINS[NUM_HEATERS] = {51};
+
+  const double INIT_Kp = 0.005;
+  const double INIT_Ki = 0.000;
+  const double INIT_Kd = 0.000;
+
 };
 
 #endif

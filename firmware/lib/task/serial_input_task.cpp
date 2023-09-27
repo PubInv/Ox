@@ -174,6 +174,33 @@ namespace OxApp
         Serial.println(r);
       }
       break;
+    case 'P':
+      {
+        double P = ic.value_f;
+        double I = smm->heaterPIDTask->GetKi();
+        double D = smm->heaterPIDTask->GetKd();
+        smm->heaterPIDTask->SetTunings(P,I,D);
+        smm->heaterPIDTask->printTunings();
+      }
+      break;
+    case 'I':
+      {
+        double P = smm->heaterPIDTask->GetKp();
+        double I = ic.value_f;
+        double D = smm->heaterPIDTask->GetKd();
+        smm->heaterPIDTask->SetTunings(P,I,D);
+        smm->heaterPIDTask->printTunings();
+      }
+      break;
+    case 'D':
+      {
+        double P = smm->heaterPIDTask->GetKp();
+        double I = smm->heaterPIDTask->GetKi();
+        double D = ic.value_f;
+        smm->heaterPIDTask->SetTunings(P,I,D);
+        smm->heaterPIDTask->printTunings();
+      }
+      break;
     default:
       Serial.println("Internal Error!");
     }
@@ -184,7 +211,8 @@ namespace OxApp
       Serial.println("executeCommand");
     }
 
-    if (ic.com_c == 'S' ||  ic.com_c == 'H' || ic.com_c == 'R') {
+    if (ic.com_c == 'S' ||  ic.com_c == 'H' || ic.com_c == 'R' ||
+        ic.com_c == 'P' || ic.com_c == 'I' || ic.com_c == 'D') {
       SerialInputTask::executeCommand(ic,mc,smm);
     } else {
       switch(ic.com_c) {
@@ -247,7 +275,8 @@ namespace OxApp
     showParsedData(ic);
     if ((ic.com_c == 'S') ) {
       processStateChange(ic,mc,smm);
-    } else if ((ic.com_c == 'H') || (ic.com_c == 'R')) {
+    } else if ((ic.com_c == 'H') || (ic.com_c == 'R')
+               || ic.com_c == 'P' || ic.com_c == 'I' || ic.com_c == 'D') {
       SerialInputTask::executeCommand(ic,mc,smm);
     } else {
       switch(ic.com_c) {

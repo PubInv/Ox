@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define COMPANY_NAME "pubinv.org "
 //#define PROG_NAME "main.cpp"
 #define PROG_NAME "OEDCS"
-#define VERSION "; Rev: 0.3.5"  // Pathfinder Relase Candidate
+#define VERSION "; Rev: 0.3.6"  // Pathfinder Relase Candidate (PID changes)
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -147,7 +147,9 @@ void setup()
 
   machineConfig.init();
   //  Eventually we will migrate all hardware to the COG_HAL..
-  machineConfig.hal = new COG_HAL();
+  COG_HAL* hal = new COG_HAL();
+  machineConfig.hal = hal;
+
   machineConfig.hal->DEBUG_HAL = 0;
   bool initSuccess  = machineConfig.hal->init();
   if (!initSuccess) {
@@ -249,7 +251,7 @@ void setup()
   OxCore::TaskProperties HeaterPIDProperties;
   HeaterPIDProperties.name = "HeaterPID";
   HeaterPIDProperties.id = 26;
-  HeaterPIDProperties.period = heaterPIDTask.PERIOD_MS;
+  HeaterPIDProperties.period = MachineConfig::INIT_PID_PERIOD_MS;
   HeaterPIDProperties.priority = OxCore::TaskPriority::High;
   HeaterPIDProperties.state_and_config = (void *) &machineConfig;
   bool heaterPIDAdd = core.AddTask(&heaterPIDTask, &HeaterPIDProperties);
@@ -279,6 +281,13 @@ void setup()
   oedcsSerialInputTask.DEBUG_SERIAL = 0;
   getConfig()->script->DEBUG_MS = 0;
   OxCore::Debug<const char *>("Added tasks\n");
+
+  // Now we will set the initial tunings for the heater_pid tasks
+  // This is a place where one could change the settings for
+  // one of the heaters but not another.
+
+  heaterPIDTask.SetTunings(hal->INIT_Kp, hal->INIT_Ki, hal->INIT_Kd);
+
 
   // We want to make sure we have run the temps before we start up.
 

@@ -41,7 +41,7 @@ void MachineConfig::outputStage2Report(
   OxCore::Debug<const char *>("Ramp    C/min: ");
   OxCore::DebugLn<float>(ramp_C_per_min);
   OxCore::Debug<const char *>("Heater     DC: ");
-  Serial.println(duty_cycle,4);
+  Serial.println(duty_cycle,5);
 
 }
 
