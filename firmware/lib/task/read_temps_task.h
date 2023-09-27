@@ -44,7 +44,7 @@ public:
   float evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv);
   // These two fields are used to track the
   // missing stack
-//  unsigned long good_temp_reads = 0;
+  //  unsigned long good_temp_reads = 0;
   unsigned long good_temp_reads_heater = 0;
   unsigned long good_temp_reads_getter = 0;
   unsigned long good_temp_reads_stack = 0;

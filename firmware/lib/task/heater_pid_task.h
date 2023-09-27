@@ -34,7 +34,9 @@
     Stage2Heater whichHeater;
     PID *pidControllerHeater;
     int DEBUG_PID = 0;
-    const int PERIOD_MS = 60*1000;
+    // This is intentionally unintialized here
+    // because it is configured from machine.h
+    //    int PERIOD_MS;
 
     // These are on a scale of 1.0;
     double dutyCycle_Output = 0.0;
@@ -43,8 +45,23 @@
     double Input_temperature_C = 25.0;
     DutyCycleTask *dutyCycleTask;
 
+    // This function sets the above parameters and
+    // also sets them into the PID loop.
+    void SetTunings(double, double, double);
+    void printTunings();
+
+    double GetKp();
+    double GetKi();
+    double GetKd();
     void shutHeaterDown();
   private:
+    // These are initial default values...
+    // other code may change these by calling SetTunings
+    double FKp = 0.005;
+    // I want zero overshoot, so I am setting this to zero!
+    double FKi = 0.0;
+    double FKd = 0.0;
+
     bool _init() override;
     bool _run() override;
     // This would go into the abstract class.

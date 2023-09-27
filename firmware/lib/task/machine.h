@@ -138,7 +138,7 @@ public:
   const float BOUND_MIN_TEMP = 25.0;
   const float BOUND_MAX_AMPERAGE_SETTING = 60.0;
   const float BOUND_MAX_WATTAGE = 300.0;
-  const float BOUND_MAX_RAMP = 1.0;
+  const float BOUND_MAX_RAMP = 3.0;
 
   // The beginning temperature of the current warming
   // or cooling cycle.
@@ -169,13 +169,30 @@ public:
 
   // Temperature Read Period is how often we will update the
   // Temperature sensor.
-  static const int TEMP_READ_PERIOD_MS = 5000;
+  //  static const int TEMP_READ_PERIOD_MS = 5000;
+  //
+  // Note: The MAX31850, OneWire system, and the MAX31855, both,
+  // can not read reliably faster than 100ms.
+  // We have tested the TEMP_READ_PERIOD_MS at 100,
+  // but see no reason for it to be that fast.
+  // At present the code does not really use or log readings
+  // that are faster than the heater PID task period, so
+  // there is no reason for it to be more than twice as fast as that.
+  // Please refer to the documentation here:
+  // https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31850-MAX31851.pdf
+  // https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31855.pdf
+  // Please make sure that the INIT_PID_PERIOD_MS is more than
+  // the TEMP_READ_PERIOD_MS.
+  static const int TEMP_READ_PERIOD_MS = 225; // this is intentionally a little less than half the PID PERIOD
+  static const int INIT_PID_PERIOD_MS = 500;
+
   // Duty Cycle Adjustment Period is how often we will adject
   const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
   // This is the number of periods around a point in time we will
   // average to produce a smooth temperature. (Our thermocouples have
   // only 0.25 C resolution, which is low for a 0.5C/minute control
   // situation!) These are always taken to be BACKWARD in time.
+  // This IS NOT USED in the current code.
   const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
   // Ddelta is the change in temperature in C per min
   float Ddelta_C_per_min = 0.0;

@@ -104,6 +104,10 @@ stage2_heater:
 #	&& pio test -v -e due_stage2_heater -vvv -f "test_stage2_heater"
 	&& pio test -v -e due_stage2_heater -f "test_stage2_heater"
 
+oedcs_as_stage2:
+	cd firmware \
+	&& pio test -v -e treat_OEDCS_as_stage2 -f "test_stage2_heater" # 2>&1 | tee -a stage2.logfile.txt
+
 run_monitor:
 	cd firmware \
 	&& pio device monitor --filter=direct --baud=115200 2>&1 | tee -a logfile.txt
@@ -115,14 +119,14 @@ oedcs:
 	&& pio run -e due_ribbonfish -t upload  \
 	&& pio device monitor --filter=direct --baud=115200 2>&1 | tee -a oedcs.logfile.txt
 
+oedcsSN2:
+	cd firmware \
+	&& pio run -e  due_OEDCS2 -t upload  \
+	&& pio device monitor --filter=direct --baud=115200 2>&1 | tee -a oedcs.logfile.txt
+
 ## NOTE! After this, break it and do "make run_monitor" of you characters will be discarded
 # for more verbose output, use this...
 #	&& pio test -v -e due_stage2_heater -vvv -f "test_stage2_heater"
-
 stage2:
 	cd firmware \
 	&& pio test -v -e due_stage2_heater -f "test_stage2_heater" # 2>&1 | tee -a stage2.logfile.txt
-
-oedcs_as_stage2:
-	cd firmware \
-	&& pio test -v -e treat_OEDCS_as_stage2 -f "test_stage2_heater" # 2>&1 | tee -a stage2.logfile.txt

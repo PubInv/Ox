@@ -100,6 +100,22 @@ public:
   const int NUM_THERMOCOUPLES = 3;
   const int THERMOCOUPLE_PINS[3] = {INT1_MAXCS,EXT1_MAXCS,EXT2_MAXCS};  // Int1, Ext1, Ext2
   float getTemperatureReading(Stage2Heater s2h,MachineConfig *mc);
+
+
+  // These should be considered INITIAL defaults.
+  // The code may change the actual values inside the heater_pid_tasks.
+  const double INIT_INT1_Kp = 0.005;
+  const double INIT_INT1_Ki = 0.000;
+  const double INIT_INT1_Kd = 0.000;
+
+  const double INIT_EXT1_Kp = 0.005;
+  const double INIT_EXT1_Ki = 0.000;
+  const double INIT_EXT1_Kd = 0.000;
+
+  const double INIT_EXT2_Kp = 0.005;
+  const double INIT_EXT2_Ki = 0.000;
+  const double INIT_EXT2_Kd = 0.000;
+
 };
 
 #endif

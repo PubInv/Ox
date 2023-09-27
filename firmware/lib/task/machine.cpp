@@ -49,7 +49,9 @@ void MachineConfig::outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<float>(msr->post_stack_C);
 
         OxCore::Debug<const char *>("Heater DC    : ");
-        OxCore::DebugLn<float>(msr->heater_duty_cycle);
+        // We want more precision to see this changing faster.
+        Serial.println(msr->heater_duty_cycle,5);
+        //        OxCore::DebugLn<float>(msr->heater_duty_cycle);
         OxCore::Debug<const char *>("Stack amps  A: ");
         OxCore::DebugLn<float>(msr->stack_amps);
         OxCore::Debug<const char *>("Stack watts W: ");
