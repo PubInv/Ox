@@ -18,7 +18,6 @@
 
 #include "SanyoAceB97.h"
 #include <math.h>
-#include <arduino.h>
 
 #define PERIOD 1000
 
