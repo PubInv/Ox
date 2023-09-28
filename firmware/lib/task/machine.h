@@ -117,14 +117,12 @@ public:
   // I am going to have these two move together as one.
   // There is only one Ramp parameter, even though we use
   // two numbers
-  const float MIN_AMPERAGE = 1.0;
-  const float MIN_WATTAGE = 10.0;
   float RAMP_UP_TARGET_D_MIN = 0.5; // R (degrees C per minute)
   float RAMP_DN_TARGET_D_MIN = -0.5; // R (degrees C per minute)
   void change_ramp(float ramp);
   float TARGET_TEMP_C = 30.0; // This is the goal target
-  float MAX_AMPERAGE = 7.0; // A (Amperes)
-  float MAX_STACK_WATTAGE = 20.0; // W (Wattage)
+  float MAX_AMPERAGE = 0.0; // A (Amperes)
+  float MAX_STACK_WATTAGE = 0.0; // W (Wattage)
   float FAN_SPEED = 0.0; // F (fraction between 0.0 and 1.0)
 
   unsigned long BEGIN_DN_TIME_MS = 0;
@@ -155,21 +153,10 @@ public:
   // state manager, I need this gloabl.
   float GLOBAL_RECENT_TEMP = 30.0;
 
-  //  static const unsigned long HOLD_TIME_MINUTES = 1;
-  //  static const unsigned long HOLD_TIME_SECONDS = 60 * HOLD_TIME_MINUTES;
-  // static constexpr float STARTING_DUTY_CYCLE_FRACTION = 0.0;
-
-  float STACK_VOLTAGE = 12.0;
+  const float MAX_STACK_VOLTAGE = 12.0;
   static constexpr float IDLE_STACK_VOLTAGE = 1.0;
-  static constexpr float MIN_OPERATING_STACK_VOLTAGE = 7.0;
+  static constexpr float MIN_OPERATING_STACK_VOLTAGE = 1.0;
 
-  // FAN CONTROL
-  //  static constexpr float FULL_POWER_FOR_FAN = 0.6;
-  //  static constexpr float FAN_SPEED_AT_OPERATING_TEMP = 0.3;
-
-  // Temperature Read Period is how often we will update the
-  // Temperature sensor.
-  //  static const int TEMP_READ_PERIOD_MS = 5000;
   //
   // Note: The MAX31850, OneWire system, and the MAX31855, both,
   // can not read reliably faster than 100ms.
@@ -188,18 +175,6 @@ public:
 
   // Duty Cycle Adjustment Period is how often we will adject
   const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
-  // This is the number of periods around a point in time we will
-  // average to produce a smooth temperature. (Our thermocouples have
-  // only 0.25 C resolution, which is low for a 0.5C/minute control
-  // situation!) These are always taken to be BACKWARD in time.
-  // This IS NOT USED in the current code.
-  const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
-  // Ddelta is the change in temperature in C per min
-  float Ddelta_C_per_min = 0.0;
-
-  int num_duty_cycles = 0;
-
-  float MAXIMUM_STACK_AMPS = 12.0;
 
   void _reportFanSpeed();
 
@@ -278,6 +253,16 @@ public:
   // when we are making the system more automatic.
   void runComplexAlgolAssertions();
   void clearErrors();
+
+  // This is the number of periods around a point in time we will
+  // average to produce a smooth temperature. (Our thermocouples have
+  // only 0.25 C resolution, which is low for a 0.5C/minute control
+  // situation!) These are always taken to be BACKWARD in time.
+  // This IS NOT USED in the current code.
+  const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
+  // Ddelta is the change in temperature in C per min
+  float Ddelta_C_per_min = 0.0;
+
 };
 
 
