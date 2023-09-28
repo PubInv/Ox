@@ -101,6 +101,13 @@ namespace OxApp
       sqrt(
            getConfig()->MAX_STACK_WATTAGE /
            getConfig()->report->stack_ohms);
+
+    if (DEBUG_LEVEL > 0) {
+      Serial.print("max_a_from_raw , max_a_from_wattage");
+      Serial.print(max_a_from_raw);
+      Serial.print(" ");
+      Serial.println(max_a_from_wattage);
+    }
     return min(max_a_from_raw,max_a_from_wattage);
   }
 
@@ -137,7 +144,7 @@ namespace OxApp
       getHAL()->_updateFanPWM(fs);
       getConfig()->report->fan_pwm = fs;
       _updateStackAmperage(a);
-      _updateStackVoltage(getConfig()->STACK_VOLTAGE);
+      _updateStackVoltage(getConfig()->MAX_STACK_VOLTAGE);
   }
   MachineState CogTask::_updatePowerComponentsWarmup() {
     MachineState new_ms = Warmup;
