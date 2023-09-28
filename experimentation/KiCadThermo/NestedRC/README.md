@@ -1,15 +1,18 @@
-## Ideas for simulating heat capacitance using SPICE
+## Ideas for Simulating Nested Structure of the Stack inside a Heat Exchanger using SPICE
 
 Motivated by ideas such as found at: https://lpsa.swarthmore.edu/Systems/Thermal/SysThermalModel.html#:~:text=To%20model%20this%20system%20with,to%20the%20thermal%20system%20above.  
-Lee has made a circuit model nesting a load and a capacitor inside another load and capacitor to represent the  possible intercoupeling of a PLANT for the load of the ODECS.
+
+Lee has made a circuit model using a current source as a heat source and resistors and capacitors to represent the heat exchanged, then nesting another resistor and capacitor to represent the stack and added a currrent (sink) as a non linear load (O2 and heat out) for the PLANT as a the load of the ODECS.
+
 
 ### Schematic Viewer
 Stale screen shot of schematic but with circuit blocks outlines.  
-![image](https://github.com/PubInv/NASA-COG/assets/5836181/6f2ed0c6-0acf-4b1d-9943-d291e908a36b)
+![image](https://github.com/ForrestErickson/NASA-COG/assets/5836181/d7302b8b-ab68-4fd0-838d-41e82ac632ad)
 
 
 [Select this link for current schematic ***View on KiCanvas***.](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Fexperimentation%2FKiCadThermo%2FNestedRC%2FNestedRC.kicad_sch)  
-Unfortunatly the KiCanvase view does not show the dashed outlines around circuit blocks.
+_(Unfortunatly the KiCanvase view does not show the dashed outlines around circuit blocks.)_
+
 
 **Notes**  
 * The resistors have units DegreeC/Watt   
@@ -18,7 +21,7 @@ Unfortunatly the KiCanvase view does not show the dashed outlines around circuit
 * The V out is actualy Degrees C.  
 
 ### Simulation results
-![RiseTimes.png](NOTAVAILABLYETRiseTimes.png)
+![RiseTimes.png](foo.png)
 
 ### Limitations / Errors in Approximations
 
