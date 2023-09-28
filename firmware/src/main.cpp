@@ -67,8 +67,8 @@ SerialReportTask serialReportTask;
 MachineConfig machineConfig;
 /***********************************/
 
-#define ETHERNET_BOARD_PRESENT 1
-// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+#define ETHERNET_REQUIRED 1
+// #define ETHERNET_REQUIRED 0 //No ethernet.
 
 
 // This is to allow a code idiom compatible with the way
@@ -217,7 +217,7 @@ void setup()
   }
   oedcsSerialInputTask.cogTask = &cogTask;
 
-  if (ETHERNET_BOARD_PRESENT) {
+  if (ETHERNET_REQUIRED) {
     OxCore::TaskProperties OEDCSNetworkProperties;
     OEDCSNetworkProperties.name = "OEDCSNetwork";
     OEDCSNetworkProperties.id = 24;
