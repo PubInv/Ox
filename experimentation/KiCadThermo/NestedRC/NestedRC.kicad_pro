@@ -247,7 +247,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "RCRC.kicad_pro",
+    "filename": "NestedRC.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -317,8 +317,8 @@
       "meta": {
         "version": 0
       },
-      "model_mode": 0,
-      "workbook_filename": "RCRC.wbk"
+      "model_mode": 4,
+      "workbook_filename": "NestedRC.wbk"
     },
     "page_layout_descr_file": "",
     "plot_directory": "",

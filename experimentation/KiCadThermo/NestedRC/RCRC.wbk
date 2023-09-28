@@ -1,0 +1,5 @@
+version 2
+1
+9
+.tran 500m 360 0{return}.kicad adjustpaths{return}.save all{return}.probe alli
+0
