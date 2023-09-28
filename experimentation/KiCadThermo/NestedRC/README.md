@@ -1,15 +1,15 @@
 ## Ideas for simulating heat capacitance using SPICE
 
 Motivated by ideas such as found at: https://lpsa.swarthmore.edu/Systems/Thermal/SysThermalModel.html#:~:text=To%20model%20this%20system%20with,to%20the%20thermal%20system%20above.  
-Lee has made a circuit model using a current source as a heat source and some resistors and capacitors to represent the heat capacitance and possible intercoupeling of a PLANT for the load of the ODECS.
+Lee has made a circuit model nesting a load and a capacitor inside another load and capacitor to represent the  possible intercoupeling of a PLANT for the load of the ODECS.
 
 ### Schematic Viewer
 Stale screen shot of schematic but with circuit blocks outlines.  
-![image](https://github.com/PubInv/NASA-COG/assets/5836181/e1a02653-20e7-48ce-bdd1-a7f860d1cea0)  
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/6f2ed0c6-0acf-4b1d-9943-d291e908a36b)
 
-[Select this link for current schematic ***View on KiCanvas***.](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Fexperimentation%2FKiCadThermo%2FRCRC%2FRCRC%2FRCRC.kicad_sch)  
+
+[Select this link for current schematic ***View on KiCanvas***.](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Fexperimentation%2FKiCadThermo%2FNestedRC%2FNestedRC.kicad_sch)  
 Unfortunatly the KiCanvase view does not show the dashed outlines around circuit blocks.
-
 
 **Notes**  
 * The resistors have units DegreeC/Watt   
@@ -18,7 +18,7 @@ Unfortunatly the KiCanvase view does not show the dashed outlines around circuit
 * The V out is actualy Degrees C.  
 
 ### Simulation results
-![RiseTimes.png](RiseTimes.png)
+![RiseTimes.png](NOTAVAILABLYETRiseTimes.png)
 
 ### Limitations / Errors in Approximations
 
