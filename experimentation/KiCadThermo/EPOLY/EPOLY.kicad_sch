@@ -641,10 +641,10 @@
     (property "Sim.Type" "POLY (1) " (at 154.94 129.54 0)
       (effects (font (size 1.27 1.27)))
     )
-    (pin "1" (uuid 59e61d4e-fe60-4cfe-9b80-9009a7b863d0))
-    (pin "2" (uuid 302f8a88-ca4e-4eb1-863c-370e6476cb86))
-    (pin "3" (uuid 1fe9fd33-5866-4fe3-9c9d-9f4ce9d64722))
-    (pin "4" (uuid 336360d8-3fc4-4a45-8b42-a69673ab0ccd))
+    (pin "1" (uuid 95fd8ab7-36c6-4f0d-8c02-3b32ab2ed880))
+    (pin "2" (uuid 7e6625b6-5316-4aa3-a093-9c548a1a7b1c))
+    (pin "3" (uuid 4e3dda20-d27a-48a7-9982-09e99f2bcfdc))
+    (pin "4" (uuid cb473388-357e-416c-9eb9-4279bb0afbff))
     (instances
       (project "EPOLY"
         (path "/be5c7280-c7eb-4c05-9300-99e4d013f7d5"
