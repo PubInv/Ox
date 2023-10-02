@@ -1,0 +1,11 @@
+version 2
+1
+9
+.tran 100m 3.6k{return}.kicad adjustpaths{return}.save all{return}.probe alli
+2
+1
+V(ControlToO2)
+ 
+1
+V(CurrentOut)
+ 
