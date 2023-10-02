@@ -39,7 +39,7 @@ bool HeaterPIDTask::_init()
 }
 
 void HeaterPIDTask::printTunings() {
-    Serial.print("Tunings for: ");
+    Serial.print("Tunings for            : ");
     Serial.print(MachineConfig::HeaterNames[whichHeater]);
     Serial.print(" ");
     Serial.print(FKp,5);
@@ -47,6 +47,27 @@ void HeaterPIDTask::printTunings() {
     Serial.print(FKi,5);
     Serial.print(", ");
     Serial.print(FKd,5);
+    Serial.println();
+    Serial.print("Tunings (Inverted, 1/x): ");
+    Serial.print(MachineConfig::HeaterNames[whichHeater]);
+    Serial.print(" ");
+    if (FKp == 0.0) {
+      Serial.print("nan");
+    } else {
+      Serial.print(1.0/FKp,2);
+    }
+    Serial.print(", ");
+    if (FKi == 0.0) {
+      Serial.print("nan");
+    } else {
+      Serial.print(1.0/FKi,2);
+    }
+    Serial.print(", ");
+    if (FKd == 0.0) {
+      Serial.print("nan");
+    } else {
+      Serial.print(1.0/FKd,2);
+    }
     Serial.println();
 }
 
