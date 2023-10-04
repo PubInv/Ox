@@ -123,7 +123,8 @@ bool HeaterPIDTask::_run()
   // didn't hang when return was here.
   pidControllerHeater->Compute();
 
-  double s = this->dutyCycle_Output + this->final_dutyCycle;
+  // double s = this->dutyCycle_Output + this->final_dutyCycle;
+  double s = this->dutyCycle_Output;
   // didn't hang when return was here
 
   s = min(s, 1.0);

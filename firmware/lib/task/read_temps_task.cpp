@@ -203,14 +203,14 @@ void ReadTempsTask::updateTemperatures() {
         Serial.print("THERMOCOUPLE FAULT PRESENT ON :");
         Serial.println(i);
         Serial.print("WILL AUTOMATICALLY SHUTDOWN IF NOT RESTORED IN ");
-        Serial.print(((float) getConfig()->errors[i].toleration_ms - (float) getConfig()->errors[i].begin_condition_ms) / (float) 1000);
+        Serial.print((((float) getConfig()->errors[i].toleration_ms) - ((float) getConfig()->errors[i].begin_condition_ms)) / (float) 1000);
         Serial.println(" SECONDS.!");
       }
     }
 
   // These are added just to test if reading quickly causes an error,
   // which might induce us to add power to the Dallas One-Wire board, for example.
-    //  float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
+  //  float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
   // Sometimes we get a data read error, that comes across
   // as -127.00. In that case, we will leave the
   // value unchanged from the last read.
