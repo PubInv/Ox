@@ -105,16 +105,16 @@ public:
   // These should be considered INITIAL defaults.
   // The code may change the actual values inside the heater_pid_tasks.
   const double INIT_INT1_Kp = 0.005;
-  const double INIT_INT1_Ki = 0.000;
-  const double INIT_INT1_Kd = 0.000;
+  const double INIT_INT1_Ki = 0.0005;
+  const double INIT_INT1_Kd = 0.0002;
 
   const double INIT_EXT1_Kp = 0.005;
-  const double INIT_EXT1_Ki = 0.000;
-  const double INIT_EXT1_Kd = 0.000;
+  const double INIT_EXT1_Ki = 0.0005;
+  const double INIT_EXT1_Kd = 0.0002;
 
   const double INIT_EXT2_Kp = 0.005;
-  const double INIT_EXT2_Ki = 0.000;
-  const double INIT_EXT2_Kd = 0.000;
+  const double INIT_EXT2_Ki = 0.0005;
+  const double INIT_EXT2_Kd = 0.0002;
 
 };
 

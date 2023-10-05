@@ -61,8 +61,8 @@ void setup(void)
   //  Serial.print(PROG_NAME);
   //  Serial.println(VERSION);
 
-  pinMode(BLOWER_PWM_PIN, OUTPUT);
-  analogWrite(BLOWER_PWM_PIN, 153);
+  //  pinMode(BLOWER_PWM_PIN, OUTPUT);
+  //  analogWrite(BLOWER_PWM_PIN, 153);
 
 
 
