@@ -156,7 +156,6 @@ public:
   const float MAX_STACK_VOLTAGE = 12.0;
   static constexpr float IDLE_STACK_VOLTAGE = 1.0;
   static constexpr float MIN_OPERATING_STACK_VOLTAGE = 1.0;
-
   //
   // Note: The MAX31850, OneWire system, and the MAX31855, both,
   // can not read reliably faster than 100ms.
@@ -172,9 +171,6 @@ public:
   // the TEMP_READ_PERIOD_MS.
   static const int TEMP_READ_PERIOD_MS = 225; // this is intentionally a little less than half the PID PERIOD
   static const int INIT_PID_PERIOD_MS = 500;
-
-  // Duty Cycle Adjustment Period is how often we will adject
-  const int DUTY_CYCLE_ADJUSTMENT_PERIOD_MS = 30000;
 
   void _reportFanSpeed();
 
