@@ -4,7 +4,7 @@ version 2
 .tran 100m 3.6k{return}{return}{return}.kicad adjustpaths{return}.save all{return}.probe alli
 3
 1
-V(Net-_R5-Pad1_)
+V(ControlToO2)
  
 1
 V(TempCFC)
