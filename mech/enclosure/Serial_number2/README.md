@@ -62,8 +62,23 @@ Bottom view showing the Due card above the Controler V1 card
 Side view showing the ethernet card above the Controler V1 card and the Due below
 > ![image](https://github.com/PubInv/NASA-COG/assets/5836181/905927c0-e418-4f2e-86d9-dd53f211a30b)
 
+Actual Control v1 with Ethernet and Due  
+<a
+href="Boards20230828/Due_Controller_Ethernet.jpg"> <img style="border:5px double black"
+src="Boards20230828/Due_Controller_Ethernet.jpg"
+alt="Boards20230828/Due_Controller_Ethernet.jpg"
+width="400">  
+***Due_Controller_Ethernet.jpg***
+</a>
 
-
+Controller thermocouple wiring detail  
+<a
+href="https://user-images.githubusercontent.com/5054116/268123079-14d45110-6290-4cd9-9399-6f682203b03e.jpg"> <img style="border:5px double black"
+src="https://user-images.githubusercontent.com/5054116/268123079-14d45110-6290-4cd9-9399-6f682203b03e.jpg"
+alt="Thermocouple wiring detail image"
+width="400">  
+***Thermocouple wiring detail***
+</a>
 
 ### Cautions
 None.
