@@ -3,7 +3,9 @@ Oxygen Engine Digital Control System, enclosure for.
 
 ## Notes on Unit Fabrication
 * Serial number 1  
-MAC Address: FE:ED:1B:70:08:77
+MAC Address: FE:ED:1B:70:08:77  
+See images in folder at: https://github.com/PubInv/NASA-COG/tree/develop/docs/OEDCS_June_2023_Version_0.1/Photos
+
 
 * Serial number 2  
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/655e3bbb-fb48-4e31-902a-e10b74c27fa8)  
