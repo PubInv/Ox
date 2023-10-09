@@ -66,7 +66,7 @@ namespace OxApp
     unsigned long now = millis();
     for(int i = 0; i < NUM_CRITICAL_ERROR_DEFINITIONS; i++) {
       if (getConfig()->errors[i].fault_present) {
-        if (((float) now - (float) getConfig()->errors[i].begin_condition_ms)
+        if ((((float) now) - ((float) getConfig()->errors[i].begin_condition_ms))
             > (float) getConfig()->errors[i].toleration_ms) {
           if (getConfig()->errors[i].response_state == EmergencyShutdown) {
             return EmergencyShutdown;

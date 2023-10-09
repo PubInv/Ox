@@ -37,9 +37,10 @@ public:
   static const int NUM_HEATERS = 1;
   const int HEATER_PINS[NUM_HEATERS] = {51};
 
+  // These are lightly tested at present
   const double INIT_Kp = 0.005;
-  const double INIT_Ki = 0.000;
-  const double INIT_Kd = 0.000;
+  const double INIT_Ki = 0.0005;
+  const double INIT_Kd = 0.0002;
 
 };
 
