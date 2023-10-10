@@ -5,11 +5,13 @@
   (paper "USLedger")
 
   (title_block
-    (title "Control Interconnect Board")
+    (title "Control Interconnect Board OEDCS")
     (date "2023-10-10")
     (rev "Rev 1.1")
     (company "Public Invention")
-    (comment 1 "Contributor: Lawrence Kinceloe")
+    (comment 1 "GNU Affero General Public License v3.0")
+    (comment 2 "Contributor: Lawrence Kinceloe")
+    (comment 3 "Drawn By: (Forrest) Lee Erickson")
   )
 
   (lib_symbols
