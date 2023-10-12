@@ -15,6 +15,7 @@ Top page is "Control v1.kicad_sch". Note the page for MAX31856 is actualy for an
 * [I2C_Level_Shifter.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl_1v1%2FControl_1v1%2FI2C_Level_Shifter.kicad_sch)
 * [SPI_ControllerLevel_Shifter.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl_1v1%2FControl_1v1%2FSPI_ControllerLevel_Shifter.kicad_sch)
 * [SSR Interface.kicad_sch](https://kicanvas.org/?https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl+Board%2FControl+v1%2FSSR+Interface.kicad_sch=&github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl%2520v1%2FSSR%2520Interface.kicad_sch)
+* [display_interface.kicad_sch](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl_1v1%2FControl_1v1%2Fdisplay_interface.kicad_sch)
 
 ## PCB / PWA
 ### Browser page view of the PCB by KiCanvas.org 
