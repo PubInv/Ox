@@ -25,10 +25,11 @@ Printed Circuit Board, Printed Wiring Assembly
 ### PCB / PWA 3D Snapshot
 ![image](https://github.com/PubInv/NASA-COG/assets/5836181/09e38a5b-f79d-4ae0-accc-0d96143d3fc2)
 
+### BOM and Parts List
 File Notes:
 Add BOM spread sheet and a JLCPCB BOM.  The instructions / notes for generating the BOM and JLCPCB BOM are embedded in the file, Control_V1_BOM.xls. The proccess starts in KiCad with the BOM gewnerator nick name, "bom_csv_grouped_by_value"
-* OLD Control_V1_BOM.xls
-* OLD Control_V1_BOM_JLCPCB_20230829_2137.csv
+[Control_1V1_BOM.xls](Control_1V1_BOM.xls)
+
 
 ## License, Public Invention for this PCB, PWA
 * [Firmware: Affero GPL 3.0](https://www.gnu.org/licenses/agpl-3.0.en.html#license-text)
