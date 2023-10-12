@@ -247,6 +247,7 @@
   )
 
 
+
   (wire (pts (xy 205.74 27.94) (xy 217.17 27.94))
     (stroke (width 0) (type default))
     (uuid 0d3cd17c-b0de-416c-8bd3-3d73fb451dad)
@@ -673,7 +674,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x05_Odd_Even") (at 134.62 58.42 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 0bb76d0e-c7f3-4d99-a295-a63acab58b99)
-    (property "Reference" "J33" (at 142.24 56.515 90)
+    (property "Reference" "J36" (at 142.24 56.515 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "Conn_02x05_Odd_Even" (at 142.24 59.055 90)
@@ -706,6 +707,12 @@
     (property "Manufacturer" "Wurth" (at 134.62 58.42 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Distributor 1" "JLCPCB" (at 134.62 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C5665" (at 134.62 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 291cdaaa-6177-4352-b076-46dd3f5aa99e))
     (pin "10" (uuid 7e763ebb-2f0e-4f1c-a1f3-42b43b440386))
     (pin "2" (uuid 202d5e31-3699-4ae0-ad41-f5b8c045d456))
@@ -719,7 +726,7 @@
     (instances
       (project "Control_1v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/f2cc20dc-f81b-4e9e-a9e1-88ed6ea8264c"
-          (reference "J33") (unit 1)
+          (reference "J36") (unit 1)
         )
       )
     )
@@ -786,7 +793,7 @@
   (symbol (lib_id "Connector_Generic:Conn_02x05_Odd_Even") (at 78.74 58.42 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 9cc833e7-2c45-4bc9-a021-b2097f8e22be)
-    (property "Reference" "J32" (at 86.36 56.515 90)
+    (property "Reference" "J35" (at 86.36 56.515 90)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "Conn_02x05_Odd_Even" (at 86.36 59.055 90)
@@ -819,6 +826,12 @@
     (property "Manufacturer" "Wurth" (at 78.74 58.42 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Distributor 1" "JLCPCB" (at 78.74 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C5665" (at 78.74 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 57d547d5-01e7-4d98-a2e3-d55d9afacbeb))
     (pin "10" (uuid 47637b4e-aacb-4db4-b333-14eb548ee73a))
     (pin "2" (uuid f323211b-081d-4675-9e05-c30b32f518f3))
@@ -832,7 +845,7 @@
     (instances
       (project "Control_1v1"
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/f2cc20dc-f81b-4e9e-a9e1-88ed6ea8264c"
-          (reference "J32") (unit 1)
+          (reference "J35") (unit 1)
         )
       )
     )
@@ -865,7 +878,7 @@
           (reference "#PWR063") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/f2cc20dc-f81b-4e9e-a9e1-88ed6ea8264c"
-          (reference "#PWR089") (unit 1)
+          (reference "#PWR0102") (unit 1)
         )
       )
     )
@@ -898,7 +911,7 @@
           (reference "#PWR063") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/f2cc20dc-f81b-4e9e-a9e1-88ed6ea8264c"
-          (reference "#PWR091") (unit 1)
+          (reference "#PWR0103") (unit 1)
         )
       )
     )
@@ -950,7 +963,7 @@
           (reference "R59") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/f2cc20dc-f81b-4e9e-a9e1-88ed6ea8264c"
-          (reference "R124") (unit 1)
+          (reference "R161") (unit 1)
         )
       )
     )
@@ -983,7 +996,7 @@
           (reference "#PWR063") (unit 1)
         )
         (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/f2cc20dc-f81b-4e9e-a9e1-88ed6ea8264c"
-          (reference "#PWR090") (unit 1)
+          (reference "#PWR0104") (unit 1)
         )
       )
     )
