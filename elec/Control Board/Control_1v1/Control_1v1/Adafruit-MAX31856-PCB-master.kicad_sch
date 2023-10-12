@@ -6449,6 +6449,9 @@
     (property "Cost" "0.0015" (at 71.12 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "LongLead" "NO" (at 71.12 67.31 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6e326f78-70b2-4590-95f6-394968f5df7c))
     (pin "2" (uuid 5b48a6bb-f2b9-48ac-834f-e16ddf434e40))
     (instances

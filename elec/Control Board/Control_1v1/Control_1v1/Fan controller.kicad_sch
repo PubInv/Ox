@@ -8607,6 +8607,9 @@
     (property "Cost" "0.0015" (at 212.09 76.2 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "LongLead" "NO" (at 212.09 76.2 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3ccb2f90-52f2-4287-b4d7-952e861ddbb3))
     (pin "2" (uuid 1caf3c93-974f-4313-a082-f51ff411fc7a))
     (instances

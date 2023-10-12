@@ -4340,6 +4340,9 @@
     (property "Cost" "0.0015" (at 64.77 83.82 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "LongLead" "NO" (at 64.77 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f3bb0bb2-2492-45c3-b57b-be93bc986955))
     (pin "2" (uuid 3304a16d-8363-4967-bf75-cd895817bd5b))
     (instances
