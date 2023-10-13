@@ -4,6 +4,16 @@
 
   (paper "A4")
 
+  (title_block
+    (title "Control Interconnect Board OEDCS")
+    (date "2023-10-10")
+    (rev "Rev 1.1")
+    (company "Public Invention")
+    (comment 1 "GNU Affero General Public License v3.0")
+    (comment 2 "Contributor: Lawrence Kinceloe")
+    (comment 3 "Drawn By: (Forrest) Lee Erickson")
+  )
+
   (lib_symbols
     (symbol "Connector_Generic:Conn_02x05_Odd_Even" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 1.27 7.62 0)

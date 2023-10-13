@@ -18232,6 +18232,23 @@
     )
   )
 
+  (sheet (at 318.77 283.21) (size 49.53 25.4) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 32c3c369-8481-45ce-a02e-9625c98479e4)
+    (property "Sheetname" "BreadBoard" (at 318.77 282.4984 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "BreadBoard30P.kicad_sch" (at 318.77 309.1946 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59" (page "10"))
+      )
+    )
+  )
+
   (sheet (at 91.44 233.68) (size 38.1 27.94) (fields_autoplaced)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
