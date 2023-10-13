@@ -3839,7 +3839,7 @@
     (property "Distributor 1" "JLCPCB" (at 116.84 137.16 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Distributor 1 PN" "C305981" (at 116.84 137.16 0)
+    (property "Distributor 1 PN" "C2683355" (at 116.84 137.16 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Distributor 2" "Digikey" (at 116.84 137.16 0)
