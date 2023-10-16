@@ -24,21 +24,22 @@ An unlisted [YouTube video](https://youtu.be/1nq-Mw7jZ5A) has been uploaded that
 
 ## How to run
 
-At present, this code does little (for the NASA COG project). We intend
-to build a native (that is, laptop) simulation using mock hardware components.
-The fundamental way to run this is to perform:
-> cd firmware
-
-> pio run -e native && ./.pio/build/native/program
-
+### Linux
+The fundamental way to run this is to perform:  
+> cd firmware  
+> pio run -e native && ./.pio/build/native/program  
 We are currently creating the [RibbonFish](https://github.com/PubInv/NASA-COG/blob/develop/RibbonFish.md) proof-of-concept.
+This can be run on a Due by executing:  
+> make pio-run-due_ribbonfish  
+As this develops, it will use a specific Due hardware configuration,  
+please see the [documentation](https://github.com/PubInv/NASA-COG/blob/develop/RibbonFish.md) for details to build your own.  
 
-This can be run on a Due by executing:
-
-> make pio-run-due_ribbonfish
-
-As this develops, it will use a specific Due hardware configuration,
-please see the [documentation](https://github.com/PubInv/NASA-COG/blob/develop/RibbonFish.md) for details to build your own.
+### Windows
+With Visual Studio Code.  
+Install the Plateform IO extention  
+To open he project in Visual Studio Code.  
+Open Project. Navigate to the firmware folder.   
+Select the file platformio.ini  
 
 
 ## Annoyances

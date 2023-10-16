@@ -30,8 +30,9 @@ class SerialReportTask : public OxCore::Task
 {
 public:
   SerialReportTask();
-  int DEBUG_SERIAL_REPORT = 1;
+  int DEBUG_SERIAL_REPORT = 0;
   int PERIOD_MS = 10000;
+
 private:
   bool _init() override;
   bool _run() override;

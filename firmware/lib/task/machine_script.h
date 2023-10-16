@@ -86,6 +86,7 @@ class MachinePhase {
   float stackCurrent;
   float stackRamp;
 };
+
 struct phase_t {
   int duration;
   int fan_speed;
@@ -97,8 +98,6 @@ struct phase_t {
   int stack_current;
   int stack_ramp;
 };
-
-//
 
 class MachineScript {
  public:
@@ -114,9 +113,9 @@ class MachineScript {
   MachinePhase *phasesInState[8];
   bool AppendPhase(MachinePhase p);
   void DeleteAllPhases();
-  MachineScript *parse_buffer_into_new_script(char *buffer);
+  MachineScript *parse_buffer_into_new_script(char *buffer, int debug);
+  void DeleteAllPhases(struct phase_t *p);
 };
-
 
 int parse_param(char *buffer, const char *value, char **rvalue);
 int parse_param(char *buffer, const char *value, int *rvalue);

@@ -81,6 +81,7 @@ Task* Scheduler::getNextTaskToRun(TimeMs currentTime) {
     } else {
       Serial.println("nexTask");
       Serial.println(nextTask->_properties.name);
+      delay(50);
     }
   }
 

@@ -1,0 +1,35 @@
+Drill report for Control v1.kicad_pcb
+Created on 8/28/2023 10:07:15 PM
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L2 :  B.Cu                      back
+
+
+Drill file 'Control v1-PTH.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.400mm  0.0157"  (307 holes)
+    T2  0.500mm  0.0197"  (80 holes)
+    T3  0.760mm  0.0299"  (6 holes)
+    T4  0.800mm  0.0315"  (24 holes)
+    T5  1.000mm  0.0394"  (241 holes)
+    T6  1.016mm  0.0400"  (92 holes)
+    T7  1.100mm  0.0433"  (8 holes)
+    T8  1.200mm  0.0472"  (4 holes)
+    T9  1.500mm  0.0591"  (27 holes)
+    T10  2.540mm  0.1000"  (18 holes)
+    T11  3.200mm  0.1260"  (4 holes)
+    T12  3.500mm  0.1378"  (10 holes)
+
+    Total plated holes count 821
+
+
+Drill file 'Control v1-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  3.200mm  0.1260"  (6 holes)
+    T2  3.250mm  0.1280"  (2 holes)
+
+    Total unplated holes count 8

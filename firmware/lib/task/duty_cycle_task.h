@@ -44,7 +44,10 @@ class DutyCycleTask : public OxCore::Task
     DutyCycleTask();
     Stage2Heater whichHeater;
     float dutyCycle;
-    const int PERIOD_MS = 50;
+    //    const int PERIOD_MS = 50;
+    // AmOx has stated that the heater will have longer life
+    // if the "time on" is set longer than 50 ms.
+    const int PERIOD_MS = 3000;
     boolean isOn = false;
     float recorded_duty_cycle = 0;
     unsigned long recorded_dc_ms = 0;

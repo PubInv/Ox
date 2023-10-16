@@ -23,30 +23,42 @@
 
 void MachineConfig::outputStage2Report(
                                        Stage2Heater s2h,MachineStatusReport *msr,
-                                       float target_temp,float measured_temp,float duty_cycle) {
-  OxCore::Debug<const char *>("Stage2Heater: ");
-  delay(100);
+                                       float target_temp,
+                                       float setpoint_temp,
+                                       float measured_temp,float duty_cycle, float ramp_C_per_min) {
+  OxCore::Debug<const char *>("Stage2Heater   : ");
+
   OxCore::DebugLn<const char *>(MachineConfig::HeaterNames[s2h]);
-  delay(100);
+
   OxCore::Debug<const char *>("Machine State: ");
   OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
-  delay(100);
-  OxCore::Debug<const char *>("Target      C: ");
+  OxCore::Debug<const char *>("Target    C: ");
   OxCore::DebugLn<float>(target_temp);
-  OxCore::Debug<const char *>("Temp C       : ");
-  // This needs to change base on our state...
+  OxCore::Debug<const char *>("Setpoint    C: ");
+  OxCore::DebugLn<float>(setpoint_temp);
+  OxCore::Debug<const char *>("Temp        C: ");
   OxCore::DebugLn<float>(measured_temp);
-  OxCore::Debug<const char *>("Heater DC    : ");
-  Serial.println(duty_cycle,4);
-  delay(100);
+  OxCore::Debug<const char *>("Ramp    C/min: ");
+  OxCore::DebugLn<float>(ramp_C_per_min);
+  OxCore::Debug<const char *>("Heater     DC: ");
+  Serial.println(duty_cycle,5);
+
 }
 
 void MachineConfig::createStage2JSONReport(Stage2Heater s2h,MachineStatusReport* msr, char *buffer) {
-  sprintf(buffer+strlen(buffer), "\"Stage2Heater\": %d,\n",s2h);
-  sprintf(buffer+strlen(buffer), "\"MachineState\": %d,\n",msr->ms);
-  sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f,\n",msr->target_temp_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f,\n",msr->post_heater_C);
-  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": %.2f,\n",msr->heater_duty_cycle);
-
+  sprintf(buffer+strlen(buffer), "\"Stage2Heater\": %d",s2h);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"MachineState\": %d",msr->ms);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"TargetC\": %.2f",msr->target_temp_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"SetpointC\": %.2f",msr->setpoint_temp_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"HeaterC\": %.2f",msr->post_heater_C);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"HeaterDutyCycle\": %.2f",msr->heater_duty_cycle);
+  strcat(buffer, ",\n");
+  sprintf(buffer+strlen(buffer), "\"RampC\": %.2f",msr->target_ramp_C);
+  strcat(buffer, "\n");
 
 }
