@@ -1,4 +1,4 @@
-# Control V1.1 akd 1V1
+# Control V1.1 aka 1V1
 Version 1.1 control board for NASA COG
 
 On line schematic viewing from **Kicanvas** See: https://kicanvas.org  
@@ -23,17 +23,18 @@ Printed Circuit Board, Printed Wiring Assembly
 * [Control 1v1.kicad_pcb](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FPubInv%2FNASA-COG%2Fblob%2Fdevelop%2Felec%2FControl%2520Board%2FControl_1v1%2FControl_1v1%2FControl_1v1.kicad_pcb)
 
 ### PCB / PWA 3D Snapshot
-![image](https://github.com/PubInv/NASA-COG/assets/5836181/09e38a5b-f79d-4ae0-accc-0d96143d3fc2)
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/d3ca428f-1e28-4c63-b433-92a612f0b6fe)
 
 ### BOM and Parts List
 File Notes:
-Add BOM spread sheet and a JLCPCB BOM.  The instructions / notes for generating the BOM and JLCPCB BOM are embedded in the file, Control_V1_BOM.xls. The proccess starts in KiCad with the BOM gewnerator nick name, "bom_csv_grouped_by_value"
-[Control_1V1_BOM.xls](Control_1V1_BOM.xls)
+See notes on the Gerbers, BOM and placement files at:
+https://github.com/PubInv/NASA-COG/issues/342
 
 
 ## License, Public Invention for this PCB, PWA
 * [Firmware: Affero GPL 3.0](https://www.gnu.org/licenses/agpl-3.0.en.html#license-text)
 * [CERN Open Hardware Licence Version 2 - Strongly Reciprocal](https://ohwr.org/cern_ohl_s_v2.txt)
+
 <hr> 
 
 ## KiCad Symbol & Footprint Library for Arduino Modules
