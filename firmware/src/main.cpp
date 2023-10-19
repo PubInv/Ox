@@ -42,6 +42,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <read_temps_task.h>
 #include <serialReportTask.h>
 #include <OEDCSNetworkTask.h>
+#include <heartbeat_task.h>
 
 #ifdef TEST_FANS_ONLY
 #include <fanTEST_task.h>
@@ -56,6 +57,8 @@ OxApp::OEDCSNetworkTask OEDCSNetworkTask;
 OxApp::CogTask cogTask;
 OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
+
+OxApp::HeartbeatTask heartbeatTask;
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
@@ -258,6 +261,20 @@ void setup()
 
   if (!heaterPIDAdd) {
     OxCore::Debug<const char *>("heaterPIDAdd Faild\n");
+    abort();
+  }
+
+//foo
+OxCore::TaskProperties HeartbeatProperties;
+  HeartbeatProperties.name = "Heartbeat";
+  HeartbeatProperties.id = 30;
+  HeartbeatProperties.period = MachineConfig::INIT_PID_PERIOD_MS; //Make new one in MachineConfig
+  HeartbeatProperties.priority = OxCore::TaskPriority::High;
+  HeartbeatProperties.state_and_config = (void *) &machineConfig;
+  bool heartbeatAdd = core.AddTask(&heartbeatTask, &HeartbeatProperties);
+
+  if (!heartbeatAdd) {
+    OxCore::Debug<const char *>("heartbeatAdd Faild\n");
     abort();
   }
 

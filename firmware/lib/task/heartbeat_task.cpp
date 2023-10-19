@@ -14,8 +14,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "heartbeat_task.h"
-#include <cmath>
-#include <abstract_temperature.h>
 
 using namespace std;
 
@@ -25,6 +23,7 @@ namespace OxApp
     bool HeartbeatTask::_init()
     {
         OxCore::Debug<const char *>("HeartbeatTask init\n");
+        Serial.println("HeartbeatTask init");
 
         return true;
     }
@@ -32,6 +31,7 @@ namespace OxApp
     bool HeartbeatTask::_run()
     {
       // Note:adding a heartbeat task
+      Serial.println("HeartbeatTask run");
         return true;
     }
 

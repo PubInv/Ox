@@ -24,19 +24,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #endif
 #include <core.h>
 #include "../collections/array.h"
-#include "heater.h"
 #include <machine.h>
 
-#include <abstract_temperature.h>
 
 #ifndef RIBBONFISH
-#include <mock_temperature_sensor.h>
+//
 #else
-#include <DS18B20_temperature.h>
+//
 #endif
-
-
-#include "model.h"
 
 
 namespace OxApp
