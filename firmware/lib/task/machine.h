@@ -172,6 +172,8 @@ public:
   static const int TEMP_READ_PERIOD_MS = 225; // this is intentionally a little less than half the PID PERIOD
   static const int INIT_PID_PERIOD_MS = 500;
 
+  static const int INIT_HEARTBEAT_PERIOD_MS = 500;
+
   void _reportFanSpeed();
 
   static const int NUM_MACHINE_STATES = 8;

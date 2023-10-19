@@ -264,11 +264,10 @@ void setup()
     abort();
   }
 
-//foo
 OxCore::TaskProperties HeartbeatProperties;
   HeartbeatProperties.name = "Heartbeat";
   HeartbeatProperties.id = 30;
-  HeartbeatProperties.period = MachineConfig::INIT_PID_PERIOD_MS; //Make new one in MachineConfig
+  HeartbeatProperties.period = MachineConfig::INIT_HEARTBEAT_PERIOD_MS; 
   HeartbeatProperties.priority = OxCore::TaskPriority::High;
   HeartbeatProperties.state_and_config = (void *) &machineConfig;
   bool heartbeatAdd = core.AddTask(&heartbeatTask, &HeartbeatProperties);
