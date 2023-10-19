@@ -1,0 +1,2353 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid f529ef1e-cfdd-47c8-b104-1df0f38bd7d2)
+
+  (paper "USLedger")
+
+  (title_block
+    (title "Control Interconnect Board OEDCS")
+    (date "2023-10-10")
+    (rev "Rev 1.1")
+    (company "Public Invention")
+    (comment 1 "GNU Affero General Public License v3.0")
+    (comment 2 "Contributor: Lawrence Kinceloe")
+    (comment 3 "Drawn By: (Forrest) Lee Erickson")
+  )
+
+  (lib_symbols
+    (symbol "Connector:Screw_Terminal_01x02" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+      (property "Reference" "J" (at 0 2.54 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" "Screw_Terminal_01x02" (at 0 -5.08 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "~" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "screw terminal" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_fp_filters" "TerminalBlock*:*" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "Screw_Terminal_01x02_1_1"
+        (rectangle (start -1.27 1.27) (end 1.27 -3.81)
+          (stroke (width 0.254) (type default))
+          (fill (type background))
+        )
+        (circle (center 0 -2.54) (radius 0.635)
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -0.5334 -2.2098)
+            (xy 0.3302 -3.048)
+          )
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -0.5334 0.3302)
+            (xy 0.3302 -0.508)
+          )
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -0.3556 -2.032)
+            (xy 0.508 -2.8702)
+          )
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy -0.3556 0.508)
+            (xy 0.508 -0.3302)
+          )
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (circle (center 0 0) (radius 0.635)
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
+        )
+        (pin passive line (at -5.08 0 0) (length 3.81)
+          (name "Pin_1" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at -5.08 -2.54 0) (length 3.81)
+          (name "Pin_2" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "Device:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "R" (at 2.032 0 90)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" "R" (at 0 0 90)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at -1.778 0 90)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "~" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "R res resistor" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Resistor" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_fp_filters" "R_*" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "R_0_1"
+        (rectangle (start -1.016 -2.54) (end 1.016 2.54)
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "R_1_1"
+        (pin passive line (at 0 3.81 270) (length 1.27)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at 0 -3.81 90) (length 1.27)
+          (name "~" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "Transistor_FET:BSS138" (pin_names hide) (in_bom yes) (on_board yes)
+      (property "Reference" "Q" (at 5.08 1.905 0)
+        (effects (font (size 1.27 1.27)) (justify left))
+      )
+      (property "Value" "BSS138" (at 5.08 0 0)
+        (effects (font (size 1.27 1.27)) (justify left))
+      )
+      (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 5.08 -1.905 0)
+        (effects (font (size 1.27 1.27) italic) (justify left) hide)
+      )
+      (property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) (justify left) hide)
+      )
+      (property "ki_keywords" "N-Channel MOSFET" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "50V Vds, 0.22A Id, N-Channel MOSFET, SOT-23" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_fp_filters" "SOT?23*" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "BSS138_0_1"
+        (polyline
+          (pts
+            (xy 0.254 0)
+            (xy -2.54 0)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0.254 1.905)
+            (xy 0.254 -1.905)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0.762 -1.27)
+            (xy 0.762 -2.286)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0.762 0.508)
+            (xy 0.762 -0.508)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0.762 2.286)
+            (xy 0.762 1.27)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 2.54 2.54)
+            (xy 2.54 1.778)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 2.54 -2.54)
+            (xy 2.54 0)
+            (xy 0.762 0)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 0.762 -1.778)
+            (xy 3.302 -1.778)
+            (xy 3.302 1.778)
+            (xy 0.762 1.778)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 1.016 0)
+            (xy 2.032 0.381)
+            (xy 2.032 -0.381)
+            (xy 1.016 0)
+          )
+          (stroke (width 0) (type default))
+          (fill (type outline))
+        )
+        (polyline
+          (pts
+            (xy 2.794 0.508)
+            (xy 2.921 0.381)
+            (xy 3.683 0.381)
+            (xy 3.81 0.254)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (polyline
+          (pts
+            (xy 3.302 0.381)
+            (xy 2.921 -0.254)
+            (xy 3.683 -0.254)
+            (xy 3.302 0.381)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+        (circle (center 1.651 0) (radius 2.794)
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+        (circle (center 2.54 -1.778) (radius 0.254)
+          (stroke (width 0) (type default))
+          (fill (type outline))
+        )
+        (circle (center 2.54 1.778) (radius 0.254)
+          (stroke (width 0) (type default))
+          (fill (type outline))
+        )
+      )
+      (symbol "BSS138_1_1"
+        (pin input line (at -5.08 0 0) (length 2.54)
+          (name "G" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at 2.54 -5.08 90) (length 2.54)
+          (name "S" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at 2.54 5.08 270) (length 2.54)
+          (name "D" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+    (symbol "power:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+      (property "Reference" "#PWR" (at 0 -6.35 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Value" "GND" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_keywords" "global power" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "GND_0_1"
+        (polyline
+          (pts
+            (xy 0 0)
+            (xy 0 -1.27)
+            (xy 1.27 -1.27)
+            (xy 0 -2.54)
+            (xy -1.27 -1.27)
+            (xy 0 -1.27)
+          )
+          (stroke (width 0) (type default))
+          (fill (type none))
+        )
+      )
+      (symbol "GND_1_1"
+        (pin power_in line (at 0 0 270) (length 0) hide
+          (name "GND" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
+  )
+
+  (junction (at 91.44 166.37) (diameter 0) (color 0 0 0 0)
+    (uuid 0afaf696-73fb-435c-9929-077ce7af6ccf)
+  )
+  (junction (at 130.81 80.01) (diameter 0) (color 0 0 0 0)
+    (uuid 157983e3-0e62-4962-b3e1-38cd6706ae74)
+  )
+  (junction (at 91.44 231.14) (diameter 0) (color 0 0 0 0)
+    (uuid 1cf22465-9831-470e-944d-7012200d3f28)
+  )
+  (junction (at 130.81 210.82) (diameter 0) (color 0 0 0 0)
+    (uuid 62918a93-a68d-4aa0-aa2e-97ecd5b5a61a)
+  )
+  (junction (at 91.44 100.33) (diameter 0) (color 0 0 0 0)
+    (uuid 9eccb1e1-6de6-4066-88e4-b10be4cf7506)
+  )
+  (junction (at 130.81 146.05) (diameter 0) (color 0 0 0 0)
+    (uuid b8fcf70a-9e24-45f3-882c-545557272536)
+  )
+
+  (wire (pts (xy 120.65 87.63) (xy 120.65 95.25))
+    (stroke (width 0) (type default))
+    (uuid 0fe292c4-92be-4361-a195-8ea2b0d4df4e)
+  )
+  (wire (pts (xy 120.65 218.44) (xy 120.65 226.06))
+    (stroke (width 0) (type default))
+    (uuid 14613d95-0101-460d-a5ee-24203793bdd2)
+  )
+  (wire (pts (xy 91.44 231.14) (xy 97.79 231.14))
+    (stroke (width 0) (type default))
+    (uuid 180ce35c-73c9-4993-84e8-90edf01abc60)
+  )
+  (wire (pts (xy 88.9 100.33) (xy 91.44 100.33))
+    (stroke (width 0) (type default))
+    (uuid 1d765d65-ae68-4aca-9b41-64cfa986cffc)
+  )
+  (wire (pts (xy 91.44 242.57) (xy 91.44 246.38))
+    (stroke (width 0) (type default))
+    (uuid 1fdfd037-ca71-414c-b603-80ee1d5d9b61)
+  )
+  (wire (pts (xy 123.19 201.93) (xy 130.81 201.93))
+    (stroke (width 0) (type default))
+    (uuid 21f41669-f1b0-4208-a3d4-a267486a37b6)
+  )
+  (wire (pts (xy 134.62 217.17) (xy 134.62 218.44))
+    (stroke (width 0) (type default))
+    (uuid 25382ea0-211b-4978-8eeb-09007f62846b)
+  )
+  (wire (pts (xy 91.44 100.33) (xy 97.79 100.33))
+    (stroke (width 0) (type default))
+    (uuid 25fc0870-b3e9-4eb1-8d7d-d6511e99362c)
+  )
+  (wire (pts (xy 134.62 146.05) (xy 134.62 149.86))
+    (stroke (width 0) (type default))
+    (uuid 3029ee98-6727-4559-b118-502a6c793023)
+  )
+  (wire (pts (xy 134.62 217.17) (xy 199.39 217.17))
+    (stroke (width 0) (type default))
+    (uuid 37994513-1dae-4500-b609-8d77b0b2f2be)
+  )
+  (wire (pts (xy 111.76 201.93) (xy 115.57 201.93))
+    (stroke (width 0) (type default))
+    (uuid 3ab13cfa-cea2-4d44-9469-f7c07420dc64)
+  )
+  (wire (pts (xy 91.44 166.37) (xy 91.44 170.18))
+    (stroke (width 0) (type default))
+    (uuid 3ad40313-4d3c-43e1-a95f-7d51f0e7d0b3)
+  )
+  (wire (pts (xy 120.65 171.45) (xy 120.65 175.26))
+    (stroke (width 0) (type default))
+    (uuid 3ad8a078-f2e9-469b-bbf9-08eff9b04230)
+  )
+  (wire (pts (xy 123.19 137.16) (xy 130.81 137.16))
+    (stroke (width 0) (type default))
+    (uuid 3b66b6a1-15ab-4353-bcf8-bb0ea6da3413)
+  )
+  (wire (pts (xy 111.76 71.12) (xy 115.57 71.12))
+    (stroke (width 0) (type default))
+    (uuid 42444366-ab47-40ae-a983-d467a695726f)
+  )
+  (wire (pts (xy 91.44 100.33) (xy 91.44 104.14))
+    (stroke (width 0) (type default))
+    (uuid 4c491415-0cc4-48cb-b45b-3c8c384159d1)
+  )
+  (wire (pts (xy 88.9 231.14) (xy 91.44 231.14))
+    (stroke (width 0) (type default))
+    (uuid 4e74e99b-0df0-42e6-801c-7095abf9ca40)
+  )
+  (wire (pts (xy 134.62 87.63) (xy 132.08 87.63))
+    (stroke (width 0) (type default))
+    (uuid 53211dd8-a639-4f46-8d23-f699fd336ffa)
+  )
+  (wire (pts (xy 130.81 201.93) (xy 130.81 210.82))
+    (stroke (width 0) (type default))
+    (uuid 539da52a-da93-42d1-af24-005f2abce0b8)
+  )
+  (wire (pts (xy 130.81 210.82) (xy 134.62 210.82))
+    (stroke (width 0) (type default))
+    (uuid 55b24a6e-e6db-4174-b035-333bf5332ec7)
+  )
+  (wire (pts (xy 130.81 71.12) (xy 130.81 80.01))
+    (stroke (width 0) (type default))
+    (uuid 5903d3f9-1295-43f8-ae79-a0ed657f83f1)
+  )
+  (wire (pts (xy 134.62 218.44) (xy 132.08 218.44))
+    (stroke (width 0) (type default))
+    (uuid 59ed3732-60a0-4c75-9c3f-2df6c3f6efad)
+  )
+  (wire (pts (xy 134.62 214.63) (xy 199.39 214.63))
+    (stroke (width 0) (type default))
+    (uuid 65aeda4f-c289-4a40-9f44-49d175063a39)
+  )
+  (wire (pts (xy 105.41 100.33) (xy 113.03 100.33))
+    (stroke (width 0) (type default))
+    (uuid 67afbf63-ba1b-446d-97f6-633e076bf69a)
+  )
+  (wire (pts (xy 124.46 87.63) (xy 120.65 87.63))
+    (stroke (width 0) (type default))
+    (uuid 6996e1ff-dc19-4d61-ba39-ce7f1b7ae864)
+  )
+  (wire (pts (xy 123.19 71.12) (xy 130.81 71.12))
+    (stroke (width 0) (type default))
+    (uuid 69bd6a5f-71c6-42ba-8674-22c3dc0ddad5)
+  )
+  (wire (pts (xy 113.03 210.82) (xy 115.57 210.82))
+    (stroke (width 0) (type default))
+    (uuid 7693d10d-9d1b-44f1-90f7-fd1447a115ab)
+  )
+  (wire (pts (xy 91.44 231.14) (xy 91.44 234.95))
+    (stroke (width 0) (type default))
+    (uuid 7c9d34b9-df6f-45cc-949b-e6e473a6a7ca)
+  )
+  (wire (pts (xy 105.41 231.14) (xy 113.03 231.14))
+    (stroke (width 0) (type default))
+    (uuid 7ddad798-217f-453e-9a28-21e073dea811)
+  )
+  (wire (pts (xy 111.76 137.16) (xy 115.57 137.16))
+    (stroke (width 0) (type default))
+    (uuid 7eeac1ec-36e9-485f-899d-42ab2c7a1bcd)
+  )
+  (wire (pts (xy 134.62 86.36) (xy 199.39 86.36))
+    (stroke (width 0) (type default))
+    (uuid 812e31e6-28ec-4337-9f2b-8d25ded42b74)
+  )
+  (wire (pts (xy 130.81 80.01) (xy 134.62 80.01))
+    (stroke (width 0) (type default))
+    (uuid 8550e066-e563-4e6b-8391-0e079389b6ff)
+  )
+  (wire (pts (xy 91.44 111.76) (xy 91.44 115.57))
+    (stroke (width 0) (type default))
+    (uuid 90b76c3d-706f-43a9-96f8-8e1a57021aef)
+  )
+  (wire (pts (xy 113.03 146.05) (xy 115.57 146.05))
+    (stroke (width 0) (type default))
+    (uuid 91f290fb-b390-4857-bc8d-006478dc546b)
+  )
+  (wire (pts (xy 130.81 146.05) (xy 134.62 146.05))
+    (stroke (width 0) (type default))
+    (uuid a026c9e7-fe47-4cac-aa46-41172f150410)
+  )
+  (wire (pts (xy 134.62 83.82) (xy 199.39 83.82))
+    (stroke (width 0) (type default))
+    (uuid a0ac5adc-e2a2-4a93-91ec-230a0b37f62a)
+  )
+  (wire (pts (xy 134.62 86.36) (xy 134.62 87.63))
+    (stroke (width 0) (type default))
+    (uuid a1cbd657-3b2d-4050-b0f4-67475aba123f)
+  )
+  (wire (pts (xy 123.19 80.01) (xy 130.81 80.01))
+    (stroke (width 0) (type default))
+    (uuid a32e5d5d-28fe-4d23-8af6-c9cd0a676db9)
+  )
+  (wire (pts (xy 124.46 153.67) (xy 120.65 153.67))
+    (stroke (width 0) (type default))
+    (uuid a43b9f5a-cde3-41a4-841b-6ae1838526ef)
+  )
+  (wire (pts (xy 123.19 210.82) (xy 130.81 210.82))
+    (stroke (width 0) (type default))
+    (uuid abdd15bb-106c-459f-b82d-f273bc1e0654)
+  )
+  (wire (pts (xy 134.62 152.4) (xy 134.62 153.67))
+    (stroke (width 0) (type default))
+    (uuid ac60f479-77a9-4a3c-a146-12fe0731c36f)
+  )
+  (wire (pts (xy 120.65 105.41) (xy 120.65 109.22))
+    (stroke (width 0) (type default))
+    (uuid b5c64347-2f2c-4ec7-95c9-db9159d47b25)
+  )
+  (wire (pts (xy 91.44 177.8) (xy 91.44 181.61))
+    (stroke (width 0) (type default))
+    (uuid b716eeae-f50b-4698-a4e4-ba8dc2906f29)
+  )
+  (wire (pts (xy 120.65 153.67) (xy 120.65 161.29))
+    (stroke (width 0) (type default))
+    (uuid b81acbb4-e1a1-42fe-832e-bc3cdbb38c8c)
+  )
+  (wire (pts (xy 130.81 137.16) (xy 130.81 146.05))
+    (stroke (width 0) (type default))
+    (uuid b97f2118-85a2-454a-bc86-e27acf3c8863)
+  )
+  (wire (pts (xy 134.62 210.82) (xy 134.62 214.63))
+    (stroke (width 0) (type default))
+    (uuid bc412934-947b-4333-92d1-1444c0de23d2)
+  )
+  (wire (pts (xy 105.41 166.37) (xy 113.03 166.37))
+    (stroke (width 0) (type default))
+    (uuid bfbeca7c-8c1a-4b89-94a8-b3802d098314)
+  )
+  (wire (pts (xy 91.44 166.37) (xy 97.79 166.37))
+    (stroke (width 0) (type default))
+    (uuid c12cf3c0-b6f5-48e4-a262-06a90cb60e90)
+  )
+  (wire (pts (xy 134.62 80.01) (xy 134.62 83.82))
+    (stroke (width 0) (type default))
+    (uuid d470ef4d-062c-42a0-975a-d9aa288548b0)
+  )
+  (wire (pts (xy 134.62 153.67) (xy 132.08 153.67))
+    (stroke (width 0) (type default))
+    (uuid dd5df1fe-f34d-4bf3-8df9-414321ec393e)
+  )
+  (wire (pts (xy 123.19 146.05) (xy 130.81 146.05))
+    (stroke (width 0) (type default))
+    (uuid e54b6ccc-2597-40e7-a458-5b0d83808e00)
+  )
+  (wire (pts (xy 88.9 166.37) (xy 91.44 166.37))
+    (stroke (width 0) (type default))
+    (uuid e9f09308-2ef0-4bf5-92e4-c985b4428fc3)
+  )
+  (wire (pts (xy 113.03 80.01) (xy 115.57 80.01))
+    (stroke (width 0) (type default))
+    (uuid ef4a24c7-96ac-497f-9b3d-9c3664e987b0)
+  )
+  (wire (pts (xy 120.65 236.22) (xy 120.65 240.03))
+    (stroke (width 0) (type default))
+    (uuid f021c66e-1637-401f-bca9-2dbcf2e32182)
+  )
+  (wire (pts (xy 134.62 149.86) (xy 199.39 149.86))
+    (stroke (width 0) (type default))
+    (uuid f8faa55e-dfda-4552-a170-4edbce834548)
+  )
+  (wire (pts (xy 134.62 152.4) (xy 199.39 152.4))
+    (stroke (width 0) (type default))
+    (uuid fabe0efe-53cc-40a2-9bea-28df57dc4d08)
+  )
+  (wire (pts (xy 124.46 218.44) (xy 120.65 218.44))
+    (stroke (width 0) (type default))
+    (uuid fd5938ce-2649-4b93-ad0a-a8ac0dd5590b)
+  )
+
+  (image (at 403.86 245.11) (scale 0.75)
+    (uuid 3c78bf78-35ef-437f-975f-77225ef53124)
+    (data
+      iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAYAAAAUg66AAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+      AAANrAAADawB7wbGRwAAIABJREFUeJzsnXd81fX1/5/nc1f2ZItAQtiKAyQJIKC11tU60VY7rG0h
+      aLV1dQ+6ft9atbVaBZRaW2utWrW1WketokAG4GaPJCAgI3vnjs/5/XETIGbdT3JHgp/n4xEe4d73
+      +/05N/fe83mPc14HbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxs
+      bGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxs
+      bGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxs
+      bGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsjiCxNgCA
+      xbPzwfwGMAcRZ9ujH6A8QdXoJ3nqqUAszbOxsYkMsXVAi2YkYLjuB77SrS3CduB20H3RNA0AU/0Y
+      Wk/ArKPZ18yj7zdG7FqL5o7B4RsasfF7w+new32rD1vu97X8DNxmVgQs6p2P2xzrv2FAFEegBp/h
+      xeVqpKK6kac2eWNmzyDA2XuTCHHj+R581f8B5vfYTpkI/CsmvlIEFDAckOiCgjxAPgLdhsp2xNyO
+      GBuoqCvq9wfN8P0AlcVhsbsv+PwFwArL/Vzmuag8Hn6DQsDrWwIsP/J/w/89VJbExBYAA1BH8Ful
+      fshMhoK8OuAgaAVQDlKGUAa6juElG1mKGTN7ga2lWZPUkBlmY/w/pk2LvrOMnQPyVf+EY5zPV/Mv
+      4rrZFzEqbQj1LU089fZr3Pnfx/D6fTEzsWt0JDAS0QUgoApDkhspyHsDkf/iM//BypK9sbbSZsCQ
+      EvyRCUA+ELypIXAgr44C1gIvYRov8GDhrkgbs2Xv5Ex/s/+CVnF83jSNSYo3G6X50KGhT0b62l0R
+      Gwd03ZxkCNzc/t87L/smt336mg5NThk9gU9PmcVn7v0WrQPOCX0MJRG4ANULcMrdFOT9D/gz8fIM
+      vytqjrV5NgOWFOB84HwM8/cU5L2PshLD+VeWrakOxwVUMd4pn3ym12tc26IytbzGOfpQa+qIGq/H
+      cIjyqeH7Ad4966xV/nBczyqxcUBu8xwgHuD0MZO49Zyru2w2f8JpFMy7jN+/9kQ0resvBvBp4NM0
+      6z4K8n7GiLg/sTQ2b7DNoGI6wr2o/w4W5z6Mun7Dg2v29GWgws1TLqnHdelzGx3Tq1o9E2t87gRT
+      O25jZLhb2n/d0E+7+4wRk6sKY9t/nZdzKiLd7+8smHh6VEyKECcAD3Kg5QMW514Qa2NsBg3xiNyA
+      4d9JQd7vuTE3JZROhR+Ojn9x0/Q7n3lvxvvv1Wc8vbEm/cs761NOrfJ6OjkfgFRXcGUh6Jbwmh86
+      sXFAph5xvfWtTT02rW+J3MFTFJmMyAssyf0zS+amx9oYm0GDC7gJn2ymIP+inhq+vGX6/6uoHlK+
+      oz71trLGpJObAs5ev9vxzmB0i6oR/RPmNmLjgFQ3tv/6/AdrqW/p3gk9tu7lqJgUFVS+jAY2sSS/
+      55M/G5uOnAD6HIvzfsHSjt/ZraWTJhVum7pjf2Pi93c0pA7zmZ2/0k7DxCHa6fE4I7groAafMAc0
+      qqQQpBTgYF0VVz/8ExpbO+7Vqio/e+GPvLy5JCYmRg4dieorLM7/cqwtsRlUCMKPOJD/BAunuQE+
+      KJ9wYbPJ+vdq0nOqvO4uO41LrOfc4ftJdXU+YU9omwG5fByKoN09EptN6KWYLNGbUf4JyPMfrCXn
+      Jwu5csanmDxiLPtqDvPc+6v5YF/ETyVjhRvRR1icP44VRT+PtTE2gwm9gszkuJItE1aIyTNvV2e4
+      mgJdf41dhsmE5HoqWj1UeT2dnncbpgLijethCRJhYhcHtKz4OZbkfR/l/wA5UFfJva/HJBQhVgii
+      P2NJnp9lxf8v1sbYDCouuvuNhAsW5ruMGl/XMx+AnKQ6nGKytS6ty+cNgjvT7pa4mG20xs4BASwr
+      voPFeeUIvwHGdNHCC1qC6ShCTEVIRknBYBzKXAtXequPFnpAEkCTg78T0mmEJZRfsTivHuRlVGu6
+      bGOQAJoKMgzlPAujv9oWuV2L0vOHTPVdC+Me228LyB09tmm3X2UowbiXUPAiPI9JLWgtSGvna/NO
+      h/+LvIKpdd3aoJKG6FBLf0OVTcjRQ5NeEJC2b7s6ETLbYsTCzpPvxhuORBczx3f9fJzDZGxCI4da
+      4qnzuzo97xDFCO4LBSZM2Nn5bxslBkYy6sJpbjJSzsYw52EamYg2Ivo2uF7oMiBrSf58VFeFPP7y
+      YoO2+NN+ccOsTEymoo6poGeCnN0WGd1fTAw9nwdKXumx1aIZIzFc+0MeVRyTWbZ2W3+NCxvXnzEC
+      0/FRiK0PsLw4HH/bjhTMHgbmwZDbq05jRcnmPl/v2gVxuP3DMLw5iOSgMhPIA06in9+/BA989xIP
+      SZ1XV0xLqWZsYiNrDg/v0gF5HAE+NewjEBqmjNuV3B87+kNsZ0DtBPOoXmr7Gbjcv64SWN32E8yb
+      WpI7A5VrgauBjD6ObGDKYyyaO6OvgWc2A5RHVrUAe9p+XgMeBNoSZwOXofpFYEZfhm5qhRff9rMw
+      v+PXOM5hcmJCEwe7mf0AOKUtBa23mXGEic0p2PHEspK3WF58I41NY1C9Hfp8ojAEh/8xBsqs1Cay
+      PLhmD8uK7mF58UxMZgBP92WY9bsC1DR2nNyPTajHEKWssfuJjevosXxMU4VsBxQuHn2/kRUldxEX
+      Nwn4c5/GUOZSkPf18BpmM+B5sPhtlhdfgeq5wAErXQMmrNl6VC7LKcrYhEZqvG66O5oHcBhtMyCh
+      oU82hwnbAYWbe1bVsLz4WkSuAULdvDyWO4L7FDafOFaU/BcjMAvYYaXb22Um2jahGZPQgNMw2dXD
+      7AeOmQGp7YCOT5YV/Q04B+j6VKZ70sH8XgQsshkMPLD+Q/zmZ4CqULvUNil7qxQRZVxSAy0BB4da
+      43rs4zTaHJA9AzqOWV68FkMvwfpMqIBFM8J/AnQMO3bkeHbuHG/PtAYiK9eVofIdK112HjAZ6m4l
+      zgiwpykR7SL59FhcbUswUSr7bmj/sR1QpHmg5HWQGyz2ikecN/ferG9s3jn+pFaHHvA5KLed0ABl
+      pOfPQMjCdh9VK2MSGzCBPU29hx55jLZEVDT0sI4I8Il2QLt2ZaduLs35+tay7G9F9ELLix4GedRS
+      H5Fr23N+wsn7u8eki1OeM0RSgXifQWRfu03fWLrKj/B8qM0r64MzoEMt8XhNR6/t49sckKiEGpcV
+      ET6RDmhLWc6CjaU5/2wR47CIPqTI7zZ9OLqvMTyh4ePbWDuiH0pG8qXhNGHTpmluh+l6usHnHFlY
+      MVQUEOGGHTtywh/hbRMGjqpG9IbPF0BE2RvC7AcgztE2AzI0pgmXnxgHpIps3Z11xXulE7eZyv/2
+      NiVeXFw11NV2VCmGL25ORA34Y1EVyk8t9RGuCtflVXGQ0PL3Rr9rZlHl0Lhan5v9zQkopAYcGjsx
+      fJseMEKWZfX6wG8aVPSy+dxOgjMoxSG43umlaUT5RDigjTvHz95YOmFjIOB4Yl9T/MTXD40wNtWl
+      tcVKBOPYFc2NuCHu9D9hYV2PcC7XLgjtE9UDqhhby3L+3Oh3nV1UMSzZZxokuXyYbTGPKnyjv9ew
+      iQRmUqgtk+NMDrTGh1RiI84ItO8BVU4et62sz+aFgag6oJ07xw/bvCt7QjSvCWAYrD7UGjf1jUMj
+      jC11abQes0au9gUdkCCTI27IfS+2ovJQyO2VRDytC/pzSVVkU1nOivqA83OFFcNS/So4DZM5mYdI
+      cvipDs4AJ2wuzxnU2rfHJRp6ak9avHKwJbR7Varb2z5+cZ/sCiNRc0Dbd0/M9hp8KIZs3Vqa88Vo
+      XReguHKovFuTQXMXm3NN/rY8GtHIOyAAp/wZK4mxhpnfn8ttLht/p9d0XF1SMTQ50HY0e0JcEw5R
+      9jQlcrAlPthQe6nPZhMD5JRQW6bFa8jLr/Q2cTIx9Jm+2RU+ouaA/IHANSK4TcVQ0Ue2lmdf03uv
+      8NCVGFM7TX5nmzfQcVEx5v7C3ai+F3J7pc9Lw/svrbkS5MaiyqEJXj36Vo9JbMSrBgda4qn1BZMV
+      RXRKX69jExEEmB1q45R4IdBL7E87w+NaQDUgrc7n+mpcuIjiEkyvafQ7zfXVQwkgoip/2VyWE7FY
+      l5CtAoKKcpK4Yf+ohKhc1DBeDb2xnNTXy2Rl+H66qTbN3RI4OvPLcLWS7PSxrzGBgAr+dsekhLzf
+      YBMFFueeQ9caWV0yblhozifZ6SPR6QPhP5Mmba/oq3nhIioOaFtp1ikiMml3U6JR2eqhuGKo4TUN
+      EfS3W0uzV3744ej4aNjRHd62L2hCiydadcXXWWg7sq8b0a3qkL3NHY9lxyU2osDupmCukNsR3LZU
+      sbA5bhNpBDEspeMMzwwtZGxkfDD53VD9pXWzwk9UHJBpGF9UJND+Zaj1uXnz8Aip8npMFflag9/z
+      7tbSrOnRsKUrfG2zAFGJTjyMipU6TAYJraP7cplDrfHGsZtNqS4vI+Kb2NeUSFOb001zBvcDDFOs
+      OEWbSLI49ybQs0NtPiLZxOPpWvfnWByijElsCJgqL0/KLhsQ73fEHZAqoipf+Kg53vAfUzLEaxqs
+      qxpitIWNTzQNKdxSnt11idQIEHwzGkly+vGZbcfRDqP3dzEcmK0fWmrv1z45xgZvx5czMbmOgAo7
+      G44ONyq+yTRV9jZUpf6rL9ewCTOLc69H5LdWupyZ4w/pVGNSch0uMX1uJ1ZTgyJGxB3Qll3jpwl6
+      wr7mhE6LVFOFjbXpfFCTjqokoPLYlvLx927YMCPijuDk1GpOSqkmzhE4ImXgMLspLxBuqrOtZSA7
+      zD7pCvuO0TbLdLcy1NNCWWPykdnPyPgmEp1+wwG3zJz5lq8v17AJE9+YNZGCvH8jcj8WvpcOQzln
+      Wu/uZ1R8U1CoDL1lwpidA6bcTMS/cOKUcwOm+Cpa41zD45qZnFxHeWMiu5uO7nl+2JxIvd8lp6dX
+      apwjcGNiRs3pm8vHLpw6bndE8lTGJDQwKr6JXQ0pVLR6OCE+yqqUIxqcWPm6m84+1ZU32u6LIsqk
+      lFoa/U52NgT3fjyGybSUmmaElZOzdj7Vl/Ft+sGiGS4czumozAIuB86mD2qYC8Z7SU5w0dCD3sJw
+      TwunpFWpqjw8adyu5X22OQJE3AGZqudUet0OBZoDThKdPiYm17GvJYFjl2Q1PjdrK4bLqemVZLpb
+      54g639pUNuHSaVk7wlqZMN3tZVpqDRXeOLbXB5ci7e+63+GIjjZKoCIdek8YPIIR6JOHbL9CVkID
+      qS4vJZVDMVVwiDIzo6LBZegzk8fuivlJ5IDGkK+xJK//hfuUeJQxCKOBE4EslO7jQ0IyDb6R10Sd
+      P7PbNiPimzg1tVpNeHZa1s5FImEozhBGouCA5LQ6n8cAqPO5+KglnpFxzWQn1rO9PrVD21bTYF3l
+      UKal1jAmoWGkIearW8vHXzx53K7XwmGLS0ymp1bhNQ3er8k48k60lSfB9Gl9OK7TK37HWEuLXzFD
+      zgk6FodhkuDyMSG5jrLGZKq8HpyGSX5mRU284f3zlHG7bh5oH8gBh3JL2MYKs9r31TNamT7Sz8sH
+      Ou9YCDAlpYZxiQ3a6pdfnJKza2lX7/U7ZePS4sVxuolMFlOzTeFEVUYKhjjELJycteu74bW6IxF1
+      QBv2j0pwturwZv/Ru/2O+lRGeFrISmxgT1MyLYGO30QFNtam4TUNcpLqkhSe31yWc/bUrJ39Dhs/
+      ObWGBKefdZVDOlzX0ybOFKdS299rhISBlRO/Voat71PtbqeYzEyvpNLrYVt9CklOP2ekH67wuPUX
+      08buurcvY9oMDEakCbfOq6fZdHbK/3IZJqekVZlD3C1+Eb3u1Am7Hjv2+U27c6ZpQD8fUGOhG3OC
+      KoagWhdwSb3PhdMwGe5pwRQtj/TriKgD8rR4khHkWM/f4HfyYXMiYxIamJRcw3s1Xae7bK9PQYEJ
+      SXXxgv5z067sWdPGl+4BmDO2dfjacmtSOeMSGxgR38SOhhQqvR3DauIcfhNomDBhp1X51D6ieRZu
+      h2UsDSnHsBNjExvwmgbv1WQwLqGxKTupbn+8+K+YNLYs9EhsmwGHxwnXzRPiXEq1t+NSPtPdyqnp
+      VT6H6Ga3Uy6fMGbXLoCysnFxrSLX+AKO7xmm5vhUtNrrkSqvh2qvm3q/S9ojqScm1zHc04JhGhHf
+      G4yoA3IYpoEaR7RH2tlel8LIuCZOiG9id1MSNd2o9++oT8EjAcYkNg43DPmTKueIoGdP8n3KigNK
+      dvmYnFxLZWscO+s7n2h7DFOA3ZZeXN8RkAsstO9rVVdaTCflTfHm3MyDVS6HPt4a1/i9SaP2x6wO
+      uE14+MpcyB4aXE35jkmxGZfQoJNTagMIv5o6bucvRQio4thWnr2oAeOXgYAjeVdDkqvC66HB5+r2
+      DjjC0wRQ7wjwcqRfS0QdkNES12B6/Jrh8nZ4sV412F6fwrTUGqam1FBUMazbjYjNdemkub2kuHxn
+      byvPvhZK/zQy2Qy1vC8Ap6VVEVDhvdr0TteJNwIYooJIdBzQ9fn5mDoi5Paq6/txtdrJSXWvOwjc
+      dHL2LmuxRzYDlodXQ+lhZfLZBj4JLjBOTqtpHhnf0GoIF04Zt6sQYFvZuMmbyhxPqMi07XWpjj1N
+      iZi95Iulub0kufyI8EQ0SjZHNA5o8uRt9YqUp7tbO11oT1MStT43aS4v4xK7P3wyga31wXLbpsrP
+      NpdPGZnoCpxoxY4kp48PatM5NieqneS2zGBMfd/KmH3GpMBSe5XVfb3U8x84rzw1Z/ulJ+fYzud4
+      wh+AVzfB+Q9m8MImN1NTqptOSGhsdhHIb3c+W0tzFgbU8V69z33ymsMjHOWNSb06H4DshAYAE9O8
+      K8IvA4hCIKJDdI0hyvD4jjN/Bd6rTcdUYWJyLYmO7kNdKls9tJoORDgRvDeLxdOEPY2JHGjpOt0s
+      xRUMyFGhPzON0Lhh9lhQKyqHe3mwuM+KdX/ekBStZaVNDKhvFX73Pxe/+o8z4Z19jusmZZVvBdhS
+      Pv42E31yf0uCu6hymDT5ew75SHb6mJpSQ05SXfB7qvLs5OyybdF4DVFIxZA/AmR3Mctp8LnY0ZCC
+      Q5TpadWIdL0QUzgitiTKhVZt2NI2g+qKo+JMZuSlKf36A8DK7vlzWNEOsvlEsrrUzTWPpt/J9fk5
+      m8uyb0a5s7wpifeOCTXpCpeYTEmpYe6Qg6S4fYyOb0QAQ807omV7xB3QlKydbyi8neryMjSuc7hm
+      aUMy1V436e5WJiR1H4ZT06ZcqCoTrdrQnU6KAQxxtypQOjW7LLKzhetnn4Ho1yz1UeOvEbLG5vhj
+      gkv0rR2HXXcfao1jS133N12AE+KbmD/sICPjmnm3JpPtdSkkOAMg8vyk8aWRXw20EZVseEO4HTCn
+      p1QfiblpR4F3qjPxmQbjk+oY6uk6prw9lkhEw7Zxnu5pxSEqCC+Ea8wu+dL0REzzYSyFP/MBKwqL
+      ImWSzfGHL0DK155Mk1c/7F7JNcXlIz/zMCelVlPemMgbh0dwoCWek1OrTYFm1H9jFE2OfCQ0wORx
+      u17bXDr+/zyOwA+np1WxoWpIh6lhi+ngvZp0ZmZUckp6FWsOD++0YdzUxQZyfxnmDmqjiPKfsA9+
+      FCEx/iHAqrDYskgYY2MR4Y+Y9E+4S0gmKC42BhgNoWs9W6WiQVj+Xz83X+jmWIUOl2EyKamWExOa
+      ONAax7uHRhyRKM5OqifR6TdM9GdTs8rLI2VbV0Qn+xs4uPvEpSPGfTh7qKflrNPTK3mnOrNDdN2h
+      1nh2NqSQk1THGRkVFFUO7ZAr5guh2JoVBDghoUlV2Ts5a9d/wzr4sSzO/S3IFyz22oMr/eGI2GNj
+      DVN/y4qSzWEd80vTE0mIH4sYk8CcRLAgwunAVKzNkrvkcJ3yj2If15wZ9ECjE5qYnFyDXw02VGdy
+      +Bjt6HiHn4lJtSbC5qaKdEsyIOEgag7orLNW+bdunXSxevwvD49rzj89o4J3qzPxH7M/s70+hTgj
+      wOiERmamV7KuasiRo0O/CibhWzMOi2vGbZiiykMiBHrvYZGlGBzMuwfF+pRW5efc92LEYzBsYsSj
+      7zcCm9t+jhJ0TLPBuALRS4E+K3S+XWZyRpaXr5xSS4rLS2ljMqUNyR32Q0WU6Wk1AUMwjYBeFwtJ
+      lqiW5Zk8eVu90y/nAYXDPC3MGXpQk50dX/MHtekcao0jw93KqanVHRIWWsM4CxodlODwuQLyp7AN
+      2s6SuekcyPtHn5wPvNNWF9zmk8aj7zeyouS/rChajOk7AeQylNf7Oty/N/ip8wmrDw9nR31Kp8OY
+      CUn1ZLpbHCi3RHPj+ViiNgNqZ8KEnXU7duSc7XPqPYkOf8HcoYfMLbWpRnmbPpACb1dnckZ6JSPi
+      mzhdlHdqMjBV8AYcR2pa94dUl5dhcS0g/H7ChJ3h1EIWCnKvQv2/A0KPdj6KiWEsZumqPun/HE/E
+      uyTtl4XznzzygFIr0ntOnCmy/rb8VSsjalw0ePAtH/As8CyL889D9A/AeCtD7K9z8EBROvOndb5x
+      j4xrJiepTkEemZK98w/hMdo6UXdAAG0h3ks2l+YUgv5+ampN+oj4Zv2gNk0a/S5MFTZUZ3J6eiXD
+      45qZkV7JW9WZNPidpLq8BExpAfok1B6UKahVkGqnj1+E6SUJBfnngv4COKMfw9zHA4UxuRMNNJxO
+      4oCFRx6Q0AKiRPUbdxfOP9dM9Hz19lNeibLSXIRYUfQSX5p+CokJ9wNfsdJ19dYAZ051YBwz+Rni
+      buHU9EoTeMNs8liLzA8zMXFA7UzN3vnojh05L/md3JHhbr12/rCD5u7GJGNHXQpeNXi7OpNT06oY
+      HtdMfuZhKtvqe/mVSuCEvlwzK6medHcrhspX+5X9vhSDQ7Ono+ZFqHwVNLvPYwEIJVTUfadfYxxH
+      NHupARa1/19FUlHtcctA0OmIcS2qCx2NLWPuWDPnsu/OXbs/4sZGg+C+0bUsyd2PyvdD7VbdqGzZ
+      azLtxOCfbmRcM6ekVfkF3pRW5yXTpm3yRsrkUIipAwKYMGHnYeC6rbuyH1BDfjk2oeEzo+MbzD2N
+      SUZpUzJvV2eSk1xHTlIdKW15W06DnqOsPsbeqmAV9KFxLQSkUV/c537g1udS9rEkc0ZIAwgpBAwP
+      hjkGkxzEmMgBnQPmkGCDfgcrH8KnV/BUbD8MAwl/QFtunf2GZTmI3xYuuEfhX4rkOsX53p1FCxbe
+      nr9qVQRMjA3LSn5IQf4E0CtC7fJOmcn0McL4pPpATlKdATwVR+C6rMm7ehByjQ4xd0DtTB5fugE4
+      b3PphHkOzO9kJTWcPy6pgQPNCbKnOVHeqsrklLRqXIaJQ9SSSPs9L7RvdDuAdAFuaPsJDQVEQaVN
+      xies2RF1GMZFrCy063IdiyL3/ud8S5KlVWP36C3TVu28Y82cPKfheBSRiw3V/95VNP+W2/LfuC9S
+      pkYZxcdiXHwKSA+lw9Z9AeYNPdwa5zT9asq3p2bvHDB7ZFE9BQuFqdk73pySvesiNXUycN+IhOaq
+      3IzDTEut9e1tTqC6G+2gQYnQiKkX2vs+nUlOkOG+tKYWKz8ptZmH79qwYMh3566tvyX/zUtR+RnB
+      Ckz3/rZw/ooVUai2EhX+WFSFyj2hNm/2wcb9jmcDZmD8QHI+MAAdUDtTx5fumJq169sHy0aPUNEL
+      4x3+x8cmNtSkubyqx0d6ZgWmcQEPlqyJtSEDEkUBb8g/KgFFUgyvFv62cEGOCHrrnFVLEf0C0KSw
+      qMGb9L9PneoYEpsXFGYC5sNYmIp/+W+pz5+cXXYwghb1iQGzBOuOs85a5Qf+A/xHFWN7WdbM8hrX
+      9Vg8DRhQqGzC8H+O5cWlsTZloFLfogdvnf3GyFDb/9/queluh/GsIvNB191ZtOCy2/NXrbo1/80n
+      frd2wTZT9F/AmWdOMF7537sRNDxarCzZS0HeRuDkkNqrzgQe67VdlBmwM6CuEMGclF227qcvJYU/
+      eDBqyKO4zdksW287nzDy/TPXVLtqEj8D/A1IN1Rfvnvtgi8C3Dxn1bsuvzkTeFOkb6enAxMJ3ZWK
+      TIqgIX1mUDmgQc4BVC9hedGXua+kb8f/TsPa4jNghrkQTD/xW7GnG3GoHrjpghdbb8l/44ttez9u
+      RP9y99oFSwFumrf6sKsm4dxWH3+zOu7AxbSSo5bae5PoM+CXYIMeoRHlfnxyB38srurXWA6jyVJ9
+      DKf0KVgzYjjdiZih+hXtUxBhsPbVqqV3FS3YK6rLEP3pXUXzxyS7GhYvnvliKwWzbwau7svYAw+j
+      2sI2kKXQlWhhz4AiRwOq9+DT8Swv/i5/LOqf8wHIjLdW0cIfSOq9URQxSQ65rWq/qtTelr9qpahx
+      BdAkylcbWpNeuLc4t3NJlEGNpb/RgHzt9gwo/KwDVuJ1/J2H14a30urSVX4K8pqBrgWuP0ZqgnPy
+      91bP3fTxxyU+zvzezFejU4Sxw4UZG/INW4x+/+1umfP6v35beOZZivFvhE/7zLg1l+T6vvzPsBb7
+      jilWwgoGZH6h7YD6zwFgFcgqAoHXeWjd9sheTvdAaBuKsyfLQ26H46FOT3h93F04v6euJtCtg1Iw
+      pYfnu+v/4jv+Ea9+EGIysWpYJHJvmb163Z0l8/IkIC8KnHzqWNeL/yw5TpRORNIIPSYlSkU3rfFJ
+      cUB9Lu4HgFIH0oRoE6r7ENmOynYc/u08sD66JW/U2IloSA6o7LDpA0dX03SDnjclDXqIsm3bSc4M
+      xYZj+ajGwr6yaNgc+e25b5b9tjB/tuL+p8CZ4Ro35qhOCL1xlMqOW+ST4YCWF5/B8VJdQnRXqE23
+      7jPrb317S/mEAAAgAElEQVRFhluV91iqGJ41c7t1UMluj+Hztnb7vDqchmlIh+er69W1Za/5CoS8
+      D7QjxHYhccvsoqr7X19wQbWpzwLnhHPsGDIz9Kahf26iySfDAR1XaBHITSE2zuBQ89nAK1ausFQw
+      YU11L80qrYzJkvxLUAub0H7CHiF+w1mrGoZ8Z85XgH3hHjvqLJoxBAgtmRpAtdNe4EDAPgUbbJiu
+      QmvtLetRRwbVr1povZuVJRFJzq2o0wG5GWsZcV6DFf1oMT6InDF9x3ZAg40H1+wBsRJF/fm2u2Xs
+      uOGMacBnLfToswzpJ4JFM1yIfNNCj1YaGwdkzqHtgAYjaj5toXUchuvHEbMlFEzHXUDoUdCqlnWA
+      PlEYriVAjoUeq9sEzQYctgMalOiTvbfpwBIK8k+LiCm9Xjn/apTzLPQ4jPojVyZpsLNo9njgV9Y6
+      yb8iYksYsB3QYGTFug3ARgs9XCiPsmhGQqRM6pKC2SehusJSH9XH2gTZbT7ODbMyMcx/A6FHuAuN
+      xHkGbIlv2wENWuR31prrNAzXX1gapfd8yRnZYL6MlS8LeHGYUS+ONygomD2MgPE/YIqlfsrj3LOq
+      JjJG9R/bAQ1WXGmPEYzCtsLlHMh/hKULIht+sSj/ZNTxJjDKWkf9a9QDOwcDBfmngVkInGKxpxfT
+      +HUkTAoXtgMarAQrp/7Eekf9EgdaXuTGM/tcdbNHluR9HUPXYrVqidCI6fpZRGwarCyc5qYg98eg
+      hVisCdbGch4sHJABiO3YDmgwU3niw6j2Rd/vHHy+9ynIuwYrp1M98Y1ZEynIewXlIUKPdj6KKb8K
+      hhjYsHCamyW5XyUzZQvIz+lbDbyDmL5w1b2LGAMnEnrx7HzE/BIwE6Q9z+gDlCeoGv0kTz0V/vrt
+      g52nngqwJHcJymqsv5cjgL+yOPc2hDtwZTxruR79UgwO5M0Drgcu7YMN7WzEndbz3s/SBU4OtH4Z
+      5Sqk/QhaW4FVGMaDPFA4uIVWl2JwIH8mYl6CynUow/uRPaSoXseDb1WE08RIEHvFvEUzEjBc7RUf
+      u7PnPSRw2REZ08X5n0L01ZCvUVnvOa5rbhXk/rjtTtl3VGsQeQHVQsTYQGPjpk6xIzfmptAqUxBO
+      Q/QMkPOwvM/TiQZMOYMHi7Z22yJ4mvZ3RKd1Zz2wHNP3rV5P0AryTwANPcpadSEGZSG3DxWTDETG
+      gWSjnI7oTCAjLGML97GsONR0nZgSWwd04/kefNUvAz1qQwAgmCj1BLVw+lKbpwno/g5v6ucGbYWK
+      hQsdZO59BfTsMI7alaRGSHWoLKCoXMOKose7bbEkdzoqqwlFUEt1OyI97W3FEaKW0qBF5QVGei6x
+      moAcK2K7BPNV/4RjnM9X8y/iutkXMSptCPUtTTz19mvc+d/H8Pp9oL1KSPRGQttP1zgtiTsNLJ56
+      KsCSuVeg/kJgcphG7VGSIzzoD1hR3L3zWTjNjfIkbc4nPSGZH55/LZ+ZmkeC20NZxUfc9epjvLSp
+      ONheZGJk7R3gCFswPJ8fLM4HYjkDum5OMu7AQdruSHde9k1u+/Q1nZq9seMdPnPvt2j1Rzg2zdCz
+      eaBkcOcgLTkjG3WuAQ25nE0M+R3Li2/pscWS3C+i8ihAWnwSq29bwUmjsjs0UVVuffpefve/v0fO
+      0sFDEyIXsKzojVgbEiqxOwVzm+fQ5nxOHzOJW8/pWid8/oTTKJh3WTQtG7wsW1+KPzAH2BlrU3rA
+      BP1+r84HALmo/bfvn/eVTs4HQES449IbGJ0+LKxGDlISQF+gIG9BrA0Jldg5IGFs+6/zck5FpPvJ
+      2IKJp0fFpOOClevK8OtcoDjWpnRBHcpClpeEGhw3rv2X+RO6T2VzOZzMHW81Ru94oAs9ViUR4fnB
+      4oRi54BMbWn/tb6152IP9S0DMpF34LKy5CCV9fMR7ou1KUcQSjCN01lR/EzIfZSQPyN1n7TPiLAF
+      6eacXklE9VkK8mdF2SrLxM4BqR5Jpnz+g7XUt3T/AXts3ctRMem44qlNXpYV34RwsUX9oHDTBPyI
+      gO9My1G5x3xGHl/fvajjvprDrNr+dp8NHGTsQ/Q6lhVPQ7kS6HpzVCQN0dcG+kwodg5oVEkhEoyv
+      OFhXxdUP/4TG1uYOTVSVn73wR17efPzUUYk6y4qfo8UzDZUfoBrNpEQTeBLTOYXlxb/qW4a740gt
+      8z8VvcCK1f/s1KKqsY4rH/ohTd6WTs8dZ+wFuZGWuByWlfwJUJaXPA36BbpzQu3Lsetzz4qqpRaI
+      bRxQQd6VwBPt/x2Rksm1+ReSNWQk1U31/G3dK7y/L0r7qYP0FGzD/lEJbp/TM33snt40nGHRjFQM
+      500g36IPVS1CpBnhz/jN34WlRFFB3jMEo6wByMs6iYWnn01SXDybPyrnL8X/obqpvYSYKvSwmTj4
+      CKDyEgYrGe55vtvj9SWzLkSNpwFPN+M0YehFA/HzHfs3a0neD1B+GXNbBqED2lKac64pPGWgNY2V
+      aTkzZ4Y4y1g4zU1myrmoXoVwAf2PwK0CXkLkn4jnRR5Y1a+qph0Ihmu8CMzppaUfYTXKgL3bh0g5
+      yGqUF3EGXuH+daGJ/w9SJxR7BwSwOO8qhN8AY7p4NgAcRDnQ7aYbMDRFclwO4ivqdafXT3N37bpF
+      zYI2oa9BwfbdE7P9AfNd0GQRENGvTR5X+nAfhhJuOGMqfseZCN8Aejty3I9QCloKxjuIrGJY4fss
+      tVS13hrXLogjrvXXoAV0/QXbiso3EfMMkCsiZkcHZBJoV1pHO+m5aCMIzW0b7Ifa6sztRWU76t3Q
+      r/ytxbkXIPIMg8gJDQwHBMG7ckbK2RjmPEwjE9FGRN8G1wss67VEDHcXzl8PzFRl1m1z3lgfBYtj
+      xo4dOSleJ+80+R1jt9SlOc7IqAA46DZ10vjxpX0vQLck/9uodiV0tpKWuBt5ZFVsN1oKZg9DzM9h
+      6jQwEjDMA6i+QeXYN6KerFyQ9wjB/MWPITeyvOgPUbXlWJbknY/yDN1n0A8oJzRwsuGDyaIvtf3Y
+      9ECrwUpRHfd2TabR4HNR5XWT4fYO9zrkR8DtfR/ZrOjyniQkx9z5ACwvPASs7PzEuqibgkop0sWE
+      XM2+6PaEj2XFL7Ik77IenFACpjxPwazPsnzda9E27+PYekCDjC1l4xc5DF24qTbdaPAF09c216Wh
+      oCg3bynPye/z4KbR9fRfe0zw/GTSXYVaQ2LrgCDohFQuBbq7aSSA8W8KZoUzeblP2A5oELGtbNxk
+      Re6raPWwtzmROEdw1VHnc1PWkCyAA9VHNuwf1Ufx+UA3+w8a27piA5HuHJD2Sbkw/KwoegnkEga4
+      ExoYS7Als87ENL6KcCbB4+FGkLdiIEYmLM49H5EvAXkEs+9rgWKQx1he9AK9qUQtXOggc8/CoHCW
+      zCAoyl4ZFA0zHmFF4Zt9Nc6nrocM1L2pLo1T0ysZGdfM2oph1Prc7GhIYUR8syY4/BMTvfG/Bqzr
+      wTidhwl0uZdsO6BOGCd2+VFQcgje2CO3KR8qy4te5vrcizHlX3S3HFPjVQry6oDdqL6MYS4/orsV
+      BWK7Cb1kbjqm72FELum+kW7D4Edoz6JQ3/yM+y8uB1Pf3h348hubAputGyPD2sIBejgFktX4zau7
+      LRu8KH8yhj4JnNztEKr/xHBdF8rG+rFsKc05F9GXP2pO4J2aDE5Nq2JUfBPv1WSwrzk44cn0tDAr
+      owIB0zB1/qTxpdb0jb40PZHEhM5H6IoiVAMHUH0d9CFWrHvP0tjHCwWzh4H5V+DTPbR6B795OSvX
+      hV/IrC9cn3supvyT0LSQfIj+HxVjfh6NG3/sHNCXpieSmLgKdGZI7ZVYu8sgQhk+zWdlycEOj39j
+      1kQcxlpCmy1sQczFID0nOB3Dw1fV3Zseb87e2ZSB4XGTk1THxOQ6djYks73+qEzS9NRqRic0orDF
+      5ZfTJkzYaU1mtSCvid4/qIrqs+C4CyMQWaVJw2zh/vWbQm5/4/ke/FUnRcQWIQXTWAnaOS2/M/vw
+      a56lGvdL5qaDL5Sx+4BxJuidaIirHmE5y4qXRMaWo8RuCZaUuBQNOh8R4av5F3LD/CvIGjKK6qY6
+      Hlv3Mne88tej6RlRcj5Ow8GNZy3k63M+x8jUIRysq+Lhwn9zz2tP4Av4QcnCKfcBVx7TTXAYf6LN
+      +SS44/jOuV/ki7POIyMxhd1VB3jgjadZufY5NJjAPAU1LC3Frvt7u5NR0hNbueR0F7fnQ4qrY3Ds
+      lvpUhnpa8DgCU/xOfgD81NpfQOpBe3NAgshlYF6GRviNCTi2YqUWVqDmRFQiE8+lR/7BYRgsmXcZ
+      i+Zewuj0YVQ01PBI0Qvc/erf2rWrTsApK4ALQx/f/2mQJ3pv2Bc6LhfHZozgxxdcx4Unz8bjdLOu
+      fDO/fvkvR3PqlAIK8l9gedHzkbEnSGzmFB8TI1txzXdZNLfzKuytPVuZd/eSqOX5iAjPLP41l5wy
+      r9NzL20q5sL7b8VUE0AJmJOPpBoEE/5eB4h3eXjj1mWcMbbzd+aPa//N1//6/8Jm70VTW/jFBU28
+      dqij/tgJ8U2cklYF4HUYjikTx24PbU1/7YI44lpqaZO8HZKUxg/Pv5YrTjuLRE88mz8q4+5X/8az
+      70ZV72ory4tDd0DX5+dg6o4I2gPAY9f9jKvPOLfT42/seIdP//6m4M0KADmd5UXvhDTox1KTIsXk
+      EWNZc9sKMhM7CoyaanLtn3/JoyUvtj2iRSwvmR1JW2JzCnaMGNnMsVO6dD4AM8ZMZvGZPWwPhZmL
+      p5/ZpfMBOG9aHpeftqD9v4JhHBHLQuTIXe4bcy/u0vkAfG3OZ8nN6k5X3TrPb47jsbc8R07D2tnf
+      nEB98IjeHTAD3wl5wPjmL9DmfDITUyn+zkq+ffZVjE4fRnpCMnPGT+eZxb/uUrnyk8Snp8zq0vlA
+      ULeo43PmRV02jCH/d8n1nZwPgCEG9yz8NnGudsl1yWPRjIgeQMTGAR0jRnZmTs9CUj0JUYWbeb1c
+      q8PzQtaR3/WocNa8Caf2PEZOz89b5Q+rE/C1dNzmUWBL3ZEP2Fd27MjpXdAdOFaB8EcXfJXxQ7uu
+      Lfirzy3mhLRPbmhQb+/x/InHfE5UsrpvGRt6+s5lJKZw0qgjkQSCOMZF0pbYOCA9mqtV29xz3uLR
+      TOfI07stdcf+99gN5GNeT8/CWOF+PS1+4a9rOz9e4Y2jyucBiAs4+FxIg2loCoRup4v87O4P+o53
+      en2PG499jzXkg4ZoUdfrZ/SYz7lTredVWiBGDkjeb//1X++t7lHN7tGS6GVmPL7+v/jNrk8e/WaA
+      x9f/9+gDoh8c/Y955Ej66Pq5M/UtTfzrvT6HAXXLhj0O3invbPeB5uBesimEuo4P+cbQ24f4eObJ
+      t16lxdf14Z+pJo+tP0ZAT4wPumwYQ3r6ThWVbmTX4X3B/wiNuJ0RjQmKjQMaWVjSLkZW2VjLZSu+
+      R1Vjh9kFAdPktqfv47Vt0UtQ335oD9c8/NNOm94tPi/X/vkXbDlQ3v5QHZ74o6cDfn2GNlGoVdvf
+      5ttP3dPJkdU0N3D5g9/ncENkNMGeW++n+WNiHLVtqRqi2pXKAB+UZg1/r3Ti1zfsmPTyxtKcA/PH
+      e4+s23pypOWVH7FqxydGgbATe6oOctXKH3VS8fT6fSx67Ne8vWdb+0NN+M3OKmox5lcvPdLxZtrG
+      po9K+cIff3z0AZVn+F1RRGdAsYusWZL3OZR/ttswJCmNq884l1FpQ6hrbuTZd9849gsfVcZkDGfh
+      6Z9iaHIaFQ21PPXW/9hddeBoA+UmVhR31FtenPdrhO+2/3fyiLFcduoCUuIT2V9TwePrX4mY82ln
+      9iQHl+cejaxIdXmZM+QQir4yNav0MwA7duR4ajCuN9X4SkvAOeqj5viMRJfPkZNUz5PveFb89JWU
+      xRA8Ebzzsm9yy6e+0KFgwN7qQ3z2gdt4d2/ED5raGZCnYACjUodw1cxzGJ6SQVVjHU+/8/rR2QMQ
+      rP4RsgB/1E7B2jlr4gzOnjwDl8PJB/t28dTbrwVr8AWpxXRO58E1eyJpQ6wVEb8D/DrmdlhB9X5W
+      lHyz0+MLFzrI/PAJ4PLoGxVEBL55nptxQ4N/znYHZKo8MS175+c3luZ81m8aD5c3JaXtaUp0Zrpb
+      afQ7GZvQwJjERkTlysm/GXIFx8Q4nTF2CueflE+CO45dh/fx+PpXaGiN6E3x4wxYB9QLj7C8+Dqs
+      FHiPsgPqgXpULmVF0f8ifaHY5oItL/4Ni3M3InInMLWLFocRfRlT9nXxHEFBKMOFaBY9h8Z/nGdR
+      OTz1RMkdkiwT9lToq+WHzC3AVIR5dF2BdQ+iP2R5yV+7HDEYtr6Qxbk3IfIDoKtCVXWEUmK4j6jC
+      P4p93HyhG4cBCW3H84aYW7aWZ18XMPXBt2syHNVeDyelVjMmoZHVFcOJd7YtFw2txIj7GmbLCbQp
+      EK7fvYX1u7dEyuTjkf2o/IQVRX+MtSHd00NagfASOL7N8rXbum4QXmKfjLqi5D8s5SX2552BQ+Zh
+      6lExsjjHa/yuuPfb7eJZpyDGuyFfU5xfY/ma6usKFzwi6CmIPHtr/qpHAFi6wMmh5jNHpTovnzyK
+      GxDZ/9oHgS+j3jdDEFZXVpT8nmsXrCC+5azcCY6fJ7qYeaiBpzeW6904zGwCH8sTEwSVNFAXQhKQ
+      hGo+Imkhv55j+KhaeXNzgLNOcpDsCpprmhw0DB4sbUx2VHs9xBsBRsc3cbA1jnqfC5dhthlPCw+s
+      amDhtLPJTPkR6LeB5C7+gPtRXgX96MhDhjgwSUGIB10AnBiiycUIm1C8KHUAY4cak8YPl0vqW9i+
+      fpe/C/2fHpBANWrc0flxTQNJByYBoRcRU7aD/hek4668GoJhnpCcIKdkJMhJiXF8uPnDwNeoanij
+      TdvKOqJbMaWz7cdi4MLU7J7zJz8+LmUobwPVqFaDmMH3iWwgPdHD3s+c6rwqZ6Sx/zfnvXl+n2zv
+      I7F3QEBQzrO4BIh9+Yug8PfrtxSfeVBM4wag9rVvrrE2FQ2Kd714ZdH8S1FmKrxy2/ffKAKKQupf
+      kPcEHVM9LPHK+35OGWeQnuFFFQxDLgEc7UmrWcn1GKLsrA9OxtodkIkEnX3wC/QTrptzJy7/ZxCZ
+      BhKHcBCRVTxQ2LOzL8h7HPh8aNbq71lW0qGu8k1rz7ocMS8R2Lj+9rV3h/7KoU1D+XvdPr9ohgvD
+      9RGhivIL8SwvuZFullJL1yzIw9Ai4MCtsws77+xaYVnJ+8D7vbYLbl2E6oAUCcxn2foPu2vws7Vn
+      jxUJXEV31TUiyMBwQAMQFWlum6SGkkEcXgS1sHPQCa8fnij084XxrZjIQQd6Tr3fRaPfhdsIcGJ8
+      I5XeOGp9wYhXt7QpRwTMjgLoD6+tB/7R9nN88OBbPhbnP43oohB7nEhB3myWF3cRbQWGgwOmAsqI
+      8BnZC6pfsFD8o5AHunc+AA7DFDP4eevHp65v2IJk3aBitC/9utPWHdDsPGDyny0exNC9gKOqNehs
+      Rsc34RBlb1NwNmRwdAaUYJiHYmRudHGYf++90TGofqG7p2pbCB6PCsNVo3CYsjh3KiIWwunF2muN
+      MrYD6gZX4xEluejPgMLEHa8nUt1keAGaA8HJ7gnxTfhVONASfFnuo3lklVlZ5bHXfY4Gw0reALo5
+      2OgCkStZuqDL1cLSs1a1ADWA+/51n+pveaPeMbjKQms/Lmevp2p+w2x3nPYMaKDgaI5vnwENWgdU
+      2Wjwq1eSsgFMhGSnj2SXj4Mt8QTaZDSSne3Lfi2MlZ1RZykmqk9Z6DGUQ809SZceAPD6zMgvw1Ss
+      ZAK/zn2rD0fMljBgO6BuuOmCF1sJymq6n3xyoSPW9vSVl7Z5hr+114VTTEbGByN3P2o+Khmd7g4m
+      sooMiPiTfrHpw9EZm3bnTNuwYYar18ZiPG5pcFO6XYZJmwNSI8L7QEtyZ4AFzWnRkF6j02vPgAYq
+      LQC7J9UOyn0gCMYGLX05GcFkiKcVVaHaG9wPEmBUfFNAlQ8CjfFWZgQDjrKycXHi8+w2TN2YkFHT
+      tLk054PNZTl/3Fqac2WXagDLi9YRLCIYKpdxc36Xs2FT2hyQBCLrgLR7J9gFrXjin42YLWHCdkA9
+      oG3JmfEtgUHrgAB2Vjh4/j0HqS4vjX4nPg2+7eMSG3AbZp1hOC+eNq2PsSsDhHHjyltFguvKHQ2p
+      zj1NCSc1m46vqOgTPicVm0uzX9lall3wTtm4Y+OrnrRwiRSaOa+rJ0T1AIBhRnAGtBQDsOCA5CXu
+      WRVS7o/PcMdsBmQfw/eAtM2AGjUwaPeB2nl0vZurpjsQ95HNaM1OrP/IUDN/8ridEc33iQYi6NYy
+      diicWutzcbg1GepwJLl8jPC0uEbGNZ2V7PJ9Ok6Mu7aUj3/YacjvJ/w/43EwfxD6VfTzQOdZhYoX
+      ARU++9vC+RG5qa/dZmY/fcA3KuQOGtryK9bYDqhnmgEEc9A7oGYv/OTFZH58kY9T06ubh7hbdiSY
+      5pkTckrreu89SBDZgHJqstPH4dbgpLXB56LOCDAkznDubEgh0emLHxnXfIM/oDds/e7B5079beau
+      Fp8R6r7KRVy/IIkHVnWIilZDHKIKyHyF+WF+VQB8VGOpyk8D6vt3qI2dYrbXeLVnQAOMNgfUq0j7
+      oGBtuYtt+5r1Uzmtm1rim+dPGLV/wIll9QdV1gJfHxLXSmnj0QwSATJcraQ4vaw9PNzYUpvGuKQG
+      xiU2fHZRXrNx7+rEUC+RgNlyMfBYh+s6/G+I37FAYb+gYc+h8gXU2LDLXELoJ7LP8eBbg+K9tR1Q
+      zzQDOMzBGYzYFT9/OYm6xrgv//iyXYPiA2oFk8BLBg4z09ViuA0TrxlcDR1sjaO0IZnspHpOz6ik
+      sGIYW+tSKW9McuSOr1NZE9ysD4ngRnAHB3T7rDX/BkKecVhmcf55iN4ScnvFUvCh3zDFYQpin4IN
+      ONoC85wDeQbUTTnlrqlsMuTH/3VHvN5TLJiWVX5AYK0IjIjrmMO8rSGFilYPyU4fJ6cGa0K2BBwc
+      MNMly4rsuui53DArtDyycGGYVk6/KlFf9GRE+4ntgHqkXQ93AC/BVH+KRSeEcgPX50e03ErMEH0E
+      YGRcxwmeqvBuTSYtpoNR8U1kJR7dxjl5rKWFgAtToqf5dHN+PCqXWujxbAiqDR1wSDAOSPuVgdg3
+      bAfUIzLwHRBSiUr32d9dY2DqChaFELA3yGhwt/xdlZoMT+sROZJ2vKbB21WZmMDklBoyXMEgzFOz
+      DAwrWVzW4nH6R7N5AV1KonSDDuzcr49jO6CeaQYwB3pC6oqih9FgYUQLnITDFfq+wiBhZnBj/bcC
+      TEjqfMBX43OzpTYNAU5Lr8JjBEiJF7KGW/oqzKMgv+uaRWHHkrPbz8giq58DHD5XcAYk9gxoQKES
+      3AMaBKdgiuFYAlirA6/8lCVnRKgWeexwBeT3AodGxDWT4e78J9ndlMS+5gQ8jgCnpVciwOlZlr4K
+      Bmif9ZpCZtGMVKyUdoZ/BLW1Bg+2A+qZwZOQumztNpQ7LfaKB8f9EbEnhkyYsLMOlVsBTkqtxiGd
+      b+wba9Op97nIcHuZnFLDKWMdOKxl/IUouNYPxH0xVmbfavRp+eU3ghHksTgFs4/he0DUGAomqFx5
+      99r51mcKSh6AoUcrwUYUd/ov8VUtBJkUch/lPAryrmR5sZW0hAHPpKydj20tG//5JKf/wikptWys
+      7ahwG1DhrZohzB5ykKzEBhr9LiaOcLNlX8gTiFkszp3AipLICeAb+oWQXYJQxvLC4ojZEiEGhQPa
+      Wpo1ycRxlxha3qKBH5+WVR7Z+jZtqJhDJajfPQ/oumh8KOMYhB5C3x/ue7GVgrwC4DWsVRr5Pd9e
+      8EqouUODARF0y17XV/D53huT0HBCg99JeWNShzZNfgdvVWWSm3mYaanVzJs4lC2hqwQFdYLgV2E1
+      vJ2C2cNQ85yQ26s8QR9nMA4xxQxOguwZUFcoxpdF9CIU4sRx6ZZd2QVTxpc+33vP/iE4/ib4GwXK
+      VYOFFC0OMBEYaar+K/zWdcPy4lUU5P0NsKIbM4Lm5l8CncsNDWKmjN5auXnn+PPEIWumJNek+tU4
+      ogTZTrXXwwc1GZySVsW106t4+M0MfF0Xx+2Ka4iUA8K8HCvfTw0MqtOvdgaFA0LkDFB2NqRwYkLD
+      CI9h/ntL2fhVCD+cMm5XxIS0bs1/7SHgoUiNHzH8eitOuQBID7mPyBIWz36MFYWhCecPEqbm7Nq4
+      qWzCZwx4+eTUqtQ4I8DOho6n2vuaE0hy+hmfVMe88T7+tz3k6IQpLMo/mQeLIlB+WT8f8iRWZRMr
+      1r3Xe8OuCYi2CwnYp2Afp01nd4aqsLMhmVWHRjp2NiQTUJmPsnZL2fjHz53i7aoG1yeXlSUHEbUe
+      GyTmcRkbNC1rR4npYA7KnonJtczMqCTe6DjN2V6fwkfNCVw81WLRRYelKOXQ+HruaJC5IbcXc9CK
+      yQ14B7S5NPtE0AwVZd7QA0xNqWF7fSpvHhohe5sTUfh8QX5T9JY4g4VlJQ8hrLHY62TE+a2I2BNj
+      po3ducmjOj0Ajw/zNOv8YQd0YnLdsTXReLcmg6knGCR7LEwEVK4m3JV9nVxF6N9NxXT8rT+XM/xO
+      Ww+oO5wwxgS8AQMDODGhkVqfmz1Nibxfk86B5njizL4pFgp6EoCqeftdhfO73TMR0VpUej4eUTFF
+      tLa3ayrqRYzGntrc+x/v9N2H+x3OoRiBAgKOd4DQZzUiP+Prs55m5Trre14DnPHjS2uBq7eUj/+D
+      mvqbnKS6OVlJ9XqoOV4OtcZR73eypTGdueMbeXGzO9Rhx7IkN5dlJWE8gbISfChv8WDhrvBdO7oM
+      eAfkd+IxTFAM3qnOIDfzMFNTaqj1uaj1uTnUGkdFrVMg9J3DIwhOFASZSteloYNoCDc4CTWRRnpN
+      veCJ6pMAAA9rSURBVE5Pgt3hkBK/f/0mluTehcr3LfRKwGncD1wQBgsGJG37hnO3l0+Ygga+NDSu
+      5dKR8U2TaJvJeKa5rTig9tSM8Digb8yaCMwIvYPFEkNdEBCVtumWPQP6OM6AVpgixDn81PtdbKpL
+      Z3pqFTPSKymsHEZLwNEmu2DdAZmmfNEZgpC4aUoqYvY8JRY1VKWrmvIdMBC3qtmjAE1FrV4NTO9t
+      rJCIM35Bs16JFTFzOJ+C3MtZXvJ0WGwYoEwct2ML8APgBxv2j0pI8CZMJmBmnDLK53A59O++QMjl
+      sa9k4cJbeOqpPtwFP4bh+LwFP2DidA4K5cPuGPAOaGJW2cat5eM/Ehg5Iq6ZvU0JJDj85CTVkZtx
+      mHWVQ+nrEvz2Oas2AhvDanA4WJJ3GuFyQL8raub63Osx5WVrHY37+PaC/x1PsUE90ZZD9vaRBwqG
+      PA6EKlsygoy9CwBrJby7QrovgtgZXcMf1u7v7yUdYkpbTUX7FOzjiBAQ9A6AnKQ6XGKyvT6F0oZk
+      Ep1+Zg05jMeI+t9tcPFAyStgTaQKdCStLT+PiD2DAatpDaL9T824fvapwGQLFx2UsT/HMuAdEMCk
+      caX3Ac8kOv2cml6FU5St9amUNSSR6PBzUmpVrE0c+Pj120C1pT7KDSzJzYuMQQOckYVrgL0WelzO
+      jed7+nVN09KRvg/TF5ZSSoEY5oINCgckgtlYmfZ5hIeGelqYO/SgmeluZUt9Glvq0jrFdNh0wcqS
+      gygWKkAAYKByXMYG9Uowq9xKfE063upz+3FFwUrZHeF/PPiWNSG6AcigcEAAM2e+5ZsybtcihS/E
+      OwNVuZmHyc08bFZ73WysCz3g9xPNyOIHAauR49MxXMdVikbIqMUTJkv7Nx+jIG82cKKFHmFbfhk+
+      p60HFCpTs3b93WhxZIP8IN3Vunf2kEOMT6qzJEH5iWUpJhiLAat/r19SkDcuAhYNbFas24CyPfQO
+      cjHXL0jqvV2XWNlDasapYat6arQtwWxJ1hCZPHnb/2/v7oPjqs47jn+fs7vCsmxcAyngljB204SM
+      S0OA2CtwQEwgJWlLalI1caFTSgmScRNKkrbMNDQmNONJDCGF1DIeAu20eFw7EGCGZtqm5cUvsnDc
+      vJEOmcTuFNLaoQEXLNvSavee/rErIVtr6R7ty92X32dGzOrq3nPPCu+jc+455zmH37n4x+uWLtl3
+      boTLHj5aaNqp6PXwhR2Xzl+3fcXCddtXLPzijR0/W9BpDwcWMRdoubxBsZiF/NuaS3TsN4LvsbYn
+      DXwkfp34BvcPtcR+bg0/DD+TpYt/NETfshGM65OuS6NYv+O9f+ycu7fsD/Oe21d2cPeTOV4dDvqD
+      90FWd/8WA4OPV6WSzSJiM4474l9gqwjtHh04dgVmb4lfp+ruehpZZKBteaRKnHMn7qIwTHEE7BDw
+      0440+6+5OH0wuGDv7+PGS+MnSG8FmwZfBEJWml/NH3afFnaToLzPbzDaWfNUNPXS9C0gmcogX/xT
+      5q781CVPn3xyXH92K9AbUPQ5ZPKfA26rqIJNx28Be1fMkztIsxL4aqyzb+iZg43E3+bH8yR/88xI
+      7PNjcOYTS0imFlA7c4VP4H3YTGezj7N6ecBapRYQZTYT8uEMmZTYOXo1cGr8ylS3+5U0BaB2tmHP
+      QRyfCbwqhbcH6O0NS+HezDbteAl8yGLTK7jlPTOuMQTABw3dv4rP/0vA+bEULLl0HApA7e7MoQHw
+      oVkQL+K0l9psblDQsocUhdTMXdvikH38UTNvj4buetroFIDa3VoiolnMDTK7q5i5r024wlZCUi7E
+      mZQYjXyI4hSHuGXWpPvl8l4tIEnQpsHvY/ZXgVfNJ2331aQ+jWjDnoPAM/EvsCw3LVs87SlhWzz/
+      N2ftfi7g/KagACRFhdxnseCdP1bSt/xDNalPI7Kg+T1G2k4+uXDNstMxH7J2bGutdj2NTC0gSdqm
+      vUeBNcHXmd1fwfKDJpN+lKDtr6dp4UT2YUJS5bZA6o1yFIDkTQO7vwGEZkE8Bz9yZy2q03AGdhzC
+      +OeAK36VNe9ZWvYnkYWs/foRGwefDzg/iLNILSBpENHYx4EZk+sfx3MrN2cvrE2FGkxkYQ+C86mp
+      gaa/+xcwLg8opaW2zZ5MAUiOt2nvAeAvAq9K4dpkbpDPPYEx7a4mxzFWcWLOYKOXoM9eYHbGQOPz
+      gGym3RJqoC2XYvRd6c4/7/qehl1NfMejoz83fDTBNLNn7f4KB7OrgIBsiP5iTv/JauArld7eHKni
+      R8EW3Luz54JKy6u2Ox4d3TF81P9azNN/ib5lF/HA89+aOBI2+fAFNu5qvLzlVdKWAeic0+3ZyBo3
+      j/TbzjS+858J1m8tEat9H972EvRvxH+e/u6vV/oooeBJO8Dj3+eNb1dUWA30Lk/x8NP5+Bc4twoo
+      BqC+5b8MLIt9rVHzpReu4A0H3ur/oWjLAFTwvIDNZiOx+siNcS4Qd0uY2hgY+h792fsJW3h6KvBl
+      IODTOVU6n386yrhZ73Vea+ctcjYnY0tHxny8Lqfno/T2/inbthUw+52AW3kotOTo17i2DECf3Vq4
+      jIEdYQna62l1dgshCapqJRq7E5f5CLAo/kX+t4GXK7ntbZdtPwA0XNfrOH3ZhzD+IObZizjjJyuA
+      Z4GT7sBbxh4G9uwPr1wYZ8Vtf5URURrLpr2v4/0ts7gyJLdxkwpcFuGjVdzcfT7wztjXWOCIWxNS
+      AJLpPTD0BPCPSVej4bz21n8Dfhr/AuvF+d8PuEOBQq4uqYbHZ0IrI2Ibufe595597/YVS760q7sz
+      6brMyBX6gcNJV6OhFLdhfizgitMImmnud5amRLS0tnwGNNk9z192Dnl7qfRtRQ9PQ3hIeTDvUu8H
+      qp7jpao27HmZ1d134f0Xk65KQ/FuCxbF3b4ZYE78U+u39MJZyiJfegpUZ23fAvJ51zXp23S9vnxp
+      cpovuI6avsFq+dkvfgnYm3Q1Gkr47qlx5clkvlaDchtO27eAcNZF5DH8v3d1HKnbNsTDo11fw+wa
+      M98cu45u21Zg9fI+vA0BrT/jOY61RPTzD8Cnqlqu8U3u3/6/VS1zGgUrzQDymgdUf4VCF2Z4bLjv
+      4vplm7t71+UjBjiLmqMFBDAwtJf+7F8Dn0i6Ko3DHgFf3QCEf6S65TWutu+C4awLwAhY31MF5m0M
+      IApKydAAcqnPUJtuR3PaOPht4D+qWOJRRtNPVLG8GU1kRNTWzAmIbPwZUF0DkHc+B+Aia54WEMBD
+      Ow/juTXpajSYaq5Wf4qHdrbNiGPbd8Gci7q8NyKsrgHIecZK3e7mCkAAD+x+jP7sk8A1lRa1YJ7r
+      un37ioWTj42edujI2qU/yFVadiV8wIDQC/+z/87z77pubXVuHLirahVE5s1IZl+wtg9ARNaFAebr
+      2wLC54rb4brm6oKNs8Jt+NSVhCRVL+M3L0w92JFKPTj5WMfrZ3DPrrLpcgpA2SwGBkc8TAlaBgV/
+      kmvAD3tsynO/zvT8uU+8+OcXpFxmynvrSM3F2dRn8O846+f54cFXyt8mvtcZndNWkz5bIwA5SwfF
+      7rS9+b6NYhfM1/kZENa8LSCAgT376V9+F9i6SoqJIjvC1MDRBZT7vaSAhWWO409+fBp2QqKeopH8
+      YfYd2jntlSda9rZF/DB8s+sTPV7tXU/jcJYyTzLzgBo/APVl/w7j16c5Yy6eU4LKHBt7hf7sMWDk
+      zx4Z7UynIB/xR/Rnb5o4x6LfY+D5p2ZX6Zl5sxzeQ1R2GD5+q8gS/H8Y5e/BZa4DfmW2RWzekbtp
+      8/VDsbodW7f2pvadfaDsLqIdp7h5bjSa8nuLOkh7nym7n72LmHfiNIgrl3z6m/M63kKucLRsHXKF
+      o0R+aiKF7KKM//udnwvquk3hk8n7XDBvzoNR/2H4cn8AGkt/9jFgZf1vbNeycfDrVS3yY8veTsrt
+      Bsik6EynmJMvcGysQPGvnveG2WzScIwBw+PfnJJhvjPSo2Mcjjx54CE27v50Nd7CFP3ZS4HnmPWA
+      hl/FxngBqB4qCSCXrP+YH9w/u9xhXR2dI0dG3jg1iY0H1w/29DjvnzZ45pOXPHtFPe+tUbB6yrjx
+      LsTCsQJzjuVgrEDn+LFZBh8otpgWjn+NjpE+loPIM790rKLnNNPauHsn3h6c+cTGV1HrBbhuWdwk
+      iVNdvTR7IKldT12hOAzvNQwvTcmlbidoZXhjMqusQ3DtBT2WcrP7SF377p4XK7p5k2r8Z0DS+AZ2
+      HGJ19yfx7TODt5yzF5xBz9sv5F9f/NbMJ0+yYK7jlWj9pffsunwfAJ48Vsw+YPh8hJVek+fNrAR5
+      K72OjLyVziEiD9HE+ZHZRDlMKsdKx/OQ9/AO8x7D6p6ZQQFIqmNgcDP92RuAq5KuSpI+evFVwQHo
+      XecaUTR2KsWUtsc9mfUnGakr/qyo+Oi49J1N/Ad/XFF23HXj3c3J7bXIR28NqngVKABJ9Ti7hch/
+      D2j8HEcnYWYVPQv68LuvsDVb7va5fPzHOYsXdN8Y+V1PpSM3r1iHTCafpvg67zMuVXxdwGfMl47j
+      MxE28ZqJ4y7jXfE1kc+YFV9HxsS1QMbzZjmUysFsaNZvfJYUgKR6Ngz+mP7s54G/TLoqlagkCC2c
+      O58PLu3m8e8+F+v8lKX2/e0Ndz9c+rbimYzNRg+hpbpePbye6i7OTISZzeah9BJgycuvvRI7W0CB
+      fFs/N1MAkura9oMczl0HlJ/J12TGA1HMr/1mtn/vf33/q0yalzWtgmv5xPPTafwumNk+vK9/Jj4X
+      /V/d79kqNuz6Dv3d15Z2jii7RKKlbdp7tLRY93dnOPO7bBpsy+H3cY0fgAYG/yTpKlRNLhoh7RJI
+      a+pfmvmcKts4+E/cfNFiUpk1RHYJxpngp/ZpHK/VvW714NmC8QFgAeV7GsOYtXX3C5phKYZIA/Pe
+      L6LYyiubcP799936hdeOvPG+Ew5H61b2f+Cq85a/epJi3wAOjs/VaWUKQCKzUOmyjRCVztBuZK37
+      zkRqpJ7BZ1yrBqHWfFciNZJE8BnXikFIw/AikhgFIJGYkmz9tCoFIBFJjAKQSEyt+AwmaQpAIpIY
+      BSCRJtCqrS8FIJEArRoIkqLfpsgs1GtETAFPRERERERERERERERERERERERERERERERERERERERE
+      RERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERE
+      RERERERERERERERERERERERERKT2/h8g+1rQ77W2SwAAAABJRU5ErkJggg==
+    )
+  )
+
+  (text "To SSR2 control." (at 210.82 151.13 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 064e5c89-c818-434e-90ce-f416b4aee1fc)
+  )
+  (text "SSR Interface (Solid State Relay)\nHEATER the Due output sets high to switch AC power to enable preheaters\nHeater_SSR_High passes +5V through to the SSR.\nHeater_SSR_High goes low, conducts, to turn on SSR when HEATER is asserted high."
+    (at 64.77 40.64 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 6b8543d6-c7b4-48b7-af4a-b968c32368fa)
+  )
+  (text "To SSR1 control." (at 210.82 85.09 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 8936daa7-fb47-47be-9706-aad48ce01169)
+  )
+  (text "To SSR3 control." (at 210.82 215.9 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid a16dc6d9-c606-4387-b84a-e0924ce75daf)
+  )
+
+  (hierarchical_label "+24V_SSR" (shape input) (at 111.76 71.12 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 13355e83-84df-466f-9b78-ba0497d201d8)
+  )
+  (hierarchical_label "+24V_SSR" (shape input) (at 111.76 137.16 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 410770af-c97a-4fdf-8690-0eac9b49cafa)
+  )
+  (hierarchical_label "Heater1" (shape input) (at 88.9 100.33 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 58903036-c9c3-4302-b8f2-c3d9b7eca24d)
+  )
+  (hierarchical_label "+12V_SSR" (shape input) (at 113.03 80.01 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 60a38213-48db-4069-855e-869656aafa8c)
+  )
+  (hierarchical_label "+12V_SSR" (shape input) (at 113.03 146.05 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 631fa2c0-360d-4233-9da5-c6d964082499)
+  )
+  (hierarchical_label "Heater2" (shape input) (at 88.9 166.37 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 7efe56b8-93f5-4872-b0ca-571a49553000)
+  )
+  (hierarchical_label "+24V_SSR" (shape input) (at 111.76 201.93 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid ccf71b5e-d608-40a6-b883-5470d20757d4)
+  )
+  (hierarchical_label "+12V_SSR" (shape input) (at 113.03 210.82 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid d654ab14-bbc0-4d49-865f-8f2a7fa99ec5)
+  )
+  (hierarchical_label "Heater3" (shape input) (at 88.9 231.14 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid fcbf51ba-fd06-4969-a6de-1361077d93df)
+  )
+
+  (symbol (lib_id "power:GND") (at 120.65 175.26 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 0068b222-9911-4c32-9835-fd9f4f39a0ee)
+    (property "Reference" "#PWR024" (at 120.65 181.61 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 120.65 180.34 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 120.65 175.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 120.65 175.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 289cea16-6a48-459e-8b3c-94dfe00074a8))
+    (instances
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "#PWR024") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "#PWR081") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Transistor_FET:BSS138") (at 118.11 100.33 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 03976aad-8dc9-475a-aaa4-8025d0fcf122)
+    (property "Reference" "Q601" (at 123.2916 99.1616 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "BSS138" (at 123.2916 101.473 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 123.19 102.235 0)
+      (effects (font (size 1.27 1.27) italic) (justify left) hide)
+    )
+    (property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Description" "50V 220mA 3.5Ω@10V,220mA 360mW 1.5V@1mA N Channel SOT-23 MOSFETs ROHS" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C400505" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "Yangzhou Yangjie Electronic Technology Co., Ltd" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "BSS138" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0196" (at 118.11 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid f79efe21-1f25-4255-a4d9-b85060dbbe0e))
+    (pin "2" (uuid be3dd7aa-0c9e-4559-9a61-579efedf6dad))
+    (pin "3" (uuid c9de7e51-40ba-48e9-9d87-2370c8fee0d9))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf/00000000-0000-0000-0000-000062dd8e5f"
+          (reference "Q601") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "Q2") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "Q4") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GND") (at 120.65 109.22 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 07c94431-2b56-4894-9d85-eb887682affc)
+    (property "Reference" "#PWR024" (at 120.65 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 120.65 114.3 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 120.65 109.22 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 120.65 109.22 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid d14961a9-7aed-4785-909f-5b050451a912))
+    (instances
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "#PWR024") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "#PWR056") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 91.44 238.76 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 10082289-920f-4521-afdf-a437052a44ff)
+    (property "Reference" "R102" (at 96.52 237.49 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10K" (at 96.52 240.03 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 93.218 238.76 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://datasheet.lcsc.com/lcsc/1811101310_TyoHM-RMC06031K1-N_C269704.pdf" (at 91.44 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 91.44 238.76 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269701" (at 91.44 238.76 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 91.44 238.76 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060310KFN" (at 91.44 238.76 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "100mW ±1% 10kΩ 0603 Chip Resistor - Surface Mount ROHS" (at 91.44 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 91.44 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 91.44 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 91.44 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 496e74c3-bcdf-4145-8fa7-d9dd5bbc6705))
+    (pin "2" (uuid 77f593d2-850f-44ab-a064-8c9b7ccedc03))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R102") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R41") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R114") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 119.38 80.01 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 2f21abb9-0bc7-4b31-8bf1-8296a2966a7d)
+    (property "Reference" "R101" (at 120.65 74.93 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "DNI" (at 119.38 77.47 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 119.38 78.232 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 119.38 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "" (at 119.38 80.01 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "" (at 119.38 80.01 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 119.38 80.01 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 119.38 80.01 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 119.38 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 119.38 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 119.38 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid c2e3fd3f-c710-483e-9557-91b076c66a3a))
+    (pin "2" (uuid 050a6546-6c36-43de-9fef-e9d7097f1a4c))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R89") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 128.27 87.63 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 3cb7d111-5a97-4179-ae82-2ffdfca78edd)
+    (property "Reference" "R101" (at 129.54 82.55 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1R0" (at 128.27 85.09 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 128.27 85.852 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 128.27 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 128.27 87.63 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269434" (at 128.27 87.63 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 128.27 87.63 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 128.27 87.63 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 128.27 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 128.27 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 128.27 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 128.27 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 2fa273bb-7d6a-4c12-9f5d-afb3f5b9e732))
+    (pin "2" (uuid 1035998f-14f0-41e2-be71-e22570df4871))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R48") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Transistor_FET:BSS138") (at 118.11 231.14 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 415d7552-83d7-4b30-b0fd-89e1878376d4)
+    (property "Reference" "Q601" (at 123.2916 229.9716 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "BSS138" (at 123.2916 232.283 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 123.19 233.045 0)
+      (effects (font (size 1.27 1.27) italic) (justify left) hide)
+    )
+    (property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Description" "50V 220mA 3.5Ω@10V,220mA 360mW 1.5V@1mA N Channel SOT-23 MOSFETs ROHS" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C400505" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "Yangzhou Yangjie Electronic Technology Co., Ltd" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "BSS138" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0196" (at 118.11 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 303f8391-1448-49cf-a8bf-4aa26e763646))
+    (pin "2" (uuid e2baa4b2-bc8d-4d76-af08-c914aa05e2d3))
+    (pin "3" (uuid 012ad6a0-ad11-45c7-814e-16bd3826c1bf))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf/00000000-0000-0000-0000-000062dd8e5f"
+          (reference "Q601") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "Q2") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "Q12") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 128.27 153.67 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 5fd67018-2d95-433f-ac30-6e254c8c6a92)
+    (property "Reference" "R101" (at 129.54 148.59 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1R0" (at 128.27 151.13 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 128.27 151.892 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 128.27 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 128.27 153.67 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269434" (at 128.27 153.67 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 128.27 153.67 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 128.27 153.67 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 128.27 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 128.27 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 128.27 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 128.27 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 7cbd1034-c354-438c-bdec-84a2415d3012))
+    (pin "2" (uuid 64cf88df-549b-412f-b0e5-f777c9152019))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R121") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 204.47 83.82 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 60c0dec4-f134-4704-abf0-8e0af8ec73ae)
+    (property "Reference" "J11" (at 200.66 80.01 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "Screw_Terminal_01x02" (at 207.01 92.71 90)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "DB128V-5.08-2P-GN-S.pdf" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "HAND" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.1537" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "1x2P XH 1 2.5mm 2 Brass Plugin,P=2.5mm Wire To Board / Wire To Wire Connector ROHS" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C265283" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "DB125-2.54-2P-GN-S" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "DIBO" (at 204.47 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid cdceb9fd-08d8-442a-9db2-018fcfaf6b8c))
+    (pin "2" (uuid 7f91b994-6ac9-4b1b-a7ce-38e60f46ffb7))
+    (instances
+      (project "moonratII"
+        (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
+          (reference "J11") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "J13") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "J13") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 101.6 231.14 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 674e02b9-b341-42e8-b415-49ce287ebd3c)
+    (property "Reference" "R108" (at 97.79 228.6 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1K" (at 104.14 228.6 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 101.6 229.362 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://datasheet.lcsc.com/lcsc/1811101310_TyoHM-RMC06031K1-N_C269704.pdf" (at 101.6 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 101.6 231.14 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269704" (at 101.6 231.14 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 101.6 231.14 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC06031K1%N" (at 101.6 231.14 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±1% 1kΩ 0603 Chip Resistor - Surface Mount ROHS" (at 101.6 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 101.6 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 101.6 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 101.6 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 5502ab7b-3c89-49c2-8c8c-55245e2bb728))
+    (pin "2" (uuid 7604a718-6216-4fc3-8ff5-9df64981e90f))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R108") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R4") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R116") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GND") (at 91.44 181.61 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid 7f8ca77a-8246-4e8a-a074-cab56e05257b)
+    (property "Reference" "#PWR024" (at 91.44 187.96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 91.44 186.69 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 91.44 181.61 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 91.44 181.61 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 8c247f95-73a7-4249-9ccc-d05fc89037b0))
+    (instances
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "#PWR024") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "#PWR080") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 119.38 146.05 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 9932e056-542e-4e0f-8939-96289eb4d483)
+    (property "Reference" "R101" (at 120.65 140.97 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "DNI" (at 119.38 143.51 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 119.38 144.272 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 119.38 146.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "" (at 119.38 146.05 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "" (at 119.38 146.05 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 119.38 146.05 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 119.38 146.05 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 119.38 146.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 119.38 146.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 119.38 146.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 4c2bdf3e-71e5-458b-b366-ba5b77e7a322))
+    (pin "2" (uuid 41b089ed-7aea-41d5-a6f7-6a7f19d0f9a6))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R118") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 101.6 166.37 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 9ae7fe10-0171-4a98-a34f-8fc9cadf6902)
+    (property "Reference" "R108" (at 97.79 163.83 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1K" (at 104.14 163.83 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 101.6 164.592 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://datasheet.lcsc.com/lcsc/1811101310_TyoHM-RMC06031K1-N_C269704.pdf" (at 101.6 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 101.6 166.37 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269704" (at 101.6 166.37 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 101.6 166.37 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC06031K1%N" (at 101.6 166.37 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±1% 1kΩ 0603 Chip Resistor - Surface Mount ROHS" (at 101.6 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 101.6 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 101.6 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 101.6 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 28f7c40d-6444-4530-b969-f16f3038bbbc))
+    (pin "2" (uuid 31874a88-e488-4418-a25a-a05d5a7b983e))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R108") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R4") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R115") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GND") (at 120.65 240.03 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid a54b7290-664d-4cf4-8e7a-74fc768eabf7)
+    (property "Reference" "#PWR024" (at 120.65 246.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 120.65 245.11 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 120.65 240.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 120.65 240.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 9eba0f5e-958b-400f-afa4-7defe7ba1045))
+    (instances
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "#PWR024") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "#PWR083") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GND") (at 91.44 246.38 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid a8d4e3a1-fe1e-4d32-8db2-87f2e1bb8fcc)
+    (property "Reference" "#PWR024" (at 91.44 252.73 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 91.44 251.46 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 91.44 246.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 91.44 246.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid b366a4ac-71c8-4fc5-b804-e296b3bd7637))
+    (instances
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "#PWR024") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "#PWR082") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 91.44 107.95 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid ac31f278-52fc-4ae6-8f5e-e5e3fd111ee8)
+    (property "Reference" "R102" (at 96.52 106.68 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10K" (at 96.52 109.22 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 93.218 107.95 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://datasheet.lcsc.com/lcsc/1811101310_TyoHM-RMC06031K1-N_C269704.pdf" (at 91.44 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 91.44 107.95 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269701" (at 91.44 107.95 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 91.44 107.95 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060310KFN" (at 91.44 107.95 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "100mW ±1% 10kΩ 0603 Chip Resistor - Surface Mount ROHS" (at 91.44 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 91.44 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 91.44 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 91.44 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid ac9209f3-6fd5-481d-9a04-1628273a4841))
+    (pin "2" (uuid d1d43e32-6e41-4a7e-af6a-08c77513984a))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R102") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R41") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R81") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 119.38 201.93 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid acb8f972-062d-4d6b-85aa-9f01f353c1e9)
+    (property "Reference" "R101" (at 120.65 196.85 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1R0" (at 119.38 199.39 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 119.38 200.152 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 119.38 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 119.38 201.93 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269434" (at 119.38 201.93 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 119.38 201.93 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 119.38 201.93 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 119.38 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 119.38 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 119.38 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 119.38 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 115a5b9c-237a-4378-a07d-02cf4bc6816a))
+    (pin "2" (uuid 3f21fd04-e1ce-4c07-a214-26009c47180e))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R119") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 204.47 149.86 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid ada479bb-c888-435b-90d2-b0cb43394c98)
+    (property "Reference" "J11" (at 200.66 146.05 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "Screw_Terminal_01x02" (at 207.01 158.75 90)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "DB128V-5.08-2P-GN-S.pdf" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "HAND" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.1537" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "1x2P XH 1 2.5mm 2 Brass Plugin,P=2.5mm Wire To Board / Wire To Wire Connector ROHS" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C265283" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "DB125-2.54-2P-GN-S" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "DIBO" (at 204.47 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 60812296-d501-43ba-8efd-6c80ca73fe93))
+    (pin "2" (uuid 94c6654b-2f67-4b03-9512-d0dd8f0495ef))
+    (instances
+      (project "moonratII"
+        (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
+          (reference "J11") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "J13") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "J30") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 119.38 71.12 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid ade76bda-2c71-4ec6-b86f-29a1e5b77c61)
+    (property "Reference" "R101" (at 120.65 66.04 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1R0" (at 119.38 68.58 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 119.38 69.342 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 119.38 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 119.38 71.12 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269434" (at 119.38 71.12 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 119.38 71.12 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 119.38 71.12 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 119.38 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 119.38 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 119.38 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 119.38 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 470ececc-710d-4f24-85f9-ce8522bae5ab))
+    (pin "2" (uuid 2eff7bdc-fe68-461c-a166-55414f07011b))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R88") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 119.38 137.16 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid ae4b745d-1654-4292-b7da-1b0cfbd5d3be)
+    (property "Reference" "R101" (at 120.65 132.08 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1R0" (at 119.38 134.62 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 119.38 135.382 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 119.38 137.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 119.38 137.16 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269434" (at 119.38 137.16 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 119.38 137.16 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 119.38 137.16 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 119.38 137.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 119.38 137.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 119.38 137.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 119.38 137.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 77cf7860-43ed-4396-8ee8-74a97c904252))
+    (pin "2" (uuid aa746277-1a73-42ce-a491-b97b15ecdc91))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R117") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 204.47 214.63 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid b8a9e164-ba4a-44a2-9cf3-2bfcdaa913ec)
+    (property "Reference" "J11" (at 200.66 210.82 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "Screw_Terminal_01x02" (at 207.01 223.52 90)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "DB128V-5.08-2P-GN-S.pdf" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "HAND" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.1537" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "1x2P XH 1 2.5mm 2 Brass Plugin,P=2.5mm Wire To Board / Wire To Wire Connector ROHS" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C265283" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "DB125-2.54-2P-GN-S" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "DIBO" (at 204.47 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 7958f587-7ca0-407a-a1fa-1e145efceec0))
+    (pin "2" (uuid 9c2787f0-4077-41dd-b600-5b91d2bba0a3))
+    (instances
+      (project "moonratII"
+        (path "/9ef5effe-cb46-4a9a-bbbe-a65ab44b9e67"
+          (reference "J11") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "J13") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "J31") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Transistor_FET:BSS138") (at 118.11 166.37 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid cee6e197-52f9-4a3b-8a2a-dbe1b65076f0)
+    (property "Reference" "Q601" (at 123.2916 165.2016 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "BSS138" (at 123.2916 167.513 0)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 123.19 168.275 0)
+      (effects (font (size 1.27 1.27) italic) (justify left) hide)
+    )
+    (property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Description" "50V 220mA 3.5Ω@10V,220mA 360mW 1.5V@1mA N Channel SOT-23 MOSFETs ROHS" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C400505" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "Yangzhou Yangjie Electronic Technology Co., Ltd" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "BSS138" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0196" (at 118.11 166.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 03bd1f06-4a7b-40d0-83e5-e05c85671c33))
+    (pin "2" (uuid b83bc04d-89fb-41b0-ade1-98939fa65048))
+    (pin "3" (uuid f1665ba0-4ee7-43a2-94f7-03dec549c7f4))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf/00000000-0000-0000-0000-000062dd8e5f"
+          (reference "Q601") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "Q2") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "Q11") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 91.44 173.99 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid d06cd84e-fe50-49ec-927c-5d14219f0bb3)
+    (property "Reference" "R102" (at 96.52 172.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10K" (at 96.52 175.26 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 93.218 173.99 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://datasheet.lcsc.com/lcsc/1811101310_TyoHM-RMC06031K1-N_C269704.pdf" (at 91.44 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 91.44 173.99 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269701" (at 91.44 173.99 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 91.44 173.99 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060310KFN" (at 91.44 173.99 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "100mW ±1% 10kΩ 0603 Chip Resistor - Surface Mount ROHS" (at 91.44 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 91.44 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 91.44 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 91.44 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 12c5c4ef-dadb-4e6c-b525-9d7bd27d5375))
+    (pin "2" (uuid c730dd6c-0355-405e-aba1-696ae3b3357c))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R102") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R41") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R113") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 119.38 210.82 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid d078a76b-1af8-4551-8ac4-a7daef469f7c)
+    (property "Reference" "R101" (at 120.65 205.74 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "DNI" (at 119.38 208.28 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 119.38 209.042 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 119.38 210.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "" (at 119.38 210.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "" (at 119.38 210.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 119.38 210.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 119.38 210.82 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 119.38 210.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 119.38 210.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 119.38 210.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 976f2ed0-d196-4ad8-b4ed-bf5450322099))
+    (pin "2" (uuid 3d8c2622-bac8-4b35-adfa-b7b742050474))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R120") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 128.27 218.44 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid e30a0f9c-3bdb-44f4-8a76-61410a10d6dc)
+    (property "Reference" "R101" (at 129.54 213.36 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1R0" (at 128.27 215.9 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 128.27 216.662 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 128.27 218.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 128.27 218.44 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269434" (at 128.27 218.44 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 128.27 218.44 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC060315%N" (at 128.27 218.44 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±5% 1Ω 0603 Chip Resistor - Surface Mount ROHS" (at 128.27 218.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 128.27 218.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 128.27 218.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 128.27 218.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 9317699c-d14f-4e62-9bcd-35a9633598a6))
+    (pin "2" (uuid df12830f-a383-4ced-bc8b-237a18c9b3e4))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R101") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R50") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R122") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "Device:R") (at 101.6 100.33 90) (mirror x) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid f0b2d12e-0a2d-43b4-865e-176293107da4)
+    (property "Reference" "R108" (at 97.79 97.79 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1K" (at 104.14 97.79 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" (at 101.6 98.552 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "https://datasheet.lcsc.com/lcsc/1811101310_TyoHM-RMC06031K1-N_C269704.pdf" (at 101.6 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1" "JLCPCB" (at 101.6 100.33 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Distributor 1 PN" "C269704" (at 101.6 100.33 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Manufacturer" "TyoHM" (at 101.6 100.33 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RMC06031K1%N" (at 101.6 100.33 90)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "0.1W ±1% 1kΩ 0603 Chip Resistor - Surface Mount ROHS" (at 101.6 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "AssemblyType" "SMT" (at 101.6 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Cost" "0.0015" (at 101.6 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "LongLead" "NO" (at 101.6 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid b694da40-e439-4131-be93-e0e8e8643493))
+    (pin "2" (uuid bb987470-b7a4-49e1-8357-d6cce9da0f84))
+    (instances
+      (project "GeneralPurposeAlarmDevicePCB"
+        (path "/412a327d-1ee3-473e-bc00-1545004b7edf"
+          (reference "R108") (unit 1)
+        )
+      )
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/0cb2f0dc-fe38-451d-b752-5d12a98f8d03"
+          (reference "R4") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "R47") (unit 1)
+        )
+      )
+    )
+  )
+
+  (symbol (lib_id "power:GND") (at 91.44 115.57 0) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (uuid ff0ffc84-2ad9-443c-8b4a-5561e3a3b529)
+    (property "Reference" "#PWR024" (at 91.44 121.92 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 91.44 120.65 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 91.44 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 91.44 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid bee73ac0-fb3a-4aad-8900-6cd60e243ce6))
+    (instances
+      (project "Control_1v1"
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59"
+          (reference "#PWR024") (unit 1)
+        )
+        (path "/c68c9deb-8d4d-42f0-adf8-4d3022f4ee59/4a4acea4-18ba-4b87-a925-0ac6ac8c0a01"
+          (reference "#PWR072") (unit 1)
+        )
+      )
+    )
+  )
+)

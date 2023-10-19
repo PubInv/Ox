@@ -1,0 +1,29 @@
+Comment,Designator,Footprint,JLCPCB Part #
+39pF,"C1-15, C20, C21, C23",Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,C107049
+1uF,"C16-19, C24",Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,C91183
+10nF,C22,Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,C389113
+5.1V,"D1,D2",Diode_SMD:D_MiniMELF,C841097
+1N5819WS,D3,Diode_SMD:D_SOD-323,C191023
+RED 0603,D4,LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder,C2286
+DB9_Female_MountingHoles,J1,Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset7.48mm,C141882
+Conn_01x08,J2-6,Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical,C2894931
+Conn_01x10,"J7,J9,J14,J26,J29",Connector_PinSocket_2.54mm:PinSocket_1x10_P2.54mm_Vertical,C2894933
+Conn_02x18_Odd_Even,J8,Connector_PinSocket_2.54mm:PinSocket_2x18_P2.54mm_Vertical,C132131
+Conn_02x12_Odd_Even,"J10,J27",PubInv_KiCad_PCB.pretty:PinHeader_2x12_P2.00mm_Vertical_JST,C160327
+Screw_Terminal_01x02,"J11-13,J25,J28,J30-34",TerminalBlock_TE-Connectivity:TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal,C265283
+DB25_Female_MountingHoles,J15,Connector_Dsub:DSUB-25_Female_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset7.48mm,C190083
+Conn_01x04,"J16,J18,J20,J24,J37",Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical,C6332197
+Conn_01x05,J17,Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical,C2897368
+Conn_01x07,J19,Connector_PinHeader_2.54mm:PinHeader_1x07_P2.54mm_Vertical,C2932672
+RJ12_6P6C_HORZ,J21,PubInv_KiCad_PCB:RJ12_Amphenol_54601,C2683355
+0.100_2Pin,"J22,J23",Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical,C168673
+Conn_02x05_Odd_Even,"J35,J36",Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical,C5665
+BSS138,"Q1,Q3-14",Package_TO_SOT_SMD:SOT-23,C400505
+NCE01P30K,Q2,Package_TO_SOT_SMD:TO-252-2,C115991
+1R0,"R1-16,R31,R33,R48-50,R59,R66,R73,R76,R79,R80,R82,R84,R88,R91-100,R109-112,R117,R119,R121,R122,R140,R141,R144-166,R169",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C269434
+1K,"R18-29,R36-38,R42,R45,R47,R54,R57,R58,R62,R115,R116,R130,R172,R173",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C269704
+4M7,R32,Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C23163
+10K,"R39-41,R44,R46,R56,R61,R64,R65,R67-70,R81,R101,R103-108,R113,R114,R123,R124,R126,R127,R142,R143",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C269701
+39R,"R71,R72,R129,R131-139,R170,R171,R174-179",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C325713
+4K7,"R77,R78,R83,R102,R125,R128,R167,R168",Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,C23162
+SWITCH_TACTILE_SPST-NO_0.05A_24V,"S1,S2",PubInv_KiCad_PCB:Switch_Tactile_THT_6x6mm,C428628
