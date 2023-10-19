@@ -1,7 +1,12 @@
 //test config for display, thermocouple and ethernet
 //Author: Lawrence Kincheloe
 //
-//
+
+// https://github.com/adafruit/Adafruit-MAX31855-library
+// https://ryand.io/AutoPID/
+// https://github.com/mprograms/SimpleRotary
+// https://github.com/olikraus/u8g2
+// //
 #include <Arduino.h>
 #include <U8g2lib.h>
 #include <MUIU8g2.h>
