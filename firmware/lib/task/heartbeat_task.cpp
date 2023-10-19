@@ -25,13 +25,22 @@ namespace OxApp
         OxCore::Debug<const char *>("HeartbeatTask init\n");
         Serial.println("HeartbeatTask init");
 
+        pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
+        digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+
         return true;
     }
 
     bool HeartbeatTask::_run()
     {
       // Note:adding a heartbeat task
-      Serial.println("HeartbeatTask run");
+      // Serial.println("HeartbeatTask run");
+        //Toggeling the LED
+            if (digitalRead(LED_BUILTIN) == LOW) {
+            digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+            } else {
+            digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
+            }     
         return true;
     }
 

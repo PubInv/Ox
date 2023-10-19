@@ -44,6 +44,12 @@ namespace OxApp
       bool _init() override;
       bool _run() override;
       // This would go into the abstract class.
+
+      const int HIGH_TIME_LED = 900;
+      const int LOW_TIME_LED = 100;
+      unsigned long lastLEDtime = 0;
+      unsigned long nextLEDchange = 100; //time in ms.
+
     };
 }
 
