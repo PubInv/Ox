@@ -14,6 +14,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
 #include "power_monitor_task.h"
+#include <machine.h>
+
 
 using namespace std;
 
@@ -23,11 +25,10 @@ namespace OxApp
     bool PowerMonitorTask::_init()
     {
         OxCore::Debug<const char *>("PowerMonitorTask init\n");
-        Serial.println("PowerMonitorTask init");
-
-        // pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
-        // digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-
+        Serial.print("First raw analogRead(SENSE_24V)= ");
+        Serial.println(analogRead(SENSE_24V ));
+        Serial.print("lowThreshold24V= ");
+        Serial.println(lowThreshold24V);
         return true;
     }
 
@@ -36,18 +37,35 @@ namespace OxApp
       // Note:adding a task
        Serial.println("PowerMonitorTask run");
 
-        // //Toggeling the LED
-        //     if (digitalRead(LED_BUILTIN) == LOW) {
-        //     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-        //     } else {
-        //     digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
-        //     }     
-
-        //Analog read of the +24V expected about 3V.
+        //Analog read of the +24V expected about 3.25V at ADC input.
         // SENSE_24V on A1.
-        Serial.print("analogRead(A1)= ");
-        Serial.println(analogRead(A1));
+        // Full scale is 1023, ten bits for 3.3V.
+        //30K into 4K7 
+        const long R1=30000;
+        const long R2=4700;
+        const float Vcc = 3.3;
 
+        Serial.print("analogRead(SENSE_24V)= ");
+        Serial.println(analogRead(SENSE_24V) * ((Vcc * (R1+R2))/(1023.0 * R2))); 
+
+        if (analogRead(A1) > lowThreshold24V) {
+            powerIsGood = true;
+            Serial.println("+24V power monitor reports good.");
+            return true;
+        }else{
+            powerIsGood = false;
+            Serial.println("+24V power monitor reports bad.");
+            return false;
+        }
+    }
+
+        bool PowerMonitorTask::setThreshold24V(int setThreshold)
+    {
+        lowThreshold24V = setThreshold;
+        OxCore::Debug<const char *>("Setting 24V threshold to: ");
+        OxCore::Debug<int >(lowThreshold24V);
+        // Serial.print("Setting 24V threshold to: ");
+        // Serial.println(lowThreshold24V);
         return true;
     }
 

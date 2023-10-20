@@ -37,6 +37,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // #define RF_FAN 2
 #define RF_HEATER 3
 #define RF_STACK DAC0
+#define SENSE_24V A1
 #define MAX31850_DATA_PIN 5
 // #define RF_FAN_TACH 5
 // This is obsolete

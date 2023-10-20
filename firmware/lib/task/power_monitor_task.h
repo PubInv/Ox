@@ -43,6 +43,11 @@ namespace OxApp
     class PowerMonitorTask : public OxCore::Task
     {
     public:
+    bool powerIsGood = false;
+    int lowThreshold24V = 1023 * 3 / 4;
+
+    bool setThreshold24V(int setThreshold);
+
     private:
       bool _init() override;
       bool _run() override;

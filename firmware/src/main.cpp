@@ -279,8 +279,6 @@ OxCore::TaskProperties HeartbeatProperties;
     abort();
   }
 
-
-//foo
 OxCore::TaskProperties PowerMonitorProperties;
   PowerMonitorProperties.name = "Powermontor";
   PowerMonitorProperties.id = 35;
