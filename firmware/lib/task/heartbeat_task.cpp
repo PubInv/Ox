@@ -23,7 +23,6 @@ namespace OxApp
     bool HeartbeatTask::_init()
     {
         OxCore::Debug<const char *>("HeartbeatTask init\n");
-        Serial.println("HeartbeatTask init");
 
         pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
         digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
