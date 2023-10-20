@@ -174,7 +174,9 @@ public:
 
   static const int INIT_HEARTBEAT_PERIOD_MS = 500;
 
-  void _reportFanSpeed();
+  static const int INIT_POWERMONITOR_PERIOD_MS = 500;
+
+void _reportFanSpeed();
 
   static const int NUM_MACHINE_STATES = 8;
 

@@ -45,6 +45,8 @@ namespace OxApp
 
         //Analog read of the +24V expected about 3V.
         // SENSE_24V on A1.
+        Serial.print("analogRead(A1)= ");
+        Serial.println(analogRead(A1));
 
         return true;
     }
