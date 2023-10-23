@@ -168,6 +168,9 @@ void MachineConfig::runComplexAlgolAssertions() {
 bool MachineConfig::init() {
  Serial.println("error toleration times (ms)");
  for(int i = 0; i < 3; i++) {
+   Serial.print("Errors index: ");
+   Serial.print(i);
+   Serial.print(" ");
    Serial.println(errors[i].toleration_ms);
  }
   return true;
