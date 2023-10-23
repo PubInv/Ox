@@ -43,7 +43,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <serialReportTask.h>
 #include <OEDCSNetworkTask.h>
 #include <heartbeat_task.h>
-#include <power_monitor_task.h>
 
 #ifdef TEST_FANS_ONLY
 #include <fanTEST_task.h>
@@ -60,7 +59,7 @@ OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 OxApp::HeartbeatTask heartbeatTask;
-// OxApp::PowerMonitorTask powermonitorTask;
+
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
@@ -278,19 +277,6 @@ OxCore::TaskProperties HeartbeatProperties;
     OxCore::Debug<const char *>("heartbeatAdd Faild\n");
     abort();
   }
-
-OxCore::TaskProperties PowerMonitorProperties;
-  PowerMonitorProperties.name = "Powermontor";
-  PowerMonitorProperties.id = 35;
-  PowerMonitorProperties.period = MachineConfig::INIT_POWERMONITOR_PERIOD_MS; 
-  PowerMonitorProperties.priority = OxCore::TaskPriority::High;
-  PowerMonitorProperties.state_and_config = (void *) &machineConfig;
-  // bool powermonitorAdd = core.AddTask(&powermonitorTask, &PowerMonitorProperties);
-
-  // if (!powermonitorAdd) {
-  //   OxCore::Debug<const char *>("Powermonitor Faild\n");
-  //   abort();
-  // }
 
 
   core.ResetHardwareWatchdog();

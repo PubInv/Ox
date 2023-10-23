@@ -17,7 +17,6 @@
 #include <cmath>
 #include <abstract_temperature.h>
 #include <TF800A12K.h>
-#include "power_monitor_task.h"
 
 // from: https://learn.adafruit.com/memories-of-an-arduino/measuring-free-memory
 // This should be made into a separte task,
