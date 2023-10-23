@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #define COMPANY_NAME "pubinv.org "
 //#define PROG_NAME "main.cpp"
 #define PROG_NAME "OEDCS"
-#define VERSION "; Rev: 0.3.9"  // Adding power_monitor_task,  Loss Detection by +24V
+#define VERSION "; Rev: 0.3.10"  // Adding power_monitor_task,  Loss Detection by +24V
 #define DEVICE_UNDER_TEST "Hardware: Due"  //A model number
 #define LICENSE "GNU Affero General Public License, version 3 "
 
@@ -60,7 +60,7 @@ OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 OxApp::HeartbeatTask heartbeatTask;
-OxApp::PowerMonitorTask powermonitorTask;
+// OxApp::PowerMonitorTask powermonitorTask;
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
@@ -285,12 +285,12 @@ OxCore::TaskProperties PowerMonitorProperties;
   PowerMonitorProperties.period = MachineConfig::INIT_POWERMONITOR_PERIOD_MS; 
   PowerMonitorProperties.priority = OxCore::TaskPriority::High;
   PowerMonitorProperties.state_and_config = (void *) &machineConfig;
-  bool powermonitorAdd = core.AddTask(&powermonitorTask, &PowerMonitorProperties);
+  // bool powermonitorAdd = core.AddTask(&powermonitorTask, &PowerMonitorProperties);
 
-  if (!powermonitorAdd) {
-    OxCore::Debug<const char *>("Powermonitor Faild\n");
-    abort();
-  }
+  // if (!powermonitorAdd) {
+  //   OxCore::Debug<const char *>("Powermonitor Faild\n");
+  //   abort();
+  // }
 
 
   core.ResetHardwareWatchdog();
