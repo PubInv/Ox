@@ -52,6 +52,8 @@ namespace OxApp
     const static int NUM_FANS = 1;
 
     float getTemperatureReading();
+    bool updatePowerMonitor();
+
     COG_HAL* getHAL();
 
     void turnOff() override;

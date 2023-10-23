@@ -60,7 +60,7 @@ OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 OxApp::HeartbeatTask heartbeatTask;
-OxApp::PowerMonitorTask powermonitorTask;
+// OxApp::PowerMonitorTask powermonitorTask;
 
 HeaterPIDTask heaterPIDTask;
 DutyCycleTask dutyCycleTask;
@@ -285,12 +285,12 @@ OxCore::TaskProperties PowerMonitorProperties;
   PowerMonitorProperties.period = MachineConfig::INIT_POWERMONITOR_PERIOD_MS; 
   PowerMonitorProperties.priority = OxCore::TaskPriority::High;
   PowerMonitorProperties.state_and_config = (void *) &machineConfig;
-  bool powermonitorAdd = core.AddTask(&powermonitorTask, &PowerMonitorProperties);
+  // bool powermonitorAdd = core.AddTask(&powermonitorTask, &PowerMonitorProperties);
 
-  if (!powermonitorAdd) {
-    OxCore::Debug<const char *>("Powermonitor Faild\n");
-    abort();
-  }
+  // if (!powermonitorAdd) {
+  //   OxCore::Debug<const char *>("Powermonitor Faild\n");
+  //   abort();
+  // }
 
 
   core.ResetHardwareWatchdog();

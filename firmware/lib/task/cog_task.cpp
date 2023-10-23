@@ -17,6 +17,7 @@
 #include <cmath>
 #include <abstract_temperature.h>
 #include <TF800A12K.h>
+#include "power_monitor_task.h"
 
 // from: https://learn.adafruit.com/memories-of-an-arduino/measuring-free-memory
 // This should be made into a separte task,
@@ -76,6 +77,8 @@ namespace OxApp
   }
   bool CogTask::_run()
   {
+    //Check for AC power, ie for +24V
+    updatePowerMonitor();
     // Report fan speed
     getConfig()->report->fan_rpm =
       getHAL()->_fans[0]._calcRPM(0);
@@ -129,7 +132,39 @@ namespace OxApp
     return Off;
   }
 
+bool CogTask::updatePowerMonitor()
+ //bool PowerMonitorTask::_run()
+    {
+      // Note:adding a task
+       Serial.println("PowerMonitorTask run");
+
+        //Analog read of the +24V expected about 3.25V at ADC input.
+        // SENSE_24V on A1.
+        // Full scale is 1023, ten bits for 3.3V.
+        //30K into 4K7 
+        const long R1=30000;
+        const long R2=4700;
+        const float Vcc = 3.3;
+        bool powerIsGood = false;
+        int lowThreshold24V = 1023 * 3 / 4;
+
+        Serial.print("analogRead(SENSE_24V)= ");
+        Serial.println(analogRead(SENSE_24V) * ((Vcc * (R1+R2))/(1023.0 * R2))); 
+
+        if (analogRead(A1) > lowThreshold24V) {
+            powerIsGood = true;
+            Serial.println("+24V power monitor reports good.");
+            return true;
+        }else{
+            powerIsGood = false;
+            Serial.println("+24V power monitor reports bad.");
+            return false;
+        }
+    }
+
+
   void CogTask::_updateCOGSpecificComponents() {
+      bool powerIsGood = updatePowerMonitor();
       float t = getTemperatureReading();
       float fs = computeFanSpeed(t);
       float a = computeAmperage(t);
