@@ -78,7 +78,10 @@ namespace OxApp
   bool CogTask::_run()
   {
     //Check for AC power, ie for +24V
-    updatePowerMonitor();
+    bool powerIsOK = updatePowerMonitor();
+    if (!powerIsOK){
+      Serial.println("AC Power (+24V) FAIL.");
+    }
     // Report fan speed
     getConfig()->report->fan_rpm =
       getHAL()->_fans[0]._calcRPM(0);
@@ -133,10 +136,9 @@ namespace OxApp
   }
 
 bool CogTask::updatePowerMonitor()
- //bool PowerMonitorTask::_run()
     {
       // Note:adding a task
-       Serial.println("PowerMonitorTask run");
+       if (DEBUG_LEVEL >0 ) Serial.println("PowerMonitorTask run");
 
         //Analog read of the +24V expected about 3.25V at ADC input.
         // SENSE_24V on A1.
@@ -148,16 +150,16 @@ bool CogTask::updatePowerMonitor()
         bool powerIsGood = false;
         int lowThreshold24V = 1023 * 3 / 4;
 
-        Serial.print("analogRead(SENSE_24V)= ");
-        Serial.println(analogRead(SENSE_24V) * ((Vcc * (R1+R2))/(1023.0 * R2))); 
+        if (DEBUG_LEVEL >0 )  Serial.print("analogRead(SENSE_24V)= ");
+        if (DEBUG_LEVEL >0 )  Serial.println(analogRead(SENSE_24V) * ((Vcc * (R1+R2))/(1023.0 * R2))); 
 
         if (analogRead(A1) > lowThreshold24V) {
             powerIsGood = true;
-            Serial.println("+24V power monitor reports good.");
+            if (DEBUG_LEVEL >0 )  Serial.println("+24V power monitor reports good.");
             return true;
         }else{
             powerIsGood = false;
-            Serial.println("+24V power monitor reports bad.");
+            if (DEBUG_LEVEL >0 ) Serial.println("+24V power monitor reports bad.");
             return false;
         }
     }
