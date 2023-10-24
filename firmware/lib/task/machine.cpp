@@ -22,6 +22,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <assert.h>
 
 
+void dumpAllData10Hz() {
+  // Loop over Ring buffer and call ouptutReport and
+  // do a Network output (eventually);
+  // using...
+  for(int i = 0; i < MAX_RECORDS; i++) {
+    outputReport(_log_entry[i]);
+  }
+
+}
 void MachineConfig::outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
         OxCore::Debug<const char *>("Machine State: ");

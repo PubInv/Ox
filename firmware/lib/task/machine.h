@@ -227,9 +227,17 @@ void _reportFanSpeed();
   int post_getter_indices[1] = {2};
 
   MachineHAL* hal;
+
   MachineStatusReport *report;
 
   bool init();
+
+  // Ring buffer with 30 seconds of data could be a variable here
+  unsigned int  MAX_RECORDS = 600;
+  OxCollections::CircularArray<MachineStatusReport, MAX_RECORDS> _log_entry;
+
+  void dumpAllData10Hz();
+
 
   void outputReport(MachineStatusReport *msr);
   void createJSONReport(MachineStatusReport *msr, char *buffer);
