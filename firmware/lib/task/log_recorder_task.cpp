@@ -27,24 +27,28 @@ namespace OxApp
         return true;
     }
 
-    bool HeartbeatTask::_run()
+    bool Log_Recorder_Task::_run()
     {
-      // Note:adding a heartbeat task
-      // Serial.println("HeartbeatTask run");
-        //Toggeling the LED
-         getConfig()->report->post_heater_C;
-		     getConfig()->fanDutyCycle;
-
-    getConfig()->CriticalError errors[NUM_CRITICAL_ERROR_DEFINITIONS];
-    getConfig()->RAMP_UP_TARGET_D_MIN = 0.5; // R (degrees C per minute)
-    getConfig()->RAMP_DN_TARGET_D_MIN = -0.5; // R (degrees C per minute)
-    getConfig()->TARGET_TEMP_C = 30.0; // This is the goal target
-    getConfig()->MAX_AMPERAGE = 0.0; // A (Amperes)
-    getConfig()->MAX_STACK_WATTAGE = 0.0; // W (Wattage)
-    getConfig()->FAN_SPEED = 0.0; // F (fraction between 0.0 and 1.0)
-    getConfig()->BEGIN_DN_TIME_MS = 0;
-    getConfig()->BEGIN_UP_TIME_MS = 0;
-    getConfig()->SETPOINT_TEMP_C = 30.0; // This is the CURRENT setpoint, which ramps up or down to TARGET_TEMP.
+		
+	
+	        return true;
+    }	
+	
+	
+    void Log_Recorder_Task::addLog(MachineStatusReport *msr) {
+    LogRecordEntry lre = {
+        mrs->report->post_heater_C, \
+		mrs->fanDutyCycle, 	\
+		mrs->CriticalError errors[NUM_CRITICAL_ERROR_DEFINITIONS],	\
+		mrs->RAMP_UP_TARGET_D_MIN ,\/* R (degrees C per minute)*/
+		mrs->RAMP_DN_TARGET_D_MIN , \/* R (degrees C per minute)*/
+		mrs->TARGET_TEMP_C , \/* This is the goal target*/
+		mrs->MAX_AMPERAGE , \/* A (Amperes)*/
+		mrs->MAX_STACK_WATTAGE , \/* W (Wattage)*/
+		mrs->FAN_SPEED , \/* F (fraction between 0.0 and 1.0)*/
+		mrs->BEGIN_DN_TIME_MS , \
+		mrs->BEGIN_UP_TIME_MS , \
+		mrs->SETPOINT_TEMP_C , /*This is the CURRENT setpoint, which ramps up or down to TARGET_TEMP.*/
 
   // These are bounds; we won't let values go outside these.
   // They can only be changed here and forcing a recompilation.
@@ -56,8 +60,8 @@ namespace OxApp
 
   // The beginning temperature of the current warming
   // or cooling cycle.
-   getConfig()->COOL_DOWN_BEGIN_TEMP;
-   getConfig()->WARM_UP_BEGIN_TEMP;
+		mrs->COOL_DOWN_BEGIN_TEMP,
+		mrs->WARM_UP_BEGIN_TEMP,
 
 
   //const unsigned long THERMOCOUPLE_FAULT_TOLERATION_TIME_MS = 2 * 60 * 1000;
@@ -67,7 +71,7 @@ namespace OxApp
   // separate temp_refresh_task. Until I can refactor
   // temp_refresh_task by placing its funciton in the
   // state manager, I need this gloabl.
-  getConfig()->GLOBAL_RECENT_TEMP;
+		mrs->GLOBAL_RECENT_TEMP,
 
   //const float MAX_STACK_VOLTAGE = 12.0;
   //static constexpr float IDLE_STACK_VOLTAGE = 1.0;
@@ -92,90 +96,51 @@ namespace OxApp
  
  // static const int NUM_MACHINE_STATES = 8;
 
-/*   constexpr inline static char const *MachineStateNames[8] = {
-    "Off",
-    "Warmup",
-    "NormalOperation",
-    "Cooldown",
-    "CriticalFault",
-    "EmergencyShutdown",
-    "OffUserAck"
-  };
-  constexpr inline static char const *MachineSubStateNames[2] = {
-    "(Not Idling)",
-    "(Idling)"
-  };
-  constexpr inline static char const *TempLocationNames[2] = {
-    "Post Heater",
-    "Post Stack"
-  };
 
-  constexpr inline static char const *HeaterNames[3] = {
-    "Int1",
-    "Ext1",
-    "Ext2"
-  }; */
 
-  getConfig()-> ms;
+  mrs-> ms;
   // This is used to make decisions that happen at transition time.
-  getConfig()-> previous_ms;
+  mrs-> previous_ms;
   //bool IS_STAGE2_HEATER_CONFIG = false;
  // Stage2Heater s2heater;
 
   //MachineScript* script;
 
-   getConfig()-> idleOrOperate ;
+   mrs-> idleOrOperate ;
 
   // This is a range from 0.0 to 1.0!
   // However, when used in the Arduino it has to be mapped
   // onto a an integer (usually 0-255) but this should be
   // the last step.
-  getConfig()-> fanDutyCycle;
-
-  // Until we have a good machine model here,
-  // we need to separately identify pre- and post-
-  // element temperature sensor indices
-  //int post_heater_indices[1] = {0};
- // int post_stack_indices[1] = {1};
-  //int post_getter_indices[1] = {2};
+  mrs-> fanDutyCycle;
 
   MachineHAL* hal;
   MachineStatusReport *report;
 
-  // bool init();
+  mrs-> Ddelta_C_per_min;
+		
+	};  // LogRecordEntry lre 
+    _log_entry.add(lre);
+/* 
+#ifdef ARDUINO
+            OxCore::Debug<const char *>(ErrorLevelText[static_cast<int>(level)]);
+            OxCore::Debug<const char *>(": ");
+            OxCore::DebugLn<const char *>(ErrorMessage[static_cast<int>(type)]);
+#else
+            std::cout << ErrorMessage[static_cast<int>(type)] << std::endl;
+#endif */
+/*         break;
+        default:
 
-  // void outputReport(MachineStatusReport *msr);
-  // void createJSONReport(MachineStatusReport *msr, char *buffer);
-
-  // Stage2 specific stuff; this should be handled
-  // as a subclass, not a decorator, but I don't have time for that,
-  // and it puts the main code at risk, so adding it in here is
-  // reasonable - rlr
-
-  void outputStage2Report(Stage2Heater s2h,MachineStatusReport *msr,
-                          float target_temp,
-                          float setpoint_temp,
-                          float measured_temp,
-                          float heater_duty_cycle,
-                          float ramp_C_per_min);
-  void createStage2JSONReport(Stage2Heater s2h,MachineStatusReport *msr, char *buffer);
-
-
-  // This is currently not in use; we expect to need it
-  // when we are making the system more automatic.
-  void runComplexAlgolAssertions();
-  void clearErrors();
-
-  // This is the number of periods around a point in time we will
-  // average to produce a smooth temperature. (Our thermocouples have
-  // only 0.25 C resolution, which is low for a 0.5C/minute control
-  // situation!) These are always taken to be BACKWARD in time.
-  // This IS NOT USED in the current code.
-  //const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
-  // Ddelta is the change in temperature in C per min
-  getConfig()-> Ddelta_C_per_min;
-
-	        return true;
+        break;
     }
-	
+    if (level == ErrorLevel::Critical) {
+        Core::RaiseCriticalError();
+    } */
+}
+
+
+	  void Log_Recorder_Task::clearLogs(){
+		  
+	  };
 }

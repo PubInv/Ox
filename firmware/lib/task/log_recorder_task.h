@@ -27,27 +27,41 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <machine.h>
 
 
-
-
-
 namespace OxApp
 {
 	
 	enum class VariableName {
     Null = 0,
-    LessThanZero,
-    OutOfBounds,
-    CoreFailedToAddTask,
-    CoreFailedToBoot,
-    CoreFailedToRun,
-    TaskTimeExceeded,
-    WatchdogExceeded,
-    NotImplemented,
+	MachineState,
+	TargetC,
+	SetpointC,
+	RampC,
+	MaxStackA,
+	MaxStackW,
+	FanPWM,
+	HeaterC,
+	StackC,
+	GetterC,
+	HeaterDutyCycle,
+	StackA,
+	StackW,
+	StackV,
+	StackOhms,
+	StackOhms,
+	FanRPM,
+
 };
 
 struct LogRecordEntry {
-    LogRecordLevel level;
-    LogRecordCode type;
+ //   LogRecordLevel level;
+//    LogRecordCode type,
+	float target_temp,
+    float setpoint_temp,
+    float measured_temp,
+                          float heater_duty_cycle,
+                          float ramp_C_per_min;
+						  
+						  
 	
 };
     // Runs the Pressure Swing Adsorption cycle
@@ -59,8 +73,12 @@ struct LogRecordEntry {
 	  static OxCollections::CircularArray<LogRecordEntry, MAX_RECORDS> _log_entry;
       bool _init() override;
       bool _run() override;
-      // This would go into the abstract class.
 
+    void addLog(MachineStatusReport *msr);
+
+  void outputLogReport(MachineStatusReport *msr);
+  void createLogJSONReport(MachineStatusReport *msr, char *buffer);
+ void clearLogs();
     };
 }
 
