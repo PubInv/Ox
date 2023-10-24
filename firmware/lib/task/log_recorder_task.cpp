@@ -30,10 +30,10 @@ namespace OxApp
     bool Log_Recorder_Task::_run()
     {
 		
-	
+			addLog(MachineStatusReport *msr);
 	        return true;
     }	
-	
+	void addMSR(MachineStatusReport *);
 	
     void Log_Recorder_Task::addLog(MachineStatusReport *msr) {
     LogRecordEntry lre = {
