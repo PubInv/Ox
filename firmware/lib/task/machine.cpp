@@ -22,12 +22,15 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <assert.h>
 
 
-void dumpAllData10Hz() {
+void MachineConfig::dumpAllData10Hz() {
   // Loop over Ring buffer and call ouptutReport and
   // do a Network output (eventually);
   // using...
-  for(int i = 0; i < MAX_RECORDS; i++) {
-    outputReport(_log_entry[i]);
+  
+  int msr_lre_size = _log_entry.size();
+  for(int i = 0; i < msr_lre_size; i++) {
+	MachineStatusReport msr_lre= _log_entry.next();
+    outputReport(&msr_lre );
   }
 
 }

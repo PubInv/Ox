@@ -25,60 +25,22 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <core.h>
 #include "../collections/circular_array.h"
 #include <machine.h>
-
+#include <machine_core_defs.h>
 
 namespace OxApp
 {
-	
-	enum class VariableName {
-    Null = 0,
-	MachineState,
-	TargetC,
-	SetpointC,
-	RampC,
-	MaxStackA,
-	MaxStackW,
-	FanPWM,
-	HeaterC,
-	StackC,
-	GetterC,
-	HeaterDutyCycle,
-	StackA,
-	StackW,
-	StackV,
-	StackOhms,
-	StackOhms,
-	FanRPM,
 
-};
-
-struct LogRecordEntry {
- //   LogRecordLevel level;
-//    LogRecordCode type,
-	float target_temp,
-    float setpoint_temp,
-    float measured_temp,
-                          float heater_duty_cycle,
-                          float ramp_C_per_min;
-						  
-						  
-	
-};
-    // Runs the Pressure Swing Adsorption cycle
-    class HeartbeatTask : public OxCore::Task
+    class Log_Recorder_Task : public OxCore::Task
     {
-    public:
-    private:
-	  unsigned int  MAX_RECORDS = 600;
-	  static OxCollections::CircularArray<LogRecordEntry, MAX_RECORDS> _log_entry;
-      bool _init() override;
-      bool _run() override;
-
-    void addLog(MachineStatusReport *msr);
-
-  void outputLogReport(MachineStatusReport *msr);
-  void createLogJSONReport(MachineStatusReport *msr, char *buffer);
- void clearLogs();
+		public:
+		private:
+		bool _init() override;
+		bool _run() override;
+		//static OxCollections::CircularArray<Error, MAX_ERRORS> errors;
+		//void addLog(MachineStatusReport *msr);
+		//int recordCount();
+		//OxCollections::CircularArray * recordLog();
+		//void clearLogs();
     };
 }
 

@@ -24,6 +24,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <OnePinHeater.h>
 
 #include <machine_script.h>
+#include "../collections/circular_array.h"
 
 
 
@@ -175,6 +176,9 @@ public:
 
   static const int INIT_HEARTBEAT_PERIOD_MS = 500;
 
+  static const int INIT_LOG_RECORDER_LONG_PERIOD_MS = 600000; //10 minute record interval
+  static const int INIT_LOG_RECORDER_SHORT_PERIOD_MS = 1000;  //1 second record interval 
+  
 void _reportFanSpeed();
 
   static const int NUM_MACHINE_STATES = 8;
@@ -233,7 +237,7 @@ void _reportFanSpeed();
   bool init();
 
   // Ring buffer with 30 seconds of data could be a variable here
-  unsigned int  MAX_RECORDS = 600;
+  static constexpr unsigned int  MAX_RECORDS = 600;
   OxCollections::CircularArray<MachineStatusReport, MAX_RECORDS> _log_entry;
 
   void dumpAllData10Hz();
