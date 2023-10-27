@@ -76,6 +76,8 @@ struct MachineStatusReport {
   float stack_watts;
   float fan_rpm;
   float heater_duty_cycle;
+ 
+  long timestamp;
 
 };
 

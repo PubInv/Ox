@@ -15,43 +15,34 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-// This goal here is to run a PID controller
-// to control the fan.
+#ifndef _TASK_H
+#define LOG_RECORDER_TASK_H
 
-#ifndef FANPID_TASK_H
-#define FANPID_TASK_H
 
 #ifdef ARDUINO
 #include <Arduino.h>
 #endif
 #include <core.h>
+#include "../collections/circular_array.h"
 #include <machine.h>
-
-#include "model.h"
-#include <PID_v1.h>
-
+#include <machine_core_defs.h>
 
 namespace OxApp
 {
-    // Runs the Pressure Swing Adsorption cycle
-    class FanPIDTask : public OxCore::Task
+
+    class Log_Recorder_Task : public OxCore::Task
     {
-    public:
-      FanPIDTask();
-      PID *pidControllerFlow;
-      int DEBUG_PID = 0;
-
-      // These are on a scale of 100
-
-      double fanSpeed_Output = 0.0;
-      double final_fanSpeed = 0.0;
-      double Flow_Setpoint_mlps = 0.0;
-      double Input_mlps = 0.0;
-
-    private:
-      bool _init() override;
-      bool _run() override;
-      // This would go into the abstract class.
+		public:
+		int recordCount();
+		private:
+		bool _init() override;
+		bool _run() override;
+		int _recordCount;
+		//static OxCollections::CircularArray<Error, MAX_ERRORS> errors;
+		//void addLog(MachineStatusReport *msr);
+		
+		//OxCollections::CircularArray * recordLog();
+		//void clearLogs();
     };
 }
 
