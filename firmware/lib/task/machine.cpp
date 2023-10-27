@@ -22,8 +22,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <assert.h>
 
 
+void MachineConfig::dumpAllData10Hz() {
+  // Loop over Ring buffer and call ouptutReport and
+  // do a Network output (eventually);
+  // using...
+  
+  //int msr_lre_size = _log_entry.size();
+  //Serial.println(msr_lre_size);
+  for(int i = 0; i < MAX_RECORDS; i++) {
+	MachineStatusReport msr_lre= _log_entry[i];
+	
+    outputReport(&msr_lre );
+  }
+
+}
 void MachineConfig::outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
+		OxCore::Debug<const char *>("Timestamp: ");
+        OxCore::DebugLn<long>(msr->timestamp);
         OxCore::Debug<const char *>("Machine State: ");
         OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
         // These are the dynamic targets

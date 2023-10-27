@@ -43,6 +43,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <serialReportTask.h>
 #include <OEDCSNetworkTask.h>
 #include <heartbeat_task.h>
+#include <log_recorder_task.h>
 
 #ifdef TEST_FANS_ONLY
 #include <fanTEST_task.h>
@@ -59,6 +60,7 @@ OxApp::OEDCSSerialInputTask oedcsSerialInputTask;
 OxApp::FaultTask faultTask;
 
 OxApp::HeartbeatTask heartbeatTask;
+OxApp::Log_Recorder_Task logRecorderTask;
 
 
 HeaterPIDTask heaterPIDTask;
@@ -278,7 +280,19 @@ OxCore::TaskProperties HeartbeatProperties;
     abort();
   }
 
+OxCore::TaskProperties Log_RecorderProperties;
+  Log_RecorderProperties.name = "Log_Recorder";
+  Log_RecorderProperties.id = 40;
+  Log_RecorderProperties.period = MachineConfig::INIT_LOG_RECORDER_SHORT_PERIOD_MS; 
+  Log_RecorderProperties.priority = OxCore::TaskPriority::High;
+  Log_RecorderProperties.state_and_config = (void *) &machineConfig;
+  bool Log_RecorderAdd = core.AddTask(&logRecorderTask, &Log_RecorderProperties);
 
+  if (!Log_RecorderAdd) {
+    OxCore::Debug<const char *>("Log_RecorderAdd Faild\n");
+    abort();
+  }
+  
   core.ResetHardwareWatchdog();
 
 
