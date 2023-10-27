@@ -27,15 +27,19 @@ void MachineConfig::dumpAllData10Hz() {
   // do a Network output (eventually);
   // using...
   
-  int msr_lre_size = _log_entry.size();
-  for(int i = 0; i < msr_lre_size; i++) {
-	MachineStatusReport msr_lre= _log_entry.next();
+  //int msr_lre_size = _log_entry.size();
+  //Serial.println(msr_lre_size);
+  for(int i = 0; i < MAX_RECORDS; i++) {
+	MachineStatusReport msr_lre= _log_entry[i];
+	
     outputReport(&msr_lre );
   }
 
 }
 void MachineConfig::outputReport(MachineStatusReport *msr) {
         OxCore::DebugLn<const char *>("");
+		OxCore::Debug<const char *>("Timestamp: ");
+        OxCore::DebugLn<long>(msr->timestamp);
         OxCore::Debug<const char *>("Machine State: ");
         OxCore::DebugLn<const char *>(MachineConfig::MachineStateNames[msr->ms]);
         // These are the dynamic targets
