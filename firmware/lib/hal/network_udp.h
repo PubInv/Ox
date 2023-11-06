@@ -18,7 +18,7 @@
 #define NETWORK_UDP_H
 
 // buffers for receiving and sending data
-#define buffMax 32*1024
+#define buffMax 2*1024
 
 class NetworkUDP  {
  public:
