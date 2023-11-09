@@ -270,7 +270,7 @@ void setup()
 OxCore::TaskProperties HeartbeatProperties;
   HeartbeatProperties.name = "Heartbeat";
   HeartbeatProperties.id = 30;
-  HeartbeatProperties.period = MachineConfig::INIT_HEARTBEAT_PERIOD_MS; 
+  HeartbeatProperties.period = MachineConfig::INIT_HEARTBEAT_PERIOD_MS;
   HeartbeatProperties.priority = OxCore::TaskPriority::High;
   HeartbeatProperties.state_and_config = (void *) &machineConfig;
   bool heartbeatAdd = core.AddTask(&heartbeatTask, &HeartbeatProperties);
@@ -283,7 +283,7 @@ OxCore::TaskProperties HeartbeatProperties;
 OxCore::TaskProperties Log_RecorderProperties;
   Log_RecorderProperties.name = "Log_Recorder";
   Log_RecorderProperties.id = 40;
-  Log_RecorderProperties.period = MachineConfig::INIT_LOG_RECORDER_SHORT_PERIOD_MS; 
+  Log_RecorderProperties.period = MachineConfig::INIT_LOG_RECORDER_SHORT_PERIOD_MS;
   Log_RecorderProperties.priority = OxCore::TaskPriority::High;
   Log_RecorderProperties.state_and_config = (void *) &machineConfig;
   bool Log_RecorderAdd = core.AddTask(&logRecorderTask, &Log_RecorderProperties);
@@ -292,16 +292,16 @@ OxCore::TaskProperties Log_RecorderProperties;
     OxCore::Debug<const char *>("Log_RecorderAdd Faild\n");
     abort();
   }
-  
-  core.ResetHardwareWatchdog();
 
+  core.ResetHardwareWatchdog();
 
   heaterPIDTask.whichHeater = (Stage2Heater) 0;
 
-  heaterPIDTask.dutyCycleTask = &dutyCycleTask;
+  cogTask.dutyCycleTask = &dutyCycleTask;
 
   cogTask.heaterPIDTask = &heaterPIDTask;
 
+  logRecorderTask.DEBUG_LOG_RECORDER = 0;
   core.DEBUG_CORE = 0;
   core._scheduler.DEBUG_SCHEDULER = 0;
   dutyCycleTask.DEBUG_DUTY_CYCLE = 0;

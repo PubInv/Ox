@@ -136,9 +136,17 @@ public:
   // They can only be changed here and forcing a recompilation.
   const float BOUND_MAX_TEMP = 750.0;
   const float BOUND_MIN_TEMP = 25.0;
+  const float NOMINAL_AMBIENT_c = 25.0;
   const float BOUND_MAX_AMPERAGE_SETTING = 60.0;
   const float BOUND_MAX_WATTAGE = 300.0;
   const float BOUND_MAX_RAMP = 3.0;
+  // TODO: Need to check this.
+
+// our CFC Heater measures at 14.4 ohms, by W = V^2 / R assuming
+// V = 115, W = 918.402
+  static constexpr float HEATER_MAXIMUM_WATTAGE = 918;
+  const float HEATER_MAXIMUM_WATTAGE_SLOP = 50;
+  const float HEATER_MAXIMUM_WATTAGE_MEASURED_DEFINITON = HEATER_MAXIMUM_WATTAGE - HEATER_MAXIMUM_WATTAGE_SLOP;
 
   // The beginning temperature of the current warming
   // or cooling cycle.
@@ -177,8 +185,8 @@ public:
   static const int INIT_HEARTBEAT_PERIOD_MS = 500;
 
   static const int INIT_LOG_RECORDER_LONG_PERIOD_MS = 600000; //10 minute record interval
-  static const int INIT_LOG_RECORDER_SHORT_PERIOD_MS = 1000;  //1 second record interval 
-  
+  static const int INIT_LOG_RECORDER_SHORT_PERIOD_MS = 1000;  //1 second record interval
+
 void _reportFanSpeed();
 
   static const int NUM_MACHINE_STATES = 8;
@@ -273,6 +281,32 @@ void _reportFanSpeed();
   const int NUMBER_OF_PERIODS_TO_AVERAGE = 4;
   // Ddelta is the change in temperature in C per min
   float Ddelta_C_per_min = 0.0;
+
+
+  // Here are new parameters associated with the "One Button" algorithm
+  static const int USE_ONE_BUTTON = 1; // if false, use the 5-knob approach
+  const float DECREASE_STACK_WATTAGE_INCREMENT_W = 1.0;
+  // This is an absolute limit on the number of watts
+  // going into the stack (OBA = One Button Algorithm)
+  const float L_OBA_W = 180.0;
+  // This is one point on the linear stack wattage ramp.
+  // If the difference betwen our thermocouples is zero,
+  // this is the maximum watts into the stack.
+  const float M_OBA_W = 200.0;
+  // This is the maximum temperature difference on the edge we will allow
+  const float Q_OBA_C = 30.0;
+
+  const float FAN_SPEED_MAX_p = 60;
+  const float FAN_SPEED_MIN_p = 20;
+  const float FAN_SPEED_TEMP_FOR_MIN_SPEED_c = 600.0;
+  const float FAN_SPEED_ADJUSTMENT_INITIAL_THRESHOLD_c = 5.0;
+  const float FAN_SPEED_ADJUSTMENT_FINAL_THRESHOLD_c = 20.0;
+
+  float CURRENT_TOTAL_WATTAGE_W;
+  float CURRENT_HEATER_WATTAGE_W;
+  float CURRENT_STACK_WATTAGE_W;
+
+  static const int WATTAGE_PID_SAMPLE_TIME_MS = 500;
 
 };
 

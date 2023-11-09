@@ -67,6 +67,9 @@ struct MachineStatusReport {
   float target_ramp_C;
   float fan_pwm;
 
+  // currently unused
+  float total_wattage_W;
+
   float post_heater_C;
   float post_stack_C;
   float post_getter_C;
@@ -76,7 +79,7 @@ struct MachineStatusReport {
   float stack_watts;
   float fan_rpm;
   float heater_duty_cycle;
- 
+
   long timestamp;
 
 };

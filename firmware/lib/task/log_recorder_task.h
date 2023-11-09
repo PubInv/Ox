@@ -30,20 +30,21 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 namespace OxApp
 {
 
-    class Log_Recorder_Task : public OxCore::Task
-    {
-		public:
-		int recordCount();
-		private:
-		bool _init() override;
-		bool _run() override;
-		int _recordCount;
-		//static OxCollections::CircularArray<Error, MAX_ERRORS> errors;
-		//void addLog(MachineStatusReport *msr);
-		
-		//OxCollections::CircularArray * recordLog();
-		//void clearLogs();
-    };
+  class Log_Recorder_Task : public OxCore::Task
+  {
+  public:
+    int DEBUG_LOG_RECORDER = 0;
+    int recordCount();
+  private:
+    bool _init() override;
+    bool _run() override;
+    int _recordCount;
+    //static OxCollections::CircularArray<Error, MAX_ERRORS> errors;
+    //void addLog(MachineStatusReport *msr);
+
+    //OxCollections::CircularArray * recordLog();
+    //void clearLogs();
+  };
 }
 
 #endif
