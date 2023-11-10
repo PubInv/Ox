@@ -1,0 +1,42 @@
+download ubuntu server                                                          
+copy to usb                                                                     
+                                                                                
+plug in keyboard and usb to sbc                                                 
+                                                                                
+power up sbc                                                                    
+when splash screen hit F12                                                      
+                                                                                
+boot to usb                                                                     
+                                                                                
+install ubuntu server                                                           
+   (you can choose minimal install)                                             
+   use entire disk                                                              
+     (you can turn off lvm - don't need it)                                     
+   install open ssh server                                                      
+   no need for any extra programs (at this time)                                
+   set usename and password                                                     
+   let install finish                                                           
+   unplug usb                                                                   
+   reboot                                                                       
+
+ssh into sbc                                                                    
+run sudo apt update                                                             
+run sudo apt dist-upgrade                                                       
+install your favorite editor (sudo apt install emacs-nox)                       
+run sudo apt install avahi-daemon                                               
+run sudo apt install bash-completion                                            
+edit /etc/dpkg/dpkg.cfg.d/excludes                                              
+   comment out the excludes for man and docs                                    
+run sudo apt install man-db manpages manpages-dev manpages-posix manpages-posix\
+-dev                                                                            
+run sudo mv /usr/bin/man.REAL /usr/bin/man
+run sudo mandb -c
+run sudo apt install less
+run sudo apt install build-essential
+run sudo apt install python3-venv
+run wget https://raw.githubusercontent.com/platformio/platformio-core-installer\
+/master/get-platformio.py -O get-platformio.py
+run python3 get-platformio.py
+run curl -fsSL https://raw.githubusercontent.com/platformio/platformio-core/dev\
+elop/platformio/assets/system/99-platformio-udev.rules | sudo tee /etc/udev/rul\
+es.d/99-platformio-udev.rules
