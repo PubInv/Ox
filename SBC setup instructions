@@ -1,7 +1,7 @@
-download ubuntu server                                                          
+download  Ubuntu Server 22.04.3 LTS                                                       
 copy to usb                                                                     
                                                                                 
-plug in keyboard and usb to sbc                                                 
+plug in keyboard , display and usb to sbc                                                 
                                                                                 
 power up sbc                                                                    
 when splash screen hit F12                                                      
