@@ -49,11 +49,18 @@ class DutyCycleTask : public OxCore::Task
     // if the "time on" is set longer than 50 ms.
     const int PERIOD_MS = 3000;
     boolean isOn = false;
+
+    // The recoded_duty_cycle represents the duty cycle
+    // inside the time window.
+    const unsigned long WINDOW_MS = 3 * 60 * 1000;
     float recorded_duty_cycle = 0;
-    unsigned long recorded_dc_ms = 0;
+    unsigned long window_start_ms = 0;
+    unsigned long window_end_ms = 0;
+    unsigned long prorata_on_in_window_ms = 0;
+
     unsigned long time_of_last_check = 0;
     int DEBUG_DUTY_CYCLE = 0;
-    void reset_duty_cycle();
+
     // By placing a pointer here, we can have
     // individual control of however many heaters are in the system.
     OnePinHeater *one_pin_heater;
