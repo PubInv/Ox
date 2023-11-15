@@ -134,7 +134,7 @@ bool HeaterPIDTask::_run()
   dutyCycleTask->dutyCycle = s;
 
   // This resets our duty_cycle computation
-  dutyCycleTask->reset_duty_cycle();
+  //  dutyCycleTask->reset_duty_cycle();
 
   getConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
 
