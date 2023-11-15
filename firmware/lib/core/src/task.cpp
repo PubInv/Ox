@@ -101,6 +101,13 @@ namespace OxCore
     {
         return _properties.period;
     }
+	
+	
+    void Task::SetPeriod( TimeMs newPeriod)
+    {
+         _properties.period = newPeriod;
+    }
+	
   MachineConfig *Task::getConfig() {
     return  (MachineConfig *) _properties.state_and_config;
   }

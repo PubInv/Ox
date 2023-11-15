@@ -267,7 +267,7 @@ void setup()
     abort();
   }
 
-OxCore::TaskProperties HeartbeatProperties;
+  OxCore::TaskProperties HeartbeatProperties;
   HeartbeatProperties.name = "Heartbeat";
   HeartbeatProperties.id = 30;
   HeartbeatProperties.period = MachineConfig::INIT_HEARTBEAT_PERIOD_MS; 
@@ -280,12 +280,13 @@ OxCore::TaskProperties HeartbeatProperties;
     abort();
   }
 
-OxCore::TaskProperties Log_RecorderProperties;
+  OxCore::TaskProperties Log_RecorderProperties;
   Log_RecorderProperties.name = "Log_Recorder";
   Log_RecorderProperties.id = 40;
-  Log_RecorderProperties.period = MachineConfig::INIT_LOG_RECORDER_SHORT_PERIOD_MS; 
+  Log_RecorderProperties.period = MachineConfig::INIT_LOG_RECORDER_LONG_PERIOD_MS; 
   Log_RecorderProperties.priority = OxCore::TaskPriority::High;
   Log_RecorderProperties.state_and_config = (void *) &machineConfig;
+  cogTask.logRecorderTask = &logRecorderTask;
   bool Log_RecorderAdd = core.AddTask(&logRecorderTask, &Log_RecorderProperties);
 
   if (!Log_RecorderAdd) {

@@ -210,6 +210,7 @@ bool CogTask::updatePowerMonitor()
   MachineState CogTask::_updatePowerComponentsCritialFault() {
     MachineState new_ms = CriticalFault;
     _updateStackVoltage(MachineConfig::MIN_OPERATING_STACK_VOLTAGE);
+	logRecorderTask->SetPeriod(MachineConfig::INIT_LOG_RECORDER_SHORT_PERIOD_MS);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsEmergencyShutdown() {
@@ -219,6 +220,7 @@ bool CogTask::updatePowerMonitor()
     // In an emergency shutdown, we do NOT run the fan!
     getHAL()->_updateFanPWM(0.0);
     getConfig()->report->fan_pwm = 0.0;
+	logRecorderTask->SetPeriod(MachineConfig::INIT_LOG_RECORDER_SHORT_PERIOD_MS);
     return new_ms;
   }
   MachineState CogTask::_updatePowerComponentsOffUserAck() {
