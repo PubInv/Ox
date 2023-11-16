@@ -46,7 +46,7 @@ namespace OxApp
     int PERIOD_MS = 10000;
     int DEBUG_LEVEL = 0;
 
-    // There are really several senosrs, but they are indexed!
+    // There are really several sensors, but they are indexed!
     const static int NUM_TEMP_SENSORS = 3;
     const static int NUM_TEMP_INDICES = 2;
     const static int NUM_FANS = 1;

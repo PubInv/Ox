@@ -119,12 +119,12 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
     }
   }
 
-  // we'd like to use the corret sentinels, but they don't seem to work...
+  // we'd like to use the correct sentinels, but they don't seem to work...
   if (temp == DEVICE_DISCONNECTED_C) {
       Serial.print("THERMOCOUPLE DIGITAL DISCONNECT FOR : ");
       Serial.println(idx);
       // As long as there is not a fault present, this creates;
-      // if one is allready present, we leave it.
+      // if one is already present, we leave it.
       if (!getConfig()->errors[ec].fault_present) {
         getConfig()->errors[ec].fault_present = true;
         getConfig()->errors[ec].begin_condition_ms = millis();
@@ -133,7 +133,7 @@ float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,
       Serial.print("THERMOCOUPLE OPEN FAULT FOR : ");
       Serial.println(idx);
       // As long as there is not a fault present, this creates;
-      // if one is allready present, we leave it.
+      // if one is already present, we leave it.
       if (!getConfig()->errors[ec].fault_present) {
         getConfig()->errors[ec].fault_present = true;
         getConfig()->errors[ec].begin_condition_ms = millis();

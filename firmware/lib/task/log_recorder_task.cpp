@@ -32,7 +32,6 @@ namespace OxApp
 		OxCore::Debug<const char *>("LogRecorderTask run: ");
 		OxCore::DebugLn<int>(_recordCount);
 		getConfig()->report->timestamp = millis();
-		//getConfig()->_log_entry.add(*getConfig()->report);
 		getConfig()->_log_entry[_recordCount] = *getConfig()->report;
 		/*testing log recorder*/
 		_recordCount++;
@@ -48,14 +47,7 @@ namespace OxApp
 	{
 		return _recordCount;
 	}
-/* 	void addMSR(MachineStatusReport *);
-	
-    void Log_Recorder_Task::addLog(MachineStatusReport *msr) {
-     
-	}
-
-
-	  void Log_Recorder_Task::clearLogs(){
-		  
-	  }; */
+    void Log_Recorder_Task::clearLogs(){
+	    _recordCount = 0; 
+    }; 
 }
