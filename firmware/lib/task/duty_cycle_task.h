@@ -42,6 +42,9 @@ class DutyCycleTask : public OxCore::Task
   {
   public:
     DutyCycleTask();
+	void reset_duty_cycle();
+
+	
     Stage2Heater whichHeater;
     float dutyCycle;
     //    const int PERIOD_MS = 50;
@@ -54,6 +57,7 @@ class DutyCycleTask : public OxCore::Task
     // inside the time window.
     const unsigned long WINDOW_MS = 3 * 60 * 1000;
     float recorded_duty_cycle = 0;
+	unsigned long recorded_dc_ms = 0;
     unsigned long window_start_ms = 0;
     unsigned long window_end_ms = 0;
     unsigned long prorata_on_in_window_ms = 0;

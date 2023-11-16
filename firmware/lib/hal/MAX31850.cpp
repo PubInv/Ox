@@ -170,7 +170,7 @@ namespace Temperature {
     temp_reading = this->sensors.getTempCByIndex(idx);
 #endif
 
-    tempC = temp_reading.celcius;
+    tempC = temp_reading;
 	
 	if (temp_reading.error_code & DallasTemperature::device_error_code::device_fault_open) {
 	   //display error for disconnected TC
@@ -187,7 +187,6 @@ namespace Temperature {
 	// etc...for other errors
 	if (temp_reading.error_code != DallasTemperature::device_error_code::device_connected) {
 		Serial.print(F("Error: OTHER: "));
-	   return;
 	}
     return tempC;
 
