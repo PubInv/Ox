@@ -55,6 +55,19 @@ bool DutyCycleTask::_init()
 
   return true;
 }
+/* There is a significant danger here that we will change the duty cycle
+   more rapidly than our turn-on time and turm-off time can support. This is
+   a rather subtle problem that will have to be thought about carefully.
+   I suspect that when we reset we should somehow use the state of the
+   system, which was probably either in the middle of an On state or Off
+   state.
+*/
+
+void DutyCycleTask::reset_duty_cycle() {
+  recorded_duty_cycle = 0;
+  recorded_dc_ms = 0;
+  time_of_last_check = millis();
+}
 // The fundamental purpose of this task is just to
 // drive the dynamic from DutyCycle of the heater.
 bool DutyCycleTask::_run()

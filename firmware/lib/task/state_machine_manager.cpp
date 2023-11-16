@@ -126,35 +126,6 @@ namespace OxApp
     return new_ms;
   }
 
-  // TODO: under the 5knob protocol, these will not be used.
-
-  // float StateMachineManager::computeFanSpeed(float t) {
-  //   float f;
-  //   float p = getConfig()->FULL_POWER_FOR_FAN;
-  //   float s = getConfig()->FAN_SPEED_AT_OPERATING_TEMP;
-  //   float d = getConfig()->TEMP_TO_BEGIN_FAN_SLOW_DOWN;
-  //   float e = getConfig()->END_FAN_SLOW_DOWN;
-  //   float h = getConfig()->OPERATING_TEMP;
-  //   float r = getConfig()->RED_TEMP;
-  //   float y = getConfig()->YELLOW_TEMP;
-  //   if (t < d) {
-  //     f = p;
-  //   } else if (t >= d && t < y) {
-  //     f = p - (p - s) * ((t - d) / (h - d));
-  //   } else  { // t > y
-  //     f = s + ((t - y) / (r - y)) * (1.0 - s);
-  //   }
-  //   return f;
-  // }
-
-  // float StateMachineManager::computeAmperage(float t) {
-  //   return getConfig()->MAX_AMPERAGE *
-  //     ((t < getConfig()->YELLOW_TEMP)
-  //      ?  1.0
-  //      : getConfig()->MAX_AMPERAGE * max(0,getConfig()->RED_TEMP - t) /
-  //      (getConfig()->RED_TEMP - getConfig()->YELLOW_TEMP));
-  // }
-
 
   float StateMachineManager::computeRampUpSetpointTemp(float t,float recent_t,unsigned long begin_up_time_ms) {
     unsigned long ms = millis();
@@ -214,13 +185,14 @@ namespace OxApp
   }
 
 
+
   MachineState StateMachineManager::_updatePowerComponentsWarmup() {
     MachineState new_ms = Warmup;
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Warmup Mode!\n");
     }
 
-    float t = getTemperatureReading();
+    float t = getTemperatureReadingA_C();
     getConfig()->GLOBAL_RECENT_TEMP = t;
 
     // if we've reached operating temperature, we switch
@@ -230,22 +202,26 @@ namespace OxApp
       return new_ms;
     }
 
-    // These also are dependent on which heater we are using
-    float tt = computeRampUpSetpointTemp(t,
-                                       getConfig()->WARM_UP_BEGIN_TEMP,
-                                       getConfig()->BEGIN_UP_TIME_MS);
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("Warmup tt for :");
-      Serial.println(getConfig()->s2heater);
-      OxCore::DebugLn<float>(tt);
-      OxCore::Debug<const char *>("Global Recent temp\n");
-      OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
-      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
+
+    if (USE_ONE_BUTTON) {
+      runOneButtonAlgorithm();
+    } else {
+      // These also are dependent on which heater we are using
+      float tt = computeRampUpSetpointTemp(t,
+                                           getConfig()->WARM_UP_BEGIN_TEMP,
+                                           getConfig()->BEGIN_UP_TIME_MS);
+      if (DEBUG_LEVEL > 0) {
+        OxCore::Debug<const char *>("Warmup tt for :");
+        Serial.println(getConfig()->s2heater);
+        OxCore::DebugLn<float>(tt);
+        OxCore::Debug<const char *>("Global Recent temp\n");
+        OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
+        OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
+      }
+
+      getConfig()->SETPOINT_TEMP_C = tt;
+      heaterPIDTask->HeaterSetPoint_C = tt;
     }
-
-    getConfig()->SETPOINT_TEMP_C = tt;
-    heaterPIDTask->HeaterSetPoint_C = tt;
-
     return new_ms;
   }
 
@@ -254,7 +230,7 @@ namespace OxApp
     if (DEBUG_LEVEL > 0) {
       OxCore::Debug<const char *>("Cooldown Mode!\n");
     }
-    float t = getTemperatureReading();
+    float t = getTemperatureReadingA_C();
     getConfig()->GLOBAL_RECENT_TEMP = t;
 
     if (t <= getConfig()->TARGET_TEMP_C) {
@@ -262,31 +238,39 @@ namespace OxApp
       return new_ms;
     }
 
-    float tt = computeRampDnSetpointTemp(t,
-                                       getConfig()->COOL_DOWN_BEGIN_TEMP,
-                                       getConfig()->BEGIN_DN_TIME_MS);
-    getConfig()->SETPOINT_TEMP_C = tt;
-    heaterPIDTask->HeaterSetPoint_C = tt;
+    if (USE_ONE_BUTTON) {
+      runOneButtonAlgorithm();
+    } else {
 
-    if (DEBUG_LEVEL > 0) {
-      OxCore::Debug<const char *>("CoolDown tt for :");
-      Serial.println((unsigned long) heaterPIDTask);
-      OxCore::DebugLn<float>(tt);
-      OxCore::Debug<const char *>("Global Recent temp\n");
-      OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
-      OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
+      float tt = computeRampDnSetpointTemp(t,
+                                           getConfig()->COOL_DOWN_BEGIN_TEMP,
+                                           getConfig()->BEGIN_DN_TIME_MS);
+      getConfig()->SETPOINT_TEMP_C = tt;
+      heaterPIDTask->HeaterSetPoint_C = tt;
+
+      if (DEBUG_LEVEL > 0) {
+        OxCore::Debug<const char *>("CoolDown tt for :");
+        Serial.println((unsigned long) heaterPIDTask);
+        OxCore::DebugLn<float>(tt);
+        OxCore::Debug<const char *>("Global Recent temp\n");
+        OxCore::DebugLn<float>(getConfig()->GLOBAL_RECENT_TEMP);
+        OxCore::DebugLn<float>(getConfig()->BEGIN_UP_TIME_MS);
+      }
     }
-
     return new_ms;
   }
 
 
   MachineState StateMachineManager::_updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) {
     MachineState new_ms = NormalOperation;
+    if (USE_ONE_BUTTON) {
+      runOneButtonAlgorithm();
+    } else {
 
-    float tt = getConfig()->TARGET_TEMP_C;
-    getConfig()->SETPOINT_TEMP_C = tt;
-    heaterPIDTask->HeaterSetPoint_C = tt;
+      float tt = getConfig()->TARGET_TEMP_C;
+      getConfig()->SETPOINT_TEMP_C = tt;
+      heaterPIDTask->HeaterSetPoint_C = tt;
+    }
     return new_ms;
   }
 

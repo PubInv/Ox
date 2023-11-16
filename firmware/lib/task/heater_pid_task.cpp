@@ -20,7 +20,7 @@
 
 #include <heater_pid_task.h>
 
-
+// Note: This routine may now be obsolete
 HeaterPIDTask::HeaterPIDTask() {
   // dutyCycle is measured betwen 0.0 and 1.0 (and ends
   // up being a PWM duty cycle)

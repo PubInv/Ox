@@ -1,4 +1,8 @@
 /*
+  cog_task.cpp -- main control algorithm or ceramic oxygen generator
+
+  Copyright 2023, Robert L. Read
+
   This program includes free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
   published by the Free Software Foundation, either version 3 of the
@@ -55,9 +59,8 @@ namespace OxApp
   bool CogTask::_init()
   {
     OxCore::Debug<const char *>("CogTask init\n");
-
     getConfig()->fanDutyCycle = 0.0;
-
+    wattagePIDObject = new WattagePIDObject();
     return true;
   }
 
@@ -71,9 +74,120 @@ namespace OxApp
     return (COG_HAL *) (getConfig()->hal);
   }
 
-  float CogTask::getTemperatureReading() {
+  float CogTask::getTemperatureReadingA_C() {
     return getConfig()->report->post_heater_C;
   }
+  float CogTask::getTemperatureReadingB_C() {
+    return getConfig()->report->post_getter_C;
+  }
+  float CogTask::getTemperatureReadingC_C() {
+    return getConfig()->report->post_stack_C;
+  }
+
+  // I am currently in the process of implementing the "One-Button Algorithm".
+  // I will first implement the helper functions. -rlr
+  float CogTask::computeTotalWattage(float controlTemp) {
+    // This has to use a PID controller, which will require some thought
+    // to determine how we add this in.
+
+
+    // somehow we need to make sure this functionality is accomplished.
+    // Possibly it is already done in the various state machines.
+    // MachineState ms = getConfig()->ms;
+    // if ((ms == Off) || (ms == EmergencyShutdown) || (ms == OffUserAck)) {
+    //   // in this case, we do nothing...but we will put the set point
+    //   // to room temperature.
+    //   this->temperatureSetPoint_C = 25.0;
+    //   getConfig()->report->heater_duty_cycle = 0.0;
+    //   dutyCycleTask->dutyCycle = 0.0;
+    //   getConfig()->report->heater_duty_cycle = dutyCycleTask->dutyCycle;
+    //  return true;
+    // }
+    float totalWattage = wattagePIDObject->compute(controlTemp);
+    return totalWattage;
+  }
+  float CogTask::computeTargetStackWattage(float targetTotalWattage, float heaterWatts, float currentTemp, float B, float C, float targetStackWatts) {
+    float BC = (B + C) / 2.0;
+    // if the operating temp is higher than the current setpoint temp and and the heater is off,
+    // we ahve not choice but to decrease the stack watts...this is a bit of "magic"
+    // that has no good rationale.
+    if ((BC > currentTemp) && (heaterWatts <= 0.0)) {
+      return targetStackWatts - getConfig()->DECREASE_STACK_WATTAGE_INCREMENT_W;
+    }
+    // here we implement a straight-line decrease in statck wattage proportional
+    // to the difference C - B
+    float y;
+    float M = getConfig()->M_OBA_W;
+    if (C > B) {
+      float d = C - B;
+      float Q = getConfig()->Q_OBA_C;
+      y = d * M / Q + M;
+    } else {
+      y = M;
+    }
+    float L = getConfig()->L_OBA_W;
+    float w = max(0.0,min(L,y));
+    return min(w,targetTotalWattage);
+  }
+  float CogTask::computeFanSpeedTargetFromSchedule(float temp) {
+    float t = max(0,temp);
+    float a = getConfig()->FAN_SPEED_MIN_p;
+    float z = getConfig()->FAN_SPEED_MAX_p;
+    float f = z - a;
+    float ambient = getConfig()->NOMINAL_AMBIENT_c;
+    float min_speed_temp = getConfig()->FAN_SPEED_TEMP_FOR_MIN_SPEED_c;
+    float r = max(0,min_speed_temp - temp)/
+      (min_speed_temp - ambient);
+    return r*f + a;
+  }
+  bool CogTask::heaterWattsAtFullPowerPred(float watts) {
+    return watts > getConfig()->HEATER_MAXIMUM_WATTAGE_MEASURED_DEFINITON;
+  }
+  float CogTask::computeFanSpeedTarget(float currentTargetTemp, float temp, float heaterWatts) {
+    float fs_p = computeFanSpeedTargetFromSchedule(temp);
+    float diff = currentTargetTemp - temp;
+    float final_c = getConfig()->FAN_SPEED_ADJUSTMENT_FINAL_THRESHOLD_c;
+    float init_c = getConfig()->FAN_SPEED_ADJUSTMENT_INITIAL_THRESHOLD_c;
+    if (heaterWattsAtFullPowerPred(heaterWatts) && ((diff > init_c))) {
+      float min_p = getConfig()->FAN_SPEED_MIN_p;
+      // m is literally the slope in our linear equation
+      float m =  -(fs_p - min_p)/(init_c - final_c);
+      float nfs_p =  max(getConfig()->FAN_SPEED_MIN_p,m * diff + fs_p);
+      return nfs_p;
+    } else {
+      return fs_p;
+    }
+  }
+
+  void CogTask::oneButtonAlgorithm(float &totalWattage_w,float &stackWattage_w,float &heaterWattage_w,float &fanSpeed_p) {
+    const float A = getTemperatureReadingA_C();
+    const float B = getTemperatureReadingB_C();
+    const float C = getTemperatureReadingC_C();
+
+    totalWattage_w = computeTotalWattage(A);
+    const float cur_heater_w = getConfig()->CURRENT_HEATER_WATTAGE_W;
+    const float sw = computeTargetStackWattage(totalWattage_w,
+                                               cur_heater_w,
+                                               A,B,C,
+                                               getConfig()->CURRENT_STACK_WATTAGE_W);
+    const float T = (B+C) / 2.0;
+
+    // We could simulate the stack wattage as a function of T,
+    // or we could just use the most recently measured stack wattage...
+    // I believe doing the latter is more accurate.
+    // Possibly we need to fudge this by adding 1 watt to it
+    // so that we don't get stick at the present value.
+    const float FUDGE_STACK_WATTS = 1.0;
+    stackWattage_w = min(getConfig()->report->stack_watts + FUDGE_STACK_WATTS,
+                              sw);
+    heaterWattage_w = max(0,
+                          min(totalWattage_w - stackWattage_w,
+                              getConfig()->HEATER_MAXIMUM_WATTAGE));
+
+    fanSpeed_p = computeFanSpeedTarget(getConfig()->SETPOINT_TEMP_C, T,heaterWattage_w);
+  }
+
+
   bool CogTask::_run()
   {
     //Check for AC power, ie for +24V
@@ -84,6 +198,8 @@ namespace OxApp
     // Report fan speed
     getConfig()->report->fan_rpm =
       getHAL()->_fans[0]._calcRPM(0);
+
+
     this->StateMachineManager::run_generic();
 
     if (DEBUG_LEVEL > 0) {
@@ -93,7 +209,7 @@ namespace OxApp
   }
 
   // We believe someday an automatic algorithm will be needed here.
-  float CogTask::computeFanSpeed(float t) {
+  float CogTask::getFanSpeed(float t) {
     return getConfig()->FAN_SPEED;
   }
 
@@ -142,7 +258,7 @@ bool CogTask::updatePowerMonitor()
         //Analog read of the +24V expected about 3.25V at ADC input.
         // SENSE_24V on A1.
         // Full scale is 1023, ten bits for 3.3V.
-        //30K into 4K7 
+        //30K into 4K7
         const long R1=30000;
         const long R2=4700;
         const float Vcc = 3.3;
@@ -150,7 +266,7 @@ bool CogTask::updatePowerMonitor()
         int lowThreshold24V = 1023 * 3 / 4;
 
         if (DEBUG_LEVEL >0 )  Serial.print("analogRead(SENSE_24V)= ");
-        if (DEBUG_LEVEL >0 )  Serial.println(analogRead(SENSE_24V) * ((Vcc * (R1+R2))/(1023.0 * R2))); 
+        if (DEBUG_LEVEL >0 )  Serial.println(analogRead(SENSE_24V) * ((Vcc * (R1+R2))/(1023.0 * R2)));
 
         if (analogRead(A1) > lowThreshold24V) {
             powerIsGood = true;
@@ -163,11 +279,38 @@ bool CogTask::updatePowerMonitor()
         }
     }
 
+  float CogTask::computeHeaterDutyCycleFromWattage(float heaterWattage_w) {
+    return (heaterWattage_w < 0.0) ?
+      0.0 :
+      min(1.0,heaterWattage_w/getConfig()->HEATER_MAXIMUM_WATTAGE);
+  }
+  void CogTask::runOneButtonAlgorithm() {
+      float totalWattage_w;
+      float stackWattage_w;
+      float heaterWattage_w;
+      float fanSpeed_p;
+
+      oneButtonAlgorithm(totalWattage_w,stackWattage_w,heaterWattage_w,fanSpeed_p);
+
+      getConfig()->report->total_wattage_W = totalWattage_w;
+
+      getConfig()->CURRENT_TOTAL_WATTAGE_W = totalWattage_w;
+
+      getConfig()->CURRENT_STACK_WATTAGE_W = stackWattage_w;
+      _updateStackWattage(stackWattage_w);
+      _updateFanSpeed(fanSpeed_p);
+      getConfig()->CURRENT_HEATER_WATTAGE_W = heaterWattage_w;
+
+      float dc = computeHeaterDutyCycleFromWattage(heaterWattage_w);
+      dutyCycleTask->dutyCycle = dc;
+      dutyCycleTask->reset_duty_cycle();
+  }
 
   void CogTask::_updateCOGSpecificComponents() {
       bool powerIsGood = updatePowerMonitor();
-      float t = getTemperatureReading();
-      float fs = computeFanSpeed(t);
+
+      float t = getTemperatureReadingA_C();
+      float fs = getFanSpeed(t);
       float a = computeAmperage(t);
 
       if (DEBUG_LEVEL > 0) {
@@ -226,7 +369,20 @@ bool CogTask::updatePowerMonitor()
     _updateStackVoltage(MachineConfig::MIN_OPERATING_STACK_VOLTAGE);
     return new_ms;
   }
-  // TODO: This would go better on the HAL
+
+  // TODO: These would go better in the HAL
+  void CogTask::_updateFanSpeed(float percentage) {
+    float pwm = percentage / 100.0;
+    getHAL()->_updateFanPWM(pwm);
+    getConfig()->report->fan_pwm = pwm;
+  }
+  void CogTask::_updateStackWattage(float wattage) {
+    // We will set the amperage based on the resistance that we measure
+    // via the formula A = sqrt(W/R)
+    float r = getConfig()->report->stack_ohms;
+    float w = wattage;
+    _updateStackAmperage((r <= 0.0) ? 0.0 : sqrt(w/r));
+  }
   void CogTask::_updateStackVoltage(float voltage) {
     for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
       getHAL()->_stacks[i]->updateVoltage(voltage,getConfig());
@@ -234,6 +390,11 @@ bool CogTask::updatePowerMonitor()
   }
 
   void CogTask::_updateStackAmperage(float amperage) {
+    if (amperage < 0.0) {
+      // This is an internal error which should not occur..
+       OxCore::Debug<const char *>("Internal Error, negative amperage");
+      return;
+    }
     for (int i = 0; i < getHAL()->NUM_STACKS; i++) {
       getHAL()->_stacks[i]->updateAmperage(amperage,getConfig());
     }

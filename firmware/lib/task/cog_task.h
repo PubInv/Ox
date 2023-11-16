@@ -33,10 +33,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #include <OnePinHeater.h>
 #include <MAX31850.h>
 
-// #include <temp_refresh_task.h>
 #include <heater_pid_task.h>
 #include <state_machine_manager.h>
-
+#include <PID_v1.h>
+#include <wattage_pid_object.h>
+#include <duty_cycle_task.h>
 
 namespace OxApp
 {
@@ -46,20 +47,44 @@ namespace OxApp
     int PERIOD_MS = 10000;
     int DEBUG_LEVEL = 0;
 
+    DutyCycleTask *dutyCycleTask;
+    WattagePIDObject *wattagePIDObject;
+
     // There are really several sensors, but they are indexed!
     const static int NUM_TEMP_SENSORS = 3;
     const static int NUM_TEMP_INDICES = 2;
     const static int NUM_FANS = 1;
 
-    float getTemperatureReading();
+    float getTemperatureReadingA_C();
+    float getTemperatureReadingB_C();
+    float getTemperatureReadingC_C();
     bool updatePowerMonitor();
+
+    // "OneButton Routines"
+    float computeHeaterDutyCycleFromWattage(float heaterWattage_w);
+    float computeTotalWattage(float controlTemp);
+    float computeTargetStackWattage(float targetTotalWattage, float heaterWatts, float currentTemp, float B, float C, float targetStackWatts);
+    float computeFanSpeedTargetFromSchedule(float temp);
+    float computeFanSpeedTarget(float currentTargetTemp,float temp, float heaterWatts);
+    bool heaterWattsAtFullPowerPred(float watts);
+    void oneButtonAlgorithm(float &totalWattage_w,float &stackWattage_w,float &heaterWattage_w,float &fanSpeed_p);
+    void runOneButtonAlgorithm();
+
+    // The PID controller for OneButton Routine
+    PID *pidControllerWattage;
+    double totalWattage_Output_W = 0.0;
+    double final_totalWattage_W = 0.0;
+    double temperatureSetPoint_C = 25.0;
+    double input_temperature_C = 25.0;
+
+
 
     COG_HAL* getHAL();
 
     void turnOff() override;
     void printGenericInstructions() override;
 
-    float computeFanSpeed(float t);
+    float getFanSpeed(float t);
     float computeAmperage(float t);
 
     void _updateCOGSpecificComponents();
@@ -69,7 +94,7 @@ namespace OxApp
     void _updateFanSpeed(float percentage);
     void _updateStackVoltage(float voltage);
     void _updateStackAmperage(float amperage);
-
+    void _updateStackWattage(float wattage);
 
     MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o) override;
     MachineState _updatePowerComponentsOff() override;

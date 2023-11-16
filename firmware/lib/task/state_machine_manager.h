@@ -32,20 +32,24 @@ namespace OxApp
 
   class StateMachineManager : public OxCore::Task {
   public:
-      int DEBUG_LEVEL = 0;
-      HeaterPIDTask* heaterPIDTask;
+    int DEBUG_LEVEL = 0;
+    bool USE_ONE_BUTTON = false;
+    HeaterPIDTask* heaterPIDTask;
 
-      MachineState _executeBasedOnState(MachineState ms);
-      virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o);
-      virtual MachineState _updatePowerComponentsOff() = 0 ;
-      virtual MachineState _updatePowerComponentsWarmup() = 0;
-      virtual MachineState _updatePowerComponentsIdle() = 0;
-      virtual MachineState _updatePowerComponentsCooldown() = 0;
-      virtual MachineState _updatePowerComponentsCritialFault() = 0;
-      virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
-      virtual MachineState _updatePowerComponentsOffUserAck() = 0;
-      virtual float getTemperatureReading() = 0;
-      bool run_generic();
+    MachineState _executeBasedOnState(MachineState ms);
+    virtual MachineState _updatePowerComponentsOperation(IdleOrOperateSubState i_or_o);
+    virtual MachineState _updatePowerComponentsOff() = 0 ;
+    virtual MachineState _updatePowerComponentsWarmup() = 0;
+    virtual MachineState _updatePowerComponentsIdle() = 0;
+    virtual MachineState _updatePowerComponentsCooldown() = 0;
+    virtual MachineState _updatePowerComponentsCritialFault() = 0;
+    virtual MachineState _updatePowerComponentsEmergencyShutdown() = 0;
+    virtual MachineState _updatePowerComponentsOffUserAck() = 0;
+    virtual float getTemperatureReadingA_C() = 0;
+    virtual float getTemperatureReadingB_C() = 0;
+    virtual float getTemperatureReadingC_C() = 0;
+    virtual void runOneButtonAlgorithm() = 0;
+    bool run_generic();
 
     MachineState checkCriticalFaults(MachineState ms);
     void transitionToWarmup(float tt);
@@ -57,10 +61,10 @@ namespace OxApp
 
     // These code in theory be made static
     //      float  computeFanSpeed(float t);
-      float  computeRampUpSetpointTemp(float t,float recent_t,unsigned long begin_up_time_ms);
-      float  computeRampDnSetpointTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
+    float  computeRampUpSetpointTemp(float t,float recent_t,unsigned long begin_up_time_ms);
+    float  computeRampDnSetpointTemp(float t,float recent_t,unsigned long begin_dn_time_ms);
 
-      bool _run() override;
+    bool _run() override;
   };
 }
 
