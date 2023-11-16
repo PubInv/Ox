@@ -50,70 +50,92 @@ int SL_PS::init() {
   if (setPS_OnOff(ADDRESS, "OFF")) Serial.println("Turned it OFF!");
 
   getPS_Manuf(ADDRESS);
-  Serial.print("Manuf: ");
+  Serial.print("GetPS Manuf: ");
   if (!strlen(manuf)) strcpy(manuf, "UNKWN");
   Serial.println(manuf);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Model(ADDRESS);
-  Serial.print("Model: ");
+  Serial.print("GetPS Model: ");
   if (!strlen(model)) strcpy(manuf, "UNKWN");
   Serial.println(model);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_VoltageString(ADDRESS);
-  Serial.print("VoltageSt: ");
+  Serial.print("GetPS VoltageSt: ");
   if (!strlen(voltage_string)) strcpy(manuf, "UNKWN");
   Serial.println(voltage_string);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Revision(ADDRESS);
-  Serial.print("Rev: ");
+  Serial.print("GetPS Rev: ");
   if (!strlen(revision)) strcpy(manuf, "UNKWN");
   Serial.println(revision);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_ManufDate(ADDRESS);
-  Serial.print("ManufDate: ");
+  Serial.print("GetPS ManufDate: ");
   if (!strlen(manuf_date)) strcpy(manuf, "UNKWN");
   Serial.println(manuf_date);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Serial(ADDRESS);
-  Serial.print("Serial: ");
+  Serial.print("GetPS Serial Address: ");
   if (!strlen(serial)) strcpy(manuf, "UNKWN");
   Serial.println(serial);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_Country(ADDRESS);
-  Serial.print("Country: ");
+  Serial.print("GetPS Country: ");
   if (!strlen(country)) strcpy(manuf, "UNKWN");
   Serial.println(country);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_RateVoltage(ADDRESS);
-  Serial.print("RateVoltage: ");
+  Serial.print("GetPS RateVoltage: ");
   if (rate_voltage < 0) Serial.println("UNKWN");
   else Serial.println(rate_voltage);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_RateCurrent(ADDRESS);
-  Serial.print("RateCurrent: ");
+  Serial.print("GetPS RateCurrent: ");
   if (rate_current < 0) Serial.println("UNKWN");
   else Serial.println(rate_current);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_MaxVoltage(ADDRESS);
-  Serial.print("MaxVoltage: ");
+  Serial.print("GetPS MaxVoltage: ");
   if (max_voltage < 0) Serial.println("UNKWN");
   else Serial.println(max_voltage);
   delay(MYDELAY);
+   watchdogReset();
+
 
   getPS_MaxCurrent(ADDRESS);
-  Serial.print("MaxCurrent: ");
+  Serial.print("GetPS MaxCurrent: ");
   if (max_current < 0) Serial.println("UNKWN");
   else Serial.println(max_current);
   delay(MYDELAY);
+   watchdogReset();
+
 
 //  snprintf(packetBuffer, sizeof packetBuffer, "{ \"Manufacturer\": \"%s\", \"Model\": \"%s\", \"VoltString\": \"%s\", \"Revision\": \"%s\", \"Serial\": \"%s\", \"VoltageRating\": %d, \"CurrentRating\": %d, \"MaxVoltage\": %d, \"MaxCurrent\": %d}", manuf, model, voltage_string, revision, serial, rate_voltage, rate_current, max_voltage, max_current);
 //  sendMsg(packetBuffer);
@@ -121,7 +143,7 @@ int SL_PS::init() {
   // Note! We want to turn off the machine as quickly as possible on startup!
   if (setPS_OnOff(ADDRESS, "ON")) Serial.println("Turned it on");
   else {
-    Serial.println("failed to turn it on");
+    Serial.println("failed to turn PS on");
     retval = -1;
   }
 
@@ -152,7 +174,7 @@ int SL_PS::setPS_Addr(uint8_t addr) {
 
 int SL_PS::setPS_Val(uint8_t addr, const char *loc, const char *val) {
   if (!setPS_Addr(addr)) {
-    Serial.println("didn't set address");
+    Serial.println("setPS_Val didn't set address");
     return 0;
   }
 
@@ -191,7 +213,7 @@ int SL_PS::setPS_Current(uint8_t addr, uint16_t amps) {
 char *SL_PS::getPS_Val(uint8_t addr, const char *val) {
   static char rval[50];
   if (!setPS_Addr(addr)) {
-    Serial.println("didn't set address");
+    Serial.println("getPS_Val didn't set address");
     return 0;
   }
 
@@ -350,6 +372,7 @@ void SL_PS::updateAmperage(float amperage, MachineConfig *config) {
   msr->stack_voltage = out_voltage / 100.0;
   msr->stack_amps = out_current / 100.0;
   msr->stack_ohms = msr->stack_voltage/ msr->stack_amps;
+  msr->stack_watts = msr->stack_voltage * msr->stack_amps;
   if (DEBUG_SL_PS > 0) {
     printFullStatus(this->address);
   }

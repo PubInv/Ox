@@ -13,3 +13,7 @@ This folder contains...
 Ox firmware uses [PlatformIO](https://platformio.org/) for development.
 
 
+# ODECS
+
+### Finding a Device IP Address
+See the issue: https://github.com/PubInv/NASA-COG/issues/270

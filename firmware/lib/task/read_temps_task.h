@@ -24,9 +24,13 @@
 #include <core_defines.h>
 #include <core.h>
 
+
+// TODO: This reference should be moved to the HAL
 #ifdef USE_MAX31850_THERMOCOUPLES
 #include <MAX31850.h>
-#else
+#elif USE_MAX31855_THERMOCOUPLES
+#include <MAX31855.h>
+#elif USE_DS18B20_THERMOCOUPLES
 #include <DS18B20_temperature.h>
 #endif
 
@@ -37,6 +41,18 @@ class ReadTempsTask : public OxCore::Task
 public:
   ReadTempsTask();
   int DEBUG_READ_TEMPS = 0;
+  float evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv);
+  // These two fields are used to track the
+  // missing stack
+  //  unsigned long good_temp_reads = 0;
+  unsigned long good_temp_reads_heater = 0;
+  unsigned long good_temp_reads_getter = 0;
+  unsigned long good_temp_reads_stack = 0;
+
+  //unsigned long bad_temp_reads = 0;
+  unsigned long bad_temp_reads_heater = 0;
+  unsigned long bad_temp_reads_getter = 0;
+  unsigned long bad_temp_reads_stack = 0;
   static const int PERIOD_MS = MachineConfig::TEMP_READ_PERIOD_MS;
   // This is a ring buffer...
 
@@ -72,9 +88,10 @@ public:
   void calculateDdelta();
   void dumpQueue();
   int ringComputation(int n);
+  bool _run() override;
 private:
   bool _init() override;
-  bool _run() override;
+
 };
 
 
@@ -88,6 +105,7 @@ class stage2_ReadTempsTask : public ReadTempsTask
 public:
   MachineConfig* mcs[3];
   void updateTemperatures();
+  bool _run() override;
 };
 
 

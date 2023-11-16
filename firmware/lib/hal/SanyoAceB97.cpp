@@ -19,7 +19,6 @@
 #include "SanyoAceB97.h"
 #include <math.h>
 
-
 #define PERIOD 1000
 
   unsigned long volatile tach_data_ts[NUMBER_OF_FANS];
@@ -31,9 +30,16 @@
 //Calculates the RPM based on the timestamps of the last 2 interrupts. Can be called at any time.
 //namespace tach_data {
 
+
+// This can be used to add time to the interrupt for testing;
+// so far I have not seen that that creates a problem
+//unsigned long temporary_test_variable;
+
   void tachISR(uint8_t i) {
     tach_data_cnt[i]++;
-    //    refresh_tach_data(i);
+    //    for(int i = 0; i < 1000; i++) {
+    //      temporary_test_variable  = (temporary_test_variable * 2 ) % 37;
+    //    }
   }
   void tachISR0() {
     tachISR(0);
@@ -92,19 +98,36 @@ void SanyoAceB97::printRPMS() {
 // is needed for some other purpose.
 void SanyoAceB97::fanSpeedPerCentage(int s)
 {
-  int q = map(s, SPEED_MIN, SPEED_MAX, 0, OPERATING_PWM_THROTTLE);
+ 
+#ifdef FAN_LOCKOUT
+	int q = map(s, SPEED_MIN, SPEED_MAX, OPERATING_PWM_THROTTLE, 0); // inverted PWM for Control v1 pcb's
+#else
+	int q = map(s, SPEED_MIN, SPEED_MAX, 0, OPERATING_PWM_THROTTLE);
+#endif
+
+
   if (DEBUG_FAN > 0 ) {
     Serial.print("Putting out speed to fan control board:");
     Serial.println(q);
   }
+  
   analogWrite(PWM_PIN[0], q);
+
+ 
 }
 
-// This would be clearer in the the .h!!
+// This would be clearer in the the .h!! or in the machine hal for the specific device
 void SanyoAceB97::_init() {
 
   PWM_PIN[0] = 9;
   TACH_PIN[0] = A0;
+  fan_Enable = 22;
+  
+  #ifdef FAN_LOCKOUT
+      pinMode(fan_Enable, OUTPUT);
+	  digitalWrite(fan_Enable, HIGH);   
+  #endif
+  
 
   for(int i = 0; i < NUMBER_OF_FANS; i++) {
     tach_data_ts[i] = 0;
@@ -112,11 +135,33 @@ void SanyoAceB97::_init() {
     tach_data_ocnt[i] = 0;
     tach_data_duration[i] = 0;
     pinMode(PWM_PIN[i], OUTPUT);
+#ifdef FAN_LOCKOUT
+	digitalWrite(PWM_PIN[i], HIGH);   
+#else
+	digitalWrite(PWM_PIN[i], LOW);   
+#endif
     pinMode(TACH_PIN[i],INPUT_PULLUP);
   }
   attachInterrupt(digitalPinToInterrupt(TACH_PIN[0]),tachISR0,FALLING);
 }
 
+void SanyoAceB97::E_STOP() {
+#ifdef FAN_LOCKOUT
+  digitalWrite(fan_Enable, LOW); 
+
+	 
+  for(int i = 0; i < NUMBER_OF_FANS; i++) {
+    pinMode(PWM_PIN[i], OUTPUT);
+		  digitalWrite(PWM_PIN[i], HIGH);
+  }
+#else
+    for(int i = 0; i < NUMBER_OF_FANS; i++) {
+    pinMode(PWM_PIN[i], OUTPUT);
+		  digitalWrite(PWM_PIN[i], LOW);
+  }
+
+#endif
+}
 
 
 // At present, we will use the same ratio for all fans;

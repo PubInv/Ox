@@ -35,28 +35,21 @@ using namespace OxCore;
 
 #include <Arduino.h>
 
-// #include <MAX31850.h>
 #include <duty_cycle_task.h>
 #include <heater_pid_task.h>
 #include <read_temps_task.h>
 #include <stage2_heater_task.h>
 #include <stage2SerialReportTask.h>
-// #include <serial_task.h>
-#include <stage2_serial_task.h>
-#include <temp_refresh_task.h>
+#include <serial_input_task.h>
+#include <stage2_network_task.h>
 
 using namespace OxCore;
 static Core core;
 
-const unsigned long REPORT_PERIOD_MS = 5000;
-TaskProperties _properties;
-unsigned long time_of_last_report = 0;
 MachineConfig *machineConfig[3];
 
 // This is a key parameter, which should perhaps be moved to a specific
 // default file to make it clearer!
-const float STAGE2_DEFAULT_TEMP = 25.0;
-const float STAGE2_OPERATING_TEMP = 750.0;
 using namespace std;
 
 
@@ -69,13 +62,20 @@ Stage2HeaterTask stage2HeaterTask[3];
 
 Stage2SerialReportTask stage2SerialReportTask[3];
 TempRefreshTask tempRefreshTask[3];
+Stage2NetworkTask stage2NetworkTask;
 
-Stage2SerialTask stage2SerialTask;
+Stage2SerialInputTask stage2SerialInputTask;
+
+
+#define ETHERNET_BOARD_PRESENT 1
+// #define ETHERNET_BOARD_PRESENT 0 //No ethernet.
+
 
 MachineConfig *getConfig(int i) {
   return machineConfig[i];
 }
 
+const int DEBUG_WITH_FAN_ON = 0;
 void setup() {
 
   OxCore::serialBegin(115200UL);
@@ -94,6 +94,13 @@ void setup() {
     Serial.println("Could not init Hardware Abastraction Layer Properly!");
   }
 
+  // WARNING!! THIS IS ONLY FOR TESTING THE THERMOCOUPLES
+  if (DEBUG_WITH_FAN_ON) {
+    const int FAN_PIN = 9;
+    pinMode(FAN_PIN, OUTPUT);
+    analogWrite(FAN_PIN, 255/2);
+  }
+
   for(int i = 0; i < 3; i++) {
     machineConfig[i] = new MachineConfig();
     getConfig(i)->hal = s2hal;
@@ -104,7 +111,6 @@ void setup() {
     getConfig(i)->ms = Off;
     getConfig(i)->ms = Off;
     getConfig(i)->ms = Off;
-
   }
 
   Serial.println("About to run test!");
@@ -116,7 +122,7 @@ void setup() {
 
   OxCore::TaskProperties readTempsProperties;
   readTempsProperties.name = "readTemps";
-  readTempsProperties.id = 20;
+  readTempsProperties.id = 19;
   readTempsProperties.period = stage2_readTempsTask.PERIOD_MS;
   readTempsProperties.priority = OxCore::TaskPriority::High;
   readTempsProperties.state_and_config = (void *) getConfig(0);
@@ -127,6 +133,27 @@ void setup() {
   // the temperatures in them
   for (int i = 0; i < 3; i++) {
     stage2_readTempsTask.mcs[i] = getConfig(i);
+  }
+
+  if (ETHERNET_BOARD_PRESENT) {
+    OxCore::TaskProperties Stage2NetworkProperties;
+    Stage2NetworkProperties.name = "Stage2Network";
+    Stage2NetworkProperties.id = 20;
+    Stage2NetworkProperties.period = stage2NetworkTask.PERIOD_MS;
+    Stage2NetworkProperties.priority = OxCore::TaskPriority::Low;
+    // note we must be cautious here, since there is only one Network interface
+    Stage2NetworkProperties.state_and_config = (void *) getConfig(0);
+    bool stage2Network = core.AddTask(&stage2NetworkTask, &Stage2NetworkProperties);
+    if (!stage2Network) {
+      OxCore::Debug<const char *>("Stage2Network add failed\n");
+      delay(100);
+      abort();
+    }
+
+    for (int i = 0; i < 3; i++) {
+      stage2NetworkTask.mcs[i] = getConfig(i);
+    }
+    stage2NetworkTask.DEBUG_UDP = 0;
   }
 
   for(int i = 0; i < 3; i++) {
@@ -154,7 +181,7 @@ void setup() {
     OxCore::TaskProperties HeaterPIDProperties;
     HeaterPIDProperties.name = "HeaterPID";
     HeaterPIDProperties.id = 27+i;
-    HeaterPIDProperties.period = heaterPIDTask[i].PERIOD_MS;
+    HeaterPIDProperties.period = MachineConfig::INIT_PID_PERIOD_MS;
     HeaterPIDProperties.priority = OxCore::TaskPriority::High;
     HeaterPIDProperties.state_and_config = (void *) getConfig(i);
     core.AddTask(&heaterPIDTask[i], &HeaterPIDProperties);
@@ -181,19 +208,6 @@ void setup() {
 
     heaterPIDTask[i].dutyCycleTask = &dutyCycleTask[i];
 
-    OxCore::TaskProperties TempRefreshProperties;
-    TempRefreshProperties.name = "TempRefresh";
-    TempRefreshProperties.id = 33+i;
-    TempRefreshProperties.period = tempRefreshTask[i].PERIOD_MS;
-    TempRefreshProperties.priority = OxCore::TaskPriority::Low;
-    TempRefreshProperties.state_and_config = (void *) getConfig(i);
-      bool tempRefresh = core.AddTask(&tempRefreshTask[i], &TempRefreshProperties);
-    if (!tempRefresh) {
-      OxCore::Debug<const char *>("Temp Refresh add failed\n");
-      delay(100);
-      abort();
-    }
-    stage2HeaterTask[i].tempRefreshTask = &tempRefreshTask[i];
   }
 
   // Let's put our DEBUG_LEVELS here...
@@ -201,27 +215,13 @@ void setup() {
     heaterPIDTask[i].DEBUG_PID = 0;
     stage2HeaterTask[i].DEBUG_LEVEL = 0;
     dutyCycleTask[i].DEBUG_DUTY_CYCLE = 0;
-    tempRefreshTask[i].DEBUG = 0;
+    //    tempRefreshTask[i].DEBUG = 0;
   }
+    stage2NetworkTask.DEBUG_UDP = 0;
 
     core.DEBUG_CORE = 0;
     core._scheduler.DEBUG_SCHEDULER = 0;
     stage2_readTempsTask.DEBUG_READ_TEMPS = 0;
-
-  // Now set the temperatures until we can document how to edit through the interface...
-  // This sets up a very basic experiment
-  //
-  for(int i = 0; i < 3; i++) {
-    getConfig(i)->OPERATING_TEMP = 50;
-    getConfig(i)->YELLOW_TEMP = 60;
-    getConfig(i)->RED_TEMP = 70;
-    getConfig(i)->STOP_TEMP = 30;
-    // Note, there is no fan in the Stage 2 system, but we need this until we
-    // make good classes separating the configurations due to assertions
-    // in the system.
-    getConfig(i)->TEMP_TO_BEGIN_FAN_SLOW_DOWN = 40;
-  }
-
 
   // This is used to determine which machine will
   // be set by keyboard commands; you switch between them
@@ -234,29 +234,60 @@ void setup() {
   }
 
   OxCore::TaskProperties serialProperties;
-  serialProperties.name = "serial";
-  serialProperties.id = 36;
+  serialProperties.name = "stage2SerialInput";
+  serialProperties.id = 39;
   serialProperties.period = 250;
   serialProperties.priority = OxCore::TaskPriority::High;
   serialProperties.state_and_config = (void *) getConfig(0);
-  bool serialAdd = core.AddTask(&stage2SerialTask, &serialProperties);
+  bool serialAdd = core.AddTask(&stage2SerialInputTask, &serialProperties);
   if (!serialAdd) {
-    OxCore::Debug<const char *>("SerialProperties add failed\n");
+    OxCore::Debug<const char *>("stage2SerialInputTask add failed\n");
     delay(100);
     abort();
   }
-  stage2SerialTask.DEBUG_LEVEL = 2;
-  stage2SerialTask.hal = s2hal;
-
-  for(int i = 0; i < 3; i++) {
-    stage2SerialTask.machineConfigs[i] = getConfig(i);
+  stage2SerialInputTask.DEBUG_SERIAL = 0;
+  for (int i = 0; i < 3; i++) {
+    stage2SerialInputTask.mcs[i] = getConfig(i);
+    stage2SerialInputTask.stage2HeaterTasks[i] = &stage2HeaterTask[i];
   }
 
   s2hal->s2heaterToControl = Int1;
 
-  core.DEBUG_CORE = 2;
+  core.DEBUG_CORE = 0;
 
   OxCore::Debug<const char *>("Added tasks\n");
+ // We want to make sure we have run the temps before we start up.
+
+  // I turn three times to make sure we get a temp...
+  stage2_readTempsTask._run();
+  stage2_readTempsTask._run();
+  stage2_readTempsTask._run();
+  for (int i = 0; i < 3; i++) {
+    getConfig(i)->GLOBAL_RECENT_TEMP = getConfig(i)->report->post_heater_C;
+    Serial.print("starting temp is: ");
+    Serial.println(getConfig(i)->GLOBAL_RECENT_TEMP);
+  }
+
+
+  // Now we will set the initial tunings for the heater_pid tasks
+  // This is a place where one could change the settings for
+  // one of the heaters but not another.
+
+  heaterPIDTask[Int1].SetTunings(s2hal->INIT_INT1_Kp,
+                                 s2hal->INIT_INT1_Ki,
+                                 s2hal->INIT_INT1_Kd);
+
+  heaterPIDTask[Ext1].SetTunings(s2hal->INIT_EXT1_Kp,
+                                 s2hal->INIT_EXT1_Ki,
+                                 s2hal->INIT_EXT1_Kd);
+
+  heaterPIDTask[Ext2].SetTunings(s2hal->INIT_EXT2_Kp,
+                                 s2hal->INIT_EXT2_Ki,
+                                 s2hal->INIT_EXT2_Kd);
+
+
+  OxCore::Debug<const char *>("Starting\n");
+
 }
 
 void loop() {

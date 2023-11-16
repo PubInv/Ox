@@ -102,65 +102,228 @@ void ReadTempsTask::calculateDdelta() {
   Ddelta_C_per_min = Ddelta_C_per_min_computed;
 }
 
+float ReadTempsTask::evaluateThermocoupleRead(int idx,CriticalErrorCondition ec,int &rv) {
+
+  float temp = _temperatureSensors[0].GetTemperature(idx);
+#ifndef ALLOW_BAD_THERMOCOUPLES_FOR_TESTING
+#ifdef USE_MAX31850_THERMOCOUPLES
+  for(int i = 0; (i < 5) && (temp < 0.0); i++) {
+    _temperatureSensors[0].ReadTemperature();
+    temp = _temperatureSensors[0].GetTemperature(idx);
+    if (temp < 0.0) {
+      if (DEBUG_READ_TEMPS > 0) {
+        Serial.println("PERFORMING ADDITIONAL READ");
+        Serial.println(i);
+        Serial.println(temp);
+      }
+    }
+  }
+
+  // we'd like to use the correct sentinels, but they don't seem to work...
+  if (temp == DEVICE_DISCONNECTED_C) {
+      Serial.print("THERMOCOUPLE DIGITAL DISCONNECT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is already present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == DEVICE_FAULT_OPEN_C) {
+      Serial.print("THERMOCOUPLE OPEN FAULT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is already present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == DEVICE_FAULT_SHORTGND_C) {
+      Serial.print("THERMOCOUPLE GROUND SHORT FAULT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is allready present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == DEVICE_FAULT_SHORTVDD_C) {
+      Serial.print("THERMOCOUPLE VDD SHORT FAULT FOR : ");
+      Serial.println(idx);
+      // As long as there is not a fault present, this creates;
+      // if one is allready present, we leave it.
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp == -0.19) {
+      Serial.print("THERMOCOUPLE PROBABLE ANALOG DISCONNECT FOR :");
+      Serial.println(idx);
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else if (temp < 0.0) {
+      Serial.print("THERMOCOUPLE PROBABLE  FOR :");
+      Serial.println(idx);
+      if (!getConfig()->errors[ec].fault_present) {
+        getConfig()->errors[ec].fault_present = true;
+        getConfig()->errors[ec].begin_condition_ms = millis();
+      }
+  } else {
+    if (getConfig()->errors[ec].fault_present) {
+      Serial.print("THERMOCOUPLE FAULT REMVOED FOR : ");
+      Serial.println(idx);
+    }
+    getConfig()->errors[ec].fault_present = false;
+  }
+
+  return temp;
+#else
+  // probably the SPI based MAX31855_THERMOCOUPLES
+#endif
+#endif
+}
+
 void ReadTempsTask::updateTemperatures() {
+    if (DEBUG_READ_TEMPS > 0) {
+      OxCore::Debug<const char *>("About to _readTemperatureSensors");
+      delay(30);
+    }
+
   _readTemperatureSensors();
-  float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
-  float postStackTemp = _temperatureSensors[0].GetTemperature(1);
-  float postGetterTemp = _temperatureSensors[0].GetTemperature(2);
+
+    if (DEBUG_READ_TEMPS > 0) {
+      OxCore::DebugLn<const char *>("Done with _readTemperatureSensors");
+      delay(30);
+    }
+
+    for(int i = 0; i < 3; i++) {
+      if (getConfig()->errors[i].fault_present) {
+        Serial.print("THERMOCOUPLE FAULT PRESENT ON :");
+        Serial.println(i);
+        Serial.print("WILL AUTOMATICALLY SHUTDOWN IF NOT RESTORED IN ");
+        Serial.print((((float) getConfig()->errors[i].toleration_ms) - ((float) getConfig()->errors[i].begin_condition_ms)) / (float) 1000);
+        Serial.println(" SECONDS.!");
+      }
+    }
+
+  // These are added just to test if reading quickly causes an error,
+  // which might induce us to add power to the Dallas One-Wire board, for example.
+  //  float postHeaterTemp = _temperatureSensors[0].GetTemperature(0);
   // Sometimes we get a data read error, that comes across
   // as -127.00. In that case, we will leave the
   // value unchanged from the last read.
-  if (postHeaterTemp > -100.0) {
+  int post_rv;
+  float postHeaterTemp = evaluateThermocoupleRead(0,POST_HEATER_TC_BAD,post_rv);
+  // The sentinel values are all less than this, so in addtion
+  // to critical errors, we will leave this.
+
+  if (postHeaterTemp > 0.0) {
     getConfig()->report->post_heater_C = postHeaterTemp;
+//    good_temp_reads++;
+    good_temp_reads_heater++;
   } else {
     OxCore::Debug<const char *>("Bad post_heater_C\n");
+    //bad_temp_reads++;
+    bad_temp_reads_heater++;
   }
-  if (postGetterTemp > -100.0) {
+
+  float postGetterTemp = evaluateThermocoupleRead(2,POST_GETTER_TC_BAD,post_rv);
+  //_temperatureSensors[0].GetTemperature(2);
+  if (postGetterTemp > 0.0) {
     getConfig()->report->post_getter_C = postGetterTemp;
+//    good_temp_reads++;
+    good_temp_reads_getter++;
   } else {
     OxCore::Debug<const char *>("Bad post_getter_C\n");
+    //bad_temp_reads++;
+    bad_temp_reads_getter++;
   }
-  if (postStackTemp > -100.0) {
+
+  float postStackTemp = evaluateThermocoupleRead(1,POST_STACK_TC_BAD,post_rv);
+  // _temperatureSensors[0].GetTemperature(1);
+  if (postStackTemp > 0.0) {
     getConfig()->report->post_stack_C = postStackTemp;
+//    good_temp_reads++;
+    good_temp_reads_stack++;
   } else {
     OxCore::Debug<const char *>("Bad post_stack_C\n");
+    //bad_temp_reads++;
+    bad_temp_reads_stack++;
   }
 
   // WARNING! This needs to be done for all configs if we are
   // a 2-stage heater; this is handled by the subclass.
-  getConfig()->report->target_temp_C = getConfig()->TARGET_TEMP;
+  getConfig()->report->target_temp_C = getConfig()->TARGET_TEMP_C;
+  getConfig()->report->setpoint_temp_C = getConfig()->SETPOINT_TEMP_C;
+  getConfig()->report->target_ramp_C = getConfig()->RAMP_UP_TARGET_D_MIN;
 
-  if (DEBUG_READ_TEMPS > 0) {
-    getConfig()->outputReport(getConfig()->report);
-    OxCore::Debug<const char *>("Target Temp : ");
-    OxCore::DebugLn<float>(getConfig()->TARGET_TEMP);
-  }
   // Notice we are keeping the queue only for the post_heater thermocouple,
   // which is what we are using as a control variable.
   addTempToQueue(getConfig()->report->post_heater_C);
   calculateDdelta();
+  if (DEBUG_READ_TEMPS > 0) {
+    OxCore::Debug<const char *>("Good Temp Reads:");
+//    OxCore::Debug<unsigned long>(good_temp_reads);
+    OxCore::Debug<unsigned long>(good_temp_reads_heater);
+    OxCore::Debug<const char *>(", ");
+OxCore::Debug<unsigned long>(good_temp_reads_getter);
+    OxCore::Debug<const char *>(", ");
+OxCore::Debug<unsigned long>(good_temp_reads_stack);
+    OxCore::DebugLn<const char *>("");
+
+
+    OxCore::Debug<const char *>("Bad  Temp Reads:");
+//    OxCore::Debug<unsigned long>(bad_temp_reads);
+    OxCore::Debug<unsigned long>(bad_temp_reads_heater);
+    OxCore::Debug<const char *>(", ");
+    OxCore::Debug<unsigned long>(bad_temp_reads_getter);
+    OxCore::Debug<const char *>(", ");
+    OxCore::Debug<unsigned long>(bad_temp_reads_stack);
+    OxCore::DebugLn<const char *>("");
+  }
 }
 
 void stage2_ReadTempsTask::updateTemperatures() {
   ReadTempsTask::updateTemperatures();
+
+  // note: This is confugsing; we are naming the temperatures
+  // wrongly on a Stage2 system, and then putting into individual
+  // machine_configs.
   mcs[0]->report->post_heater_C = getConfig()->report->post_heater_C;
-  mcs[1]->report->post_getter_C = getConfig()->report->post_getter_C;
-  mcs[2]->report->post_stack_C = getConfig()->report->post_stack_C;
+  mcs[1]->report->post_heater_C = getConfig()->report->post_getter_C;
+  mcs[2]->report->post_heater_C = getConfig()->report->post_stack_C;
   // The TARGET_TEMP is not computed here, this is just a reporting function!
   for(int i = 0; i < 3; i++) {
-    mcs[i]->report->target_temp_C = mcs[i]->TARGET_TEMP;
+    mcs[i]->report->target_temp_C = mcs[i]->TARGET_TEMP_C;
+    mcs[i]->report->target_ramp_C = mcs[i]->RAMP_UP_TARGET_D_MIN;
+    mcs[i]->report->setpoint_temp_C = mcs[i]->SETPOINT_TEMP_C;
+    mcs[i]->report->ms = mcs[i]->ms;
   }
 
 }
-// I don't fully understand this!
 void ReadTempsTask::_configTemperatureSensors() {
+
+#ifdef USE_MAX31850_THERMOCOUPLES
   _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31850Temperature[1];
+#elif USE_MAX31855_THERMOCOUPLES
+  _temperatureSensors = (Temperature::AbstractTemperature *) new Temperature::MAX31855Temperature[1];
+#else
+  Serial.println("MAJOR INTERNAL ERROR, THERMOCOUPLE PREPROCESSOR DIRECTIVES NOT DEFINED!");
+#endif
+
   _temperatureSensors[0]._config = config[0];
+  if (DEBUG_READ_TEMPS > 0) {
+    OxCore::Debug<const char *>("Read Temp Configuration done!");
+    delay(50);
+  }
 }
 
 void ReadTempsTask::_readTemperatureSensors() {
   for (int i = 0; i < NUM_TEMP_INDICES; i++) {
     _temperatureSensors[i].ReadTemperature();
+
     float temperature = _temperatureSensors[0].GetTemperature(i);
     if (DEBUG_READ_TEMPS > 0) {
       OxCore::Debug<const char *>("Temp : ");
@@ -168,14 +331,12 @@ void ReadTempsTask::_readTemperatureSensors() {
       OxCore::Debug<const char *>(": ");
       OxCore::DebugLn<float>(temperature);
     }
+    // TODO: We should investigate a delay hear to make sure the
+    // OneWire system is ready
   }
-  if (DEBUG_READ_TEMPS > 1) {
-    OxCore::Debug<const char *>("Ddelta_C_per_min :");
-    Serial.println(Ddelta_C_per_min,5);
-  }
-  if (DEBUG_READ_TEMPS > 1) {
-    dumpQueue();
-  }
+  //  if (DEBUG_READ_TEMPS > 1) {
+  //    dumpQueue();
+  //  }
 }
 
 bool ReadTempsTask::_init()
@@ -190,6 +351,15 @@ bool ReadTempsTask::_init()
 }
 
 bool ReadTempsTask::_run()
+{
+  if (DEBUG_READ_TEMPS > 1) {
+    OxCore::Debug<const char *>("Running ReadTemps\n");
+  }
+  updateTemperatures();
+}
+
+
+bool stage2_ReadTempsTask::_run()
 {
   if (DEBUG_READ_TEMPS > 1) {
     OxCore::Debug<const char *>("Running ReadTemps\n");

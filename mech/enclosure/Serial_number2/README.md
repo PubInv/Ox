@@ -8,6 +8,12 @@ Information capturing the build of Serial_number2 OEDCS
 Isometric view of FreeCad assembly drawing showing the Ethernet, Controller V1 and Due assembly off to the side.
 > ![image](https://github.com/PubInv/NASA-COG/assets/5836181/acfafbcd-7913-475d-9ad6-6f1f11418265)
 
+Serial number 2, Assembly on 20230914
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/ddf36d0f-b828-4666-9d21-01b977a775d9)
+
+![image](https://github.com/PubInv/NASA-COG/assets/5836181/4c4c0f65-dee8-4c41-a483-dea0b79f8496)
+
+
 
 ### Parts
 Enclosure 2 parts and assembly stuff  
@@ -56,8 +62,23 @@ Bottom view showing the Due card above the Controler V1 card
 Side view showing the ethernet card above the Controler V1 card and the Due below
 > ![image](https://github.com/PubInv/NASA-COG/assets/5836181/905927c0-e418-4f2e-86d9-dd53f211a30b)
 
+Actual Control v1 with Ethernet and Due  
+<a
+href="Boards20230828/Due_Controller_Ethernet.jpg"> <img style="border:5px double black"
+src="Boards20230828/Due_Controller_Ethernet.jpg"
+alt="Boards20230828/Due_Controller_Ethernet.jpg"
+width="400">  
+***Due_Controller_Ethernet.jpg***
+</a>
 
-
+Controller thermocouple wiring detail  
+<a
+href="https://user-images.githubusercontent.com/5054116/268123079-14d45110-6290-4cd9-9399-6f682203b03e.jpg"> <img style="border:5px double black"
+src="https://user-images.githubusercontent.com/5054116/268123079-14d45110-6290-4cd9-9399-6f682203b03e.jpg"
+alt="Thermocouple wiring detail image"
+width="400">  
+***Thermocouple wiring detail***
+</a>
 
 ### Cautions
 None.

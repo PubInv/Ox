@@ -31,7 +31,7 @@
 #include <machine.h>
 
 #define ADDRESS 0x00
-#define MYDELAY 500
+#define MYDELAY 100
 
 
 // TODO: This could potentially become part of

@@ -22,6 +22,7 @@
 #include <MAX31850.h>
 
 #include <core.h>
+#include <machine.h>
 
 
 #define TEMPERATURE_PRECISION 9
@@ -144,17 +145,49 @@ namespace Temperature {
   float MAX31850Temperature::GetTemperature() {
     return GetTemperature(0);
   }
-  float MAX31850Temperature::GetTemperature(int idx) {
-    float tempC = this->sensors.getTempCByIndex(idx);
 
-    if (tempC != DEVICE_DISCONNECTED_C)
-      {
-      }
-    else
-      {
-        Serial.print(F("Error: Could not read temperature data: "));
-        Serial.println(idx);
-      }
+  float MAX31850Temperature::GetTemperature(int idx) {
+	DallasTemperature::celsius_result_t temp_reading;  
+    float tempC;
+
+#ifdef USE_ADRESS_BASED_RETRIEVAL
+    switch(idx) {
+    case 0:
+      temp_reading = this->sensors.getTempC(postHeaterThermometer);
+      break;
+    case 1:
+      temp_reading = this->sensors.getTempC(postGetterThermometer);
+      break;
+    case 2:
+      temp_reading = this->sensors.getTempC(postStackThermometer);
+      break;
+    default: {
+      Serial.print("INTERNAL ERROR! BAD IDX FOR MAX31850: ");
+      Serial.println(idx);
+    }
+    }
+#else
+    temp_reading = this->sensors.getTempCByIndex(idx);
+#endif
+
+    tempC = temp_reading;
+	
+	if (temp_reading.error_code & DallasTemperature::device_error_code::device_fault_open) {
+	   //display error for disconnected TC
+	   Serial.print(F("Error: OPEN TC: "));
+	}
+	if (temp_reading.error_code & DallasTemperature::device_error_code::device_fault_shortgnd) {
+	   //display error for shorted ground
+	   Serial.print(F("Error: shorted ground: "));
+	}
+	if (temp_reading.error_code & DallasTemperature::device_error_code::device_fault_shortvdd) {
+	   //display error for shorted vdd
+	   Serial.print(F("Error: shorted VDD: "));
+	}
+	// etc...for other errors
+	if (temp_reading.error_code != DallasTemperature::device_error_code::device_connected) {
+		Serial.print(F("Error: OTHER: "));
+	}
     return tempC;
 
   }

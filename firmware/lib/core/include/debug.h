@@ -40,6 +40,7 @@ namespace OxCore {
   void Debug (myType a) {
   #ifdef ARDUINO
     Serial.print(a);
+    Serial.flush();
   #else
     std::cout << a;
   #endif
@@ -50,6 +51,7 @@ namespace OxCore {
   #ifdef ARDUINO
     Serial.print(a);
     Serial.print("\n");
+    Serial.flush();
   #else
     std::cout << a << std::endl;
   #endif

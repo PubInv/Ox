@@ -40,7 +40,6 @@
 // This is a quick-and-dirty approach for the "RibbonFish" POC.
 #define POST_STACK_0_IDX 0
 #define POST_HEATER_0_IDX 1
-#define THERMOCOUPLE_PIN 2
 
 namespace Temperature {
   class DS18B20Temperature : public AbstractTemperature {
