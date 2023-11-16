@@ -15,7 +15,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-#ifndef _TASK_H
+#ifndef LOG_RECORDER_TASK_H
 #define LOG_RECORDER_TASK_H
 
 

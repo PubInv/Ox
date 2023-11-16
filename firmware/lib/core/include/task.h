@@ -69,6 +69,7 @@ class Task {
         TaskPriority GetPriority() const;
         TaskState GetState() const;
         TimeMs GetPeriod() const;
+		void SetPeriod( TimeMs );
         TimeMs GetLastRunTime() const;
         bool IsHardTiming() const;
 

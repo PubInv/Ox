@@ -40,11 +40,11 @@ struct TaskProperties {
     TimeMs period;
   // We place a void pointer here to hold a pointer
   // to the state and configuration of the machine under control.
-  // In gneral, tasks will need to know this. However,
+  // In general, tasks will need to know this. However,
   // I don't want to go so far as the create type correctness for this.
   // so a task that uses this point is responsible for correctly
   // casting it to the correct type. This let's this code remain
-  // absolutely "core" functionality, and locallize all code
+  // absolutely "core" functionality, and localize all code
   // into specific task overrides.
   void* state_and_config;
 };
